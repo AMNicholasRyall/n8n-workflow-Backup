@@ -1,0 +1,688 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Create a draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Filter3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Call 'ZenotiNZ-MedOrderPerClinic'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'ZenotiNZ-MedOrderPerClinic'": {
+      "main": [
+        [
+          {
+            "node": "Filter2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Add an attachment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add an attachment": {
+      "main": [
+        [
+          {
+            "node": "Send a draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a draft": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a draft": {
+      "main": [
+        []
+      ]
+    },
+    "Call 'Zenoti - Order Meds'": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti - Order Meds'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter3": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-12T05:12:57.779Z",
+  "id": "ooOtLZVLZmPykOeq",
+  "isArchived": false,
+  "meta": null,
+  "name": "ZenotiNZ-MasterMedOrderRun",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        -64
+      ],
+      "id": "6412d3a9-6c85-43b4-882a-62afea4ccf68",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pVbLONb8Gh393bg0",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinicsNZ",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/pVbLONb8Gh393bg0"
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        -64
+      ],
+      "id": "d76d64ef-03b2-47de-bb3b-c519022e28b5",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "92552a5f-df60-44a1-b306-cf3bf101c140",
+              "leftValue": "={{ $json.code }}",
+              "rightValue": "CO",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        112,
+        -64
+      ],
+      "id": "fc4b8250-9a30-416b-aff9-660e39dacccf",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c897594d-d4f9-4330-9460-2c4ceb4e370b",
+              "leftValue": "={{ $json.code }}",
+              "rightValue": "WH",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        288,
+        -64
+      ],
+      "id": "0131d5b2-7695-45af-a244-42370ee63768",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "content": "## Grab Clinics Filter Our Junk",
+        "height": 208,
+        "width": 640
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -80,
+        -128
+      ],
+      "typeVersion": 1,
+      "id": "910d8b7e-0092-4f92-a0e7-0fadb8ccffc3",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        896,
+        -64
+      ],
+      "id": "1d8b0ba1-b92e-4530-9286-2c545ffbaec5",
+      "name": "Loop Over Items",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "zAIYcDSMTH0KqEhr",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/zAIYcDSMTH0KqEhr",
+          "cachedResultName": "ZenotiNZ-MedOrderPerClinic"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1168,
+        -48
+      ],
+      "id": "8711d060-0c3b-439d-9cde-2a329b6be9fe",
+      "name": "Call 'ZenotiNZ-MedOrderPerClinic'"
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "NZ_Medorders",
+        "bodyContent": "Something something email",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        -352,
+        -64
+      ],
+      "id": "e1d54a21-0302-4352-8aaf-89701b419f1a",
+      "name": "Create a draft",
+      "webhookId": "b8eb751f-4484-4cf1-ac9e-7c84cd3ea608",
+      "executeOnce": true,
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Create Draft Email",
+        "height": 288,
+        "width": 320,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -448,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "0c6575c2-0d4c-4a8c-8778-fe76c35f3053",
+      "name": "Sticky Note23"
+    },
+    {
+      "parameters": {
+        "content": "## Loop Over Each Clinic",
+        "height": 560,
+        "width": 1920
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        576,
+        -128
+      ],
+      "typeVersion": 1,
+      "id": "7be305df-7ec4-4fcc-84b0-b1ecb9e5c0db",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "fileName": "NZ_Medorder.xlsx",
+          "headerRow": true,
+          "sheetName": "={{ $json.CLinicABB }}"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1344,
+        -400
+      ],
+      "id": "c3f38dc1-032e-4022-a69b-9b84d68a1a48",
+      "name": "Convert to File",
+      "executeOnce": false,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "messageAttachment",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $('Create a draft').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {
+          "fileName": "NZ_Medorder.xlsx"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1552,
+        -400
+      ],
+      "id": "76ed1a93-e430-4c10-b41e-73963b616b5d",
+      "name": "Add an attachment",
+      "webhookId": "58ea741a-311f-4726-bf3a-7df49a0a2581",
+      "executeOnce": true,
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "operation": "send",
+        "draftId": {
+          "__rl": true,
+          "value": "={{ $('Create a draft').item.json.id }}",
+          "mode": "id"
+        },
+        "to": "nicholas.ryall@ashleyandmartin.com.au"
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1776,
+        -400
+      ],
+      "id": "3d462848-4a33-4d83-a894-bca48480cb38",
+      "name": "Send a draft",
+      "webhookId": "4218c37c-f564-4377-b531-ada0de0b10f3",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Write File to excel and email - This needs to come up a level. Each line runs Individually so we can random lines to random sheets",
+        "height": 288,
+        "width": 768,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1280,
+        -512
+      ],
+      "typeVersion": 1,
+      "id": "f09e73d4-9f6f-4719-9ca4-7df8aacf9262",
+      "name": "Sticky Note22"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "37b7fb26-78ff-4769-8e7f-680ff8f8cfb9",
+              "leftValue": "={{ $json.is_form_submitted }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1408,
+        -48
+      ],
+      "id": "1d367c4f-5199-4385-8b63-28976313ae0f",
+      "name": "Filter2",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "content": "## Exported Data",
+        "height": 224,
+        "width": 256,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        976,
+        -480
+      ],
+      "typeVersion": 1,
+      "id": "4abdb37c-e564-4b74-aa52-de0f41310b73",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## List of things to do\n1. ~~Get DOB~~\n2. ~~Email Address~~\n3. ~~Gender~~\n4. ~~Reformatte Drugs Names~~\n5. ~~Select Correct Address~~\n6. ~~Compare to avalaible products for Client~~\n7. ~~Test with Multi Clinic~~\n8. Email EACH clinic a copy of there site to check out drugs <-- do we need to do this if I can invoice\n9. Format into excel <--\n10. Seperate Excel into tabs for each clinic\n11. Create invoice - Need to test\n12. Redeem products againts invoice - Need to test\n13. ~~Compare products againts what a customer still has~~\n14. Make a \"automation User in Zenoti\"\n15. New Email ACcount to send from that isnt nicholas\n16. ~~Hunt out monixdel or monox plus finistra~~\n17. Filter Out Error Orders\n18. Need a filter for side effects not filled out\n19. ~~Work out emailing spreadsheets with different tabs~~\n20. ~~Build Out Parent flow that sends clinics down to here~~\n21. Work out what emails need to be sent to what flow.\n22. How to check if a invoice has been made already and not do it.\n23. Build out manualy fix for each failed issue\na) Could do a manualy for that requires the invoice and customer ID for each paid in full\nb) same could be for each of the other ones oo\n24. ~~Fix no consent sign in~~ <-- IMPORTANT\n25. Pull corret product ID for zenoti invoice\n26. Update all zenoti oroducts to match with form\n27.\n\n100. ERROR HANDLING",
+        "height": 640,
+        "width": 720,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -256,
+        176
+      ],
+      "typeVersion": 1,
+      "id": "8294dfa8-1675-4adf-abff-242feefb848a",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Order Meds",
+        "height": 224,
+        "width": 224,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2208,
+        -480
+      ],
+      "typeVersion": 1,
+      "id": "1938af60-08a2-4ea8-8508-c3c11b99cf19",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "STUF6Fz9PaFzUwRx",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/STUF6Fz9PaFzUwRx",
+          "cachedResultName": "Zenoti - Order Meds"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        2224,
+        112
+      ],
+      "id": "1a8621bf-3b2c-49a6-aa5d-ed2ae1cbae8c",
+      "name": "Call 'Zenoti - Order Meds'",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1696,
+        -48
+      ],
+      "id": "be8f8e02-a979-4613-b491-60c31a84124c",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1904,
+        48
+      ],
+      "id": "7381231c-e09f-4cb0-b863-5af2fa75b89e",
+      "name": "Wait",
+      "webhookId": "9ad9ec32-bb7e-4dc8-9b16-6bbe81cd24d5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2959efa9-f5f5-4310-a286-09e49b165b24",
+              "leftValue": "={{ $json.code }}",
+              "rightValue": "=AK",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        448,
+        -64
+      ],
+      "id": "7db49d68-f4bf-4768-a7f6-5c5b76ea1c50",
+      "name": "Filter3"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-12T05:12:57.781Z",
+      "createdAt": "2025-12-12T05:12:57.781Z",
+      "role": "workflow:owner",
+      "workflowId": "ooOtLZVLZmPykOeq",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-08T01:13:26.183Z",
+  "versionId": "1cd477ae-af5d-4d02-8211-9d5594cc843d"
+}
