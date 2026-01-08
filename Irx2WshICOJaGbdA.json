@@ -1,0 +1,260 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Execute": {
+      "main": [
+        [
+          {
+            "node": "FTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FTP": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "FTP1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "UploadMergeedCSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FTP1": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Extract from File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-13T07:04:16.427Z",
+  "id": "Irx2WshICOJaGbdA",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "CSVMerger",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        32
+      ],
+      "id": "92322003-a820-4f56-b69a-fd0ff949f58b",
+      "name": "Execute"
+    },
+    {
+      "parameters": {
+        "protocol": "sftp",
+        "operation": "list",
+        "path": "=/C/AMLogs/BATCH/{{ $json.Abb }}"
+      },
+      "type": "n8n-nodes-base.ftp",
+      "typeVersion": 1,
+      "position": [
+        224,
+        32
+      ],
+      "id": "27db7f3e-e811-4175-b2db-d97111543d46",
+      "name": "FTP",
+      "credentials": {
+        "sftp": {
+          "id": "sbHKh6CJeP3rVwER",
+          "name": "FTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        448,
+        32
+      ],
+      "id": "6c68180a-6f89-402c-ac25-7d33ecb17384",
+      "name": "Loop Over Items",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        -160
+      ],
+      "id": "4520318d-bdd6-4be7-801f-8a9eeb56bd75",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "protocol": "sftp",
+        "operation": "upload",
+        "path": "=/C/AMLogs/BATCH/{{ $('Execute').first().json.Abb }}/{{ $('Execute').first().json.Abb }}.csv"
+      },
+      "type": "n8n-nodes-base.ftp",
+      "typeVersion": 1,
+      "position": [
+        896,
+        -160
+      ],
+      "id": "7bac7ce0-3c40-4e85-8952-0c58c0f5de34",
+      "name": "UploadMergeedCSV",
+      "credentials": {
+        "sftp": {
+          "id": "sbHKh6CJeP3rVwER",
+          "name": "FTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "protocol": "sftp",
+        "path": "={{ $json.path }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.ftp",
+      "typeVersion": 1,
+      "position": [
+        672,
+        32
+      ],
+      "id": "d652fb53-68ac-4014-bc44-b224f78fcb26",
+      "name": "FTP1",
+      "credentials": {
+        "sftp": {
+          "id": "sbHKh6CJeP3rVwER",
+          "name": "FTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $json.name }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        896,
+        32
+      ],
+      "id": "91e29db8-889d-4300-9ec3-7fc3121dbd6e",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        104
+      ],
+      "id": "080fb459-8934-4532-9dda-35afadc8bd77",
+      "name": "Extract from File1"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-13T07:04:16.430Z",
+      "createdAt": "2025-11-13T07:04:16.430Z",
+      "role": "workflow:owner",
+      "workflowId": "Irx2WshICOJaGbdA",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-13T05:47:15.147Z",
+      "createdAt": "2025-11-13T05:47:15.147Z",
+      "id": "dkYWH6XMkxWsDBNj",
+      "name": "CompareFlows"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-13T23:28:32.000Z",
+  "versionId": "d3857b08-06cb-4248-b9e7-e80e0399e6b1"
+}
