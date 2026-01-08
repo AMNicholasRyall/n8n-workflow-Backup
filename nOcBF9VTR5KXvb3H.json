@@ -1,0 +1,81 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2025-11-03T04:31:59.080Z",
+  "id": "nOcBF9VTR5KXvb3H",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        -16
+      ],
+      "id": "7940b673-f707-4be1-8ec6-5dd09b0e4dac",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "list",
+        "site": {
+          "__rl": true,
+          "value": "ashleyandmartincomau.sharepoint.com,d072e691-4945-4cb7-9d46-8ce09a647579,25bd0103-07ad-4698-92dc-5a919b01719b",
+          "mode": "list",
+          "cachedResultName": "A&M"
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.microsoftSharePoint",
+      "typeVersion": 1,
+      "position": [
+        48,
+        -48
+      ],
+      "id": "33f55990-92e1-4acd-8e1a-cfc0d75c5733",
+      "name": "Get many lists",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-03T04:31:59.083Z",
+      "createdAt": "2025-11-03T04:31:59.083Z",
+      "role": "workflow:owner",
+      "workflowId": "nOcBF9VTR5KXvb3H",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-07T01:46:05.000Z",
+  "versionId": "132f0523-6fd5-40d5-9485-69a83e0eb4ac"
+}
