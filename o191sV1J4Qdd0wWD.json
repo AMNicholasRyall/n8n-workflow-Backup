@@ -1,0 +1,255 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Microsoft Outlook Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Microsoft Outlook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft Outlook": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Microsoft Outlook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft Outlook2": {
+      "main": [
+        [
+          {
+            "node": "Microsoft Outlook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-14T04:31:01.793Z",
+  "id": "o191sV1J4Qdd0wWD",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Auto Email Forward",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 1
+            }
+          ]
+        },
+        "filters": {
+          "foldersToInclude": [
+            "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAAAAAEMAAA="
+          ],
+          "sender": "hr@ashleyandmartin.com.au"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlookTrigger",
+      "typeVersion": 1,
+      "position": [
+        -460,
+        -200
+      ],
+      "id": "239da03a-26fe-4591-b401-9f474bee390c",
+      "name": "Microsoft Outlook Trigger",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "output": "raw",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        -20,
+        -200
+      ],
+      "id": "6ae9cb86-9bfd-4d18-8313-4e3d9324f390",
+      "name": "Microsoft Outlook",
+      "webhookId": "9427f886-e07d-4366-8432-c220dd2763cc",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0e524845-9828-4d1a-878b-0e8248e01cbb",
+              "leftValue": "={{ $json.subject }}",
+              "rightValue": "IT Access For",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -240,
+        -200
+      ],
+      "id": "c3491f19-b1c2-4bc1-ab68-1656608f995a",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = $input.first().json.body.content || '';\n\n// Convert HTML to plain text\nconst text = html\n  .replace(/<br\\s*\\/?>/gi, '\\n')\n  .replace(/<\\/p>|<\\/div>/gi, '\\n')\n  .replace(/<[^>]+>/g, '')\n  .replace(/\\u00a0|&nbsp;/g, ' ')         // replace non-breaking spaces\n  .replace(/\\r\\n|\\r|\\n/g, '\\n')\n  .trim();\n\n// Define regex patterns\nconst fields = {\n  employeeId: /Employee ID:\\s*(.+)/i,\n  firstName: /First Name:\\s*(.+)/i,\n  lastName: /Last Name:\\s*(.+)/i,\n  position: /Position:\\s*(.+)/i,\n  location: /Location:\\s*(.+)/i,\n  startDate: /Start Date:\\s*(.+)/i,\n};\n\n// Extract and clean values\nconst result = {};\nfor (const [key, regex] of Object.entries(fields)) {\n  const match = text.match(regex);\n  result[key] = match ? match[1].replace(/\\u00a0|&nbsp;/g, ' ').trim() : null;\n}\n\nreturn [{ json: result }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        200,
+        -200
+      ],
+      "id": "278808a1-e320-456e-9a91-624c99f05231",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "toRecipients": "helpdesk@inspired-it.com.au",
+        "subject": "AM - New User",
+        "bodyContent": "=Hey Inspired iT,\n\nPlease see the below new user:\n\nEmployee ID: {{ $json.employeeId }}\nFirst Name: {{ $json.firstName }}\nLast Name: {{ $json.lastName }}\nPosition: {{ $json.position }}\nLocation: {{ $json.location }}\nStart Date: {{ $json.startDate }}\n\nRegards,\nNicholas\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        420,
+        -200
+      ],
+      "id": "eda8e8d9-7772-496e-870a-e104bda679c6",
+      "name": "Microsoft Outlook2",
+      "webhookId": "95a27010-efdf-4768-935a-8942cfa94f41",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "move",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $('Microsoft Outlook').item.json.id }}",
+          "mode": "id"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAADKbNLAAA=",
+          "mode": "list",
+          "cachedResultName": "ELMO",
+          "cachedResultUrl": "https://outlook.office365.com/mail/AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAADKbNLAAA%3D"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        640,
+        -200
+      ],
+      "id": "11a17c1d-ed22-4b0e-814d-a61d89cd14b0",
+      "name": "Microsoft Outlook3",
+      "webhookId": "cbf5028b-9f8e-42f0-97e7-48e996a8673c",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-07-14T04:31:01.797Z",
+      "createdAt": "2025-07-14T04:31:01.797Z",
+      "role": "workflow:owner",
+      "workflowId": "o191sV1J4Qdd0wWD",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-14T04:57:55.000Z",
+  "versionId": "0d95ba06-74d2-4302-a7de-d001aced94c3"
+}
