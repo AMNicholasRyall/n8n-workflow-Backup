@@ -1,0 +1,118 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get many workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many workflows": {
+      "main": [
+        [
+          {
+            "node": "List files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-08T05:26:07.329Z",
+  "id": "SXmMPovOR2budlXT",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Backup",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "acabc07a-144d-4ebd-a869-61d03d643c75",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "filters": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "cdfa8de3-a9ed-46a6-a832-d203bbe817b8",
+      "name": "Get many workflows",
+      "credentials": {
+        "n8nApi": {
+          "id": "XdO2CEKgIh0c7hq6",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "list",
+        "owner": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "repository": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "1ca8500e-0c58-4590-a522-f666e3c0365f",
+      "name": "List files",
+      "webhookId": "ceb49647-b11b-4526-aab8-86b49a796a86"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-08T05:26:07.332Z",
+      "createdAt": "2026-01-08T05:26:07.332Z",
+      "role": "workflow:owner",
+      "workflowId": "SXmMPovOR2budlXT",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-08T05:58:20.278Z",
+  "versionId": "e1bcf2cf-0a50-4708-8a9c-59b87a0bd7e8"
+}
