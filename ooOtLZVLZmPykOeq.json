@@ -535,8 +535,8 @@
     },
     {
       "parameters": {
-        "content": "## List of things to do\n1. ~~Get DOB~~\n2. ~~Email Address~~\n3. ~~Gender~~\n4. ~~Reformatte Drugs Names~~\n5. ~~Select Correct Address~~\n6. ~~Compare to avalaible products for Client~~\n7. ~~Test with Multi Clinic~~\n8. Email EACH clinic a copy of there site to check out drugs <-- do we need to do this if I can invoice\n9. Format into excel <--\n10. Seperate Excel into tabs for each clinic\n11. Create invoice - Need to test\n12. Redeem products againts invoice - Need to test\n13. ~~Compare products againts what a customer still has~~\n14. Make a \"automation User in Zenoti\"\n15. New Email ACcount to send from that isnt nicholas\n16. ~~Hunt out monixdel or monox plus finistra~~\n17. Filter Out Error Orders\n18. Need a filter for side effects not filled out\n19. ~~Work out emailing spreadsheets with different tabs~~\n20. ~~Build Out Parent flow that sends clinics down to here~~\n21. Work out what emails need to be sent to what flow.\n22. How to check if a invoice has been made already and not do it.\n23. Build out manualy fix for each failed issue\na) Could do a manualy for that requires the invoice and customer ID for each paid in full\nb) same could be for each of the other ones oo\n24. ~~Fix no consent sign in~~ <-- IMPORTANT\n25. Pull corret product ID for zenoti invoice\n26. Update all zenoti oroducts to match with form\n27.\n\n100. ERROR HANDLING",
-        "height": 640,
+        "content": "## List of things to do\n1. ~~Get DOB~~\n2. ~~Email Address~~\n3. ~~Gender~~\n4. ~~Reformatte Drugs Names~~\n5. ~~Select Correct Address~~\n6. ~~Compare to avalaible products for Client~~\n7. ~~Test with Multi Clinic~~\n8. Email EACH clinic a copy of there site to check out drugs <-- do we need to do this if I can invoice\n9. Format into excel <--\n10. Seperate Excel into tabs for each clinic\n11. ~~vCreate invoice - Need to test~~\n12. ~~Redeem products againts invoice - Need to test~~\n13. ~~Compare products againts what a customer still has~~\n14. Make a \"automation User in Zenoti\"\n15. New Email ACcount to send from that isnt nicholas\n16. ~~Hunt out monixdel or monox plus finistra~~\n17. Filter Out Error Orders\n18. ~~Need a filter for side effects not filled out~~\n19. ~~Work out emailing spreadsheets with different tabs~~\n20. ~~Build Out Parent flow that sends clinics down to here~~\n21. Work out what emails need to be sent to what flow.\n22. ~~How to check if a invoice has been made already and not do it.~~\n23. Build out manualy fix for each failed issue\na) Could do a manualy for that requires the invoice and customer ID for each paid in full\nb) same could be for each of the other ones oo\n24. ~~Fix no consent sign in~~ <-- IMPORTANT\n25. ~~Pull corret product ID for zenoti invoice~~\n26. ~~Update all zenoti oroducts to match with form~~\n27.\n\n100. ERROR HANDLING",
+        "height": 928,
         "width": 720,
         "color": 4
       },
@@ -683,6 +683,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-01-08T01:13:26.183Z",
-  "versionId": "1cd477ae-af5d-4d02-8211-9d5594cc843d"
+  "updatedAt": "2026-01-08T07:48:12.286Z",
+  "versionId": "a3440c36-9b94-4ce6-bfaa-34853b5c8b56"
 }
