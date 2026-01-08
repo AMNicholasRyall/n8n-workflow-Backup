@@ -1,0 +1,1146 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-07T06:18:23.000Z",
+    "createdAt": "2025-12-30T00:16:41.697Z",
+    "versionId": "372a0c03-78b2-4a9d-a30a-de6f62a2e385",
+    "workflowId": "0Ro4JNclWnhvigq7",
+    "nodes": [
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "cdd82afc-d1f7-4d5b-ab18-b0b5ff3f0e89",
+                "leftValue": "={{ $json.d.results }}",
+                "rightValue": "=0",
+                "operator": {
+                  "type": "array",
+                  "operation": "empty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          432,
+          144
+        ],
+        "id": "ee7ce119-a7e7-4ebe-8824-447deb19e6e8",
+        "name": "If - True:Does Exist - False:Doesnt"
+      },
+      {
+        "parameters": {
+          "operation": "move",
+          "messageId": {
+            "__rl": true,
+            "value": "={{ $('If1').item.json.messageId }}",
+            "mode": "id"
+          },
+          "folderId": {
+            "__rl": true,
+            "value": "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAADKbMaAAA=",
+            "mode": "list",
+            "cachedResultName": "1. Read - No actions",
+            "cachedResultUrl": "https://outlook.office365.com/mail/AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAADKbMaAAA%3D"
+          }
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          1328,
+          144
+        ],
+        "id": "a0ea0d7a-66b5-4014-aead-10bc2f310999",
+        "name": "Microsoft Outlook2",
+        "webhookId": "bde37e99-8c32-4b84-8cc4-df67db19c62c",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const html = $input.first().json.body.content;\n\n// Remove hidden divs (Proofpoint etc.)\nlet cleanHtml = html.replace(/<div[^>]*style=\"[^\"]*(display\\s*:\\s*none|visibility\\s*:\\s*hidden)[^\"]*\"[^>]*>.*?<\\/div>/gis, '');\n\n// Strip HTML tags and collapse whitespace\nconst stripHtml = (html) => {\n  let text = html.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/gi, ' ');\n  return text.replace(/\\s+/g, ' ').trim();\n};\n\nconst text = stripHtml(cleanHtml);\n\n// Extract value from text between labels using context-aware lookaheads\nconst getMatch = (label, nextLabels = []) => {\n  const safeLabel = label.replace(/[-\\/\\\\^$*+?.()|[\\]{}]/g, '\\\\$&');\n  const lookahead = nextLabels.length\n    ? `(?=\\\\s+(?:${nextLabels.map(l => l.replace(/[-\\/\\\\^$*+?.()|[\\]{}]/g, '\\\\$&')).join('|')}))`\n    : '(?=\\\\s|$)';\n  const regex = new RegExp(`${safeLabel}\\\\s+(.+?)\\\\s*${lookahead}`, 'i');\n  const match = text.match(regex);\n  return match ? match[1].trim() : '';\n};\n\n// Extract clinic after colon (e.g. \"VIC: Dandenong\" → \"Dandenong\")\nconst cleanClinic = (raw) => {\n  const parts = raw.split(':');\n  return parts.length > 1 ? parts[1].trim() : raw.trim();\n};\n\n// Clean and assign fields\nconst result = {\n  Title: getMatch('Unique ID', ['Your First Name']),\n  Cl_First: getMatch('Your First Name', ['Your Last Name']),\n  Cl_Last: getMatch('Your Last Name', ['Your Clinic']),\n  Cl_Clinic: cleanClinic(getMatch('Your Clinic', ['Your Email'])),\n  Cl_Email: getMatch('Your Email', ['Your Mobile Phone Number']).replace(/\\s+/g, ''),\n  Cl_Mobile: getMatch('Your Mobile Phone Number', ['First Name of the Person You Referred']),\n  Ref_First: getMatch('First Name of the Person You Referred', ['Last Name of the Person You Referred']),\n  Ref_Last: getMatch('Last Name of the Person You Referred', ['Mobile Phone Number of the Person You Referred']),\n  Ref_Mobile: getMatch('Mobile Phone Number of the Person You Referred', ['Their Clinic']),\n  Ref_Email: getMatch('Referral Email', ['Their Clinic']).replace(/\\s+/g, ''),\n  Ref_Clinic: cleanClinic(getMatch('Their Clinic (If Known)', ['Terms'])),\n};\n\n// Final trim cleanup\nfor (const key in result) {\n  if (typeof result[key] === 'string') {\n    result[key] = result[key].replace(/^[^a-zA-Z0-9@+]+/, '').trim();\n  }\n}\n\n// Add messageId for downstream use\nresult.messageId = $input.first().json.id;\n\nreturn [{ json: result }];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -688,
+          144
+        ],
+        "id": "2ce62a8c-4c28-4ae4-bd9f-1d7fac644fb6",
+        "name": "Clean Email Body"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "messageId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "output": "raw",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          -912,
+          144
+        ],
+        "id": "afe494ce-c753-4a4c-ab80-2a79c9bc3822",
+        "name": "Microsoft Outlook - Extract Email Informaition",
+        "webhookId": "1dd3222e-63cb-471f-a7b9-a354b28ddb1f",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const title = encodeURIComponent($json[\"Title\"]); // e.g. \"101005\"\nconst url = `http://10.64.1.11/_api/web/lists/getbytitle('Referrals')/items?$filter=Title eq '${title}'`;\nconst safeUrl = url.replace(/\\$/g, '\\\\$').replace(/ /g, '%20').replace(/'/g, '%27');\n\nconst curlCommand = `curl --ntlm -u 'Ashleyandmartin/nryall:Danceparty45Slut!' \\\n-H \"Accept: application/json;odata=verbose\" \\\n\"${safeUrl}\"`;\n\nreturn [{ json: { command: curlCommand } }];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -240,
+          144
+        ],
+        "id": "92eb9da2-770d-4998-8340-10db26bf4c8e",
+        "name": "Code to check if already existing"
+      },
+      {
+        "parameters": {
+          "pollTimes": {
+            "item": [
+              {
+                "mode": "everyX",
+                "value": 10,
+                "unit": "minutes"
+              }
+            ]
+          },
+          "output": "raw",
+          "filters": {
+            "custom": "contains(subject, 'Referrals Form V2')",
+            "foldersToInclude": [
+              "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAAAAAEMAAA="
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlookTrigger",
+        "typeVersion": 1,
+        "position": [
+          -1584,
+          144
+        ],
+        "id": "bcc6b294-1bbb-462f-98bb-6c9e2bba88cf",
+        "name": "Microsoft Outlook Trigger",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "970cec47-ef29-43d2-a839-67c1d5f70d05",
+                "leftValue": "={{ $json.subject }}",
+                "rightValue": "New submission from Referrals Form V2",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -1136,
+          144
+        ],
+        "id": "463c1c01-67ba-44c5-9016-fdf8174423dd",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "6b3d3b30-60d8-4753-bc8c-1b19622dd467",
+                "leftValue": "={{ $json.Title }}",
+                "rightValue": "null",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -464,
+          144
+        ],
+        "id": "c5f82a19-b4ca-424b-b14b-bf2dd204c7a4",
+        "name": "If1"
+      },
+      {
+        "parameters": {
+          "resource": "folderMessage",
+          "folderId": {
+            "__rl": true,
+            "value": "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAAAAAEMAAA=",
+            "mode": "list",
+            "cachedResultName": "Inbox",
+            "cachedResultUrl": "https://outlook.office365.com/mail/AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAAAAAEMAAA%3D"
+          },
+          "filtersUI": {
+            "values": {
+              "filterBy": "search",
+              "search": "New submission from Referrals Form V2"
+            }
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          -1360,
+          144
+        ],
+        "id": "5b37392c-3913-406e-ab9e-86a40e39dbbd",
+        "name": "Microsoft Outlook1",
+        "webhookId": "6cc423ad-c704-43c6-8d7d-a015de092c86",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const command = $json.command;\nreturn [{ json: { command } }];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -16,
+          144
+        ],
+        "id": "54ba1cef-6c78-4cf8-b173-da9724c48644",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "url": "http://10.64.1.11/_api/web/lists/getbytitle('Referrals')/items",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpBasicAuth",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$filter",
+                "value": "=Title eq '{{ $('Clean Email Body').item.json.Title }}'"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json;odata=verbose"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          208,
+          144
+        ],
+        "id": "2fa7bba5-a1a3-4ca0-a19e-000abc8b9c82",
+        "name": "HTTP Request",
+        "credentials": {
+          "httpBasicAuth": {
+            "id": "dGN7XVraKhKrlOOY",
+            "name": "OnPremSharepoint"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://10.64.1.11/_api/web/lists/getbytitle('Referrals')/items",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpBasicAuth",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json;odata=verbose"
+              },
+              {
+                "name": "X-RequestDigest",
+                "value": "={{ $('HTTP Request2').item.json.d.GetContextWebInformation.FormDigestValue }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "raw",
+          "rawContentType": "application/json;odata=verbose",
+          "body": "={{ JSON.stringify($json) }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1104,
+          144
+        ],
+        "id": "7669a411-73c0-495f-8f2b-1b5b419cf08a",
+        "name": "HTTP Request1",
+        "credentials": {
+          "httpBasicAuth": {
+            "id": "dGN7XVraKhKrlOOY",
+            "name": "OnPremSharepoint"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const d = $('Clean Email Body').first().json;\n\nreturn [{\n  json: {\n    __metadata: { type: \"SP.Data.ReferralsListItem\" },\n    Title: d.Title,\n\n    Cl_First: d.Cl_First,\n    Cl_last: d.Cl_Last,\n    Cl_Clinic: d.Cl_Clinic,\n    Cl_Email: d.Cl_Email,\n    Cl_Mobile: d.Cl_Mobile,\n\n    Ref_First: d.Ref_First,\n    Ref_Last: d.Ref_Last,\n    Ref_Mobile: d.Ref_Mobile,\n    Ref_Email: d.Ref_Email,\n    Ref_Clinic: d.Ref_Clinic\n  }\n}];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          880,
+          144
+        ],
+        "id": "b6bbfa76-eecd-4856-96fd-4618a5397f04",
+        "name": "Import Into http request"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://10.64.1.11/_api/contextinfo",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpBasicAuth",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json;odata=verbose"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "raw",
+          "rawContentType": "application/json;odata=verbose",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          656,
+          144
+        ],
+        "id": "7eb9a52c-4301-4780-ba20-7b80c89c34a5",
+        "name": "HTTP Request2",
+        "credentials": {
+          "httpBasicAuth": {
+            "id": "dGN7XVraKhKrlOOY",
+            "name": "OnPremSharepoint"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "If - True:Does Exist - False:Doesnt": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request2",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      },
+      "Clean Email Body": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Microsoft Outlook - Extract Email Informaition": {
+        "main": [
+          [
+            {
+              "node": "Clean Email Body",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code to check if already existing": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Microsoft Outlook Trigger": {
+        "main": [
+          [
+            {
+              "node": "Microsoft Outlook1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Microsoft Outlook - Extract Email Informaition",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "Code to check if already existing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Microsoft Outlook1": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "If - True:Does Exist - False:Doesnt",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Import Into http request": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request2": {
+        "main": [
+          [
+            {
+              "node": "Import Into http request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request1": {
+        "main": [
+          [
+            {
+              "node": "Microsoft Outlook2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 372a0c03",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "372a0c03-78b2-4a9d-a30a-de6f62a2e385",
+  "connections": {
+    "If - True:Does Exist - False:Doesnt": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Clean Email Body": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft Outlook - Extract Email Informaition": {
+      "main": [
+        [
+          {
+            "node": "Clean Email Body",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code to check if already existing": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft Outlook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Microsoft Outlook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Microsoft Outlook - Extract Email Informaition",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Code to check if already existing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft Outlook1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If - True:Does Exist - False:Doesnt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Import Into http request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Import Into http request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Microsoft Outlook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-05-27T07:11:50.215Z",
+  "id": "0Ro4JNclWnhvigq7",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Referral AutoUpload",
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cdd82afc-d1f7-4d5b-ab18-b0b5ff3f0e89",
+              "leftValue": "={{ $json.d.results }}",
+              "rightValue": "=0",
+              "operator": {
+                "type": "array",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        432,
+        144
+      ],
+      "id": "ee7ce119-a7e7-4ebe-8824-447deb19e6e8",
+      "name": "If - True:Does Exist - False:Doesnt"
+    },
+    {
+      "parameters": {
+        "operation": "move",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $('If1').item.json.messageId }}",
+          "mode": "id"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAADKbMaAAA=",
+          "mode": "list",
+          "cachedResultName": "1. Read - No actions",
+          "cachedResultUrl": "https://outlook.office365.com/mail/AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAADKbMaAAA%3D"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1328,
+        144
+      ],
+      "id": "a0ea0d7a-66b5-4014-aead-10bc2f310999",
+      "name": "Microsoft Outlook2",
+      "webhookId": "bde37e99-8c32-4b84-8cc4-df67db19c62c",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = $input.first().json.body.content;\n\n// Remove hidden divs (Proofpoint etc.)\nlet cleanHtml = html.replace(/<div[^>]*style=\"[^\"]*(display\\s*:\\s*none|visibility\\s*:\\s*hidden)[^\"]*\"[^>]*>.*?<\\/div>/gis, '');\n\n// Strip HTML tags and collapse whitespace\nconst stripHtml = (html) => {\n  let text = html.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/gi, ' ');\n  return text.replace(/\\s+/g, ' ').trim();\n};\n\nconst text = stripHtml(cleanHtml);\n\n// Extract value from text between labels using context-aware lookaheads\nconst getMatch = (label, nextLabels = []) => {\n  const safeLabel = label.replace(/[-\\/\\\\^$*+?.()|[\\]{}]/g, '\\\\$&');\n  const lookahead = nextLabels.length\n    ? `(?=\\\\s+(?:${nextLabels.map(l => l.replace(/[-\\/\\\\^$*+?.()|[\\]{}]/g, '\\\\$&')).join('|')}))`\n    : '(?=\\\\s|$)';\n  const regex = new RegExp(`${safeLabel}\\\\s+(.+?)\\\\s*${lookahead}`, 'i');\n  const match = text.match(regex);\n  return match ? match[1].trim() : '';\n};\n\n// Extract clinic after colon (e.g. \"VIC: Dandenong\" → \"Dandenong\")\nconst cleanClinic = (raw) => {\n  const parts = raw.split(':');\n  return parts.length > 1 ? parts[1].trim() : raw.trim();\n};\n\n// Clean and assign fields\nconst result = {\n  Title: getMatch('Unique ID', ['Your First Name']),\n  Cl_First: getMatch('Your First Name', ['Your Last Name']),\n  Cl_Last: getMatch('Your Last Name', ['Your Clinic']),\n  Cl_Clinic: cleanClinic(getMatch('Your Clinic', ['Your Email'])),\n  Cl_Email: getMatch('Your Email', ['Your Mobile Phone Number']).replace(/\\s+/g, ''),\n  Cl_Mobile: getMatch('Your Mobile Phone Number', ['First Name of the Person You Referred']),\n  Ref_First: getMatch('First Name of the Person You Referred', ['Last Name of the Person You Referred']),\n  Ref_Last: getMatch('Last Name of the Person You Referred', ['Mobile Phone Number of the Person You Referred']),\n  Ref_Mobile: getMatch('Mobile Phone Number of the Person You Referred', ['Their Clinic']),\n  Ref_Email: getMatch('Referral Email', ['Their Clinic']).replace(/\\s+/g, ''),\n  Ref_Clinic: cleanClinic(getMatch('Their Clinic (If Known)', ['Terms'])),\n};\n\n// Final trim cleanup\nfor (const key in result) {\n  if (typeof result[key] === 'string') {\n    result[key] = result[key].replace(/^[^a-zA-Z0-9@+]+/, '').trim();\n  }\n}\n\n// Add messageId for downstream use\nresult.messageId = $input.first().json.id;\n\nreturn [{ json: result }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -688,
+        144
+      ],
+      "id": "2ce62a8c-4c28-4ae4-bd9f-1d7fac644fb6",
+      "name": "Clean Email Body"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "output": "raw",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        -912,
+        144
+      ],
+      "id": "afe494ce-c753-4a4c-ab80-2a79c9bc3822",
+      "name": "Microsoft Outlook - Extract Email Informaition",
+      "webhookId": "1dd3222e-63cb-471f-a7b9-a354b28ddb1f",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const title = encodeURIComponent($json[\"Title\"]); // e.g. \"101005\"\nconst url = `http://10.64.1.11/_api/web/lists/getbytitle('Referrals')/items?$filter=Title eq '${title}'`;\nconst safeUrl = url.replace(/\\$/g, '\\\\$').replace(/ /g, '%20').replace(/'/g, '%27');\n\nconst curlCommand = `curl --ntlm -u 'Ashleyandmartin/nryall:Danceparty45Slut!' \\\n-H \"Accept: application/json;odata=verbose\" \\\n\"${safeUrl}\"`;\n\nreturn [{ json: { command: curlCommand } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        144
+      ],
+      "id": "92eb9da2-770d-4998-8340-10db26bf4c8e",
+      "name": "Code to check if already existing"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 10,
+              "unit": "minutes"
+            }
+          ]
+        },
+        "output": "raw",
+        "filters": {
+          "custom": "contains(subject, 'Referrals Form V2')",
+          "foldersToInclude": [
+            "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAAAAAEMAAA="
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlookTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1584,
+        144
+      ],
+      "id": "bcc6b294-1bbb-462f-98bb-6c9e2bba88cf",
+      "name": "Microsoft Outlook Trigger",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "970cec47-ef29-43d2-a839-67c1d5f70d05",
+              "leftValue": "={{ $json.subject }}",
+              "rightValue": "New submission from Referrals Form V2",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1136,
+        144
+      ],
+      "id": "463c1c01-67ba-44c5-9016-fdf8174423dd",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6b3d3b30-60d8-4753-bc8c-1b19622dd467",
+              "leftValue": "={{ $json.Title }}",
+              "rightValue": "null",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -464,
+        144
+      ],
+      "id": "c5f82a19-b4ca-424b-b14b-bf2dd204c7a4",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "resource": "folderMessage",
+        "folderId": {
+          "__rl": true,
+          "value": "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAAAAAEMAAA=",
+          "mode": "list",
+          "cachedResultName": "Inbox",
+          "cachedResultUrl": "https://outlook.office365.com/mail/AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAAAAAEMAAA%3D"
+        },
+        "filtersUI": {
+          "values": {
+            "filterBy": "search",
+            "search": "New submission from Referrals Form V2"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        -1360,
+        144
+      ],
+      "id": "5b37392c-3913-406e-ab9e-86a40e39dbbd",
+      "name": "Microsoft Outlook1",
+      "webhookId": "6cc423ad-c704-43c6-8d7d-a015de092c86",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const command = $json.command;\nreturn [{ json: { command } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        144
+      ],
+      "id": "54ba1cef-6c78-4cf8-b173-da9724c48644",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "url": "http://10.64.1.11/_api/web/lists/getbytitle('Referrals')/items",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$filter",
+              "value": "=Title eq '{{ $('Clean Email Body').item.json.Title }}'"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json;odata=verbose"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        208,
+        144
+      ],
+      "id": "2fa7bba5-a1a3-4ca0-a19e-000abc8b9c82",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "dGN7XVraKhKrlOOY",
+          "name": "OnPremSharepoint"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://10.64.1.11/_api/web/lists/getbytitle('Referrals')/items",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json;odata=verbose"
+            },
+            {
+              "name": "X-RequestDigest",
+              "value": "={{ $('HTTP Request2').item.json.d.GetContextWebInformation.FormDigestValue }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json;odata=verbose",
+        "body": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1104,
+        144
+      ],
+      "id": "7669a411-73c0-495f-8f2b-1b5b419cf08a",
+      "name": "HTTP Request1",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "dGN7XVraKhKrlOOY",
+          "name": "OnPremSharepoint"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const d = $('Clean Email Body').first().json;\n\nreturn [{\n  json: {\n    __metadata: { type: \"SP.Data.ReferralsListItem\" },\n    Title: d.Title,\n\n    Cl_First: d.Cl_First,\n    Cl_last: d.Cl_Last,\n    Cl_Clinic: d.Cl_Clinic,\n    Cl_Email: d.Cl_Email,\n    Cl_Mobile: d.Cl_Mobile,\n\n    Ref_First: d.Ref_First,\n    Ref_Last: d.Ref_Last,\n    Ref_Mobile: d.Ref_Mobile,\n    Ref_Email: d.Ref_Email,\n    Ref_Clinic: d.Ref_Clinic\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        144
+      ],
+      "id": "b6bbfa76-eecd-4856-96fd-4618a5397f04",
+      "name": "Import Into http request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://10.64.1.11/_api/contextinfo",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json;odata=verbose"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json;odata=verbose",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        656,
+        144
+      ],
+      "id": "7eb9a52c-4301-4780-ba20-7b80c89c34a5",
+      "name": "HTTP Request2",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "dGN7XVraKhKrlOOY",
+          "name": "OnPremSharepoint"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "timeSavedPerExecution": 5,
+    "errorWorkflow": "J83Enw8ArDSqhMCL"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-05-27T07:11:50.220Z",
+      "createdAt": "2025-05-27T07:11:50.220Z",
+      "role": "workflow:owner",
+      "workflowId": "0Ro4JNclWnhvigq7",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": {
+    "node:Microsoft Outlook Trigger": {
+      "lastTimeChecked": "2026-01-08T05:46:32.645+00:00"
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-12-30T00:16:41.696Z",
+  "versionId": "372a0c03-78b2-4a9d-a30a-de6f62a2e385"
+}
