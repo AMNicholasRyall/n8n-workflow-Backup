@@ -1,0 +1,95 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-13T06:03:04.968Z",
+  "id": "fMWRIDFwJGNJFepm",
+  "isArchived": false,
+  "meta": null,
+  "name": "ClinicTableFinder",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f8d6505b-e981-4778-ab72-bca24cdac67d",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Abb",
+              "keyValue": "={{ $json.clinic }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "5d91df80-4819-4fd1-a32e-b7cb3bed64cc",
+      "name": "Get row(s)"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-13T06:03:04.970Z",
+      "createdAt": "2025-11-13T06:03:04.970Z",
+      "role": "workflow:owner",
+      "workflowId": "fMWRIDFwJGNJFepm",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-13T05:47:15.147Z",
+      "createdAt": "2025-11-13T05:47:15.147Z",
+      "id": "dkYWH6XMkxWsDBNj",
+      "name": "CompareFlows"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-13T23:31:21.000Z",
+  "versionId": "7eb1dc60-e705-4f54-993e-c9271b5ae8ef"
+}
