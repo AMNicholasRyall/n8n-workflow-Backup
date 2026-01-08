@@ -1,0 +1,265 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Customer Doc Appoint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Customer Doc Appoint": {
+      "main": [
+        [
+          {
+            "node": "autograb zenoti medorder form as PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Customer With Receptpn Selects Address": {
+      "main": [
+        [
+          {
+            "node": "Generate Med Order template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Med Order template": {
+      "main": [
+        [
+          {
+            "node": "Compare Address's from forms",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compare Address's from forms": {
+      "main": [
+        [
+          {
+            "node": "Product Order Compared",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Product Order Compared": {
+      "main": [
+        [
+          {
+            "node": "Xlsx auto fills other boxes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Xlsx auto fills other boxes": {
+      "main": [
+        [
+          {
+            "node": "sent to phamarcy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "sent to phamarcy": {
+      "main": [
+        [
+          {
+            "node": "Date of order plus other details re-uploaded to zenoti",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "autograb zenoti medorder form as PDF": {
+      "main": [
+        [
+          {
+            "node": "Customer With Receptpn Selects Address",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-05T07:27:45.259Z",
+  "id": "xmDU0vwBMmBxMyQz",
+  "isArchived": false,
+  "meta": null,
+  "name": "Workings out not a actually flow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -48
+      ],
+      "id": "03bf7510-9311-4e44-8f4b-3907042e4de3",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        -48
+      ],
+      "id": "41b90b50-8e0e-4c2b-8c6c-f2b4541c0264",
+      "name": "Customer Doc Appoint"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        -48
+      ],
+      "id": "cede224f-5ef1-41fa-89b2-81145841ec15",
+      "name": "Customer With Receptpn Selects Address"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        -48
+      ],
+      "id": "934123de-ec73-4e9b-b9a7-a787c1328707",
+      "name": "Generate Med Order template"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        -48
+      ],
+      "id": "1e596c41-0318-4c4f-a314-22c2485875d7",
+      "name": "Compare Address's from forms"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1328,
+        -48
+      ],
+      "id": "d413dcf1-b941-4b27-a4a9-7e1454f25708",
+      "name": "Product Order Compared"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1552,
+        -48
+      ],
+      "id": "57f6baa4-5f42-44a3-a022-5e08b9268680",
+      "name": "Xlsx auto fills other boxes"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1776,
+        -48
+      ],
+      "id": "19faf917-1d59-4de7-a2d4-741933da55c2",
+      "name": "sent to phamarcy"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2000,
+        -48
+      ],
+      "id": "e115db53-29ee-4f97-b600-250bfb75f7a1",
+      "name": "Date of order plus other details re-uploaded to zenoti"
+    },
+    {
+      "parameters": {
+        "jsCode": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=d89b13f9-6f63-467e-9086-7f997ed5abc9&ServiceId=c881a110-4440-40fc-9e81-918d918bc7a3&Service=Telehealth%20First&PackageId=&Therapistname=Dr%20Annemarie%20Hern%2015150&GuestId=7d53c1ef-e49d-4aea-8bd5-fd0827ee178d&AppointmentId=1377e309-24a9-4310-9a20-90cb24542ecf&UserId=7d53c1ef-e49d-4aea-8bd5-fd0827ee178d&VersionNo=&FormId=undefined&IsClassType=0&ShowAddFormButton=true&SessionId=1767597176404&DisableFormsOnFlyForCenter=false"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        -48
+      ],
+      "id": "4ce7ca89-5547-4660-8b39-5d3d07c63bce",
+      "name": "autograb zenoti medorder form as PDF"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-05T07:27:45.262Z",
+      "createdAt": "2026-01-05T07:27:45.262Z",
+      "role": "workflow:owner",
+      "workflowId": "xmDU0vwBMmBxMyQz",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-05T07:27:45.259Z",
+  "versionId": "e42780c2-06bc-4ff5-b524-5b0ebcdec322"
+}
