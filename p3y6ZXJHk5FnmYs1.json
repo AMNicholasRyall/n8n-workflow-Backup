@@ -1,0 +1,3080 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-07T06:21:32.000Z",
+    "createdAt": "2026-01-07T06:21:31.010Z",
+    "versionId": "6e39e9c0-a405-4834-9e30-fee546a2891e",
+    "workflowId": "p3y6ZXJHk5FnmYs1",
+    "nodes": [
+      {
+        "parameters": {
+          "pollTimes": {
+            "item": [
+              {
+                "mode": "everyMinute"
+              }
+            ]
+          },
+          "filters": {
+            "custom": "contains(subject, 'IT Access For')",
+            "foldersToInclude": [
+              "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAAAAAEMAAA="
+            ],
+            "sender": "hr@ashleyandmartin.com.au"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlookTrigger",
+        "typeVersion": 1,
+        "position": [
+          0,
+          -224
+        ],
+        "id": "056b839e-9e63-40a5-a80f-88898d6aa3e6",
+        "name": "Microsoft Outlook Trigger",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "messageId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "output": "raw",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          224,
+          -224
+        ],
+        "id": "59a91ba0-1738-44db-aac1-d3835b52be63",
+        "name": "Get a message",
+        "webhookId": "b5bdaee3-6007-4da4-8c03-dc846d0be4d9",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1040,
+          -224
+        ],
+        "id": "766438c2-e53f-4438-8f0e-cea5c4d0a957",
+        "name": "Clean for IF"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "b10b2be5-bf59-4cc5-9a6f-882cb99725eb",
+                "leftValue": "={{ $json.empty }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "false",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          1200,
+          -224
+        ],
+        "id": "bc85bb42-0bdc-4b8f-8e21-85bb7491bd06",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "baseDN": "=OU={{ $json.name }},OU={{ $json.Country }},OU=AMUsers,DC=AshleyandMartin,DC=local",
+          "searchFor": "(objectclass=user)",
+          "attribute": "sAMAccountName",
+          "searchText": "={{ $('Email Cleanup').item.json.samAccountName }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.ldap",
+        "typeVersion": 1,
+        "position": [
+          896,
+          -224
+        ],
+        "id": "8474f952-ea85-46b5-8385-1571468bc51e",
+        "name": "SearchForUser",
+        "alwaysOutputData": true,
+        "credentials": {
+          "ldap": {
+            "id": "jytIHVQdPwtaxqUr",
+            "name": "LDAP account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "baseDN": "=OU={{ $('FindClinic').item.json.name }},OU={{ $('FindClinic').item.json.Country }},OU=AMUsers,DC=AshleyandMartin,DC=local",
+          "searchFor": "(objectclass=user)",
+          "attribute": "title",
+          "searchText": "={{ $('Email Cleanup').item.json.position }}",
+          "limit": 1,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.ldap",
+        "typeVersion": 1,
+        "position": [
+          1440,
+          -240
+        ],
+        "id": "3a2741d5-ef74-40c7-a44c-0e453dcfacc9",
+        "name": "Group to Copy",
+        "credentials": {
+          "ldap": {
+            "id": "jytIHVQdPwtaxqUr",
+            "name": "LDAP account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "baseDN": "OU=AMUsers,DC=AshleyandMartin,DC=local",
+          "searchFor": "(objectclass=user)",
+          "attribute": "mail",
+          "searchText": "={{ $('Email Cleanup').item.json.managerEmail }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.ldap",
+        "typeVersion": 1,
+        "position": [
+          1632,
+          -240
+        ],
+        "id": "465eed4c-610f-4076-bb16-3eedc5baa935",
+        "name": "FindManager",
+        "credentials": {
+          "ldap": {
+            "id": "jytIHVQdPwtaxqUr",
+            "name": "LDAP account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "Trigger with Email - Grabs Email",
+          "height": 240,
+          "width": 400
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -32,
+          -304
+        ],
+        "typeVersion": 1,
+        "id": "9b8dc8c1-566e-4847-8fef-bb37fc949cb4",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "Rips out New Staff details\nSearches clinic details",
+          "height": 240,
+          "width": 384,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          432,
+          -304
+        ],
+        "typeVersion": 1,
+        "id": "ac11e884-20de-4603-80f3-2a4722be2f5b",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lsINP70DmcZtIj4M",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinics",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "name",
+                "keyValue": "={{ $json.location }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1,
+        "position": [
+          688,
+          -224
+        ],
+        "id": "719428a2-cd55-48ba-a299-e74999c92c90",
+        "name": "FindClinic"
+      },
+      {
+        "parameters": {
+          "content": "Check for Duplicate User",
+          "height": 240,
+          "width": 496
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          848,
+          -304
+        ],
+        "typeVersion": 1,
+        "id": "46b343f4-820b-489c-97c3-84ea4bdcd0b6",
+        "name": "Sticky Note2"
+      },
+      {
+        "parameters": {
+          "toRecipients": "monitoring@ashleyandmartin.com.au",
+          "subject": "=New User Exist - {{ $('Email Cleanup').item.json.displayName }}",
+          "bodyContent": "=Hi Team,\n\nThe following user already exists and you may need to look into your work flow\n\n{{ $('Email Cleanup').item.json.employeeId }}\n{{ $('Email Cleanup').item.json.firstName }}\n{{ $('Email Cleanup').item.json.lastName }}\n{{ $('Email Cleanup').item.json.position }}\n{{ $('Email Cleanup').item.json.location }}\n{{ $('Email Cleanup').item.json.startDate }}\n{{ $('Email Cleanup').item.json.managerEmail }}\n{{ $('Email Cleanup').item.json.displayName }}\n{{ $('Email Cleanup').item.json.samAccountName }}\n{{ $('Email Cleanup').item.json.userPrincipalName }}\n\nRegards,\nAutomation",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          1456,
+          -480
+        ],
+        "id": "8ec265cd-09d0-4b6f-9628-79744f2f523e",
+        "name": "Duplicate User Found",
+        "webhookId": "9a53cda4-a03d-4933-9dc1-5851363c8999",
+        "executeOnce": true,
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "Collect Data for Creating User",
+          "height": 208,
+          "width": 432,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1376,
+          -288
+        ],
+        "typeVersion": 1,
+        "id": "a34f7a44-614a-4352-a8f4-ea3bb25ed325",
+        "name": "Sticky Note3"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Get the HTML body from previous node\nconst htmlBody = $input.first().json.body?.content || '';\n\n// 1) Normalise HTML into text\nlet text = htmlBody\n  .replace(/\\r\\n/g, '\\n')\n  .replace(/<br\\s*\\/?>/gi, '\\n')\n  .replace(/<\\/p>/gi, '\\n')\n  .replace(/<\\/div>/gi, '\\n');\n\n// Strip &nbsp; (both entity and actual NBSP char)\ntext = text\n  .replace(/&nbsp;/gi, ' ')\n  .replace(/\\u00A0/g, ' ');\n\n// Strip all remaining HTML tags\ntext = text.replace(/<[^>]+>/g, '');\n\n// Collapse multiple blank lines\ntext = text.replace(/\\n{2,}/g, '\\n').trim();\n\n// Helper to get lines of the form \"Label: value\"\nfunction getField(label) {\n  const regex = new RegExp('^[ \\\\t]*' + label + '\\\\s*:\\\\s*(.*)$', 'mi');\n  const match = text.match(regex);\n  if (!match) return '';\n  return match[1].replace(/&nbsp;/gi, ' ').replace(/\\u00A0/g, ' ').trim();\n}\n\nconst employeeId    = getField('Employee ID');\nconst firstName     = getField('First Name');\nconst lastName      = getField('Last Name');\nconst position      = getField('Position');\nconst location      = getField('Location');\nconst startDateRaw  = getField('Start Date');\nconst managerEmail  = getField('Manager Email');\n\n// Build firstname.lastname username\nlet usernameBase = '';\nif (firstName && lastName) {\n  usernameBase = `${firstName}.${lastName}`;\n  usernameBase = usernameBase\n    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '') // remove accents\n    .toLowerCase()\n    .replace(/[^a-z0-9.]/g, ''); // limit to safe chars\n}\n\n// AD fields\nlet samAccountName = usernameBase;\n\n// Enforce 20-char limit\nif (samAccountName.length > 20) {\n  samAccountName = samAccountName.substring(0, 20);\n}\n\nconst userPrincipalName = usernameBase\n  ? `${samAccountName}@ashleyandmartin.com.au`\n  : '';\n\nconst displayName = [firstName, lastName].filter(x => x).join(' ');\n\n// Return clean JSON\nreturn [{\n  json: {\n    employeeId,\n    firstName,\n    lastName,\n    position,\n    location,\n    startDate: startDateRaw,\n    managerEmail,\n    displayName,\n    samAccountName,\n    userPrincipalName\n  }\n}];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          480,
+          -224
+        ],
+        "id": "60acd488-4e8a-4496-aa59-fa9ef872f9ad",
+        "name": "Email Cleanup"
+      },
+      {
+        "parameters": {
+          "content": "Creates User",
+          "height": 208,
+          "width": 208,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1824,
+          -288
+        ],
+        "typeVersion": 1,
+        "id": "adef9426-8c2c-4a19-91b8-7eaef2fe64fd",
+        "name": "Sticky Note4"
+      },
+      {
+        "parameters": {
+          "operation": "create",
+          "dn": "=CN={{ $('Email Cleanup').item.json.displayName }},OU={{ $('FindClinic').item.json.name }},OU={{ $('FindClinic').item.json.Country }},OU=AMUsers,DC=AshleyandMartin,DC=local",
+          "attributes": {
+            "attribute": [
+              {
+                "id": "cn",
+                "value": "={{ $('Email Cleanup').item.json.displayName }}"
+              },
+              {
+                "id": "Company",
+                "value": "Ashley and Martin"
+              },
+              {
+                "id": "department",
+                "value": "={{ $json.department }}"
+              },
+              {
+                "id": "description",
+                "value": "={{ $('Email Cleanup').item.json.position }}"
+              },
+              {
+                "id": "displayName",
+                "value": "={{ $('Email Cleanup').item.json.displayName }}"
+              },
+              {
+                "id": "distinguishedName",
+                "value": "=CN={{ $('Email Cleanup').item.json.displayName }},OU={{ $('Email Cleanup').item.json.location }},OU=Australia,OU=AMUsers,DC=AshleyandMartin,DC=local "
+              },
+              {
+                "id": "employeeID",
+                "value": "={{ $('Email Cleanup').item.json.employeeId }}"
+              },
+              {
+                "id": "extensionAttribute1",
+                "value": "={{ $('Email Cleanup').item.json.position }}"
+              },
+              {
+                "id": "extensionAttribute2",
+                "value": "={{ $('FindClinic').item.json.Country_Code }}"
+              },
+              {
+                "id": "extensionAttribute3",
+                "value": "={{ $('Email Cleanup').item.json.location }}"
+              },
+              {
+                "id": "mail",
+                "value": "={{ $('Email Cleanup').item.json.userPrincipalName }}"
+              },
+              {
+                "id": "mailNickname",
+                "value": "={{ $('Email Cleanup').item.json.samAccountName }}"
+              },
+              {
+                "id": "manager",
+                "value": "={{ $('FindManager').item.json.dn }}"
+              },
+              {
+                "id": "sAMAccountName",
+                "value": "={{ $('Email Cleanup').item.json.samAccountName }}"
+              },
+              {
+                "id": "title",
+                "value": "={{ $('Email Cleanup').item.json.position }}"
+              },
+              {
+                "id": "userPrincipalName",
+                "value": "={{ $('Email Cleanup').item.json.userPrincipalName }}"
+              },
+              {
+                "id": "givenName",
+                "value": "={{ $('Email Cleanup').item.json.firstName }}"
+              },
+              {
+                "id": "sn",
+                "value": "={{ $('Email Cleanup').item.json.lastName }}"
+              },
+              {
+                "id": "objectClass",
+                "value": "top"
+              },
+              {
+                "id": "objectClass",
+                "value": "person"
+              },
+              {
+                "id": "objectClass",
+                "value": "organizationalPerson"
+              },
+              {
+                "id": "objectClass",
+                "value": "user"
+              },
+              {
+                "id": "userAccountControl",
+                "value": "514"
+              },
+              {
+                "id": "physicalDeliveryOfficeName",
+                "value": "={{ $('Group to Copy').item.json.physicalDeliveryOfficeName }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.ldap",
+        "typeVersion": 1,
+        "position": [
+          1872,
+          -240
+        ],
+        "id": "b65b3ec5-fb96-44d5-9e95-c343eb1763cc",
+        "name": "Create User",
+        "credentials": {
+          "ldap": {
+            "id": "jytIHVQdPwtaxqUr",
+            "name": "LDAP account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "advanced": true,
+          "mergeByFields": {
+            "values": [
+              {
+                "field1": "dn",
+                "field2": "newUserDn"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          2640,
+          -112
+        ],
+        "id": "7fcc54e5-52a4-4336-8c22-c4a6a37b0621",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Get the current item (from the LDAP node just before this Code node)\nconst item = $input.first().json;\n\n// This is your array of group DNs:\n// [\"CN=Staff - WHS,OU=Security Groups,...\", \"CN=Admin Staff - SG,OU=Security Groups,...\", ...]\nlet groups = item.memberOf || [];\n\n// Clean up, make sure it's an array of non-empty strings\ngroups = groups\n  .map(g => (g || '').trim())\n  .filter(g => g.length > 0);\n\n// Build the new user DN (same as you used in the Create step)\n// If you already have newUserDn in JSON, just read it instead.\nconst displayName = $('Email Cleanup').first().json.displayName;\nconst clinicName  = $('FindClinic').first().json.name;\nconst country     = $('FindClinic').first().json.Country;\n\nconst newUserDn = `CN=${displayName},OU=${clinicName},OU=${country},OU=AMUsers,DC=AshleyandMartin,DC=local`;\n\n// Map to one item per group\nreturn groups.map(groupDn => {\n  // Optional: just the CN for logging\n  const cnMatch = groupDn.match(/^CN=([^,]+)/i);\n  const groupName = cnMatch ? cnMatch[1] : groupDn;\n\n  return {\n    json: {\n      groupDn,      // full group DN from memberOf array\n      groupName,    // \"Staff - WHS\", \"Admin Staff - SG\", etc.\n      newUserDn     // DN of the user we just created\n    }\n  };\n});\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2016,
+          0
+        ],
+        "id": "7dca1a29-e207-4048-aeda-cc7a3f38021f",
+        "name": "Pull Out Groups",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "content": "Collect and Add to Groups",
+          "height": 272,
+          "width": 496,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          2592,
+          -176
+        ],
+        "typeVersion": 1,
+        "id": "c34ca382-4af1-4714-8208-acf86f9b3493",
+        "name": "Sticky Note5"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "dn": "CN=DUO_NewUsers,OU=Security Groups,DC=AshleyandMartin,DC=local",
+          "attributes": {
+            "add": [
+              {
+                "id": "member",
+                "value": "={{ $('Merge').item.json.dn }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.ldap",
+        "typeVersion": 1,
+        "position": [
+          2960,
+          -112
+        ],
+        "id": "7550c693-67d6-4495-bbc1-7de86f12db2c",
+        "name": "DUO New User",
+        "executeOnce": true,
+        "credentials": {
+          "ldap": {
+            "id": "jytIHVQdPwtaxqUr",
+            "name": "LDAP account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "dn": "={{ $json.groupDn }}",
+          "attributes": {
+            "add": [
+              {
+                "id": "member",
+                "value": "={{ $json.dn }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.ldap",
+        "typeVersion": 1,
+        "position": [
+          2800,
+          -112
+        ],
+        "id": "59eb3474-2369-48a3-8686-8f2f87406b5e",
+        "name": "Add Copied Groups",
+        "credentials": {
+          "ldap": {
+            "id": "jytIHVQdPwtaxqUr",
+            "name": "LDAP account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "Sync to 365",
+          "height": 256
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          3120,
+          -176
+        ],
+        "typeVersion": 1,
+        "id": "b9eec605-b43a-4976-961b-d2fddc642792",
+        "name": "Sticky Note6"
+      },
+      {
+        "parameters": {
+          "content": "## Check List of things to do\n1. Force AD to Sync - Completed\n2. Wait for sync - Completed\n3. Add Licence - Completed\n4. For AD to Sync - Completed\n5. Exchange Console Command - Completed\n6. Docusign - Not possible\n7. Error Handling",
+          "height": 256,
+          "width": 480,
+          "color": 5
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1824,
+          -608
+        ],
+        "typeVersion": 1,
+        "id": "493d9f0b-3c88-4d7a-a7d2-d8076bc8c7c0",
+        "name": "Sticky Note7"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "uc1c19X92S4cXgn5",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/uc1c19X92S4cXgn5",
+            "cachedResultName": "AD - Force Sync to 365"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {}
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          3184,
+          -112
+        ],
+        "id": "1fa22996-2495-49d9-878c-b5040c62d9ae",
+        "name": "Call 'AD - Force Sync to 365'",
+        "executeOnce": true
+      },
+      {
+        "parameters": {
+          "content": "Licence 365 User",
+          "height": 256,
+          "width": 528
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          3600,
+          -176
+        ],
+        "typeVersion": 1,
+        "id": "b191ac11-a559-43d8-b9f8-90b9ae8caeb4",
+        "name": "Sticky Note8"
+      },
+      {
+        "parameters": {
+          "content": "Pause for 365 Sync",
+          "height": 256,
+          "width": 176,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          3392,
+          -176
+        ],
+        "typeVersion": 1,
+        "id": "9461817d-a552-4171-897b-789ad6a97968",
+        "name": "Sticky Note9"
+      },
+      {
+        "parameters": {
+          "unit": "minutes"
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          3424,
+          -112
+        ],
+        "id": "7debbc90-73dd-41e9-94a2-20fa42e803af",
+        "name": "Wait",
+        "webhookId": "108b5d04-cc03-4118-ac14-a9f3dca679b2"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "user": {
+            "__rl": true,
+            "value": "={{ $('Email Cleanup').item.json.userPrincipalName }}",
+            "mode": "id"
+          },
+          "requestOptions": {}
+        },
+        "type": "n8n-nodes-base.microsoftEntra",
+        "typeVersion": 1,
+        "position": [
+          3632,
+          -112
+        ],
+        "id": "3ae5682c-9abd-447d-a99a-840a2e9d0200",
+        "name": "Search4NewUser",
+        "credentials": {
+          "microsoftEntraOAuth2Api": {
+            "id": "KdYKykHvS322gNtb",
+            "name": "Microsoft Entra ID (Azure Active Directory) account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "Sync to 365",
+          "height": 256,
+          "width": 224,
+          "color": 2
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          4176,
+          -176
+        ],
+        "typeVersion": 1,
+        "id": "4282da8c-5ee3-4af1-b7e3-bebe81a1fb57",
+        "name": "Sticky Note10"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "uc1c19X92S4cXgn5",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/uc1c19X92S4cXgn5",
+            "cachedResultName": "AD - Force Sync to 365"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {}
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          4240,
+          -112
+        ],
+        "id": "f8af389d-a7e7-4ff0-99de-2adc4115c613",
+        "name": "Call 'AD - Force Sync to 365'1",
+        "executeOnce": true
+      },
+      {
+        "parameters": {
+          "content": "Pause for 365 Sync",
+          "height": 256,
+          "width": 176,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          4448,
+          -176
+        ],
+        "typeVersion": 1,
+        "id": "f31188f8-c261-4873-9dbe-7dcd20d32427",
+        "name": "Sticky Note11"
+      },
+      {
+        "parameters": {
+          "unit": "minutes"
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          4480,
+          -112
+        ],
+        "id": "3a92f8ff-ccd5-4fc4-afdb-9652ddb5d0de",
+        "name": "Wait1",
+        "webhookId": "108b5d04-cc03-4118-ac14-a9f3dca679b2",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "content": "Email if something is wrong",
+          "height": 224,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1376,
+          -544
+        ],
+        "typeVersion": 1,
+        "id": "8f5df419-4235-4747-93fd-ac9cb9d62280",
+        "name": "Sticky Note12"
+      },
+      {
+        "parameters": {
+          "method": "PATCH",
+          "url": "=https://graph.microsoft.com/v1.0/users/{{ $json.id }}",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "microsoftEntraOAuth2Api",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\n  \"usageLocation\": \"AU\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          3808,
+          -112
+        ],
+        "id": "c772e945-ec1a-4e6c-8eda-a9e29388a7ca",
+        "name": "Set Usage Location",
+        "credentials": {
+          "microsoftEntraOAuth2Api": {
+            "id": "KdYKykHvS322gNtb",
+            "name": "Microsoft Entra ID (Azure Active Directory) account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://graph.microsoft.com/v1.0/users/{{ $('Search4NewUser').item.json.id }}/assignLicense",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "microsoftEntraOAuth2Api",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "{\n  \"addLicenses\": [\n    {\n      \"skuId\": \"cbdc14ab-d96c-4c30-b9f4-6ada7cdc1d46\",\n      \"disabledPlans\": []\n    }\n  ],\n  \"removeLicenses\": []\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          4000,
+          -112
+        ],
+        "id": "0d9d9dbd-51fa-44f3-8929-f701bc2815b8",
+        "name": "Licence User",
+        "credentials": {
+          "microsoftEntraOAuth2Api": {
+            "id": "KdYKykHvS322gNtb",
+            "name": "Microsoft Entra ID (Azure Active Directory) account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const upn = $('Email Cleanup').first().json.userPrincipalName;\n\nconst command = `powershell.exe -NoProfile -Command \"$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://ho-EXC2016/PowerShell/ -Authentication Kerberos; Import-PSSession $Session -DisableNameChecking; Enable-RemoteMailbox ${upn} -RemoteRoutingAddress ${upn} -DomainController AM-WA-DC01\"`;\n\n\nreturn [\n  {\n    json: { exchangeCommand: command },\n  },\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          4736,
+          -112
+        ],
+        "id": "125ecbc7-74cc-43c2-8bb0-de82d5df9c7e",
+        "name": "Exchange Management Console"
+      },
+      {
+        "parameters": {
+          "command": "={{ $json.exchangeCommand }}",
+          "cwd": "="
+        },
+        "type": "n8n-nodes-base.ssh",
+        "typeVersion": 1,
+        "position": [
+          4912,
+          -112
+        ],
+        "id": "98395758-1709-4d42-9a49-406b3dc3c8a1",
+        "name": "Execute a command",
+        "credentials": {
+          "sshPassword": {
+            "id": "SEXNVZKc31LJccvl",
+            "name": "SSH Password account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "Enable Mailbox post Licence",
+          "height": 256,
+          "width": 384
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          4672,
+          -176
+        ],
+        "typeVersion": 1,
+        "id": "fe8626a1-56c8-466e-8606-b6d0c32ef1e5",
+        "name": "Sticky Note14"
+      },
+      {
+        "parameters": {
+          "toRecipients": "={{ $('Email Cleanup').item.json.managerEmail }}",
+          "subject": "=New User -  {{ $('Email Cleanup').item.json.displayName }}",
+          "bodyContent": "=Hi {{ $('FindManager').item.json.givenName }}\n\nYour new staff {{ $('Email Cleanup').item.json.displayName }} is ready and setup to go.\n\nUsername:{{ $('Email Cleanup').item.json.samAccountName }}\nEmail:{{ $('Email Cleanup').item.json.userPrincipalName }}\nPassword: Welcome01\nSite: {{ $('Email Cleanup').item.json.location }}\nPosition: {{ $('Email Cleanup').item.json.position }}\n\nAny issue's please let It know.\n\nIt please manually make the Docusign accounts!\n\nRegards,\nNicholas",
+          "additionalFields": {
+            "ccRecipients": "monitoring@ashleyandmartin.com.au"
+          }
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          5856,
+          -368
+        ],
+        "id": "a5f5e539-1352-4eab-9300-29247c18db2a",
+        "name": "Send a message1",
+        "webhookId": "5b7a717b-5c5b-4321-b6b6-7103d504629a",
+        "executeOnce": true,
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "Completion Email to Manager",
+          "height": 224,
+          "width": 224,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          5792,
+          -432
+        ],
+        "typeVersion": 1,
+        "id": "8513e805-fcef-45aa-9230-ee330ddea156",
+        "name": "Sticky Note15"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Hard-set password\nconst rawPwd = \"Welcome01!@#\";\n\n// Pull DN from the Create User node\nconst dn = $('Create User').first().json.dn;\n\nif (!dn) {\n    throw new Error(\"DN not found from 'Create User' node\");\n}\n\n// Escape single quotes for safety inside PowerShell strings\nconst escapedPwd = rawPwd.replace(/'/g, \"''\");\n\n// Activate + unlock account\nconst activateCommand =\n  `powershell.exe -NoProfile -Command ` +\n  `\"Enable-ADAccount -Identity '${dn}'; ` +\n  `Unlock-ADAccount -Identity '${dn}' -ErrorAction SilentlyContinue\"`;\n\n// Reset password\nconst passwordCommand =\n  `powershell.exe -NoProfile -Command ` +\n  `\"Set-ADAccountPassword -Identity '${dn}' -Reset ` +\n  `-NewPassword (ConvertTo-SecureString -AsPlainText '${escapedPwd}' -Force)\"`;\n\nreturn [\n  {\n    json: {\n      distinguishedName: dn,\n      activateCommand,\n      passwordCommand\n    }\n  }\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          5184,
+          -112
+        ],
+        "id": "3c2d38d7-f58d-41c1-8641-e6dbea409eda",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "command": "={{ $('Code in JavaScript').item.json.activateCommand }}",
+          "cwd": "="
+        },
+        "type": "n8n-nodes-base.ssh",
+        "typeVersion": 1,
+        "position": [
+          5568,
+          -112
+        ],
+        "id": "0262a45f-d92e-470f-9c6a-d4d97bfee8c5",
+        "name": "Activate User",
+        "credentials": {
+          "sshPassword": {
+            "id": "SEXNVZKc31LJccvl",
+            "name": "SSH Password account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "command": "={{ $json.passwordCommand }}",
+          "cwd": "="
+        },
+        "type": "n8n-nodes-base.ssh",
+        "typeVersion": 1,
+        "position": [
+          5376,
+          -112
+        ],
+        "id": "7c60a776-bf35-409a-992f-e6b3ed286f84",
+        "name": "Set User Password",
+        "credentials": {
+          "sshPassword": {
+            "id": "SEXNVZKc31LJccvl",
+            "name": "SSH Password account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "Activate Account and Set password",
+          "height": 256,
+          "width": 656,
+          "color": 5
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          5104,
+          -176
+        ],
+        "typeVersion": 1,
+        "id": "7db2139a-5061-4007-8b36-72dde8de709d",
+        "name": "Sticky Note16"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2192,
+          0
+        ],
+        "id": "2d1ffa1e-02ee-47fb-8cde-f60a022585c4",
+        "name": "No Groups"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "d9672701-f551-4dd7-b042-b6696dc7a14e",
+                "leftValue": "={{ $json.empty }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "false",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          2352,
+          0
+        ],
+        "id": "c0752328-c8b3-4efe-a24b-fe43bb7dfde6",
+        "name": "If1"
+      },
+      {
+        "parameters": {
+          "toRecipients": "monitoring@ashleyandmartin.com.au",
+          "subject": "=New User - {{ $('Email Cleanup').item.json.displayName }}",
+          "bodyContent": "=Hi Team,\nWe cannot find groups for the new user {{ $('Email Cleanup').item.json.displayName }}.\nThere appears to be no one to clone them in the {{ $('Email Cleanup').item.json.location }} OU.\n\nRegards,\nAutomation",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          2544,
+          -352
+        ],
+        "id": "6ae20e65-f373-4c24-b068-2808341c70ac",
+        "name": "Failed No Groups",
+        "webhookId": "a27271a8-56cd-4567-9e35-6bd0422a6914",
+        "executeOnce": true,
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "Copy Groups",
+          "height": 240,
+          "width": 608,
+          "color": 2
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1936,
+          -64
+        ],
+        "typeVersion": 1,
+        "id": "e22e3536-6260-4ce2-a885-63806d149c45",
+        "name": "Sticky Note17"
+      },
+      {
+        "parameters": {
+          "content": "Email if something is wrong",
+          "height": 224,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          2480,
+          -416
+        ],
+        "typeVersion": 1,
+        "id": "8306e43c-eb26-4a39-970e-9dc9a8302b14",
+        "name": "Sticky Note18"
+      },
+      {
+        "parameters": {
+          "operation": "move",
+          "messageId": {
+            "__rl": true,
+            "value": "={{ $('Get a message').item.json.id }}",
+            "mode": "id"
+          },
+          "folderId": {
+            "__rl": true,
+            "value": "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAADKbNLAAA=",
+            "mode": "list",
+            "cachedResultName": "ELMO",
+            "cachedResultUrl": "https://outlook.office365.com/mail/AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAADKbNLAAA%3D"
+          }
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          5856,
+          -112
+        ],
+        "id": "91bd7453-4abc-4181-aa63-8b9d2716addc",
+        "name": "Move a message",
+        "webhookId": "fa7a6a5a-bfdf-4317-938b-c463d53a71ab",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "Email Clean Up",
+          "height": 256,
+          "width": 224
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          5792,
+          -176
+        ],
+        "typeVersion": 1,
+        "id": "973ec807-0e91-44d2-9dc5-ca577806c19b",
+        "name": "Sticky Note19"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "iERBtie2iZV2PJJf",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/iERBtie2iZV2PJJf",
+            "cachedResultName": "Zenoti - Create User"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {
+            "waitForSubWorkflow": false
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          928,
+          -528
+        ],
+        "id": "8fd75f77-d213-45e8-a723-45d9a2fe2645",
+        "name": "Call 'Zenoti - Create User'1"
+      },
+      {
+        "parameters": {
+          "content": "Creates the User in Zenoti",
+          "height": 224,
+          "width": 288,
+          "color": 5
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          848,
+          -592
+        ],
+        "typeVersion": 1,
+        "id": "03e806ce-8383-43a7-abf7-2fe89f0d83e1",
+        "name": "Sticky Note13"
+      }
+    ],
+    "connections": {
+      "Microsoft Outlook Trigger": {
+        "main": [
+          [
+            {
+              "node": "Get a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get a message": {
+        "main": [
+          [
+            {
+              "node": "Email Cleanup",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Clean for IF": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Duplicate User Found",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Group to Copy",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SearchForUser": {
+        "main": [
+          [
+            {
+              "node": "Clean for IF",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Group to Copy": {
+        "main": [
+          [
+            {
+              "node": "FindManager",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Pull Out Groups",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "FindManager": {
+        "main": [
+          [
+            {
+              "node": "Create User",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "FindClinic": {
+        "main": [
+          [
+            {
+              "node": "SearchForUser",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Email Cleanup": {
+        "main": [
+          [
+            {
+              "node": "FindClinic",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Call 'Zenoti - Create User'1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create User": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Add Copied Groups",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Pull Out Groups": {
+        "main": [
+          [
+            {
+              "node": "No Groups",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Add Copied Groups": {
+        "main": [
+          [
+            {
+              "node": "DUO New User",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "DUO New User": {
+        "main": [
+          [
+            {
+              "node": "Call 'AD - Force Sync to 365'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'AD - Force Sync to 365'": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Search4NewUser",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search4NewUser": {
+        "main": [
+          [
+            {
+              "node": "Set Usage Location",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'AD - Force Sync to 365'1": {
+        "main": [
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set Usage Location": {
+        "main": [
+          [
+            {
+              "node": "Licence User",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Licence User": {
+        "main": [
+          [
+            {
+              "node": "Call 'AD - Force Sync to 365'1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait1": {
+        "main": [
+          [
+            {
+              "node": "Exchange Management Console",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Exchange Management Console": {
+        "main": [
+          [
+            {
+              "node": "Execute a command",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Execute a command": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Set User Password",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Activate User": {
+        "main": [
+          [
+            {
+              "node": "Send a message1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Move a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set User Password": {
+        "main": [
+          [
+            {
+              "node": "Activate User",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "No Groups": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ],
+          [
+            {
+              "node": "Failed No Groups",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 6e39e9c0",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "6e39e9c0-a405-4834-9e30-fee546a2891e",
+  "connections": {
+    "Microsoft Outlook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a message": {
+      "main": [
+        [
+          {
+            "node": "Email Cleanup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean for IF": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Duplicate User Found",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Group to Copy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchForUser": {
+      "main": [
+        [
+          {
+            "node": "Clean for IF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Group to Copy": {
+      "main": [
+        [
+          {
+            "node": "FindManager",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Pull Out Groups",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FindManager": {
+      "main": [
+        [
+          {
+            "node": "Create User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FindClinic": {
+      "main": [
+        [
+          {
+            "node": "SearchForUser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Cleanup": {
+      "main": [
+        [
+          {
+            "node": "FindClinic",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Call 'Zenoti - Create User'1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create User": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Add Copied Groups",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pull Out Groups": {
+      "main": [
+        [
+          {
+            "node": "No Groups",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Copied Groups": {
+      "main": [
+        [
+          {
+            "node": "DUO New User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DUO New User": {
+      "main": [
+        [
+          {
+            "node": "Call 'AD - Force Sync to 365'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'AD - Force Sync to 365'": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Search4NewUser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search4NewUser": {
+      "main": [
+        [
+          {
+            "node": "Set Usage Location",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'AD - Force Sync to 365'1": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Usage Location": {
+      "main": [
+        [
+          {
+            "node": "Licence User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Licence User": {
+      "main": [
+        [
+          {
+            "node": "Call 'AD - Force Sync to 365'1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Exchange Management Console",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exchange Management Console": {
+      "main": [
+        [
+          {
+            "node": "Execute a command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a command": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Set User Password",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Activate User": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Move a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set User Password": {
+      "main": [
+        [
+          {
+            "node": "Activate User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Groups": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Failed No Groups",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-27T23:11:17.277Z",
+  "id": "p3y6ZXJHk5FnmYs1",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "AD - Create User",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {
+          "custom": "contains(subject, 'IT Access For')",
+          "foldersToInclude": [
+            "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAAAAAEMAAA="
+          ],
+          "sender": "hr@ashleyandmartin.com.au"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlookTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -224
+      ],
+      "id": "056b839e-9e63-40a5-a80f-88898d6aa3e6",
+      "name": "Microsoft Outlook Trigger",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "output": "raw",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        224,
+        -224
+      ],
+      "id": "59a91ba0-1738-44db-aac1-d3835b52be63",
+      "name": "Get a message",
+      "webhookId": "b5bdaee3-6007-4da4-8c03-dc846d0be4d9",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        -224
+      ],
+      "id": "766438c2-e53f-4438-8f0e-cea5c4d0a957",
+      "name": "Clean for IF"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b10b2be5-bf59-4cc5-9a6f-882cb99725eb",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        -224
+      ],
+      "id": "bc85bb42-0bdc-4b8f-8e21-85bb7491bd06",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "baseDN": "=OU={{ $json.name }},OU={{ $json.Country }},OU=AMUsers,DC=AshleyandMartin,DC=local",
+        "searchFor": "(objectclass=user)",
+        "attribute": "sAMAccountName",
+        "searchText": "={{ $('Email Cleanup').item.json.samAccountName }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.ldap",
+      "typeVersion": 1,
+      "position": [
+        896,
+        -224
+      ],
+      "id": "8474f952-ea85-46b5-8385-1571468bc51e",
+      "name": "SearchForUser",
+      "alwaysOutputData": true,
+      "credentials": {
+        "ldap": {
+          "id": "jytIHVQdPwtaxqUr",
+          "name": "LDAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "baseDN": "=OU={{ $('FindClinic').item.json.name }},OU={{ $('FindClinic').item.json.Country }},OU=AMUsers,DC=AshleyandMartin,DC=local",
+        "searchFor": "(objectclass=user)",
+        "attribute": "title",
+        "searchText": "={{ $('Email Cleanup').item.json.position }}",
+        "limit": 1,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.ldap",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        -240
+      ],
+      "id": "3a2741d5-ef74-40c7-a44c-0e453dcfacc9",
+      "name": "Group to Copy",
+      "credentials": {
+        "ldap": {
+          "id": "jytIHVQdPwtaxqUr",
+          "name": "LDAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "baseDN": "OU=AMUsers,DC=AshleyandMartin,DC=local",
+        "searchFor": "(objectclass=user)",
+        "attribute": "mail",
+        "searchText": "={{ $('Email Cleanup').item.json.managerEmail }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.ldap",
+      "typeVersion": 1,
+      "position": [
+        1632,
+        -240
+      ],
+      "id": "465eed4c-610f-4076-bb16-3eedc5baa935",
+      "name": "FindManager",
+      "credentials": {
+        "ldap": {
+          "id": "jytIHVQdPwtaxqUr",
+          "name": "LDAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Trigger with Email - Grabs Email",
+        "height": 240,
+        "width": 400
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -32,
+        -304
+      ],
+      "typeVersion": 1,
+      "id": "9b8dc8c1-566e-4847-8fef-bb37fc949cb4",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Rips out New Staff details\nSearches clinic details",
+        "height": 240,
+        "width": 384,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        432,
+        -304
+      ],
+      "typeVersion": 1,
+      "id": "ac11e884-20de-4603-80f3-2a4722be2f5b",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "name",
+              "keyValue": "={{ $json.location }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        688,
+        -224
+      ],
+      "id": "719428a2-cd55-48ba-a299-e74999c92c90",
+      "name": "FindClinic"
+    },
+    {
+      "parameters": {
+        "content": "Check for Duplicate User",
+        "height": 240,
+        "width": 496
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        848,
+        -304
+      ],
+      "typeVersion": 1,
+      "id": "46b343f4-820b-489c-97c3-84ea4bdcd0b6",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "toRecipients": "monitoring@ashleyandmartin.com.au",
+        "subject": "=New User Exist - {{ $('Email Cleanup').item.json.displayName }}",
+        "bodyContent": "=Hi Team,\n\nThe following user already exists and you may need to look into your work flow\n\n{{ $('Email Cleanup').item.json.employeeId }}\n{{ $('Email Cleanup').item.json.firstName }}\n{{ $('Email Cleanup').item.json.lastName }}\n{{ $('Email Cleanup').item.json.position }}\n{{ $('Email Cleanup').item.json.location }}\n{{ $('Email Cleanup').item.json.startDate }}\n{{ $('Email Cleanup').item.json.managerEmail }}\n{{ $('Email Cleanup').item.json.displayName }}\n{{ $('Email Cleanup').item.json.samAccountName }}\n{{ $('Email Cleanup').item.json.userPrincipalName }}\n\nRegards,\nAutomation",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1456,
+        -480
+      ],
+      "id": "8ec265cd-09d0-4b6f-9628-79744f2f523e",
+      "name": "Duplicate User Found",
+      "webhookId": "9a53cda4-a03d-4933-9dc1-5851363c8999",
+      "executeOnce": true,
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Collect Data for Creating User",
+        "height": 208,
+        "width": 432,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1376,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "a34f7a44-614a-4352-a8f4-ea3bb25ed325",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the HTML body from previous node\nconst htmlBody = $input.first().json.body?.content || '';\n\n// 1) Normalise HTML into text\nlet text = htmlBody\n  .replace(/\\r\\n/g, '\\n')\n  .replace(/<br\\s*\\/?>/gi, '\\n')\n  .replace(/<\\/p>/gi, '\\n')\n  .replace(/<\\/div>/gi, '\\n');\n\n// Strip &nbsp; (both entity and actual NBSP char)\ntext = text\n  .replace(/&nbsp;/gi, ' ')\n  .replace(/\\u00A0/g, ' ');\n\n// Strip all remaining HTML tags\ntext = text.replace(/<[^>]+>/g, '');\n\n// Collapse multiple blank lines\ntext = text.replace(/\\n{2,}/g, '\\n').trim();\n\n// Helper to get lines of the form \"Label: value\"\nfunction getField(label) {\n  const regex = new RegExp('^[ \\\\t]*' + label + '\\\\s*:\\\\s*(.*)$', 'mi');\n  const match = text.match(regex);\n  if (!match) return '';\n  return match[1].replace(/&nbsp;/gi, ' ').replace(/\\u00A0/g, ' ').trim();\n}\n\nconst employeeId    = getField('Employee ID');\nconst firstName     = getField('First Name');\nconst lastName      = getField('Last Name');\nconst position      = getField('Position');\nconst location      = getField('Location');\nconst startDateRaw  = getField('Start Date');\nconst managerEmail  = getField('Manager Email');\n\n// Build firstname.lastname username\nlet usernameBase = '';\nif (firstName && lastName) {\n  usernameBase = `${firstName}.${lastName}`;\n  usernameBase = usernameBase\n    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '') // remove accents\n    .toLowerCase()\n    .replace(/[^a-z0-9.]/g, ''); // limit to safe chars\n}\n\n// AD fields\nlet samAccountName = usernameBase;\n\n// Enforce 20-char limit\nif (samAccountName.length > 20) {\n  samAccountName = samAccountName.substring(0, 20);\n}\n\nconst userPrincipalName = usernameBase\n  ? `${samAccountName}@ashleyandmartin.com.au`\n  : '';\n\nconst displayName = [firstName, lastName].filter(x => x).join(' ');\n\n// Return clean JSON\nreturn [{\n  json: {\n    employeeId,\n    firstName,\n    lastName,\n    position,\n    location,\n    startDate: startDateRaw,\n    managerEmail,\n    displayName,\n    samAccountName,\n    userPrincipalName\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        -224
+      ],
+      "id": "60acd488-4e8a-4496-aa59-fa9ef872f9ad",
+      "name": "Email Cleanup"
+    },
+    {
+      "parameters": {
+        "content": "Creates User",
+        "height": 208,
+        "width": 208,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1824,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "adef9426-8c2c-4a19-91b8-7eaef2fe64fd",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "dn": "=CN={{ $('Email Cleanup').item.json.displayName }},OU={{ $('FindClinic').item.json.name }},OU={{ $('FindClinic').item.json.Country }},OU=AMUsers,DC=AshleyandMartin,DC=local",
+        "attributes": {
+          "attribute": [
+            {
+              "id": "cn",
+              "value": "={{ $('Email Cleanup').item.json.displayName }}"
+            },
+            {
+              "id": "Company",
+              "value": "Ashley and Martin"
+            },
+            {
+              "id": "department",
+              "value": "={{ $json.department }}"
+            },
+            {
+              "id": "description",
+              "value": "={{ $('Email Cleanup').item.json.position }}"
+            },
+            {
+              "id": "displayName",
+              "value": "={{ $('Email Cleanup').item.json.displayName }}"
+            },
+            {
+              "id": "distinguishedName",
+              "value": "=CN={{ $('Email Cleanup').item.json.displayName }},OU={{ $('Email Cleanup').item.json.location }},OU=Australia,OU=AMUsers,DC=AshleyandMartin,DC=local "
+            },
+            {
+              "id": "employeeID",
+              "value": "={{ $('Email Cleanup').item.json.employeeId }}"
+            },
+            {
+              "id": "extensionAttribute1",
+              "value": "={{ $('Email Cleanup').item.json.position }}"
+            },
+            {
+              "id": "extensionAttribute2",
+              "value": "={{ $('FindClinic').item.json.Country_Code }}"
+            },
+            {
+              "id": "extensionAttribute3",
+              "value": "={{ $('Email Cleanup').item.json.location }}"
+            },
+            {
+              "id": "mail",
+              "value": "={{ $('Email Cleanup').item.json.userPrincipalName }}"
+            },
+            {
+              "id": "mailNickname",
+              "value": "={{ $('Email Cleanup').item.json.samAccountName }}"
+            },
+            {
+              "id": "manager",
+              "value": "={{ $('FindManager').item.json.dn }}"
+            },
+            {
+              "id": "sAMAccountName",
+              "value": "={{ $('Email Cleanup').item.json.samAccountName }}"
+            },
+            {
+              "id": "title",
+              "value": "={{ $('Email Cleanup').item.json.position }}"
+            },
+            {
+              "id": "userPrincipalName",
+              "value": "={{ $('Email Cleanup').item.json.userPrincipalName }}"
+            },
+            {
+              "id": "givenName",
+              "value": "={{ $('Email Cleanup').item.json.firstName }}"
+            },
+            {
+              "id": "sn",
+              "value": "={{ $('Email Cleanup').item.json.lastName }}"
+            },
+            {
+              "id": "objectClass",
+              "value": "top"
+            },
+            {
+              "id": "objectClass",
+              "value": "person"
+            },
+            {
+              "id": "objectClass",
+              "value": "organizationalPerson"
+            },
+            {
+              "id": "objectClass",
+              "value": "user"
+            },
+            {
+              "id": "userAccountControl",
+              "value": "514"
+            },
+            {
+              "id": "physicalDeliveryOfficeName",
+              "value": "={{ $('Group to Copy').item.json.physicalDeliveryOfficeName }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.ldap",
+      "typeVersion": 1,
+      "position": [
+        1872,
+        -240
+      ],
+      "id": "b65b3ec5-fb96-44d5-9e95-c343eb1763cc",
+      "name": "Create User",
+      "credentials": {
+        "ldap": {
+          "id": "jytIHVQdPwtaxqUr",
+          "name": "LDAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "dn",
+              "field2": "newUserDn"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2640,
+        -112
+      ],
+      "id": "7fcc54e5-52a4-4336-8c22-c4a6a37b0621",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the current item (from the LDAP node just before this Code node)\nconst item = $input.first().json;\n\n// This is your array of group DNs:\n// [\"CN=Staff - WHS,OU=Security Groups,...\", \"CN=Admin Staff - SG,OU=Security Groups,...\", ...]\nlet groups = item.memberOf || [];\n\n// Clean up, make sure it's an array of non-empty strings\ngroups = groups\n  .map(g => (g || '').trim())\n  .filter(g => g.length > 0);\n\n// Build the new user DN (same as you used in the Create step)\n// If you already have newUserDn in JSON, just read it instead.\nconst displayName = $('Email Cleanup').first().json.displayName;\nconst clinicName  = $('FindClinic').first().json.name;\nconst country     = $('FindClinic').first().json.Country;\n\nconst newUserDn = `CN=${displayName},OU=${clinicName},OU=${country},OU=AMUsers,DC=AshleyandMartin,DC=local`;\n\n// Map to one item per group\nreturn groups.map(groupDn => {\n  // Optional: just the CN for logging\n  const cnMatch = groupDn.match(/^CN=([^,]+)/i);\n  const groupName = cnMatch ? cnMatch[1] : groupDn;\n\n  return {\n    json: {\n      groupDn,      // full group DN from memberOf array\n      groupName,    // \"Staff - WHS\", \"Admin Staff - SG\", etc.\n      newUserDn     // DN of the user we just created\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2016,
+        0
+      ],
+      "id": "7dca1a29-e207-4048-aeda-cc7a3f38021f",
+      "name": "Pull Out Groups",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "content": "Collect and Add to Groups",
+        "height": 272,
+        "width": 496,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2592,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "c34ca382-4af1-4714-8208-acf86f9b3493",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dn": "CN=DUO_NewUsers,OU=Security Groups,DC=AshleyandMartin,DC=local",
+        "attributes": {
+          "add": [
+            {
+              "id": "member",
+              "value": "={{ $('Merge').item.json.dn }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.ldap",
+      "typeVersion": 1,
+      "position": [
+        2960,
+        -112
+      ],
+      "id": "7550c693-67d6-4495-bbc1-7de86f12db2c",
+      "name": "DUO New User",
+      "executeOnce": true,
+      "credentials": {
+        "ldap": {
+          "id": "jytIHVQdPwtaxqUr",
+          "name": "LDAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dn": "={{ $json.groupDn }}",
+        "attributes": {
+          "add": [
+            {
+              "id": "member",
+              "value": "={{ $json.dn }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.ldap",
+      "typeVersion": 1,
+      "position": [
+        2800,
+        -112
+      ],
+      "id": "59eb3474-2369-48a3-8686-8f2f87406b5e",
+      "name": "Add Copied Groups",
+      "credentials": {
+        "ldap": {
+          "id": "jytIHVQdPwtaxqUr",
+          "name": "LDAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Sync to 365",
+        "height": 256
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3120,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "b9eec605-b43a-4976-961b-d2fddc642792",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## Check List of things to do\n1. Force AD to Sync - Completed\n2. Wait for sync - Completed\n3. Add Licence - Completed\n4. For AD to Sync - Completed\n5. Exchange Console Command - Completed\n6. Docusign - Not possible\n7. Error Handling",
+        "height": 256,
+        "width": 480,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1824,
+        -608
+      ],
+      "typeVersion": 1,
+      "id": "493d9f0b-3c88-4d7a-a7d2-d8076bc8c7c0",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "uc1c19X92S4cXgn5",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/uc1c19X92S4cXgn5",
+          "cachedResultName": "AD - Force Sync to 365"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        3184,
+        -112
+      ],
+      "id": "1fa22996-2495-49d9-878c-b5040c62d9ae",
+      "name": "Call 'AD - Force Sync to 365'",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "content": "Licence 365 User",
+        "height": 256,
+        "width": 528
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3600,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "b191ac11-a559-43d8-b9f8-90b9ae8caeb4",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "Pause for 365 Sync",
+        "height": 256,
+        "width": 176,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3392,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "9461817d-a552-4171-897b-789ad6a97968",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3424,
+        -112
+      ],
+      "id": "7debbc90-73dd-41e9-94a2-20fa42e803af",
+      "name": "Wait",
+      "webhookId": "108b5d04-cc03-4118-ac14-a9f3dca679b2"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "user": {
+          "__rl": true,
+          "value": "={{ $('Email Cleanup').item.json.userPrincipalName }}",
+          "mode": "id"
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.microsoftEntra",
+      "typeVersion": 1,
+      "position": [
+        3632,
+        -112
+      ],
+      "id": "3ae5682c-9abd-447d-a99a-840a2e9d0200",
+      "name": "Search4NewUser",
+      "credentials": {
+        "microsoftEntraOAuth2Api": {
+          "id": "KdYKykHvS322gNtb",
+          "name": "Microsoft Entra ID (Azure Active Directory) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Sync to 365",
+        "height": 256,
+        "width": 224,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4176,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "4282da8c-5ee3-4af1-b7e3-bebe81a1fb57",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "uc1c19X92S4cXgn5",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/uc1c19X92S4cXgn5",
+          "cachedResultName": "AD - Force Sync to 365"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        4240,
+        -112
+      ],
+      "id": "f8af389d-a7e7-4ff0-99de-2adc4115c613",
+      "name": "Call 'AD - Force Sync to 365'1",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "content": "Pause for 365 Sync",
+        "height": 256,
+        "width": 176,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4448,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "f31188f8-c261-4873-9dbe-7dcd20d32427",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        4480,
+        -112
+      ],
+      "id": "3a92f8ff-ccd5-4fc4-afdb-9652ddb5d0de",
+      "name": "Wait1",
+      "webhookId": "108b5d04-cc03-4118-ac14-a9f3dca679b2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "Email if something is wrong",
+        "height": 224,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1376,
+        -544
+      ],
+      "typeVersion": 1,
+      "id": "8f5df419-4235-4747-93fd-ac9cb9d62280",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://graph.microsoft.com/v1.0/users/{{ $json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftEntraOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"usageLocation\": \"AU\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        3808,
+        -112
+      ],
+      "id": "c772e945-ec1a-4e6c-8eda-a9e29388a7ca",
+      "name": "Set Usage Location",
+      "credentials": {
+        "microsoftEntraOAuth2Api": {
+          "id": "KdYKykHvS322gNtb",
+          "name": "Microsoft Entra ID (Azure Active Directory) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/users/{{ $('Search4NewUser').item.json.id }}/assignLicense",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftEntraOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"addLicenses\": [\n    {\n      \"skuId\": \"cbdc14ab-d96c-4c30-b9f4-6ada7cdc1d46\",\n      \"disabledPlans\": []\n    }\n  ],\n  \"removeLicenses\": []\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        4000,
+        -112
+      ],
+      "id": "0d9d9dbd-51fa-44f3-8929-f701bc2815b8",
+      "name": "Licence User",
+      "credentials": {
+        "microsoftEntraOAuth2Api": {
+          "id": "KdYKykHvS322gNtb",
+          "name": "Microsoft Entra ID (Azure Active Directory) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const upn = $('Email Cleanup').first().json.userPrincipalName;\n\nconst command = `powershell.exe -NoProfile -Command \"$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri http://ho-EXC2016/PowerShell/ -Authentication Kerberos; Import-PSSession $Session -DisableNameChecking; Enable-RemoteMailbox ${upn} -RemoteRoutingAddress ${upn} -DomainController AM-WA-DC01\"`;\n\n\nreturn [\n  {\n    json: { exchangeCommand: command },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4736,
+        -112
+      ],
+      "id": "125ecbc7-74cc-43c2-8bb0-de82d5df9c7e",
+      "name": "Exchange Management Console"
+    },
+    {
+      "parameters": {
+        "command": "={{ $json.exchangeCommand }}",
+        "cwd": "="
+      },
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        4912,
+        -112
+      ],
+      "id": "98395758-1709-4d42-9a49-406b3dc3c8a1",
+      "name": "Execute a command",
+      "credentials": {
+        "sshPassword": {
+          "id": "SEXNVZKc31LJccvl",
+          "name": "SSH Password account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Enable Mailbox post Licence",
+        "height": 256,
+        "width": 384
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4672,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "fe8626a1-56c8-466e-8606-b6d0c32ef1e5",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "toRecipients": "={{ $('Email Cleanup').item.json.managerEmail }}",
+        "subject": "=New User -  {{ $('Email Cleanup').item.json.displayName }}",
+        "bodyContent": "=Hi {{ $('FindManager').item.json.givenName }}\n\nYour new staff {{ $('Email Cleanup').item.json.displayName }} is ready and setup to go.\n\nUsername:{{ $('Email Cleanup').item.json.samAccountName }}\nEmail:{{ $('Email Cleanup').item.json.userPrincipalName }}\nPassword: Welcome01\nSite: {{ $('Email Cleanup').item.json.location }}\nPosition: {{ $('Email Cleanup').item.json.position }}\n\nAny issue's please let It know.\n\nIt please manually make the Docusign accounts!\n\nRegards,\nNicholas",
+        "additionalFields": {
+          "ccRecipients": "monitoring@ashleyandmartin.com.au"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        5856,
+        -368
+      ],
+      "id": "a5f5e539-1352-4eab-9300-29247c18db2a",
+      "name": "Send a message1",
+      "webhookId": "5b7a717b-5c5b-4321-b6b6-7103d504629a",
+      "executeOnce": true,
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Completion Email to Manager",
+        "height": 224,
+        "width": 224,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        5792,
+        -432
+      ],
+      "typeVersion": 1,
+      "id": "8513e805-fcef-45aa-9230-ee330ddea156",
+      "name": "Sticky Note15"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Hard-set password\nconst rawPwd = \"Welcome01!@#\";\n\n// Pull DN from the Create User node\nconst dn = $('Create User').first().json.dn;\n\nif (!dn) {\n    throw new Error(\"DN not found from 'Create User' node\");\n}\n\n// Escape single quotes for safety inside PowerShell strings\nconst escapedPwd = rawPwd.replace(/'/g, \"''\");\n\n// Activate + unlock account\nconst activateCommand =\n  `powershell.exe -NoProfile -Command ` +\n  `\"Enable-ADAccount -Identity '${dn}'; ` +\n  `Unlock-ADAccount -Identity '${dn}' -ErrorAction SilentlyContinue\"`;\n\n// Reset password\nconst passwordCommand =\n  `powershell.exe -NoProfile -Command ` +\n  `\"Set-ADAccountPassword -Identity '${dn}' -Reset ` +\n  `-NewPassword (ConvertTo-SecureString -AsPlainText '${escapedPwd}' -Force)\"`;\n\nreturn [\n  {\n    json: {\n      distinguishedName: dn,\n      activateCommand,\n      passwordCommand\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5184,
+        -112
+      ],
+      "id": "3c2d38d7-f58d-41c1-8641-e6dbea409eda",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "command": "={{ $('Code in JavaScript').item.json.activateCommand }}",
+        "cwd": "="
+      },
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        5568,
+        -112
+      ],
+      "id": "0262a45f-d92e-470f-9c6a-d4d97bfee8c5",
+      "name": "Activate User",
+      "credentials": {
+        "sshPassword": {
+          "id": "SEXNVZKc31LJccvl",
+          "name": "SSH Password account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "command": "={{ $json.passwordCommand }}",
+        "cwd": "="
+      },
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        5376,
+        -112
+      ],
+      "id": "7c60a776-bf35-409a-992f-e6b3ed286f84",
+      "name": "Set User Password",
+      "credentials": {
+        "sshPassword": {
+          "id": "SEXNVZKc31LJccvl",
+          "name": "SSH Password account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Activate Account and Set password",
+        "height": 256,
+        "width": 656,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        5104,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "7db2139a-5061-4007-8b36-72dde8de709d",
+      "name": "Sticky Note16"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2192,
+        0
+      ],
+      "id": "2d1ffa1e-02ee-47fb-8cde-f60a022585c4",
+      "name": "No Groups"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d9672701-f551-4dd7-b042-b6696dc7a14e",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2352,
+        0
+      ],
+      "id": "c0752328-c8b3-4efe-a24b-fe43bb7dfde6",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "toRecipients": "monitoring@ashleyandmartin.com.au",
+        "subject": "=New User - {{ $('Email Cleanup').item.json.displayName }}",
+        "bodyContent": "=Hi Team,\nWe cannot find groups for the new user {{ $('Email Cleanup').item.json.displayName }}.\nThere appears to be no one to clone them in the {{ $('Email Cleanup').item.json.location }} OU.\n\nRegards,\nAutomation",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        2544,
+        -352
+      ],
+      "id": "6ae20e65-f373-4c24-b068-2808341c70ac",
+      "name": "Failed No Groups",
+      "webhookId": "a27271a8-56cd-4567-9e35-6bd0422a6914",
+      "executeOnce": true,
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Copy Groups",
+        "height": 240,
+        "width": 608,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1936,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "e22e3536-6260-4ce2-a885-63806d149c45",
+      "name": "Sticky Note17"
+    },
+    {
+      "parameters": {
+        "content": "Email if something is wrong",
+        "height": 224,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2480,
+        -416
+      ],
+      "typeVersion": 1,
+      "id": "8306e43c-eb26-4a39-970e-9dc9a8302b14",
+      "name": "Sticky Note18"
+    },
+    {
+      "parameters": {
+        "operation": "move",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $('Get a message').item.json.id }}",
+          "mode": "id"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAADKbNLAAA=",
+          "mode": "list",
+          "cachedResultName": "ELMO",
+          "cachedResultUrl": "https://outlook.office365.com/mail/AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAADKbNLAAA%3D"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        5856,
+        -112
+      ],
+      "id": "91bd7453-4abc-4181-aa63-8b9d2716addc",
+      "name": "Move a message",
+      "webhookId": "fa7a6a5a-bfdf-4317-938b-c463d53a71ab",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Email Clean Up",
+        "height": 256,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        5792,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "973ec807-0e91-44d2-9dc5-ca577806c19b",
+      "name": "Sticky Note19"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "iERBtie2iZV2PJJf",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/iERBtie2iZV2PJJf",
+          "cachedResultName": "Zenoti - Create User"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        928,
+        -528
+      ],
+      "id": "8fd75f77-d213-45e8-a723-45d9a2fe2645",
+      "name": "Call 'Zenoti - Create User'1"
+    },
+    {
+      "parameters": {
+        "content": "Creates the User in Zenoti",
+        "height": 224,
+        "width": 288,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        848,
+        -592
+      ],
+      "typeVersion": 1,
+      "id": "03e806ce-8383-43a7-abf7-2fe89f0d83e1",
+      "name": "Sticky Note13"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "timeSavedPerExecution": 20,
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "saveDataSuccessExecution": "all"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-27T23:11:17.279Z",
+      "createdAt": "2025-11-27T23:11:17.279Z",
+      "role": "workflow:owner",
+      "workflowId": "p3y6ZXJHk5FnmYs1",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": {
+    "node:Microsoft Outlook Trigger": {
+      "lastTimeChecked": "2026-01-08T05:46:33.081+00:00"
+    }
+  },
+  "tags": [
+    {
+      "updatedAt": "2025-11-27T23:16:28.880Z",
+      "createdAt": "2025-11-27T23:16:28.880Z",
+      "id": "mDg4TH0DyIA1jzi0",
+      "name": "AD"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-01-07T06:21:31.009Z",
+  "versionId": "6e39e9c0-a405-4834-9e30-fee546a2891e"
+}
