@@ -1,0 +1,360 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Today",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get Clinic Clients",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Client Age",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Clinics": {
+      "main": [
+        [
+          {
+            "node": "Filter out Non user Clinics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter out Non user Clinics": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Clinic Clients": {
+      "main": [
+        [
+          {
+            "node": "Filter Non DOB Clients",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Non DOB Clients": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Client Age": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Today": {
+      "main": [
+        [
+          {
+            "node": "Get Clinics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-10T05:17:27.497Z",
+  "id": "DCFX5EDU5qrD6QYS",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Zenoti-CustomerAgestest",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -240
+      ],
+      "id": "3641f2b9-bdc6-4cf8-baa3-65fcf4dec941",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        656,
+        -240
+      ],
+      "id": "eb312751-e549-41d6-b64f-f287d2e5131a",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1328,
+        -240
+      ],
+      "id": "e3269188-b482-4b94-bacc-a63b26fe2aef",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        208,
+        -240
+      ],
+      "id": "42c2d763-e2af-475b-a0e7-4b56222dcbbb",
+      "name": "Get Clinics"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a86513e1-448b-433b-ac57-0fb7e17e82e8",
+              "leftValue": "={{ $json.table_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        432,
+        -240
+      ],
+      "id": "eec8f439-5e10-45e5-8c5f-f0953a393d62",
+      "name": "Filter out Non user Clinics"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "={{ $('Filter out Non user Clinics').item.json.table_id }}",
+          "mode": "id"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        880,
+        -240
+      ],
+      "id": "01a0b055-f892-466f-b67d-176613c607a3",
+      "name": "Get Clinic Clients"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a5fd712a-f6b3-459b-8fcd-089223a08a29",
+              "leftValue": "={{ $json.Client_DOB }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1104,
+        -240
+      ],
+      "id": "2934db76-4bf6-493c-a7a2-6f7ab6023e91",
+      "name": "Filter Non DOB Clients"
+    },
+    {
+      "parameters": {
+        "jsCode": "const dobString = $input.first().json.Client_DOB;\nconst todayString = $('Today').first().json.Today;\n\nconst dob = new Date(dobString);\nconst today = new Date(todayString);\n\nlet age = today.getFullYear() - dob.getFullYear();\n\nconst hasHadBirthday =\n  today.getMonth() > dob.getMonth() ||\n  (today.getMonth() === dob.getMonth() && today.getDate() >= dob.getDate());\n\nif (!hasHadBirthday) {\n  age--;\n}\n\nreturn [\n  {\n    json: {\n      Age: age\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1536,
+        -224
+      ],
+      "id": "c109febb-45a1-4bbf-94dc-6d064ce1fe24",
+      "name": "Get Client Age"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Create a single output item with today's date in ISO format\nreturn [\n  {\n    json: {\n      Today: new Date().toISOString()\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        -240
+      ],
+      "id": "83fe97a0-8dda-4ea4-a47d-a6bfca91833f",
+      "name": "Today"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get static workflow data to store running totals\nlet data = $getWorkflowStaticData('global');\n\n// Initialise totals if they don't exist yet\nif (!data.totalAge) data.totalAge = 0;\nif (!data.count) data.count = 0;\n\n// Current person's age\nconst age = Number($input.first().json.Age);\n\n// Add to totals\ndata.totalAge += age;\ndata.count++;\n\n// Calculate average so far (optional output)\nconst avg = data.totalAge / data.count;\n\nreturn [\n  {\n    json: {\n      CurrentAge: age,\n      RunningAverageAge: avg,\n      CountSoFar: data.count\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1744,
+        -224
+      ],
+      "id": "d81d5722-99c4-4c84-a6c1-23df657f4e43",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1536,
+        -416
+      ],
+      "id": "368df793-2b7e-4db1-9148-5e1da690f4d8",
+      "name": "Send a message",
+      "webhookId": "e550092d-6926-40ad-9f3c-19f4e433ee2c",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-10T05:17:27.499Z",
+      "createdAt": "2025-12-10T05:17:27.499Z",
+      "role": "workflow:owner",
+      "workflowId": "DCFX5EDU5qrD6QYS",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-10T06:13:15.000Z",
+  "versionId": "050634a7-b136-444f-8619-880e82f03513"
+}
