@@ -1,0 +1,185 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set Clinic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Clinic": {
+      "main": [
+        [
+          {
+            "node": "Call 'ClinicTableFinder'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'ClinicTableFinder'": {
+      "main": [
+        [
+          {
+            "node": "Call 'Batch Run Client Compare'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Batch Run Client Compare'": {
+      "main": [
+        [
+          {
+            "node": "Call 'CSVMerger'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-13T05:48:13.601Z",
+  "id": "IdGCvS4Lr6PAK9Ho",
+  "isArchived": false,
+  "meta": null,
+  "name": "Clinic Compare Selector / Master Run",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -224
+      ],
+      "id": "a72d1ab3-d1bf-4d6c-8654-8ccb6069e77a",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ----- TYPE THE CLINIC NAME HERE -----\nconst clinic = \"ADE\";   // <- change this each run\n// -------------------------------------\n\nreturn {\n  json: {\n    clinic\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        -224
+      ],
+      "id": "494fba59-e148-46ef-9597-9603c865ac97",
+      "name": "Set Clinic"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "fMWRIDFwJGNJFepm",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/fMWRIDFwJGNJFepm",
+          "cachedResultName": "ClinicTableFinder"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        448,
+        -224
+      ],
+      "id": "fe381456-6a11-44e6-9f5b-5514ac169f21",
+      "name": "Call 'ClinicTableFinder'"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "SYr5jpV9aa79xYtH",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/SYr5jpV9aa79xYtH",
+          "cachedResultName": "Batch Run Client Compare"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        656,
+        -224
+      ],
+      "id": "a5144fe7-ad44-442f-b089-75ee99e9e063",
+      "name": "Call 'Batch Run Client Compare'"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Irx2WshICOJaGbdA",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Irx2WshICOJaGbdA",
+          "cachedResultName": "CSVMerger"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        912,
+        -224
+      ],
+      "id": "c8a731ae-120b-41d1-9470-4168763d0641",
+      "name": "Call 'CSVMerger'",
+      "executeOnce": true
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-13T05:48:13.603Z",
+      "createdAt": "2025-11-13T05:48:13.603Z",
+      "role": "workflow:owner",
+      "workflowId": "IdGCvS4Lr6PAK9Ho",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-13T05:47:15.147Z",
+      "createdAt": "2025-11-13T05:47:15.147Z",
+      "id": "dkYWH6XMkxWsDBNj",
+      "name": "CompareFlows"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-19T06:58:46.000Z",
+  "versionId": "1271ca38-5d10-4184-949d-2c8920b3847f"
+}
