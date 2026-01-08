@@ -1,0 +1,752 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Microsoft Outlook - Get Email": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Microsoft Outlook - Get all Attachements": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Microsoft Outlook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft Outlook": {
+      "main": [
+        [
+          {
+            "node": "Microsoft SharePoint HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        []
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft SharePoint HTTP Request": {
+      "main": [
+        []
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Microsoft Outlook1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ClinicArray": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Microsoft Outlook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Microsoft Outlook - Get all Attachements",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft Outlook Trigger": {
+      "main": [
+        [
+          {
+            "node": "ClinicArray",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Microsoft Outlook - Get Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-05-29T07:03:46.727Z",
+  "id": "mM3rJvApGO1dW0pA",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Email to Scan. Faster then PowerAutomate",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        -1280,
+        835
+      ],
+      "id": "ba787f97-a874-4ed5-ac08-bc36ecb6d6eb",
+      "name": "Microsoft Outlook - Get Email",
+      "webhookId": "a6f30e69-68b5-4882-9389-816a661aeb46",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "messageAttachment",
+        "operation": "getAll",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "returnAll": true,
+        "options": {
+          "fields": []
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        40,
+        685
+      ],
+      "id": "e29a51cb-c61a-4f11-9d5a-873d1fd61013",
+      "name": "Microsoft Outlook - Get all Attachements",
+      "webhookId": "714a7ff8-0bdc-4996-a753-e6939c9ac07c",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "messageAttachment",
+        "operation": "download",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $('Microsoft Outlook - Get Email').item.json.id }}",
+          "mode": "id"
+        },
+        "attachmentId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        480,
+        685
+      ],
+      "id": "47bb6b15-5d0f-4b94-82e8-6935fe939a61",
+      "name": "Microsoft Outlook",
+      "webhookId": "97164475-9401-4e63-ac07-45b0f195801b",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().filter(item => item.json.isInline === false);\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        685
+      ],
+      "id": "889c2696-3da0-40ea-a871-43b6abac2591",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "curlImport": "",
+        "httpVariantWarning": "",
+        "method": "PUT",
+        "url": "https://graph.microsoft.com/v1.0/drives/b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU/root:/ClinicData/{{$node[\"Microsoft Outlook - Get Email\"].json.subject}}/Scans/{{$binary.attachment.fileName}}:/content",
+        "": "",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftSharePointOAuth2Api",
+        "provideSslCertificates": false,
+        "sendQuery": false,
+        "sendHeaders": false,
+        "sendBody": false,
+        "options": {},
+        "infoMessage": ""
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1500,
+        -320
+      ],
+      "id": "367d4b27-575f-4894-8260-69adec98ec34",
+      "name": "Microsoft SharePoint HTTP Request",
+      "extendsCredential": "microsoftSharePointOAuth2Api",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1500,
+        200
+      ],
+      "id": "3530d5b0-96a6-447a-bbe6-43e72dd309f5",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "const subject = $node[\"Microsoft Outlook - Get Email\"].json.subject?.trim();\nconst folderList = $node[\"ClinicArray\"].json.clinicFolderNames || [];\n\nif (!subject || typeof subject !== 'string') {\n  throw new Error('Subject is missing or not a string');\n}\n\nconst matched = folderList.find(name => {\n  return typeof name === 'string' && name.toLowerCase() === subject.toLowerCase();\n});\n\nreturn [{\n  json: {\n    subject,\n    matchFound: !!matched,\n    matchedFolder: matched || null\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -620,
+        510
+      ],
+      "id": "777a9876-7ce9-4124-9e60-234cee6f7d6c",
+      "name": "Code1",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c9a1f351-b55f-4185-8ad5-1264d2d2e9a4",
+              "leftValue": "={{ $json.matchFound }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -400,
+        510
+      ],
+      "id": "303fa56b-2434-40e7-a5bc-e9644e7e7f49",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    clinicFolderNames: [\n      \"Adelaide Clinic\",\n      \"Auckland Clinic\",\n      \"Brisbane Clinic\",\n      \"CallCenter\",\n      \"Canberra Clinic\",\n      \"Chatswood Clinic\",\n      \"Christchurch Clinic\",\n      \"Dandenong Clinic\",\n      \"GladstonePark Clinic\",\n      \"GoldCoast Clinic\",\n      \"Hamilton Clinic\",\n      \"Hurstville Clinic\",\n      \"Joondalup Clinic\",\n      \"Newcastle Clinic\",\n      \"Parramatta Clinic\",\n      \"Perth Clinic\",\n      \"Singapore Clinic\",\n      \"Southbank Clinic\",\n      \"Sydney Clinic\",\n      \"Wellington Clinic\"\n    ]\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1060,
+        510
+      ],
+      "id": "d967064f-d9c8-4bc4-b872-b674b7afcc16",
+      "name": "ClinicArray"
+    },
+    {
+      "parameters": {
+        "operation": "move",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $('Microsoft Outlook - Get Email').item.json.id }}",
+          "mode": "id"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "AAMkADhhYjM1MDY3LWYyZDktNDFkYy05MTIxLTdjZjg5YTBhNzIwYgAuAAAAAACJdDgB257PTJJpQIrN3gnNAQA610-_A_S_RY7szOYmYwKFAABS4F13AAA=",
+          "mode": "list",
+          "cachedResultName": "IncorrectSubject",
+          "cachedResultUrl": "https://outlook.office365.com/mail/AAMkADhhYjM1MDY3LWYyZDktNDFkYy05MTIxLTdjZjg5YTBhNzIwYgAuAAAAAACJdDgB257PTJJpQIrN3gnNAQA610%2F_A_S_RY7szOYmYwKFAABS4F13AAA%3D"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        460
+      ],
+      "id": "46bd1079-a785-4c1f-b4a5-d26b9e26044a",
+      "name": "Microsoft Outlook1",
+      "webhookId": "2c14120a-495b-40fc-8fb0-0b90504169e2",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        -840,
+        510
+      ],
+      "id": "a2955e15-c2da-4005-ba35-d115c628de04",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3a3e451c-5b40-42f9-8049-18bb67ae3de8",
+              "leftValue": "={{ $json.hasAttachments }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1060,
+        910
+      ],
+      "id": "56eda8cb-4fa7-4841-aee4-adcae3e31370",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "operation": "move",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $('Microsoft Outlook - Get Email').item.json.id }}",
+          "mode": "id"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "AAMkADhhYjM1MDY3LWYyZDktNDFkYy05MTIxLTdjZjg5YTBhNzIwYgAuAAAAAACJdDgB257PTJJpQIrN3gnNAQA610-_A_S_RY7szOYmYwKFAABS4F13AAA=",
+          "mode": "list",
+          "cachedResultName": "IncorrectSubject",
+          "cachedResultUrl": "https://outlook.office365.com/mail/AAMkADhhYjM1MDY3LWYyZDktNDFkYy05MTIxLTdjZjg5YTBhNzIwYgAuAAAAAACJdDgB257PTJJpQIrN3gnNAQA610%2F_A_S_RY7szOYmYwKFAABS4F13AAA%3D"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        -840,
+        960
+      ],
+      "id": "4a34eb9f-a21a-4e2d-a5bf-24e5f33201c7",
+      "name": "Microsoft Outlook2",
+      "webhookId": "2c14120a-495b-40fc-8fb0-0b90504169e2",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "curlImport": "",
+        "httpVariantWarning": "",
+        "method": "PUT",
+        "url": "=https://graph.microsoft.com/v1.0/drives/<Drive-ID>/root:/ClinicData/{{$node[\"Microsoft Outlook - Get Email\"].json.subject}}/Scans/{{$binary.attachment.fileName}}:/content",
+        "": "",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftSharePointOAuth2Api",
+        "provideSslCertificates": false,
+        "sendQuery": false,
+        "sendHeaders": false,
+        "sendBody": false,
+        "options": {},
+        "infoMessage": ""
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1500,
+        -60
+      ],
+      "id": "a2b29c89-1730-4ef3-a488-d8f4ec32d9b0",
+      "name": "Microsoft SharePoint HTTP Request1",
+      "extendsCredential": "microsoftSharePointOAuth2Api",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        -180,
+        685
+      ],
+      "id": "2ba38b97-656c-4a71-96a5-a7c916bea76e",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "hour": 0,
+              "minute": 10
+            }
+          ]
+        },
+        "filters": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlookTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1500,
+        685
+      ],
+      "id": "97cddfb0-e170-49a7-ab05-5e698b369137",
+      "name": "Microsoft Outlook Trigger",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "curlImport": "",
+        "httpVariantWarning": "",
+        "method": "PUT",
+        "url": "=https://graph.microsoft.com/v1.0/drives/b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU/root:/ClinicData/{{$node[\"Microsoft Outlook - Get Email\"].json.subject}}/Scans/{{$binary.attachment.fileName}}:/content",
+        "": "",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftSharePointOAuth2Api",
+        "provideSslCertificates": false,
+        "sendQuery": false,
+        "sendHeaders": false,
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "attachment",
+        "options": {},
+        "infoMessage": ""
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        700,
+        685
+      ],
+      "id": "9f925caf-cbd6-40fd-b23a-0d028fa9843a",
+      "name": "Microsoft SharePoint HTTP Request2",
+      "extendsCredential": "microsoftSharePointOAuth2Api",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "ClinicArray": [
+      {
+        "json": {
+          "clinicFolderNames": [
+            "Adelaide Clinic",
+            "Auckland Clinic",
+            "Brisbane Clinic",
+            "CallCenter",
+            "Canberra Clinic",
+            "Chatswood Clinic",
+            "Christchurch Clinic",
+            "Dandenong Clinic",
+            "GladstonePark Clinic",
+            "GoldCoast Clinic",
+            "Hamilton Clinic",
+            "Hurstville Clinic",
+            "Joondalup Clinic",
+            "Newcastle Clinic",
+            "Parramatta Clinic",
+            "Perth Clinic",
+            "Singapore Clinic",
+            "Southbank Clinic",
+            "Sydney Clinic",
+            "Wellington Clinic"
+          ]
+        }
+      }
+    ],
+    "Microsoft Outlook - Get all Attachements": [
+      {
+        "json": {
+          "@odata.type": "#microsoft.graph.fileAttachment",
+          "@odata.mediaContentType": "image/png",
+          "id": "AAMkADhhYjM1MDY3LWYyZDktNDFkYy05MTIxLTdjZjg5YTBhNzIwYgBGAAAAAACJdDgB257PTJJpQIrN3gnNBwA610-_A_S_RY7szOYmYwKFAAAAAAEMAAC6lWya7tyARpiJDLDZFvhbAAAmt33eAAABEgAQAGQUWWRh4t1JuAJuw-aKxXo=",
+          "lastModifiedDateTime": "2025-05-30T05:00:49Z",
+          "name": "Screen Background - New Year new Opportunities.png",
+          "contentType": "image/png",
+          "size": 1063099,
+          "isInline": false
+        }
+      },
+      {
+        "json": {
+          "@odata.type": "#microsoft.graph.fileAttachment",
+          "@odata.mediaContentType": "image/png",
+          "id": "AAMkADhhYjM1MDY3LWYyZDktNDFkYy05MTIxLTdjZjg5YTBhNzIwYgBGAAAAAACJdDgB257PTJJpQIrN3gnNBwA610-_A_S_RY7szOYmYwKFAAAAAAEMAAC6lWya7tyARpiJDLDZFvhbAAAmt33eAAABEgAQAInVOOoVk51NoP_aEdWZ6aQ=",
+          "lastModifiedDateTime": "2025-05-30T05:00:50Z",
+          "name": "image001.png",
+          "contentType": "image/png",
+          "size": 2552,
+          "isInline": true
+        }
+      },
+      {
+        "json": {
+          "@odata.type": "#microsoft.graph.fileAttachment",
+          "@odata.mediaContentType": "image/png",
+          "id": "AAMkADhhYjM1MDY3LWYyZDktNDFkYy05MTIxLTdjZjg5YTBhNzIwYgBGAAAAAACJdDgB257PTJJpQIrN3gnNBwA610-_A_S_RY7szOYmYwKFAAAAAAEMAAC6lWya7tyARpiJDLDZFvhbAAAmt33eAAABEgAQAFGGsITKj0BGlUYmiVtppQo=",
+          "lastModifiedDateTime": "2025-05-30T05:00:50Z",
+          "name": "image002.png",
+          "contentType": "image/png",
+          "size": 2520,
+          "isInline": true
+        }
+      },
+      {
+        "json": {
+          "@odata.type": "#microsoft.graph.fileAttachment",
+          "@odata.mediaContentType": "image/png",
+          "id": "AAMkADhhYjM1MDY3LWYyZDktNDFkYy05MTIxLTdjZjg5YTBhNzIwYgBGAAAAAACJdDgB257PTJJpQIrN3gnNBwA610-_A_S_RY7szOYmYwKFAAAAAAEMAAC6lWya7tyARpiJDLDZFvhbAAAmt33eAAABEgAQAMkTjeSa-OdMsnrGamcxWBs=",
+          "lastModifiedDateTime": "2025-05-30T05:00:51Z",
+          "name": "image003.png",
+          "contentType": "image/png",
+          "size": 2464,
+          "isInline": true
+        }
+      },
+      {
+        "json": {
+          "@odata.type": "#microsoft.graph.fileAttachment",
+          "@odata.mediaContentType": "image/png",
+          "id": "AAMkADhhYjM1MDY3LWYyZDktNDFkYy05MTIxLTdjZjg5YTBhNzIwYgBGAAAAAACJdDgB257PTJJpQIrN3gnNBwA610-_A_S_RY7szOYmYwKFAAAAAAEMAAC6lWya7tyARpiJDLDZFvhbAAAmt33eAAABEgAQAEMuEHdNm_VBqp5p_javZqw=",
+          "lastModifiedDateTime": "2025-05-30T05:00:51Z",
+          "name": "image004.png",
+          "contentType": "image/png",
+          "size": 2473,
+          "isInline": true
+        }
+      },
+      {
+        "json": {
+          "@odata.type": "#microsoft.graph.fileAttachment",
+          "@odata.mediaContentType": "image/png",
+          "id": "AAMkADhhYjM1MDY3LWYyZDktNDFkYy05MTIxLTdjZjg5YTBhNzIwYgBGAAAAAACJdDgB257PTJJpQIrN3gnNBwA610-_A_S_RY7szOYmYwKFAAAAAAEMAAC6lWya7tyARpiJDLDZFvhbAAAmt33eAAABEgAQAL1NNSCwOOhGj7TRHIm-bvs=",
+          "lastModifiedDateTime": "2025-05-30T05:00:52Z",
+          "name": "image005.png",
+          "contentType": "image/png",
+          "size": 69230,
+          "isInline": true
+        }
+      }
+    ],
+    "Microsoft Outlook - Get Email": [
+      {
+        "json": {
+          "id": "AAMkADhhYjM1MDY3LWYyZDktNDFkYy05MTIxLTdjZjg5YTBhNzIwYgBGAAAAAACJdDgB257PTJJpQIrN3gnNBwA610-_A_S_RY7szOYmYwKFAAAAAAEMAAC6lWya7tyARpiJDLDZFvhbAAAmt33eAAA=",
+          "conversationId": "AAQkADhhYjM1MDY3LWYyZDktNDFkYy05MTIxLTdjZjg5YTBhNzIwYgAQAAnfzU95JJ9OtJnMWxxY80k=",
+          "subject": "Perth Clinic",
+          "bodyPreview": "Regards,\r\nNicholas Ryall\r\nHead of IT\r\n. . . . .\r\nAshley and Martin Pty Ltd\r\nW: www.ashleyandmartin.com.au\r\nHead Office | Ground Floor, 640 Murray Street, West Perth, Western Australia, 6005\r\nT: 08 9322 1200 | E: Nicholas.Ryall@ashleyandmartin.com.au",
+          "from": "Nicholas.Ryall@ashleyandmartin.com.au",
+          "to": [
+            "SharePointUploader@ashleyandmartin.com.au"
+          ],
+          "categories": [],
+          "hasAttachments": true
+        }
+      }
+    ],
+    "Microsoft Outlook Trigger": [
+      {
+        "json": {
+          "id": "AAMkADhhYjM1MDY3LWYyZDktNDFkYy05MTIxLTdjZjg5YTBhNzIwYgBGAAAAAACJdDgB257PTJJpQIrN3gnNBwA610-_A_S_RY7szOYmYwKFAAAAAAEMAAC6lWya7tyARpiJDLDZFvhbAAAmt33eAAA=",
+          "conversationId": "AAQkADhhYjM1MDY3LWYyZDktNDFkYy05MTIxLTdjZjg5YTBhNzIwYgAQAAnfzU95JJ9OtJnMWxxY80k=",
+          "subject": "Perth Clinic",
+          "bodyPreview": "Regards,\r\nNicholas Ryall\r\nHead of IT\r\n. . . . .\r\nAshley and Martin Pty Ltd\r\nW: www.ashleyandmartin.com.au\r\nHead Office | Ground Floor, 640 Murray Street, West Perth, Western Australia, 6005\r\nT: 08 9322 1200 | E: Nicholas.Ryall@ashleyandmartin.com.au",
+          "from": "Nicholas.Ryall@ashleyandmartin.com.au",
+          "to": [
+            "SharePointUploader@ashleyandmartin.com.au"
+          ],
+          "categories": [],
+          "hasAttachments": true
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-05-29T07:03:46.730Z",
+      "createdAt": "2025-05-29T07:03:46.730Z",
+      "role": "workflow:owner",
+      "workflowId": "mM3rJvApGO1dW0pA",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-06-06T04:39:24.000Z",
+  "versionId": "ad705582-e537-401a-ad43-d61d307a3c73"
+}
