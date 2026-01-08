@@ -1,0 +1,81 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get many workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-14T04:01:45.698Z",
+  "id": "ZBY6O8zCyApMbVZn",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "BackupN8n",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -464,
+        -96
+      ],
+      "id": "c234f7ba-2f91-4adc-8a58-7f0f100733f0",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "filters": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        -96
+      ],
+      "id": "7ca786db-9d48-4da7-b837-8a46ae7535da",
+      "name": "Get many workflows",
+      "credentials": {
+        "n8nApi": {
+          "id": "XdO2CEKgIh0c7hq6",
+          "name": "n8n account"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-14T04:01:45.701Z",
+      "createdAt": "2025-11-14T04:01:45.701Z",
+      "role": "workflow:owner",
+      "workflowId": "ZBY6O8zCyApMbVZn",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-19T00:30:28.000Z",
+  "versionId": "2596a030-140c-4060-b785-f558565451f5"
+}
