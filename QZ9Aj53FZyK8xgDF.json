@@ -1,0 +1,371 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-12-30T01:31:20.000Z",
+    "createdAt": "2025-12-30T01:31:18.915Z",
+    "versionId": "9b40f804-222c-4d1c-bca1-0619eed9051e",
+    "workflowId": "QZ9Aj53FZyK8xgDF",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "O7QvEberheUcDwMp",
+            "mode": "list",
+            "cachedResultName": "ZenotiTokens",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "TokenName",
+                "keyValue": "access_token"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1,
+        "position": [
+          -336,
+          -240
+        ],
+        "id": "fac9b4bd-3eda-4181-9c04-2193adaab167",
+        "name": "Get row(s)"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Get the expiry value from the previous node\nconst expiryString = $input.first().json.Token_Expiry;\n\n// If the field is missing or empty, handle it cleanly\nif (!expiryString) {\n  throw new Error('Token_Expiry is missing or empty.');\n}\n\n// Parse both current and expiry times\nconst now = new Date();\nconst expiry = new Date(expiryString);\n\n// Optional: refresh a bit early (60 seconds buffer)\nconst bufferMs = 60 * 1000;\n\n// Calculate difference\nconst msLeft = expiry.getTime() - now.getTime();\nconst needsRefresh = msLeft <= bufferMs;\n\n// Return useful info\nreturn [{\n  json: {\n    now: now.toISOString(),\n    expiry: expiry.toISOString(),\n    msLeft,\n    minutesLeft: Math.round(msLeft / 60000),\n    needsRefresh\n  }\n}];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -112,
+          -240
+        ],
+        "id": "165320ab-099d-4d4b-970a-e9c807c180d1",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "12049fad-8567-48bf-a1e2-bff6eb0cb432",
+                "leftValue": "={{ $json.needsRefresh }}",
+                "rightValue": "false",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          112,
+          -240
+        ],
+        "id": "191ad77c-b429-4f4d-97ed-ca8509561c6b",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "fhkDyShdvZfqX9V8",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/fhkDyShdvZfqX9V8",
+            "cachedResultName": "Zenoti - Acces token renewal"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {}
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          336,
+          -240
+        ],
+        "id": "5a971f14-68bb-485b-9a94-42786e506234",
+        "name": "Call 'Zenoti - Acces token renewal'"
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -560,
+          -240
+        ],
+        "id": "51e80c75-e9a4-45d6-87a3-1496c4b98639",
+        "name": "When Executed by Another Workflow"
+      }
+    ],
+    "connections": {
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Call 'Zenoti - Acces token renewal'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 9b40f804",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "9b40f804-222c-4d1c-bca1-0619eed9051e",
+  "connections": {
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Call 'Zenoti - Acces token renewal'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-07T01:38:00.052Z",
+  "id": "QZ9Aj53FZyK8xgDF",
+  "isArchived": false,
+  "meta": null,
+  "name": "Zenoti-AccessTokenCheck",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "O7QvEberheUcDwMp",
+          "mode": "list",
+          "cachedResultName": "ZenotiTokens",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "TokenName",
+              "keyValue": "access_token"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        -240
+      ],
+      "id": "fac9b4bd-3eda-4181-9c04-2193adaab167",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the expiry value from the previous node\nconst expiryString = $input.first().json.Token_Expiry;\n\n// If the field is missing or empty, handle it cleanly\nif (!expiryString) {\n  throw new Error('Token_Expiry is missing or empty.');\n}\n\n// Parse both current and expiry times\nconst now = new Date();\nconst expiry = new Date(expiryString);\n\n// Optional: refresh a bit early (60 seconds buffer)\nconst bufferMs = 60 * 1000;\n\n// Calculate difference\nconst msLeft = expiry.getTime() - now.getTime();\nconst needsRefresh = msLeft <= bufferMs;\n\n// Return useful info\nreturn [{\n  json: {\n    now: now.toISOString(),\n    expiry: expiry.toISOString(),\n    msLeft,\n    minutesLeft: Math.round(msLeft / 60000),\n    needsRefresh\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -112,
+        -240
+      ],
+      "id": "165320ab-099d-4d4b-970a-e9c807c180d1",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "12049fad-8567-48bf-a1e2-bff6eb0cb432",
+              "leftValue": "={{ $json.needsRefresh }}",
+              "rightValue": "false",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        112,
+        -240
+      ],
+      "id": "191ad77c-b429-4f4d-97ed-ca8509561c6b",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "fhkDyShdvZfqX9V8",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/fhkDyShdvZfqX9V8",
+          "cachedResultName": "Zenoti - Acces token renewal"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        336,
+        -240
+      ],
+      "id": "5a971f14-68bb-485b-9a94-42786e506234",
+      "name": "Call 'Zenoti - Acces token renewal'"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -560,
+        -240
+      ],
+      "id": "51e80c75-e9a4-45d6-87a3-1496c4b98639",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-07T01:38:00.057Z",
+      "createdAt": "2025-11-07T01:38:00.057Z",
+      "role": "workflow:owner",
+      "workflowId": "QZ9Aj53FZyK8xgDF",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-30T01:31:18.914Z",
+  "versionId": "9b40f804-222c-4d1c-bca1-0619eed9051e"
+}
