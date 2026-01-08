@@ -1,0 +1,253 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-12-30T00:43:59.000Z",
+    "createdAt": "2025-12-30T00:43:58.624Z",
+    "versionId": "c6041bb3-d608-40e6-bbc8-9e904a88d498",
+    "workflowId": "QA7Qdseg7ehAOWP6",
+    "nodes": [
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          -176,
+          96
+        ],
+        "id": "a70fa2c4-c2cb-4b90-8f66-d9e49210649e",
+        "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "QZ9Aj53FZyK8xgDF",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/QZ9Aj53FZyK8xgDF",
+            "cachedResultName": "Zenoti-AccessTokenCheck"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {}
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          208,
+          0
+        ],
+        "id": "b7726aa6-cc0b-471d-9b9d-d24e68409b20",
+        "name": "Call 'Zenoti-AccessTokenCheck'"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "O7QvEberheUcDwMp",
+            "mode": "list",
+            "cachedResultName": "ZenotiTokens",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "TokenName",
+                "keyValue": "access_token"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1,
+        "position": [
+          416,
+          0
+        ],
+        "id": "421e1091-f516-4ed3-941a-51542e62867f",
+        "name": "Get row(s)"
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -176,
+          -128
+        ],
+        "id": "80b82f95-df1c-481f-809c-029fb1438495",
+        "name": "When Executed by Another Workflow"
+      }
+    ],
+    "connections": {
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "Call 'Zenoti-AccessTokenCheck'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'Zenoti-AccessTokenCheck'": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Call 'Zenoti-AccessTokenCheck'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version c6041bb3",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "c6041bb3-d608-40e6-bbc8-9e904a88d498",
+  "connections": {
+    "Call 'Zenoti-AccessTokenCheck'": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti-AccessTokenCheck'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-07T01:48:59.663Z",
+  "id": "QA7Qdseg7ehAOWP6",
+  "isArchived": false,
+  "meta": null,
+  "name": "Zenoti-GetAuthToken",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "QZ9Aj53FZyK8xgDF",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/QZ9Aj53FZyK8xgDF",
+          "cachedResultName": "Zenoti-AccessTokenCheck"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        48,
+        -128
+      ],
+      "id": "b7726aa6-cc0b-471d-9b9d-d24e68409b20",
+      "name": "Call 'Zenoti-AccessTokenCheck'"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "O7QvEberheUcDwMp",
+          "mode": "list",
+          "cachedResultName": "ZenotiTokens",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "TokenName",
+              "keyValue": "access_token"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        272,
+        -128
+      ],
+      "id": "421e1091-f516-4ed3-941a-51542e62867f",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -176,
+        -128
+      ],
+      "id": "80b82f95-df1c-481f-809c-029fb1438495",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-07T01:48:59.664Z",
+      "createdAt": "2025-11-07T01:48:59.664Z",
+      "role": "workflow:owner",
+      "workflowId": "QA7Qdseg7ehAOWP6",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-30T01:31:37.097Z",
+  "versionId": "b97327bc-1ee1-4b7f-bf4b-15584471db2e"
+}
