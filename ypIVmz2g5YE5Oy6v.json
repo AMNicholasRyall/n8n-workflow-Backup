@@ -1,0 +1,569 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Seed Queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Seed Queue": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Explode & Plan Paths",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Explode & Plan Paths": {
+      "main": [
+        [
+          {
+            "node": "Delete Later",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "RenameFile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete Later": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload a file": {
+      "main": [
+        [
+          {
+            "node": "Pre-CSVApend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pre-CSVApend": {
+      "main": [
+        [
+          {
+            "node": "Append rows to table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Search a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append rows to table": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchResultClean": {
+      "main": [
+        [
+          {
+            "node": "CheckExisting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RenameFile": {
+      "main": [
+        [
+          {
+            "node": "Upload a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DataCleanPreHTML": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search a file": {
+      "main": [
+        [
+          {
+            "node": "SearchResultClean",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CheckExisting": {
+      "main": [
+        [
+          {
+            "node": "DataCleanPreHTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-09-25T02:02:37.797Z",
+  "id": "ypIVmz2g5YE5Oy6v",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Archive Disputes",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -784,
+        32
+      ],
+      "id": "0a402a4d-c148-4d5d-8560-b0437f096f8e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2e9f8ad0-0034-4b7e-866c-949023f66832",
+              "name": "spBase",
+              "value": "http://ho-web",
+              "type": "string"
+            },
+            {
+              "id": "4df4fac8-c033-429a-8a5c-9da4687e1a40",
+              "name": "spUser",
+              "value": "Ashleyandmartin/nryall",
+              "type": "string"
+            },
+            {
+              "id": "c970cf23-17a6-4eb3-afec-95e71c02fb8c",
+              "name": "spPass",
+              "value": "Danceparty45Slut!",
+              "type": "string"
+            },
+            {
+              "id": "b8b6d967-e93e-4f56-b1cf-abf92b24dd4c",
+              "name": "rootFolder",
+              "value": "/Disputes",
+              "type": "string"
+            },
+            {
+              "id": "22cd97ba-7738-4423-a779-879174e7ec26",
+              "name": "batchSize",
+              "value": "10",
+              "type": "string"
+            },
+            {
+              "id": "19cb702d-f383-440b-9a72-5ade21f01c45",
+              "name": "rateDelayMs",
+              "value": "300",
+              "type": "string"
+            },
+            {
+              "id": "e4498efb-376d-4c86-9774-2a2775342db6",
+              "name": "destRoot",
+              "value": "/archive/sharepoint-xml",
+              "type": "string"
+            },
+            {
+              "id": "816ca1cf-0123-4ab7-ae40-b53db3ba0155",
+              "name": "guid",
+              "value": "f9503c2d-dd62-4220-8333-8f349bae93e4",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -560,
+        32
+      ],
+      "id": "6220b1a3-3c20-4184-bd5b-0a7cd35407cf",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Take config from Edit Fields and emit the first folder to crawl\nreturn [\n  {\n    json: {\n      folder: $json.rootFolder,   // \"/Disputes\"\n      spBase: $json.spBase,\n      spUser: $json.spUser,\n      spPass: $json.spPass,\n      destRoot: $json.destRoot || \"/archive/sharepoint-xml\",\n      batchSize: $json.batchSize || 10,\n      rateDelayMs: $json.rateDelayMs || 300,\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -336,
+        32
+      ],
+      "id": "9227ce32-8fee-40e8-9764-b61b89c49070",
+      "name": "Seed Queue"
+    },
+    {
+      "parameters": {
+        "url": "={{ $node[\"Edit Fields\"].json.spBase + \"/_api/Web/Lists(guid'\" + $node[\"Edit Fields\"].json.guid + \"')/RootFolder/Files?$select=Name,ServerRelativeUrl\" }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -112,
+        32
+      ],
+      "id": "3b6faca9-55c7-4d5f-a7be-fb3007384399",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "QAc4op39fbgbbKHr",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "parentId": "012CMKCCFQPGL3XQZDUBAJUQL4AYANHO3U",
+        "binaryData": true
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        2128,
+        -48
+      ],
+      "id": "58b0fcb7-efcc-49fe-9ccd-ad736070aa44",
+      "name": "Upload a file",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "YQJEXWiBLg1Zt1YR",
+          "name": "Microsoft Drive account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const cfg = $node[\"Edit Fields\"].json || {};\nconst destRoot = cfg.destRoot || \"/archive/sharepoint-xml\";\n\nconst files = Array.isArray($json.value) ? $json.value : [];\nconst out = [];\n\nfor (const f of files) {\n  const name = f.Name || \"\";\n  const rel  = f.ServerRelativeUrl || \"\";\n\n  const safeName = name\n    .replace(/[<>:\"/\\\\|?*\\x00-\\x1F]/g, \"_\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n\n// SharePoint-safe URL: double single quotes, then encode, keep slashes\nconst safeUrl = encodeURIComponent(rel.replace(/'/g, \"''\"))\n  .replace(/%2F/g, \"/\");\n\n  // OneDrive Search-safe: strip apostrophes\n  const searchTerm = safeName.replace(/'/g, \"\");  \n\n  const relNoSlash = rel.replace(/^\\/+/, \"\");\n  const mirrorPath = `${destRoot}/${relNoSlash}`;\n\n  const m = safeName.match(/(\\d{4})-(\\d{2})-(\\d{2})\\.xml$/i);\n  const year = m ? m[1] : \"unknown\";\n  const byYearPath = `${destRoot}/${year}/${safeName}`;\n\n  const destPath = byYearPath;\n\n  out.push({\n    json: {\n      fileName: safeName,       // keep original name, with apostrophe if present\n      serverRelativeUrl: rel,\n      safeUrl,                  // use this in SP download\n      searchTerm,               // 👈 stripped, use this in OneDrive Search\n      destPath,\n      spBase: cfg.spBase,\n      rateDelayMs: cfg.rateDelayMs || 300\n    }\n  });\n}\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        112,
+        32
+      ],
+      "id": "4e68392b-2c75-46e3-8786-29f9076e03ba",
+      "name": "Explode & Plan Paths"
+    },
+    {
+      "parameters": {
+        "url": "=http://ho-web/_api/web/GetFileByServerRelativeUrl('{{$json._safeUrl}}')/$value",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "responseFormat": "file"
+            }
+          },
+          "timeout": 120000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1680,
+        -48
+      ],
+      "id": "950fbbd8-f324-4360-a923-4b87a8557227",
+      "name": "HTTP Request1",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "QAc4op39fbgbbKHr",
+          "name": "Unnamed credential"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Keep only the first item from upstream\nconst items = $input.all();\nreturn items.slice(6820, 8000);\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        32
+      ],
+      "id": "a37acf1b-13ea-4799-a3d4-296d661f89b7",
+      "name": "Delete Later"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Turn every incoming item into a row for the CSV append\nconst items = $input.all();\n\nreturn items.map(item => ({\n  json: {\n    fileName: item.json.name,          // 👈 use THIS item\n    uploadedAt: new Date().toISOString(),\n    serverRelativeUrl: item.json.webUrl\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2352,
+        -48
+      ],
+      "id": "284fc405-951e-4c7f-a4a4-059156386501",
+      "name": "Pre-CSVApend",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "resource": "table",
+        "workbook": {
+          "__rl": true,
+          "value": "012CMKCCCJFSJJE6LXTBAYLAGC22HKPOW7",
+          "mode": "list",
+          "cachedResultName": "DisputeXMLUpload",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B92922C49-7779-4198-8580-C2D68EA7BADF%7D&file=DisputeXMLUpload.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
+        },
+        "worksheet": {
+          "__rl": true,
+          "value": "{5788695F-160D-482B-B37A-54C2452843D6}",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B92922C49-7779-4198-8580-C2D68EA7BADF%7D&file=DisputeXMLUpload.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "{57A20E02-B75A-41DC-9B79-9482D12382E6}",
+          "mode": "list",
+          "cachedResultName": "DisputeData",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B92922C49-7779-4198-8580-C2D68EA7BADF%7D&file=DisputeXMLUpload.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1:C2"
+        },
+        "fieldsUi": {
+          "values": [
+            {
+              "column": "fileName",
+              "fieldValue": "={{ $json.fileName }}"
+            },
+            {
+              "column": "uploadedAt",
+              "fieldValue": "={{ $json.uploadedAt }}"
+            },
+            {
+              "column": "=serverRelativeUrl",
+              "fieldValue": "={{ $json.serverRelativeUrl }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftExcel",
+      "typeVersion": 2.1,
+      "position": [
+        2576,
+        32
+      ],
+      "id": "8e196413-3fb3-460f-8a81-a6f4cee32446",
+      "name": "Append rows to table",
+      "credentials": {
+        "microsoftExcelOAuth2Api": {
+          "id": "snb39Kzd4tl5cSJU",
+          "name": "Microsoft Excel account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "batchSize": 10,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        560,
+        16
+      ],
+      "id": "44f32f99-8bbe-4f03-a7b7-d3bee39f17c4",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = $input.all();\nconst out = [];\n\nfor (const it of results) {\n  const j = it.json || {};\n  const name = (j.name || \"\").trim().toLowerCase();\n  const mime = (j.file?.mimeType || \"\").toLowerCase();\n\n  // Only allow XML\n  const isXml =\n    mime === \"text/xml\" ||\n    mime === \"application/xml\" ||\n    name.endsWith(\".xml\");\n\n  if (isXml) {\n    out.push({\n      json: {\n        fileName: j.name\n      }\n    });\n  }\n}\n\n// ⚠️ Don't return a fallback row here\n// If nothing left -> return []\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        -48
+      ],
+      "id": "cc60b83d-f463-44e3-b282-099aaff03f9c",
+      "name": "SearchResultClean",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const fromClean = $items(\"DataCleanPreHTML\", 0);  // all items from DataCleanPreHTML\nconst items = $input.all();\n\nfor (let i = 0; i < items.length; i++) {\n  const item = items[i];\n  const name = fromClean[i]?.json?.fileName || \"file.xml\";\n\n  // Normalise filename and enforce .xml\n  const finalName = /\\.xml$/i.test(name) ? name : `${name}.xml`;\n  item.json.finalName = finalName;\n\n  // Stamp into the binary so OneDrive sees the right metadata\n  if (item.binary) {\n    for (const key of Object.keys(item.binary)) {\n      const b = item.binary[key];\n      b.fileName = finalName;\n      b.fileExtension = \"xml\";\n      b.mimeType = \"application/xml\";\n    }\n  }\n}\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1904,
+        -48
+      ],
+      "id": "3db5ea47-1a7a-47c4-a9db-1ff9caabd73a",
+      "name": "RenameFile",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Grab the safeUrl from Loop Over Items\nconst loopSafeUrl = $('Loop Over Items').first().json.safeUrl || \"\";\n\n// Map over current input\nreturn $input.all().map(item => {\n  const j = item.json || {};\n\n  // Prefer ServerRelativeUrl if present, else fallback\n  let rawUrl = j.ServerRelativeUrl || j.safeUrl || loopSafeUrl || \"\";\n\n  // Decode in case n8n gave you %20 etc.\n  let cleaned = decodeURIComponent(rawUrl).trim();\n\n  // Store both values for later steps\n  j._fileName = j.fileName || \"\";\n  j._safeUrl  = cleaned; // <-- use this for GetFileByServerRelativeUrl\n\n  return { json: j };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1456,
+        -48
+      ],
+      "id": "6061fcd8-f863-4112-8605-2acda71fd7bf",
+      "name": "DataCleanPreHTML",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "query": "={{ $('Explode & Plan Paths').item.json.searchTerm }}"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        784,
+        -48
+      ],
+      "id": "176a2cdc-dcc3-418c-b63e-bccd58ab30b4",
+      "name": "Search a file",
+      "alwaysOutputData": true,
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "YQJEXWiBLg1Zt1YR",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Candidate files (from Loop Over Items)\nconst candidates = $('Loop Over Items').all().map(item => item.json.fileName);\n\n// Uploaded files (from input branch, may be blank)\nconst uploaded = $input.all().map(item => item.json.fileName).filter(Boolean);\n\n// If no uploaded files exist, keep all candidates\nif (uploaded.length === 0) {\n  return candidates.map(name => ({ json: { fileName: name } }));\n}\n\n// Otherwise, filter out already uploaded\nconst uploadedSet = new Set(uploaded.map(n => n.toLowerCase()));\nconst remaining = candidates.filter(name => !uploadedSet.has(name.toLowerCase()));\n\n// Always return something\nreturn remaining.map(name => ({ json: { fileName: name } }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1232,
+        -48
+      ],
+      "id": "1b769aa9-4504-43c8-9115-247084ba4560",
+      "name": "CheckExisting",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-09-25T02:02:37.803Z",
+      "createdAt": "2025-09-25T02:02:37.803Z",
+      "role": "workflow:owner",
+      "workflowId": "ypIVmz2g5YE5Oy6v",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-10-01T07:18:19.000Z",
+  "versionId": "6931fab9-4f51-488a-b9f0-3a9dc0cb4311"
+}
