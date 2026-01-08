@@ -1,0 +1,195 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-12-30T00:41:02.000Z",
+    "createdAt": "2025-12-30T00:41:01.476Z",
+    "versionId": "508c7fd9-280a-418b-ba83-70b46bc23da9",
+    "workflowId": "uc1c19X92S4cXgn5",
+    "nodes": [
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "2a2f5f3e-2a47-4e0b-8d5d-900751e0e13f",
+        "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {
+          "command": "powershell -NoProfile -Command \"Import-Module ADSync; Start-ADSyncSyncCycle -PolicyType Delta | Out-String\"",
+          "cwd": "="
+        },
+        "type": "n8n-nodes-base.ssh",
+        "typeVersion": 1,
+        "position": [
+          416,
+          0
+        ],
+        "id": "bbb6db10-4591-44c7-a4df-c75e3b14e3ac",
+        "name": "Execute a command",
+        "credentials": {
+          "sshPassword": {
+            "id": "SEXNVZKc31LJccvl",
+            "name": "SSH Password account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          0,
+          -176
+        ],
+        "id": "0de3bd7c-4073-4f79-8990-d7ff9365e85e",
+        "name": "When Executed by Another Workflow"
+      }
+    ],
+    "connections": {
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "Execute a command",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Execute a command",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 508c7fd9",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "508c7fd9-280a-418b-ba83-70b46bc23da9",
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Execute a command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Execute a command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-28T04:05:49.588Z",
+  "id": "uc1c19X92S4cXgn5",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "AD - Force Sync to 365",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "2a2f5f3e-2a47-4e0b-8d5d-900751e0e13f",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "command": "powershell -NoProfile -Command \"Import-Module ADSync; Start-ADSyncSyncCycle -PolicyType Delta | Out-String\"",
+        "cwd": "="
+      },
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "bbb6db10-4591-44c7-a4df-c75e3b14e3ac",
+      "name": "Execute a command",
+      "credentials": {
+        "sshPassword": {
+          "id": "SEXNVZKc31LJccvl",
+          "name": "SSH Password account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        -176
+      ],
+      "id": "0de3bd7c-4073-4f79-8990-d7ff9365e85e",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "timeSavedPerExecution": 1
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-28T04:05:49.591Z",
+      "createdAt": "2025-11-28T04:05:49.591Z",
+      "role": "workflow:owner",
+      "workflowId": "uc1c19X92S4cXgn5",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-27T23:16:28.880Z",
+      "createdAt": "2025-11-27T23:16:28.880Z",
+      "id": "mDg4TH0DyIA1jzi0",
+      "name": "AD"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-30T00:41:09.315Z",
+  "versionId": "508c7fd9-280a-418b-ba83-70b46bc23da9"
+}
