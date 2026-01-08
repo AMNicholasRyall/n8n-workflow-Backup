@@ -1,0 +1,599 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get API Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get API Token": {
+      "main": [
+        [
+          {
+            "node": "Search for Device",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search for Device": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Call 'SnipeIT-DeviceModelCreate'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "CreateDevice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'SnipeIT-DeviceModelCreate'": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CreateDevice": {
+      "main": [
+        [
+          {
+            "node": "Search for Device1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search for Device1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-08T01:36:25.071Z",
+  "id": "zLrekTKSc2wDJI4m",
+  "isArchived": false,
+  "meta": null,
+  "name": "SnipeIT-CreateDevice",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -64
+      ],
+      "id": "ab37e2ac-54ce-46f7-bee3-7820499ee02c",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "FVGc9R5kchTK7wsd",
+          "mode": "list",
+          "cachedResultName": "SnipeIT",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/FVGc9R5kchTK7wsd"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "User",
+              "keyValue": "nryall"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        -64
+      ],
+      "id": "4c4f3e56-69c4-4a9b-8423-7d81f354a739",
+      "name": "Get API Token"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b33a4937-bef9-436e-a20c-6f028bf0b48f",
+              "leftValue": "={{ $json.total }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        432,
+        -64
+      ],
+      "id": "5250fc12-0542-4a64-a7ad-9c76731c2d89",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "https://assets.ashleyandmartin.local/api/v1/hardware",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "limit",
+              "value": "2"
+            },
+            {
+              "name": "offset",
+              "value": "0"
+            },
+            {
+              "name": "search",
+              "value": "={{ $('When clicking ‘Execute workflow’').item.json.deviceName }}"
+            },
+            {
+              "name": "sort",
+              "value": "created_at"
+            },
+            {
+              "name": "order",
+              "value": "desc"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.Key }}"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        208,
+        -64
+      ],
+      "id": "37282c80-f533-4f14-821e-8e490f5d055f",
+      "name": "Search for Device"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================\n// INPUT VARIABLES (EDIT THESE)\n// ===============================\n\n// Put whatever variables you want to pass forward:\nconst out = {\n  Model: $('When clicking ‘Execute workflow’').first().json.model,\n  Manufacturer: $('When clicking ‘Execute workflow’').first().json.manufacturer,\n};\n\n// ===============================\n// OUTPUT CLEAN JSON\n// ===============================\nreturn [\n  {\n    json: out\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        -128
+      ],
+      "id": "146e0e55-3123-453d-9c0d-04041f331a36",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "AJWEF7ZOfEBBJhwF",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/AJWEF7ZOfEBBJhwF",
+          "cachedResultName": "SnipeIT-DeviceModel/ManCreate"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        880,
+        -128
+      ],
+      "id": "48cbac22-e726-49ec-90d2-820e2da04b2a",
+      "name": "Call 'SnipeIT-DeviceModelCreate'"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = {\n  archived: false,\n  warranty_months: null,\n  depreciate: false,\n  supplier_id: null,\n  requestable: false,\n  rtd_location_id: null,\n  location_id: null,\n  asset_tag: $('When clicking ‘Execute workflow’').first().json.serialNumber,\n  model_id: $input.first().json.ModelID,\n  serial: $('When clicking ‘Execute workflow’').first().json.serialNumber,\n  status_id: 2,\n  name: $('When clicking ‘Execute workflow’').first().json.deviceName\n};\n\nreturn [{ json: data }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        -128
+      ],
+      "id": "65cfb825-37ae-4872-88a5-959fd93e5ae2",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://assets.ashleyandmartin.local/api/v1/hardware",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Get API Token').first().json.Key }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1328,
+        -128
+      ],
+      "id": "964c34d9-0aba-4979-9296-b3dcd649a533",
+      "name": "CreateDevice"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1856,
+        16
+      ],
+      "id": "2e349626-9c67-486b-82bb-99abc082a5ab",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = {\n  SnipeITDeviceID: $input.first().json.data[0].rows[0].id,\n  SnipeITDeviceSN: $input.first().json.data[0].rows[0].serial,\n  DeviceID: $('When clicking ‘Execute workflow’').first().json.id,\n  DeviceName: $input.first().json.data[0].rows[0].name\n};\n\nreturn [{ json: data }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2096,
+        16
+      ],
+      "id": "cbffd334-81d6-4935-99ad-0754a76eda54",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "url": "https://assets.ashleyandmartin.local/api/v1/hardware",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "limit",
+              "value": "2"
+            },
+            {
+              "name": "offset",
+              "value": "0"
+            },
+            {
+              "name": "search",
+              "value": "={{ $json.payload.name }}"
+            },
+            {
+              "name": "sort",
+              "value": "created_at"
+            },
+            {
+              "name": "order",
+              "value": "desc"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Get API Token').item.json.Key }}"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1568,
+        -128
+      ],
+      "id": "1d7be6f8-e360-4ac6-afa6-80ffdd5e3557",
+      "name": "Search for Device1"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "When clicking ‘Execute workflow’": [
+      {
+        "json": {
+          "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/managedDevices/$entity",
+          "id": "c01063b5-a898-4c68-bdc1-e7a719993470",
+          "userId": "0c2b1b39-fd09-4909-a071-1b0ebe2e6ced",
+          "deviceName": "LAPTOP-M9EV1A9N",
+          "ownerType": "personal",
+          "managedDeviceOwnerType": "personal",
+          "managementState": "managed",
+          "enrolledDateTime": "2024-10-14T06:44:20.6950051Z",
+          "lastSyncDateTime": "2025-12-06T01:46:40.7747632Z",
+          "chassisType": "laptop",
+          "operatingSystem": "Windows",
+          "deviceType": "windowsRT",
+          "complianceState": "compliant",
+          "jailBroken": "Unknown",
+          "managementAgent": "mdm",
+          "osVersion": "10.0.26100.7171",
+          "easActivated": true,
+          "easDeviceId": "BD97A141F2CFE52409C38E70E95960C9",
+          "easActivationDateTime": "2024-10-14T06:45:42.4893098Z",
+          "aadRegistered": true,
+          "azureADRegistered": true,
+          "deviceEnrollmentType": "windowsAutoEnrollment",
+          "lostModeState": "disabled",
+          "activationLockBypassCode": null,
+          "emailAddress": "Rohana.Samat@ashleyandmartin.com.au",
+          "azureActiveDirectoryDeviceId": "4d58fc0e-0d3f-4fc0-bf13-4de32f0e83f3",
+          "azureADDeviceId": "4d58fc0e-0d3f-4fc0-bf13-4de32f0e83f3",
+          "deviceRegistrationState": "registered",
+          "deviceCategoryDisplayName": "",
+          "isSupervised": false,
+          "exchangeLastSuccessfulSyncDateTime": "0001-01-01T00:00:00Z",
+          "exchangeAccessState": "none",
+          "exchangeAccessStateReason": "none",
+          "remoteAssistanceSessionUrl": "",
+          "remoteAssistanceSessionErrorDetails": "",
+          "isEncrypted": false,
+          "userPrincipalName": "rsamat@ashleyandmartin.com.au",
+          "enrolledByUserPrincipalName": "rsamat@ashleyandmartin.com.au",
+          "model": "Aspire A315-55G",
+          "manufacturer": "Acer",
+          "imei": null,
+          "complianceGracePeriodExpirationDateTime": "9999-12-31T23:59:59.9999999Z",
+          "serialNumber": "NXHNTSG00301405F527600",
+          "phoneNumber": null,
+          "androidSecurityPatchLevel": null,
+          "userDisplayName": "Rohana Samat",
+          "configurationManagerClientEnabledFeatures": null,
+          "wiFiMacAddress": "E4AAEA76F121",
+          "deviceHealthAttestationState": null,
+          "subscriberCarrier": "",
+          "meid": null,
+          "totalStorageSpaceInBytes": 254952865792,
+          "freeStorageSpaceInBytes": 144932077568,
+          "managedDeviceName": "rsamat_Windows_10/14/2024_6:44 AM",
+          "partnerReportedThreatState": "unknown",
+          "retireAfterDateTime": "9999-12-31T23:59:59.9999999Z",
+          "preferMdmOverGroupPolicyAppliedDateTime": "0001-01-01T00:00:00Z",
+          "autopilotEnrolled": false,
+          "requireUserEnrollmentApproval": null,
+          "managementCertificateExpirationDate": "2026-05-03T01:19:03Z",
+          "iccid": "",
+          "udid": "",
+          "roleScopeTagIds": [
+            "0"
+          ],
+          "windowsActiveMalwareCount": 0,
+          "windowsRemediatedMalwareCount": 0,
+          "notes": null,
+          "configurationManagerClientHealthState": null,
+          "configurationManagerClientInformation": null,
+          "ethernetMacAddress": "00090FAA0001",
+          "physicalMemoryInBytes": 0,
+          "processorArchitecture": "unknown",
+          "specificationVersion": null,
+          "joinType": "azureADRegistered",
+          "skuFamily": "Home",
+          "securityPatchLevel": null,
+          "skuNumber": 101,
+          "managementFeatures": "none",
+          "enrollmentProfileName": "",
+          "bootstrapTokenEscrowed": false,
+          "deviceFirmwareConfigurationInterfaceManaged": false,
+          "hardwareInformation": {
+            "serialNumber": null,
+            "totalStorageSpace": 0,
+            "freeStorageSpace": 0,
+            "imei": null,
+            "meid": null,
+            "manufacturer": null,
+            "model": null,
+            "phoneNumber": null,
+            "subscriberCarrier": null,
+            "cellularTechnology": null,
+            "wifiMac": null,
+            "operatingSystemLanguage": null,
+            "isSupervised": false,
+            "isEncrypted": false,
+            "batterySerialNumber": null,
+            "batteryHealthPercentage": 0,
+            "batteryChargeCycles": 0,
+            "isSharedDevice": false,
+            "tpmSpecificationVersion": null,
+            "operatingSystemEdition": null,
+            "deviceFullQualifiedDomainName": null,
+            "deviceGuardVirtualizationBasedSecurityHardwareRequirementState": "meetHardwareRequirements",
+            "deviceGuardVirtualizationBasedSecurityState": "running",
+            "deviceGuardLocalSystemAuthorityCredentialGuardState": "running",
+            "osBuildNumber": null,
+            "operatingSystemProductType": 0,
+            "ipAddressV4": null,
+            "subnetAddress": null,
+            "esimIdentifier": null,
+            "systemManagementBIOSVersion": null,
+            "tpmManufacturer": null,
+            "tpmVersion": null,
+            "wiredIPv4Addresses": [],
+            "batteryLevelPercentage": null,
+            "residentUsersCount": null,
+            "productName": null,
+            "deviceLicensingStatus": "unknown",
+            "deviceLicensingLastErrorCode": 0,
+            "deviceLicensingLastErrorDescription": null,
+            "sharedDeviceCachedUsers": []
+          },
+          "deviceActionResults": [],
+          "usersLoggedOn": [
+            {
+              "userId": "0c2b1b39-fd09-4909-a071-1b0ebe2e6ced",
+              "lastLogOnDateTime": "2025-12-06T01:46:40.9001732Z"
+            }
+          ],
+          "chromeOSDeviceInfo": [],
+          "supplementalDeviceDetails": [],
+          "deviceIdentityAttestationDetail": {
+            "deviceIdentityAttestationStatus": "unknown"
+          }
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "timeSavedPerExecution": 5,
+    "saveDataSuccessExecution": "all"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-08T01:36:25.074Z",
+      "createdAt": "2025-12-08T01:36:25.074Z",
+      "role": "workflow:owner",
+      "workflowId": "zLrekTKSc2wDJI4m",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-12-05T00:51:56.073Z",
+      "createdAt": "2025-12-05T00:51:56.073Z",
+      "id": "N5UMYKN3CMwB8JVM",
+      "name": "SnipeIT"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-08T07:11:32.000Z",
+  "versionId": "b34ba170-31c3-4f5a-9772-082b14c9ff2e"
+}
