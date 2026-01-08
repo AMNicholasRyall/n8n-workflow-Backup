@@ -1,0 +1,326 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Microsoft OneDrive2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Microsoft OneDrive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft OneDrive2": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft OneDrive": {
+      "main": [
+        [
+          {
+            "node": "Microsoft OneDrive1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft OneDrive1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Microsoft OneDrive3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-05-23T05:55:58.207Z",
+  "id": "rjQ6e3XLAZiONmaC",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Transcriibe",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -260,
+        100
+      ],
+      "id": "f821fe8f-822b-4c3e-a657-7d049d6ea313",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "const files = items.filter(item => !item.json.folder);\n\nif (files.length === 0) {\n  throw new Error(\"No files found in the folder.\");\n}\n\nfiles.sort((a, b) =>\n  new Date(b.json.createdDateTime) - new Date(a.json.createdDateTime)\n);\n\nreturn [files[0]];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        180,
+        100
+      ],
+      "id": "51776f18-89e7-461f-968f-4e3b906713b2",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "folderId": "012CMKCCHDX7JTOXIMWZEIH3PI4RGQVZYZ"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        100
+      ],
+      "id": "363e93ec-5731-484d-a493-f2d7419f8176",
+      "name": "Microsoft OneDrive2",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "YQJEXWiBLg1Zt1YR",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "fileId": "={{ $json[\"id\"] }}"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        400,
+        100
+      ],
+      "id": "3b459707-d9b9-4cfb-b390-abd14551da6c",
+      "name": "Microsoft OneDrive",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "YQJEXWiBLg1Zt1YR",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        620,
+        100
+      ],
+      "id": "b88cf6b4-7321-400c-b61f-87eb978238ef",
+      "name": "Microsoft OneDrive1",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "YQJEXWiBLg1Zt1YR",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://10.64.1.43:9000/transcribe-with-speakers",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 3600000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1060,
+        0
+      ],
+      "id": "74560eee-6d3c-4859-b054-b32331b7169a",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const segments = $json.segments || [];\n\n// Pull the filename directly from the OneDrive node context\nconst originalFileName = $('Microsoft OneDrive1').item.json.name || 'transcript.wav';\n\n// Strip extension and add .txt\nconst baseName = originalFileName.split('.').slice(0, -1).join('.') || 'transcript';\nconst fileName = `${baseName}.txt`;\n\nlet transcript = '';\n\nfor (const segment of segments) {\n  const start = new Date(segment.start * 1000).toISOString().substr(11, 8);\n  const end = new Date(segment.end * 1000).toISOString().substr(11, 8);\n  transcript += `[${start} - ${end}] ${segment.speaker || 'Speaker'}: ${segment.text.trim()}\\n\\n`;\n}\n\nreturn [{\n  binary: {\n    data: {\n      data: Buffer.from(transcript, 'utf-8').toString('base64'),\n      mimeType: 'text/plain',\n      fileName: fileName,\n    }\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        0
+      ],
+      "id": "9692ecbf-56be-493d-aa8e-d604b5ba9805",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "fileName": "={{ $('Microsoft OneDrive1').item.json.name.replace(/\\.[^/.]+$/, '') + '.txt' }}",
+        "parentId": "012CMKCCHDX7JTOXIMWZEIH3PI4RGQVZYZ",
+        "binaryData": true
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        1500,
+        0
+      ],
+      "id": "1e15f0c8-85a0-426b-b769-bf40bbc1d374",
+      "name": "Microsoft OneDrive3",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "YQJEXWiBLg1Zt1YR",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "errorMessage": "File not MP3"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        200
+      ],
+      "id": "f7379b9b-9fcb-4e4a-84b9-c60ceab732bf",
+      "name": "Stop and Error"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "29fd063d-3491-4a04-88d7-5f7a727bc14e",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": ".mp3",
+              "operator": {
+                "type": "string",
+                "operation": "endsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        840,
+        100
+      ],
+      "id": "47edbfab-44cb-4b64-9bd8-d18cf9ca3ffb",
+      "name": "If"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-05-23T05:55:58.210Z",
+      "createdAt": "2025-05-23T05:55:58.210Z",
+      "role": "workflow:owner",
+      "workflowId": "rjQ6e3XLAZiONmaC",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-05-27T06:53:10.000Z",
+  "versionId": "4c077f4d-415d-4f2f-9d1b-08c20151cb31"
+}
