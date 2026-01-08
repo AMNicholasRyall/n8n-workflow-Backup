@@ -1,0 +1,303 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        []
+      ]
+    },
+    "Appointment": {
+      "main": [
+        [
+          {
+            "node": "Doctor Prescribes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Doctor Prescribes": {
+      "main": [
+        [
+          {
+            "node": "Appointment Finishes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appointment Finishes": {
+      "main": [
+        [
+          {
+            "node": "Check out Meds in Zenoti",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check out Meds in Zenoti": {
+      "main": [
+        [
+          {
+            "node": "Save A digital Copy of Script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save A digital Copy of Script": {
+      "main": [
+        []
+      ]
+    },
+    "Pull a Zenoti Report": {
+      "main": [
+        [
+          {
+            "node": "Combine and send to HO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-17T04:40:43.466Z",
+  "id": "zgrbRtSGYlL8TrDD",
+  "isArchived": false,
+  "meta": null,
+  "name": "Zenoti - Testing Things",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        176
+      ],
+      "id": "696f4dd9-6688-4050-917c-d07e7ca97e23",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "products",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        176
+      ],
+      "id": "15dab15a-0739-46c7-9fdf-be57704ebed8",
+      "name": "Split Out",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const agg = $input.first()?.json ?? {};\nconst raw = Array.isArray(agg.products) ? agg.products : [];\n\n// Flatten 1 level: products = [ [..], [..] ]  ->  [.., ..]\nconst flattened = raw.flat();\n\n// Remove null/empty objects\nconst cleaned = flattened.filter(p =>\n  p && typeof p === \"object\" && Object.keys(p).length > 0\n);\n\n// 1) No products\nif (cleaned.length === 0) {\n  return [{\n    json: {\n      FilterMeOut: true,\n      FilterReason: \"NoProducts\",\n    }\n  }];\n}\n\n// 2) De-dupe by product_type_info.id\nconst seen = new Set();\nconst deduped = [];\nlet hadDuplicates = false;\n\nfor (const p of cleaned) {\n  const key = p?.product_type_info?.id ?? JSON.stringify(p); // fallback just in case\n  if (seen.has(key)) {\n    hadDuplicates = true;\n    continue;\n  }\n  seen.add(key);\n  deduped.push(p);\n}\n\n// 3) Decide what to do next\nif (deduped.length === 1) {\n  // Exactly 1 => carry on, still ONE item\n  return [{\n    json: {\n      FilterMeOut: false,\n      FilterReason: \"OK\",\n      HadDuplicates: hadDuplicates,\n      ...deduped[0],\n    }\n  }];\n}\n\n// More than 1 real product remains => stop (so you don't loop multiple times)\nreturn [{\n  json: {\n    FilterMeOut: true,\n    FilterReason: \"MultipleProducts\",\n    ProductCount: deduped.length,\n    HadDuplicates: hadDuplicates,\n    // optional debug\n    ProductTypeIds: deduped.map(p => p.product_type_info?.id).filter(Boolean),\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -32,
+        176
+      ],
+      "id": "5ff48ecd-f749-4910-85a3-c42e09227a9f",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "const agg = $input.first()?.json ?? {};\nconst raw = Array.isArray(agg.products) ? agg.products : [];\n\n// Flatten 1 level: products = [ [..], [..] ]  ->  [.., ..]\nconst flattened = raw.flat();\n\n// Remove null/empty objects\nconst cleaned = flattened.filter(p =>\n  p && typeof p === \"object\" && Object.keys(p).length > 0\n);\n\n// 1) No products\nif (cleaned.length === 0) {\n  return [{\n    json: {\n      FilterMeOut: true,\n      FilterReason: \"NoProducts\",\n    }\n  }];\n}\n\n// 2) De-dupe by product_type_info.id\nconst seen = new Set();\nconst deduped = [];\nlet hadDuplicates = false;\n\nfor (const p of cleaned) {\n  const key = p?.product_type_info?.id ?? JSON.stringify(p); // fallback just in case\n  if (seen.has(key)) {\n    hadDuplicates = true;\n    continue;\n  }\n  seen.add(key);\n  deduped.push(p);\n}\n\n// 3) Decide what to do next\nif (deduped.length === 1) {\n  // Exactly 1 => carry on, still ONE item\n  return [{\n    json: {\n      FilterMeOut: false,\n      FilterReason: \"OK\",\n      HadDuplicates: hadDuplicates,\n      ...deduped[0],\n    }\n  }];\n}\n\n// More than 1 real product remains => stop (so you don't loop multiple times)\nreturn [{\n  json: {\n    FilterMeOut: true,\n    FilterReason: \"MultipleProducts\",\n    ProductCount: deduped.length,\n    HadDuplicates: hadDuplicates,\n    // optional debug\n    ProductTypeIds: deduped.map(p => p.product_type_info?.id).filter(Boolean),\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -464,
+        -416
+      ],
+      "id": "4a1dad23-0d66-4248-b1f7-7dec702b2c85",
+      "name": "Appointment"
+    },
+    {
+      "parameters": {
+        "jsCode": "const agg = $input.first()?.json ?? {};\nconst raw = Array.isArray(agg.products) ? agg.products : [];\n\n// Flatten 1 level: products = [ [..], [..] ]  ->  [.., ..]\nconst flattened = raw.flat();\n\n// Remove null/empty objects\nconst cleaned = flattened.filter(p =>\n  p && typeof p === \"object\" && Object.keys(p).length > 0\n);\n\n// 1) No products\nif (cleaned.length === 0) {\n  return [{\n    json: {\n      FilterMeOut: true,\n      FilterReason: \"NoProducts\",\n    }\n  }];\n}\n\n// 2) De-dupe by product_type_info.id\nconst seen = new Set();\nconst deduped = [];\nlet hadDuplicates = false;\n\nfor (const p of cleaned) {\n  const key = p?.product_type_info?.id ?? JSON.stringify(p); // fallback just in case\n  if (seen.has(key)) {\n    hadDuplicates = true;\n    continue;\n  }\n  seen.add(key);\n  deduped.push(p);\n}\n\n// 3) Decide what to do next\nif (deduped.length === 1) {\n  // Exactly 1 => carry on, still ONE item\n  return [{\n    json: {\n      FilterMeOut: false,\n      FilterReason: \"OK\",\n      HadDuplicates: hadDuplicates,\n      ...deduped[0],\n    }\n  }];\n}\n\n// More than 1 real product remains => stop (so you don't loop multiple times)\nreturn [{\n  json: {\n    FilterMeOut: true,\n    FilterReason: \"MultipleProducts\",\n    ProductCount: deduped.length,\n    HadDuplicates: hadDuplicates,\n    // optional debug\n    ProductTypeIds: deduped.map(p => p.product_type_info?.id).filter(Boolean),\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        -416
+      ],
+      "id": "cd6d0f14-6455-4e6e-9cd2-01317e6a9c46",
+      "name": "Doctor Prescribes"
+    },
+    {
+      "parameters": {
+        "jsCode": "const agg = $input.first()?.json ?? {};\nconst raw = Array.isArray(agg.products) ? agg.products : [];\n\n// Flatten 1 level: products = [ [..], [..] ]  ->  [.., ..]\nconst flattened = raw.flat();\n\n// Remove null/empty objects\nconst cleaned = flattened.filter(p =>\n  p && typeof p === \"object\" && Object.keys(p).length > 0\n);\n\n// 1) No products\nif (cleaned.length === 0) {\n  return [{\n    json: {\n      FilterMeOut: true,\n      FilterReason: \"NoProducts\",\n    }\n  }];\n}\n\n// 2) De-dupe by product_type_info.id\nconst seen = new Set();\nconst deduped = [];\nlet hadDuplicates = false;\n\nfor (const p of cleaned) {\n  const key = p?.product_type_info?.id ?? JSON.stringify(p); // fallback just in case\n  if (seen.has(key)) {\n    hadDuplicates = true;\n    continue;\n  }\n  seen.add(key);\n  deduped.push(p);\n}\n\n// 3) Decide what to do next\nif (deduped.length === 1) {\n  // Exactly 1 => carry on, still ONE item\n  return [{\n    json: {\n      FilterMeOut: false,\n      FilterReason: \"OK\",\n      HadDuplicates: hadDuplicates,\n      ...deduped[0],\n    }\n  }];\n}\n\n// More than 1 real product remains => stop (so you don't loop multiple times)\nreturn [{\n  json: {\n    FilterMeOut: true,\n    FilterReason: \"MultipleProducts\",\n    ProductCount: deduped.length,\n    HadDuplicates: hadDuplicates,\n    // optional debug\n    ProductTypeIds: deduped.map(p => p.product_type_info?.id).filter(Boolean),\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -48,
+        -416
+      ],
+      "id": "1585fc46-3553-410e-8112-5783c2c3b09f",
+      "name": "Appointment Finishes"
+    },
+    {
+      "parameters": {
+        "jsCode": "const agg = $input.first()?.json ?? {};\nconst raw = Array.isArray(agg.products) ? agg.products : [];\n\n// Flatten 1 level: products = [ [..], [..] ]  ->  [.., ..]\nconst flattened = raw.flat();\n\n// Remove null/empty objects\nconst cleaned = flattened.filter(p =>\n  p && typeof p === \"object\" && Object.keys(p).length > 0\n);\n\n// 1) No products\nif (cleaned.length === 0) {\n  return [{\n    json: {\n      FilterMeOut: true,\n      FilterReason: \"NoProducts\",\n    }\n  }];\n}\n\n// 2) De-dupe by product_type_info.id\nconst seen = new Set();\nconst deduped = [];\nlet hadDuplicates = false;\n\nfor (const p of cleaned) {\n  const key = p?.product_type_info?.id ?? JSON.stringify(p); // fallback just in case\n  if (seen.has(key)) {\n    hadDuplicates = true;\n    continue;\n  }\n  seen.add(key);\n  deduped.push(p);\n}\n\n// 3) Decide what to do next\nif (deduped.length === 1) {\n  // Exactly 1 => carry on, still ONE item\n  return [{\n    json: {\n      FilterMeOut: false,\n      FilterReason: \"OK\",\n      HadDuplicates: hadDuplicates,\n      ...deduped[0],\n    }\n  }];\n}\n\n// More than 1 real product remains => stop (so you don't loop multiple times)\nreturn [{\n  json: {\n    FilterMeOut: true,\n    FilterReason: \"MultipleProducts\",\n    ProductCount: deduped.length,\n    HadDuplicates: hadDuplicates,\n    // optional debug\n    ProductTypeIds: deduped.map(p => p.product_type_info?.id).filter(Boolean),\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        144,
+        -416
+      ],
+      "id": "9db43da8-aa89-436c-af38-f09967e68a97",
+      "name": "Check out Meds in Zenoti"
+    },
+    {
+      "parameters": {
+        "jsCode": "const agg = $input.first()?.json ?? {};\nconst raw = Array.isArray(agg.products) ? agg.products : [];\n\n// Flatten 1 level: products = [ [..], [..] ]  ->  [.., ..]\nconst flattened = raw.flat();\n\n// Remove null/empty objects\nconst cleaned = flattened.filter(p =>\n  p && typeof p === \"object\" && Object.keys(p).length > 0\n);\n\n// 1) No products\nif (cleaned.length === 0) {\n  return [{\n    json: {\n      FilterMeOut: true,\n      FilterReason: \"NoProducts\",\n    }\n  }];\n}\n\n// 2) De-dupe by product_type_info.id\nconst seen = new Set();\nconst deduped = [];\nlet hadDuplicates = false;\n\nfor (const p of cleaned) {\n  const key = p?.product_type_info?.id ?? JSON.stringify(p); // fallback just in case\n  if (seen.has(key)) {\n    hadDuplicates = true;\n    continue;\n  }\n  seen.add(key);\n  deduped.push(p);\n}\n\n// 3) Decide what to do next\nif (deduped.length === 1) {\n  // Exactly 1 => carry on, still ONE item\n  return [{\n    json: {\n      FilterMeOut: false,\n      FilterReason: \"OK\",\n      HadDuplicates: hadDuplicates,\n      ...deduped[0],\n    }\n  }];\n}\n\n// More than 1 real product remains => stop (so you don't loop multiple times)\nreturn [{\n  json: {\n    FilterMeOut: true,\n    FilterReason: \"MultipleProducts\",\n    ProductCount: deduped.length,\n    HadDuplicates: hadDuplicates,\n    // optional debug\n    ProductTypeIds: deduped.map(p => p.product_type_info?.id).filter(Boolean),\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        -416
+      ],
+      "id": "e2dd24c0-3e59-4159-b131-71817bca82a5",
+      "name": "Save A digital Copy of Script"
+    },
+    {
+      "parameters": {
+        "jsCode": "const agg = $input.first()?.json ?? {};\nconst raw = Array.isArray(agg.products) ? agg.products : [];\n\n// Flatten 1 level: products = [ [..], [..] ]  ->  [.., ..]\nconst flattened = raw.flat();\n\n// Remove null/empty objects\nconst cleaned = flattened.filter(p =>\n  p && typeof p === \"object\" && Object.keys(p).length > 0\n);\n\n// 1) No products\nif (cleaned.length === 0) {\n  return [{\n    json: {\n      FilterMeOut: true,\n      FilterReason: \"NoProducts\",\n    }\n  }];\n}\n\n// 2) De-dupe by product_type_info.id\nconst seen = new Set();\nconst deduped = [];\nlet hadDuplicates = false;\n\nfor (const p of cleaned) {\n  const key = p?.product_type_info?.id ?? JSON.stringify(p); // fallback just in case\n  if (seen.has(key)) {\n    hadDuplicates = true;\n    continue;\n  }\n  seen.add(key);\n  deduped.push(p);\n}\n\n// 3) Decide what to do next\nif (deduped.length === 1) {\n  // Exactly 1 => carry on, still ONE item\n  return [{\n    json: {\n      FilterMeOut: false,\n      FilterReason: \"OK\",\n      HadDuplicates: hadDuplicates,\n      ...deduped[0],\n    }\n  }];\n}\n\n// More than 1 real product remains => stop (so you don't loop multiple times)\nreturn [{\n  json: {\n    FilterMeOut: true,\n    FilterReason: \"MultipleProducts\",\n    ProductCount: deduped.length,\n    HadDuplicates: hadDuplicates,\n    // optional debug\n    ProductTypeIds: deduped.map(p => p.product_type_info?.id).filter(Boolean),\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        -96
+      ],
+      "id": "8e77d4ad-d196-4d3d-aed4-28b515c495f5",
+      "name": "Pull a Zenoti Report"
+    },
+    {
+      "parameters": {
+        "jsCode": "const agg = $input.first()?.json ?? {};\nconst raw = Array.isArray(agg.products) ? agg.products : [];\n\n// Flatten 1 level: products = [ [..], [..] ]  ->  [.., ..]\nconst flattened = raw.flat();\n\n// Remove null/empty objects\nconst cleaned = flattened.filter(p =>\n  p && typeof p === \"object\" && Object.keys(p).length > 0\n);\n\n// 1) No products\nif (cleaned.length === 0) {\n  return [{\n    json: {\n      FilterMeOut: true,\n      FilterReason: \"NoProducts\",\n    }\n  }];\n}\n\n// 2) De-dupe by product_type_info.id\nconst seen = new Set();\nconst deduped = [];\nlet hadDuplicates = false;\n\nfor (const p of cleaned) {\n  const key = p?.product_type_info?.id ?? JSON.stringify(p); // fallback just in case\n  if (seen.has(key)) {\n    hadDuplicates = true;\n    continue;\n  }\n  seen.add(key);\n  deduped.push(p);\n}\n\n// 3) Decide what to do next\nif (deduped.length === 1) {\n  // Exactly 1 => carry on, still ONE item\n  return [{\n    json: {\n      FilterMeOut: false,\n      FilterReason: \"OK\",\n      HadDuplicates: hadDuplicates,\n      ...deduped[0],\n    }\n  }];\n}\n\n// More than 1 real product remains => stop (so you don't loop multiple times)\nreturn [{\n  json: {\n    FilterMeOut: true,\n    FilterReason: \"MultipleProducts\",\n    ProductCount: deduped.length,\n    HadDuplicates: hadDuplicates,\n    // optional debug\n    ProductTypeIds: deduped.map(p => p.product_type_info?.id).filter(Boolean),\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        -96
+      ],
+      "id": "3302f215-601f-4851-ad65-53938bdce45c",
+      "name": "Combine and send to HO"
+    },
+    {
+      "parameters": {
+        "content": "## Each Clinic",
+        "height": 224,
+        "width": 1120
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -512,
+        -464
+      ],
+      "typeVersion": 1,
+      "id": "9f207ea9-8576-4476-a01c-699d2b1b6614",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Head Office / Twice a Week\n## Tuesday / Thursday",
+        "height": 320,
+        "width": 576,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -512,
+        -224
+      ],
+      "typeVersion": 1,
+      "id": "7e28d6b8-4e66-4403-964e-98980efc6070",
+      "name": "Sticky Note1"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "When clicking ‘Execute workflow’": [
+      {
+        "json": {
+          "products": []
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-17T04:40:43.468Z",
+      "createdAt": "2025-12-17T04:40:43.468Z",
+      "role": "workflow:owner",
+      "workflowId": "zgrbRtSGYlL8TrDD",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-23T01:49:41.000Z",
+  "versionId": "9c028090-b2ee-4bd2-b00b-8800cf18721c"
+}
