@@ -28,7 +28,7 @@
   },
   "createdAt": "2026-01-08T05:26:07.329Z",
   "id": "SXmMPovOR2budlXT",
-  "isArchived": false,
+  "isArchived": true,
   "meta": {
     "templateCredsSetupCompleted": true
   },
@@ -113,6 +113,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-01-08T05:58:20.278Z",
-  "versionId": "e1bcf2cf-0a50-4708-8a9c-59b87a0bd7e8"
+  "updatedAt": "2026-01-08T07:30:17.000Z",
+  "versionId": "741bd1c1-a4d0-4b33-b32c-4885e774c88b"
 }
