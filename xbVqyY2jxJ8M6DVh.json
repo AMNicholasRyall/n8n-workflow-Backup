@@ -1,0 +1,606 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Read/Write Files from Disk1": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Filter Down",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out File Name": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pull Varaibles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pull Varaibles": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)1": {
+      "main": [
+        [
+          {
+            "node": "Pre If Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pre If Check": {
+      "main": [
+        [
+          {
+            "node": "If Match Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Match Found": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Non Match Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "User Match",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "User Match": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Non Match Code": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Normalise schema/order",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalise schema/order": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Down": {
+      "main": [
+        [
+          {
+            "node": "Split Out File Name",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "FTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FTP": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-13T06:17:06.039Z",
+  "id": "xbVqyY2jxJ8M6DVh",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Sharepoint Compared to Zenoti",
+  "nodes": [
+    {
+      "parameters": {
+        "fileSelector": "clinicdata.xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        784
+      ],
+      "id": "18c05955-8f9d-4bee-a90c-cf5af7d4375d",
+      "name": "Read/Write Files from Disk1",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "sheetName": "={{ $('Execute').item.json.Abb }}"
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        784
+      ],
+      "id": "6bfc8686-588a-48d5-830a-4d5b444235c6",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Split data out of the Title field (\"Lastname, Firstname DOB\")\nconst results = [];\n\nfor (const item of $input.all()) {\n  // Force Title to a string before trimming to avoid \"trim is not a function\"\n  const rawTitle = item.json.Title;\n  const title = String(rawTitle ?? '').trim();\n\n  if (!title) continue; // skip if blank, just in case\n\n  let lastName = '';\n  let firstName = '';\n  let dob = '';\n\n  // Expect format like \"ARDILL, Jason 30.09.1971\"\n  const [rawLast, rawRest] = title.split(',', 2);\n\n  if (rawRest) {\n    lastName = rawLast.trim();\n\n    const parts = rawRest.trim().split(/\\s+/);\n    if (parts.length > 1) {\n      dob = parts.pop(); // last bit should be DOB\n      firstName = parts.join(' ').trim();\n    } else {\n      firstName = rawRest.trim();\n    }\n  } else {\n    // No comma found – fallback\n    const parts = title.split(/\\s+/);\n    if (parts.length > 2) {\n      dob = parts.pop();\n      firstName = parts.pop();\n      lastName = parts.join(' ');\n    } else {\n      lastName = title;\n    }\n  }\n\n  results.push({\n    json: {\n      ...item.json,\n      LastName: lastName,\n      FirstName: firstName,\n      DOB: dob\n    }\n  });\n}\n\nreturn results;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        160,
+        784
+      ],
+      "id": "c472521c-6189-4347-9311-b67a9e7660b5",
+      "name": "Split Out File Name"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        416,
+        784
+      ],
+      "id": "3585a32b-29d3-460d-b833-45882356e6a3",
+      "name": "Loop Over Items1",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Grab current item in the loop\nconst cur = $json;  // this represents the current item in the loop\n\n// Extract what we care about\nconst ID   = cur.ID;\nconst first = cur.FirstName;\nconst last  = cur.LastName;\nconst dob   = cur.DOB || cur.DateOfBirth || cur.Client_DOB; // flexible field name\n\n// Return a simple view\nreturn [{\n  json: {\n    ID,\n    FirstName: first,\n    LastName: last,\n    DOB: dob\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        800
+      ],
+      "id": "53a0d9a4-6e27-4c0f-8b0d-307d57423a5a",
+      "name": "Pull Varaibles"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "={{ $('Execute').first().json.table_id }}",
+          "mode": "id"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "=Client_LastName",
+              "condition": "=ilike",
+              "keyValue": "={{ $json.LastName }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        832,
+        800
+      ],
+      "id": "c95f0a25-29e3-4095-bcac-fc52b992b443",
+      "name": "Get row(s)1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        800
+      ],
+      "id": "ebf0543d-6c2d-4f00-8370-efd2f91c9e87",
+      "name": "Pre If Check"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "94360171-6fe8-4d86-b471-4a1333a87ca3",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        800
+      ],
+      "id": "9aed4180-b9e3-43b8-890a-cf497ad4c910",
+      "name": "If Match Found"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        720
+      ],
+      "id": "2afa6653-890d-424f-a795-18ad0f2480ff",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Non-match: build from Loop Over Items1 and keep the \"matches: {}\" shape\nconst loop = $('Loop Over Items1').first().json || {};\n\n// Try to derive target fields from loop or parse from Title \"LAST, First DD.MM.YYYY\"\nfunction parseFromTitle(title) {\n  if (!title || typeof title !== 'string') return {};\n  const m = title.match(/^([^,]+),\\s*([^\\d]+?)\\s+(\\d{2}\\.\\d{2}\\.\\d{4})$/);\n  if (!m) return {};\n  const [ , last, first, dob ] = m;\n  return {\n    targetFirstName: first.trim(),\n    targetLastName: last.trim(),\n    targetDOB: dob.trim(),\n  };\n}\n\nconst parsed = parseFromTitle(loop.Title);\n\n// Prefer explicit fields on the loop, else fall back to parsed-from-Title, else empty\nconst targetFirstName = loop.targetFirstName ?? parsed.targetFirstName ?? '';\nconst targetLastName  = loop.targetLastName  ?? parsed.targetLastName  ?? '';\nconst targetDOB       = loop.targetDOB       ?? parsed.targetDOB       ?? '';\n\nreturn [{\n  json: {\n    // keep your search-result header fields\n    ID: loop.ID ?? '',\n    targetFirstName,\n    targetLastName,\n    targetDOB,\n    exists: false,\n\n    // IMPORTANT: matches is an OBJECT for your format (not an array)\n    matches: {\n      Client_ID: '',\n      Zenoti_ID: '',\n      Clinic_name: '',\n      Client_FirstName: '',\n      Client_LastName: '',\n      Client_DOB: '',\n      Client_Code: '',\n      Client_Tags: null,\n      id: '',\n      createdAt: '',\n      updatedAt: ''\n    },\n\n    // your two control fields\n    ZenotiMatch: false,\n    ClientCode: '',\n\n    // (optional) keep the file row context so you can normalise later without re-fetching\n    Title: loop.Title ?? '',\n    Modified: loop.Modified ?? '',\n    Created: loop.Created ?? '',\n    Link: loop.Link ?? '',\n    Name: loop.Name ?? '',\n    FilenameWithExtension: loop.FilenameWithExtension ?? '',\n    Path: loop.Path ?? '',\n    FullPath: loop.FullPath ?? '',\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1424,
+        848
+      ],
+      "id": "b8d1d7d5-9b93-47e7-ae91-9240dd0a4120",
+      "name": "Non Match Code"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get list of client records\nconst clients = $input.first().json.data;\n\n// Get values from Loop Over Items\nconst loopItem = $('Loop Over Items1').first().json;\nconst targetFirstName = loopItem.FirstName;\nconst targetLastName = loopItem.LastName;\nconst targetDOB = loopItem.DOB || loopItem.DateOfBirth || loopItem.Client_DOB;\nconst targetID = loopItem.ID;\n\n// Filter for matches (case-sensitive)\nconst matches = clients.filter(client => client.Client_FirstName === targetFirstName);\n\n// Return result\nreturn [{\n  json: {\n    ID: targetID,\n    targetFirstName,\n    targetLastName,\n    targetDOB,\n    exists: matches.length > 0,\n    matches: matches\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1616,
+        720
+      ],
+      "id": "0315a246-bd6e-41be-b86a-90880957a728",
+      "name": "User Match"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1792,
+        768
+      ],
+      "id": "d855d784-8875-4b40-80cc-15ca7d238130",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalise merged items → unified sheet row\nconst loop = $('Loop Over Items1').first().json;\n\nfunction firstMatch(src) {\n  const m = src?.matches;\n  if (!m) return null;\n  if (Array.isArray(m)) return m[0] ?? null;\n  if (typeof m === 'object') return Object.keys(m).length ? m : null; // matches as object\n  return null;\n}\n\nreturn $input.all().map(({ json: src }) => {\n  const m = firstMatch(src);\n  const code = (m?.Client_Code ?? src.ClientCode ?? '').toString();\n\n  // Determine \"matched\" robustly\n  const hasMatches =\n    Array.isArray(src.matches) ? src.matches.length > 0\n    : (src.matches && typeof src.matches === 'object' && Object.keys(src.matches).length > 0);\n\n  const matched = src.ZenotiMatch === true || !!code || (!!src.exists && hasMatches);\n\n  return {\n    json: {\n      // file row fields come from the loop context\n      ID: loop.ID ?? '',\n      Title: loop.Title ?? '',\n      Modified: loop.Modified ?? '',\n      Created: loop.Created ?? '',\n      Link: loop.Link ?? '',\n      Name: loop.Name ?? '',\n      FilenameWithExtension: loop.FilenameWithExtension ?? '',\n      Path: loop.Path ?? '',\n      FullPath: loop.FullPath ?? '',\n\n      // the two fields we’re updating\n      ZenotiMatch: matched,\n      ClientCode: code\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1952,
+        768
+      ],
+      "id": "24a56d8e-9c21-41de-9954-af5300e11460",
+      "name": "Normalise schema/order"
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- Pull vars from initial node ---\nconst source = $('Execute').first().json;\nconst Zenoti_ID = source.Zenoti_ID;\nconst Abb = source.Abb;\n\n// --- How many per batch ---\nconst batchSize = $('Execute').first().json.batch_size;\n\n// --- All rows coming in ---\nconst rows = $input.all();\n\n// --- Determine slice range ---\nconst start = source.batch_start;        // from original node\nconst end = start + batchSize - 1;\n\n// --- Slice the items ---\nconst sliced = rows.slice(start, start + batchSize);\n\n// --- Return each item with appended metadata ---\nreturn sliced.map(item => ({\n  json: {\n    ...item.json,\n    batch_start: start,\n    batch_end: end,\n    Zenoti_ID,\n    Abb,\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -32,
+        784
+      ],
+      "id": "828ff4b8-63aa-4a4b-9fc9-9a601dfcbee6",
+      "name": "Filter Down"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        592,
+        480
+      ],
+      "id": "1c5884b1-2dc5-4ee0-b62b-e24227477492",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=clinic{{ $('Execute').first().json.Abb }}DataComparedBatch{{ $('Execute').first().json.run_number }}.csv",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        752,
+        480
+      ],
+      "id": "996891e4-b57e-4c56-9299-3858b86c55b0",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "protocol": "sftp",
+        "operation": "upload",
+        "path": "=/C/AMLOGS/BATCH/{{ $('Execute').first().json.Abb }}/{{ $json.fileName }}"
+      },
+      "type": "n8n-nodes-base.ftp",
+      "typeVersion": 1,
+      "position": [
+        960,
+        480
+      ],
+      "id": "36364a71-ec0e-4dc5-b7df-1fe836515e04",
+      "name": "FTP",
+      "credentials": {
+        "sftp": {
+          "id": "sbHKh6CJeP3rVwER",
+          "name": "FTP account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        784
+      ],
+      "id": "d12fc3d8-9cec-479b-bdb6-b11d8b67f837",
+      "name": "Execute",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pull values from the earlier node\nconst abb = $('Execute').first().json.Abb;\nconst zenotiId = $('Execute').first().json.Zenoti_ID;\n\n// All items coming from the upload step\nconst items = $input.all();\n\n// Work out if anything failed\n// (Adjust the conditions to match how your upload node reports errors)\nconst failed = items.filter(i =>\n  i.json.success === false || i.json.error\n);\n\n// Build a single, tiny output item\nreturn [\n  {\n    json: {\n      Abb: abb,\n      Zenoti_ID: zenotiId,\n      success: failed.length === 0,\n      filesAttempted: items.length,\n      filesFailed: failed.length\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1168,
+        480
+      ],
+      "id": "3d86ce1f-d1f8-4a69-b7ce-33b6e1bdad22",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "content": "## Clean data for loop\n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)",
+        "height": 336,
+        "width": 1056
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -704,
+        688
+      ],
+      "typeVersion": 1,
+      "id": "1af3c4e6-3d03-444d-9ab2-146fc1d5d4b6",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Loop\n",
+        "height": 336,
+        "width": 1760,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        368,
+        688
+      ],
+      "typeVersion": 1,
+      "id": "0b1618f8-5c78-439e-bb7f-1f591d5c6c4e",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## UPload CSV to ftp site\n",
+        "height": 224,
+        "width": 752,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        544,
+        432
+      ],
+      "typeVersion": 1,
+      "id": "df73d8b9-1632-49ac-8a41-feed9d9d4b0d",
+      "name": "Sticky Note2"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-13T06:17:06.042Z",
+      "createdAt": "2025-11-13T06:17:06.042Z",
+      "role": "workflow:owner",
+      "workflowId": "xbVqyY2jxJ8M6DVh",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-13T05:47:15.147Z",
+      "createdAt": "2025-11-13T05:47:15.147Z",
+      "id": "dkYWH6XMkxWsDBNj",
+      "name": "CompareFlows"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-17T06:09:48.000Z",
+  "versionId": "30a45ad4-e142-4f1b-bc15-8ee59c8d8e26"
+}
