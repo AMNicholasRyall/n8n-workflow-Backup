@@ -1,0 +1,115 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "FTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FTP": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-13T05:31:37.939Z",
+  "id": "cQWCyvSSIoNxTDnA",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "UpdateMasterSpreadSheet",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d2a55201-3df2-45b3-9952-c608639a2b27",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "protocol": "sftp",
+        "path": "/C/AMlogs/BATCH/MASTER/SharePointFoldersTemplate.xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.ftp",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "a6156a8b-b387-4294-9831-634cea6dcac5",
+      "name": "FTP",
+      "credentials": {
+        "sftp": {
+          "id": "sbHKh6CJeP3rVwER",
+          "name": "FTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "clinicdata.xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "0e9c3d1a-500c-4f41-9428-f3c877d080bb",
+      "name": "Read/Write Files from Disk"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-13T05:31:37.943Z",
+      "createdAt": "2025-11-13T05:31:37.943Z",
+      "role": "workflow:owner",
+      "workflowId": "cQWCyvSSIoNxTDnA",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-13T05:47:15.147Z",
+      "createdAt": "2025-11-13T05:47:15.147Z",
+      "id": "dkYWH6XMkxWsDBNj",
+      "name": "CompareFlows"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-13T05:47:36.000Z",
+  "versionId": "688b3e39-1afa-42eb-8552-461cba779ad0"
+}
