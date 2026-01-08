@@ -1,0 +1,6143 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-07T23:11:19.000Z",
+    "createdAt": "2026-01-07T23:11:13.538Z",
+    "versionId": "242fa9c5-ba4b-477d-af04-c751f1088389",
+    "workflowId": "zAIYcDSMTH0KqEhr",
+    "nodes": [
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "PygQxZaLVrcaZiGx",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/PygQxZaLVrcaZiGx",
+            "cachedResultName": "ZenotiNZ-GetAuthToken"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -832,
+          -320
+        ],
+        "id": "ee95fde3-18c6-4625-b06d-f91c66a1e22d",
+        "name": "Call 'ZenotiNZ-GetAuthToken'"
+      },
+      {
+        "parameters": {
+          "url": "https://api.zenoti.com/v1/appointments",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "center_id",
+                "value": "={{ $('Get Clinc').first().json.Zenoti_ID }}"
+              },
+              {
+                "name": "start_date",
+                "value": "={{ $('Create Previous Date').item.json.start_date }}"
+              },
+              {
+                "name": "end_date",
+                "value": "={{ $('Create Previous Date').item.json.end_date }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').item.json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -32,
+          -320
+        ],
+        "id": "571ab246-fbb0-4123-b906-47e5f583094c",
+        "name": "Clinic Previous Day Appointments",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "jsCode": "// Select your timezone offset here\nconst TZ_OFFSET_HOURS = 8; // Perth = 8, Brisbane = 10, Sydney = 11 (DST), NZ = 13\n\n// Helper to shift UTC time to target timezone\nconst shiftToTz = (date, offsetHours) => {\n  const shifted = new Date(date.getTime() + offsetHours * 3600 * 1000);\n  return shifted;\n};\n\n// Helper to format YYYY-MM-DD using shifted date\nconst formatLocal = (d) => {\n  const year = d.getUTCFullYear();\n  const month = String(d.getUTCMonth() + 1).padStart(2, '0');\n  const day = String(d.getUTCDate()).padStart(2, '0');\n  return `${year}-${month}-${day}`;\n};\n\n// Current UTC time\nconst nowUtc = new Date();\n\n// Convert to local timezone\nconst todayLocal = shiftToTz(nowUtc, TZ_OFFSET_HOURS);\n\n// Yesterday in local timezone\nconst yesterdayLocal = new Date(todayLocal.getTime() - 24 * 3600 * 1000);\n\n// Output\nreturn [\n  {\n    json: {\n      start_date: formatLocal(yesterdayLocal),\n      end_date: formatLocal(todayLocal),\n    }\n  }\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -448,
+          -320
+        ],
+        "id": "0aed91db-3af9-4de3-9f6a-14428cdb1b88",
+        "name": "Create Previous Date"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "pVbLONb8Gh393bg0",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinicsNZ",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/pVbLONb8Gh393bg0"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "code",
+                "keyValue": "={{ $('When clicking ‘Execute workflow’').item.json.code }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1,
+        "position": [
+          -640,
+          -320
+        ],
+        "id": "d1ea02d4-3673-435b-b318-10be148b867c",
+        "name": "Get Clinc"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/appointments/{{ $('Loop Over Items').item.json.appointment_id }}/forms",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1712,
+          -432
+        ],
+        "id": "278c4418-1eaf-4ee8-ab82-417d2734cfdd",
+        "name": "Get Appointment Forms"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "689c654f-e3b6-4cb0-aa0c-4470444057b3",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "NZ Medical Prescription Form.",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.2,
+        "position": [
+          1920,
+          -432
+        ],
+        "id": "ad99f6d9-647d-40bb-a23c-83c44ce37a72",
+        "name": "Filter1",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          1072,
+          -336
+        ],
+        "id": "f6b5d3aa-8e0d-4f3e-9efa-65b926d409c1",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/appointments/{{ $json.AppointmentID }}/forms_data",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "tag_Id",
+                "value": "={{ $json.CustomerFormVerisonID }}"
+              },
+              {
+                "name": "view_context",
+                "value": "0"
+              },
+              {
+                "name": "version_no",
+                "value": "0"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          3088,
+          -256
+        ],
+        "id": "5558facd-5234-41be-98fb-02b914107dd0",
+        "name": "Appointment Form Data1"
+      },
+      {
+        "parameters": {
+          "jsCode": "const item = $input.first().json;\n\n// Get data and turn it into an object if it's a JSON string\nlet data = item.data;\n\nif (typeof data === 'string') {\n  try {\n    data = JSON.parse(data);\n  } catch (error) {\n    throw new Error('data is not valid JSON: ' + data);\n  }\n} else if (!data || typeof data !== 'object') {\n  data = {};\n}\n\n// Pull out first file for the signature\nconst file0 = (data.file && data.file[0]) || {};\n\nconst output = {\n  ...item,      // keep original fields (guest_data, is_form_submitted, etc.)\n  ...data,      // expand fields from parsed data\n  signatureUrl: file0.presignedUrl || null,\n};\n\n// Optional: remove nested data now that it's expanded\ndelete output.data;\n\nreturn [\n  {\n    json: output,\n  },\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3280,
+          -256
+        ],
+        "id": "bcc32d23-8e2b-4772-8314-2a9836543f17",
+        "name": "CleanUpAppointment"
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1408,
+          -464
+        ],
+        "id": "b35dc26c-0193-43d1-bb9e-169102a3aa63",
+        "name": "Wait",
+        "webhookId": "59e6b3b0-5384-4de1-ba67-d4149bf6391b"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "fcb4db13-127c-4dbc-be8d-5262053148e3",
+                "leftValue": "={{ $json.service.name }}",
+                "rightValue": "Telehealth",
+                "operator": {
+                  "type": "string",
+                  "operation": "startsWith"
+                }
+              },
+              {
+                "id": "9082b649-ff3b-4e04-a344-b7dcda4b9b14",
+                "leftValue": "={{ $json.service.name }}",
+                "rightValue": "Doctor",
+                "operator": {
+                  "type": "string",
+                  "operation": "startsWith"
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.2,
+        "position": [
+          176,
+          -320
+        ],
+        "id": "c372698d-4bf4-4791-abef-d0d6c23f518c",
+        "name": "RemoveNonRequired",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2272,
+          -432
+        ],
+        "id": "ff2cf932-72b4-4306-bf90-b44d78147b89",
+        "name": "Clean for IF"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "b10b2be5-bf59-4cc5-9a6f-882cb99725eb",
+                "leftValue": "={{ $json.empty }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "false",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          2448,
+          -416
+        ],
+        "id": "1c516501-0187-49d4-9622-7d499c85ef68",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "46a4d344-6343-4cdd-861c-420b8df2c7f9",
+                "leftValue": "={{ $json.packagesavailable }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.2,
+        "position": [
+          1376,
+          -864
+        ],
+        "id": "856d0e80-2e12-4a2b-91e3-4228170a700d",
+        "name": "Filter3",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "jsCode": "// Safely get CustomerFormVersionID or fallback to 0\nlet formVersionId = 0;\ntry {\n  const hist = $input.first().json.form_history;\n  if (Array.isArray(hist) && hist[0]?.version_id) {\n    formVersionId = hist[0].version_id;\n  }\n} catch (e) {\n  formVersionId = 0;\n}\n\n// Build the output\nreturn [\n  {\n    json: {\n      AppointmentID: $('Wait').first().json.appointment_id,\n      CustomerFirstName: $('Wait').first().json.guest.first_name,\n      CustomerLastName: $('Wait').first().json.guest.last_name,\n      CustomerCode: $('Wait').first().json.guest.code,\n      CustomerFormVerisonID: formVersionId,\n      CustomerID: $('Wait').first().json.guest.id,\n    }\n  }\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2768,
+          -432
+        ],
+        "id": "7b0d24be-b833-4525-8539-311835af136d",
+        "name": "GrabUserDetails",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/appointments/{{ $('GrabUserDetails').item.json.AppointmentID }}/forms",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          3536,
+          -256
+        ],
+        "id": "f6ee4eb7-3849-48d3-9077-4738b4e66e25",
+        "name": "Get Appointment Forms1"
+      },
+      {
+        "parameters": {
+          "content": "## Per Clinic\n",
+          "height": 688,
+          "width": 8368
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -160,
+          -656
+        ],
+        "typeVersion": 1,
+        "id": "629e370d-3ebb-4bef-ab42-01c981c16fa3",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "## Clean non med order appointments",
+          "height": 288,
+          "width": 1296,
+          "color": 2
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -80,
+          -384
+        ],
+        "typeVersion": 1,
+        "id": "a7e80250-4ab2-4d68-b0c4-19018d6cff78",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "content": "## Validate That consent form is filled",
+          "height": 224,
+          "width": 592,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          3488,
+          -320
+        ],
+        "typeVersion": 1,
+        "id": "90977796-0d9f-4cdf-b82d-e85620d01c05",
+        "name": "Sticky Note2"
+      },
+      {
+        "parameters": {
+          "content": "## Need to Do somethnig with this data",
+          "height": 256,
+          "width": 384,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1216,
+          -960
+        ],
+        "typeVersion": 1,
+        "id": "868b1819-e907-4e3e-8b24-a777fa313717",
+        "name": "Sticky Note3"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/guests/{{ $json.CustomerID }}/Packages",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "show_redeemable",
+                "value": "false"
+              },
+              {
+                "name": "center_id",
+                "value": "={{ $('Get Clinc').item.json.Zenoti_ID }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          5728,
+          -512
+        ],
+        "id": "b5336092-c7c4-49e3-b98e-56e4bf24a0d2",
+        "name": "GetPackges"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "855f7d29-527d-4c75-b265-f25d3479e450",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "SIDE EFFECTS FORM",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.2,
+        "position": [
+          3728,
+          -256
+        ],
+        "id": "4aed4eb9-9340-46d7-bdfa-fd0577aea7de",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "content": "## Product Checking",
+          "height": 768,
+          "width": 1712
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -624,
+          352
+        ],
+        "typeVersion": 1,
+        "id": "ed918380-d633-4083-96ac-b866abac51df",
+        "name": "Sticky Note5"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -528,
+          832
+        ],
+        "id": "3bb11677-7775-4581-abf1-37628050009c",
+        "name": "Check for Product",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "2b31abdf-9bd4-4db6-a234-98a5a0400767",
+                "leftValue": "",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -272,
+          832
+        ],
+        "id": "76b44dbf-9bc7-4c4c-8254-ac51595bca2c",
+        "name": "Can Have product"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          512,
+          688
+        ],
+        "id": "ee00b64a-ec22-4202-a665-a9334745cfe1",
+        "name": "Generate INVOICE"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          240,
+          960
+        ],
+        "id": "866f2979-162b-4a92-a134-1c22794ecb01",
+        "name": "Cannot Be redemmed"
+      },
+      {
+        "parameters": {
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          336,
+          368
+        ],
+        "id": "93019bd1-2066-4c2f-b5da-57718059cb17",
+        "name": "Compound",
+        "webhookId": "835f00c0-2e11-4da0-8668-6fb0f97d9b24",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          464,
+          960
+        ],
+        "id": "cf4d15f2-ed38-43d4-b208-2c22858c23c4",
+        "name": "FAILED ORDERS MANUALL FIX",
+        "webhookId": "c9a59fa3-4ca1-4109-90ba-11d537f9c36b",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          672,
+          688
+        ],
+        "id": "cd8167f5-d496-4958-879d-7020b88ee312",
+        "name": "Add Product"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          832,
+          688
+        ],
+        "id": "08db07a2-81a7-454b-9ff6-69aabfa425fd",
+        "name": "Close Invoice"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          272,
+          672
+        ],
+        "id": "d381d5c7-2ce4-415e-bbc1-8e60dd0c52d5",
+        "name": "Loop Over Items1"
+      },
+      {
+        "parameters": {
+          "fieldsToAggregate": {
+            "fieldToAggregate": [
+              {}
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          640,
+          496
+        ],
+        "id": "2064da7e-8057-4b9c-9f00-907e3bc42103",
+        "name": "Aggregate"
+      },
+      {
+        "parameters": {
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          848,
+          496
+        ],
+        "id": "871326cc-1242-4991-9088-a235bedbb9a1",
+        "name": "CLINIC INFO",
+        "webhookId": "74ada91a-e3e2-47b3-a43f-590ad5eb8089",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/guests/{{ $json.CustomerID }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          3536,
+          -528
+        ],
+        "id": "ecace02a-f026-48af-ba64-513357d59dbb",
+        "name": "Guest Details"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Get the raw DOB\nconst rawDob = $input.first().json.personal_info.date_of_birth;\n\n// Convert to dd/MM/yyyy format\nlet formattedDob = null;\n\nif (rawDob) {\n  const dateOnly = rawDob.split(\"T\")[0]; // \"1979-03-25\"\n  const [year, month, day] = dateOnly.split(\"-\");\n  formattedDob = `${day}/${month}/${year}`;\n}\n\n// Build the output\nreturn [\n  {\n    json: {\n      AppointmentID: $('Wait').first().json.appointment_id,\n      CustomerFirstName: $('Wait').first().json.guest.first_name,\n      CustomerLastName: $('Wait').first().json.guest.last_name,\n      CustomerCode: $('Wait').first().json.guest.code,\n      CustomerID: $('Wait').first().json.guest.id,\n      CustomerDOB: formattedDob,\n      CustomerEmail: $input.first().json.personal_info.email,\n      CustomerGender: $input.first().json.personal_info.gender_name,\n      CustomerCenterID: $input.first().json.center_id,\n    }\n  }\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3744,
+          -528
+        ],
+        "id": "315fd129-89f1-4473-b029-ba26ea45e0e1",
+        "name": "Format Data"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "advanced": true,
+          "mergeByFields": {
+            "values": [
+              {
+                "field1": "AppointmentID",
+                "field2": "ClientAppointmentID"
+              }
+            ]
+          },
+          "joinMode": "keepEverything",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          4208,
+          -384
+        ],
+        "id": "8bb135e9-ccc7-4089-b8d0-20f1144e5a0d",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Get all items from the CleanUpAppointment node\nconst items = $('CleanUpAppointment').all();\n\n// Add your custom variables to each item\nfor (const item of items) {\n    item.json.ConsentFormFilled = $input.first().json.is_filled;\n    item.json.ConsentFormSubmitted = $input.first().json.is_submitted;\n    item.json.ClientAppointmentID = $('GrabUserDetails').first().json.AppointmentID;\n}\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3920,
+          -256
+        ],
+        "id": "62084206-9949-442b-b752-f72b3b15d298",
+        "name": "Consent Form Check"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Get all incoming items\nconst items = $input.all();\n\nfor (const item of items) {\n  const boxes = item.json.selectBoxes || {};\n\n  // Work out which option is true\n  if (boxes.clinic) {\n    item.json.DeliveryLocation = 'clinic';\n  } else if (boxes.guest) {\n    item.json.DeliveryLocation = 'guest';\n  } else if (boxes.custom) {\n    item.json.DeliveryLocation = 'custom';\n  } else {\n    item.json.DeliveryLocation = 'unknown';\n  }\n}\n\n// Pass everything through with the new field added\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          4368,
+          -384
+        ],
+        "id": "0b63b976-f10f-4d8c-a4ae-787271313874",
+        "name": "Delivery Location"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.DeliveryLocation }}",
+                      "rightValue": "clinic",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "8d4ab3ca-9811-461d-806b-1076dbe00812"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "a6e7582d-a121-4ebe-99f5-eb3c32773f4e",
+                      "leftValue": "={{ $json.DeliveryLocation }}",
+                      "rightValue": "guest",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "bc647ec7-6e18-4d7b-a214-6d59fc4e0e4e",
+                      "leftValue": "={{ $json.DeliveryLocation }}",
+                      "rightValue": "custom",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "c05e7570-8e45-4bd2-9416-94f621df9136",
+                      "leftValue": "={{ $json.DeliveryLocation }}",
+                      "rightValue": "unknown",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.3,
+        "position": [
+          4528,
+          -400
+        ],
+        "id": "939d8832-abe4-4369-85cf-b9dde2fec6e2",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "content": "## DOB / Email / Gender",
+          "height": 192,
+          "width": 432,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          3488,
+          -576
+        ],
+        "typeVersion": 1,
+        "id": "dd3c5c30-4d38-4fc4-bd80-885097f59a4a",
+        "name": "Sticky Note7"
+      },
+      {
+        "parameters": {
+          "content": "## Grab Form / Clean Form Data",
+          "height": 208,
+          "width": 384,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          3040,
+          -320
+        ],
+        "typeVersion": 1,
+        "id": "3617ce9e-d7b9-479e-a673-9f7349537afd",
+        "name": "Sticky Note8"
+      },
+      {
+        "parameters": {
+          "content": "## Grab Forms from Appointment / Clean Data / Filter Out Non required forms",
+          "height": 288,
+          "width": 480,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1648,
+          -544
+        ],
+        "typeVersion": 1,
+        "id": "8dadda0c-71ca-44cb-92b8-a5823b0a8f03",
+        "name": "Sticky Note9"
+      },
+      {
+        "parameters": {
+          "content": "## Remove Clients if No meds ordered",
+          "height": 288,
+          "width": 352,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          2224,
+          -544
+        ],
+        "typeVersion": 1,
+        "id": "9839d478-73e9-4aba-b3c3-e08b924832b8",
+        "name": "Sticky Note10"
+      },
+      {
+        "parameters": {
+          "content": "## Grab Client Details for Visbility and form version",
+          "height": 288,
+          "width": 288,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          2672,
+          -544
+        ],
+        "typeVersion": 1,
+        "id": "4a52c495-b940-4a49-99f1-a6b29bf99ada",
+        "name": "Sticky Note11"
+      },
+      {
+        "parameters": {
+          "content": "## Slow Process down",
+          "height": 240,
+          "width": 256,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1328,
+          -544
+        ],
+        "typeVersion": 1,
+        "id": "7e31a215-5e16-4234-88ef-864a1cdc0eae",
+        "name": "Sticky Note12"
+      },
+      {
+        "parameters": {
+          "content": "## Grab Auth Token / Clinics / Yesterdays Local Data",
+          "height": 352,
+          "width": 608,
+          "color": 2
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -896,
+          -464
+        ],
+        "typeVersion": 1,
+        "id": "99eb1bdf-bc4d-47d2-807f-e33e615dadfa",
+        "name": "Sticky Note13"
+      },
+      {
+        "parameters": {
+          "content": "",
+          "height": 528,
+          "width": 880
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -1136,
+          -528
+        ],
+        "typeVersion": 1,
+        "id": "d2e60e82-f109-4448-aa84-21fc7e60d57e",
+        "name": "Sticky Note14"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "42bc09ed-7e2a-4517-848f-e55011e3fdc9",
+                "leftValue": "={{ $json.invoice.status }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.2,
+        "position": [
+          5904,
+          -512
+        ],
+        "id": "9cc96dfe-823b-4774-9312-ae0cab5f4d8f",
+        "name": "FilterLiveProducts",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "jsCode": "// GUEST DELIVERY NODE\n\nconst items = $input.all();\n\nfor (const item of items) {\n\tconst json = item.json;\n\n\t// --- 1. Rename fields for product & quantity ---\n\tif (json.select16 !== undefined) {\n\t\tjson.product = json.select16;\n\t\tdelete json.select16;\n\t}\n\n\tif (json.textField16 !== undefined) {\n\t\tjson.quantity = json.textField16;\n\t\tdelete json.textField16;\n\t}\n\n\t// --- 2. Build delivery address for GUEST deliveries ---\n\t// Using contentMacros.content14\n\tif (json.DeliveryLocation === 'guest'\n\t\t&& json.contentMacros\n\t\t&& json.contentMacros.content14) {\n\n\t\tconst c14 = json.contentMacros.content14;\n\n\t\tjson.DeliveryAddress1 = c14['[GuestAddress1]'] || '';\n\t\tjson.DeliveryCity     = c14['[GuestCity]'] || '';\n\n\t\tjson.DeliveryAddressFull = [\n\t\t\tjson.DeliveryAddress1,\n\t\t\tjson.DeliveryCity,\n\t\t].filter(Boolean).join(', ');\n\t}\n}\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          4704,
+          -416
+        ],
+        "id": "300a385f-491d-466c-9516-b9f69a583a41",
+        "name": "Guest Address"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Get all incoming items\nconst items = $input.all();\n\nfor (const item of items) {\n\tconst json = item.json;\n\n\t// --- 1. Rename fields for product & quantity ---\n\tif (json.select16 !== undefined) {\n\t\tjson.product = json.select16;\n\t\tdelete json.select16;\n\t}\n\n\tif (json.textField16 !== undefined) {\n\t\tjson.quantity = json.textField16;\n\t\tdelete json.textField16;\n\t}\n\n\t// --- 2. Build delivery address for CLINIC deliveries ---\n\t// We’re using contentMacros.content15 for clinic\n\tif (json.DeliveryLocation === 'clinic'\n\t\t&& json.contentMacros\n\t\t&& json.contentMacros.content15) {\n\n\t\tconst c15 = json.contentMacros.content15;\n\n\t\t// Map macros to cleaner fields\n\t\tjson.DeliveryAddress1 = c15['[CustomMacro2]'] || '';\n\t\tjson.DeliverySuburb  = c15['[CustomMacro3]'] || '';\n\t\tjson.DeliveryCity    = c15['[CustomMacro4]'] || '';\n\t\tjson.DeliveryPostcode = c15['[CustomMacro5]'] || '';\n\n\t\t// Optional: combined address line if you want it\n\t\tjson.DeliveryAddressFull = [\n\t\t\tjson.DeliveryAddress1,\n\t\t\tjson.DeliverySuburb,\n\t\t\tjson.DeliveryCity,\n\t\t\tjson.DeliveryPostcode,\n\t\t].filter(Boolean).join(', ');\n\t}\n}\n\n// Return updated items\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          4704,
+          -560
+        ],
+        "id": "62110bb8-e988-4f9b-92ae-184c58d6f060",
+        "name": "Clinic Address"
+      },
+      {
+        "parameters": {
+          "jsCode": "// CUSTOM DELIVERY NODE\n\nconst items = $input.all();\n\n// Get the custom address from the first input item\nconst customAddress = $input.first().json.textField || '';\n\nfor (const item of items) {\n\tconst json = item.json;\n\n\t// --- 1. Rename fields for product & quantity ---\n\tif (json.select16 !== undefined) {\n\t\tjson.product = json.select16;\n\t\tdelete json.select16;\n\t}\n\n\tif (json.textField16 !== undefined) {\n\t\tjson.quantity = json.textField16;\n\t\tdelete json.textField16;\n\t}\n\n\t// --- 2. Build delivery address for CUSTOM deliveries ---\n\tif (json.DeliveryLocation === 'custom') {\n\t\t// Full address typed by user (same value as $input.first().json.textField)\n\t\tjson.DeliveryAddressFull = customAddress;\n\t}\n}\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          4704,
+          -288
+        ],
+        "id": "cb79a85d-bfa4-4381-bf47-e83d79c8995b",
+        "name": "Custom Address"
+      },
+      {
+        "parameters": {
+          "content": "## Amend Delivery Address / Refine Data",
+          "height": 464,
+          "width": 976,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          4144,
+          -592
+        ],
+        "typeVersion": 1,
+        "id": "e7780154-0b2a-4ae3-993c-2870c981c6ee",
+        "name": "Sticky Note15"
+      },
+      {
+        "parameters": {
+          "content": "## Client Current Packages",
+          "height": 272,
+          "width": 2608,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          5712,
+          -608
+        ],
+        "typeVersion": 1,
+        "id": "5a3b6a9e-7894-4377-8294-f28d2ff72c9c",
+        "name": "Sticky Note16"
+      },
+      {
+        "parameters": {
+          "content": "## Cleaned Drug Name",
+          "height": 272,
+          "width": 256,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          5440,
+          -608
+        ],
+        "typeVersion": 1,
+        "id": "4d089655-11c3-455b-a32b-c7a09a589654",
+        "name": "Sticky Note17"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\n\nfor (const item of items) {\n\tconst json = item.json;\n\n\t// --- Rename fields ---\n\tif (json.select13 !== undefined) {\n\t\tjson.doctorsDirections = json.select13;\n\t\tdelete json.select13;\n\t}\n\n\t// --- Remove unwanted top-level fields ---\n\tdelete json.guest_data;\n\tdelete json.selectBoxes;\n\tdelete json.file;\n\tdelete json.contentMacros;\n\tdelete json.signatureUrl;\n\tdelete json.dateTime1;\n\tdelete json.dateTime;\n\tdelete json.ClientAppointmentID;\n\n\t// Add more deletes here as needed\n}\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          4896,
+          -384
+        ],
+        "id": "162009c8-6283-4030-9082-c141475d2c2f",
+        "name": "Merge UpData"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\n\n// Field we are reading from\nconst targetField = \"product\";\n\nfunction formatNumber(numStr) {\n  if (numStr.length < 3) {\n    return numStr + \"%\";\n  }\n  const first = numStr[0];\n  const rest = numStr.slice(1);\n  return `${first}.${rest}%`;\n}\n\nfor (const item of items) {\n  const raw = item.json[targetField];\n\n  if (typeof raw === \"string\" && raw.length > 0) {\n\n    const parts = raw.match(/[A-Z][a-z]*|[0-9]+/g) || [];\n\n    const transformed = parts.map(p => {\n      if (/^\\d+$/.test(p)) {\n        return formatNumber(p);\n      }\n      return p;\n    });\n\n    item.json[\"ProductNameCleaned\"] = transformed.join(\" \");\n\n    if (/finasteride/i.test(raw)) {\n      item.json[\"ZenotiProductName\"] = \"Minoxidil + Finasteride Solution\";\n    } else {\n      item.json[\"ZenotiProductName\"] = \"Minoxidil Solution\";\n    }\n\n    // NEW — first 5 chars\n    item.json[\"ZenotiProductNameShort\"] = item.json[\"ZenotiProductName\"].slice(0, 5);\n\n    // NEW — last 5 chars\n    const zName = item.json[\"ZenotiProductName\"];\n    item.json[\"ZenotiProductNameEnd\"] = zName.slice(-4);\n\n  } else {\n    item.json[\"ProductNameCleaned\"] = \"\";\n    item.json[\"ZenotiProductName\"] = \"\";\n    item.json[\"ZenotiProductNameShort\"] = \"\";\n    item.json[\"ZenotiProductNameEnd\"] = \"\";\n  }\n}\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          5520,
+          -512
+        ],
+        "id": "45054cb6-e403-414f-bf0c-c62570715c31",
+        "name": "Clean up Drug Name"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "products",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          7056,
+          -512
+        ],
+        "id": "41df8be2-be42-4408-9014-70918a63e104",
+        "name": "Split Out",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "310efdec-6d82-42ae-bb86-dbeb99f6a3a4",
+                "leftValue": "={{ $json.product_type_info.name }}",
+                "rightValue": "={{ $('Clean up Drug Name').item.json.ZenotiProductNameShort }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "startsWith"
+                }
+              },
+              {
+                "id": "c2d0b2fa-256e-4577-965f-c78201617654",
+                "leftValue": "={{ $json.product_type_info.name }}",
+                "rightValue": "={{ $('Clean up Drug Name').item.json.ZenotiProductNameEnd }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "endsWith"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.2,
+        "position": [
+          7232,
+          -512
+        ],
+        "id": "f13a972f-9f55-4b2b-b095-d0d1ecc7fb36",
+        "name": "FilterDown Drugs",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          7472,
+          -512
+        ],
+        "id": "ecfda189-fd59-40f0-badc-6fa015504428",
+        "name": "Clean for IF1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "b10b2be5-bf59-4cc5-9a6f-882cb99725eb",
+                "leftValue": "={{ $json.empty }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "false",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          7680,
+          -512
+        ],
+        "id": "b3d15791-c97e-4be0-a0cd-a8732f26d74d",
+        "name": "If No Matching Package"
+      },
+      {
+        "parameters": {
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          6832,
+          -192
+        ],
+        "id": "e16c97cd-cd5c-47a8-8600-390f38433485",
+        "name": "Email Clinic for Manual Ordering",
+        "webhookId": "154f893b-4513-43c4-8228-a8e5997d7f54",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "content": "## Error Handling - No Matching Products\n",
+          "height": 256,
+          "width": 272,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          6768,
+          -288
+        ],
+        "typeVersion": 1,
+        "id": "aa182cf0-56d6-4f98-9d23-27170ae1b031",
+        "name": "Sticky Note6"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $('Clean up Drug Name').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = false;\n}\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          7680,
+          128
+        ],
+        "id": "f90bae19-3493-451d-a68e-0ee971d9dd89",
+        "name": "PackagesAvaliable"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Items we want to OUTPUT (all fields kept)\nconst drugItems = $('Clean up Drug Name').all();\n\n// Previous node items (where balance lives)\nconst balanceItems = $input.all();\n\nconst output = [];\n\nfor (let i = 0; i < drugItems.length; i++) {\n  const drugItem = drugItems[i];\n\n  // Clone so we don't accidentally mutate shared references\n  const item = {\n    json: { ...drugItem.json },\n  };\n\n  // Get balance from previous node (same index if possible, else first one)\n  const balanceRaw = balanceItems[i]\n    ? balanceItems[i].json.balance\n    : (balanceItems[0]?.json.balance ?? 0);\n\n  // Quantity comes from Clean up Drug Name\n  const qtyRaw = drugItem.json.quantity;\n\n  // Make sure they're numbers\n  const balance = Number(balanceRaw) || 0;\n  const quantity = Number(qtyRaw) || 0;\n\n  // Do the maths\n  const remaining = balance - quantity;\n\n  // Add new fields\n  item.json.CanSubtract = remaining >= 0;\n  item.json.RemainingBalance = remaining;\n  item.json.ProductID = $input.first().json.product_type_info.id;\n\n  output.push(item);\n}\n\n// Return ALL Clean up Drug Name fields + new maths fields\nreturn output;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          7936,
+          -512
+        ],
+        "id": "235ca24d-1efa-4f32-95ae-7fca9da860e3",
+        "name": "Drug Compare"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "d149344b-810e-42ab-9beb-8c9f5da883f7",
+                "leftValue": "={{ $json.CanSubtract }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          8160,
+          -512
+        ],
+        "id": "311f4ba6-500a-4f1f-a95c-0e2e35184248",
+        "name": "If1"
+      },
+      {
+        "parameters": {
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          7216,
+          -192
+        ],
+        "id": "d7914fa7-baf5-4dac-a85a-8767ddac5e0b",
+        "name": "Client Doesnt Have Enough Balance",
+        "webhookId": "38d9fd49-c566-4dd3-969d-cd92243f5410",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "content": "## Error Handling - Not Enough Product\n",
+          "height": 256,
+          "width": 272,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          7168,
+          -288
+        ],
+        "typeVersion": 1,
+        "id": "20306ebb-6fd4-440c-908d-9a727c4478b1",
+        "name": "Sticky Note18"
+      },
+      {
+        "parameters": {
+          "content": "## Error Handling- Keep Flow Going",
+          "height": 224,
+          "width": 400,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          7536,
+          48
+        ],
+        "typeVersion": 1,
+        "id": "dd2a9d2c-4d61-4f0f-aaca-30fcfeefe4fd",
+        "name": "Sticky Note19"
+      },
+      {
+        "parameters": {
+          "content": "## Return To Flow",
+          "height": 224,
+          "width": 208,
+          "color": 5
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          8784,
+          64
+        ],
+        "typeVersion": 1,
+        "id": "e8441e49-90b8-454d-8394-76b837e73b9d",
+        "name": "Sticky Note21"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $('Drug Compare').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = true;\n    item.json.CLinicABB = $('Get Clinc').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl\n}\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          8848,
+          128
+        ],
+        "id": "28d17a30-d2c5-4c80-8e8b-b4b8a71f3c1a",
+        "name": "Re-Grab All Details"
+      },
+      {
+        "parameters": {
+          "operation": "xlsx",
+          "options": {
+            "fileName": "NZ_Medorder.xlsx",
+            "headerRow": true,
+            "sheetName": "={{ $('Get Clinc').first().json.Abb }}"
+          }
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          1440,
+          640
+        ],
+        "id": "ae56431d-6dea-4481-8f7d-f6cb7a5432a2",
+        "name": "Convert to File",
+        "executeOnce": false
+      },
+      {
+        "parameters": {
+          "resource": "messageAttachment",
+          "messageId": {
+            "__rl": true,
+            "value": "={{ $('Create a draft').item.json.id }}",
+            "mode": "id"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          1712,
+          640
+        ],
+        "id": "5f42bef7-7d25-4f46-9e83-d535ee3745d1",
+        "name": "Add an attachment",
+        "webhookId": "58ea741a-311f-4726-bf3a-7df49a0a2581",
+        "executeOnce": true,
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "draft",
+          "operation": "send",
+          "draftId": {
+            "__rl": true,
+            "value": "={{ $('Create a draft').item.json.id }}",
+            "mode": "id"
+          },
+          "to": "nicholas.ryall@ashleyandmartin.com.au"
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          1936,
+          640
+        ],
+        "id": "b14a02c2-5a54-4767-9807-2f506dc41358",
+        "name": "Send a draft",
+        "webhookId": "4218c37c-f564-4377-b531-ada0de0b10f3",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "## Write File to excel and email - This needs to come up a level. Each line runs Individually so we can random lines to random sheets",
+          "height": 288,
+          "width": 800,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1360,
+          544
+        ],
+        "typeVersion": 1,
+        "id": "8b200b92-5948-430c-8c10-e8daf813e9af",
+        "name": "Sticky Note22"
+      },
+      {
+        "parameters": {
+          "content": "## This sets the clinic",
+          "height": 192,
+          "color": 7
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -704,
+          -368
+        ],
+        "typeVersion": 1,
+        "id": "10cb3f87-8b28-4137-b206-a8e32c6a2de1",
+        "name": "Sticky Note24"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "b10b2be5-bf59-4cc5-9a6f-882cb99725eb",
+                "leftValue": "={{ $json.empty }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "false",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          624,
+          -320
+        ],
+        "id": "c400d5f9-1be1-441e-ac75-1f829cda050b",
+        "name": "If2"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          400,
+          -320
+        ],
+        "id": "ddb63784-5488-4ea6-ba17-b46095dfab77",
+        "name": "Clean for No Appointments"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $('RemoveNonRequired').all();\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          864,
+          -336
+        ],
+        "id": "04f1682d-2119-473a-b605-da4eafd8fb7a",
+        "name": "BringDataforward"
+      },
+      {
+        "parameters": {
+          "content": "## Error Handling - No Mathcing Appointments\n",
+          "height": 256,
+          "width": 272,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          544,
+          -928
+        ],
+        "typeVersion": 1,
+        "id": "1a05df70-44f7-4c10-9cb6-eedad0050c39",
+        "name": "Sticky Note23"
+      },
+      {
+        "parameters": {
+          "jsCode": "return [\n  {\n    json: {\n      FilterMeOut: true,\n      CustomerCenterID: $('Get Clinc').first().json.Zenoti_ID,\n    }\n  }\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          592,
+          -800
+        ],
+        "id": "ae812173-931c-4ead-bb7e-82a23514b78d",
+        "name": "CleanedNoAppointments"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $('FilterLiveProducts').all();\n\nreturn items;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          6880,
+          -512
+        ],
+        "id": "f963ddf1-93e5-436f-a855-c48da559552a",
+        "name": "BringDataForward2"
+      },
+      {
+        "parameters": {
+          "content": "## Error Handling - No Invocies Matching\n(paid in full most likly)\n",
+          "height": 256,
+          "width": 272,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          6384,
+          -288
+        ],
+        "typeVersion": 1,
+        "id": "bc4dc0b0-b6d7-461c-9d43-9f8f539b5ced",
+        "name": "Sticky Note25"
+      },
+      {
+        "parameters": {
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          6432,
+          -192
+        ],
+        "id": "45eaf755-44bc-4d33-8fb6-be565c27bb0f",
+        "name": "Email Clinic for Manual Ordering1",
+        "webhookId": "154f893b-4513-43c4-8228-a8e5997d7f54",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "amount": 0
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1664,
+          -1152
+        ],
+        "id": "e4eb0ed0-d94d-40c9-ba08-d4ad19f6ea5d",
+        "name": "Wait1",
+        "webhookId": "e5015f0f-81f7-4e08-9b19-78a380eb4a72"
+      },
+      {
+        "parameters": {
+          "content": "## Brings all data out into ONE output",
+          "height": 256,
+          "width": 384,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1552,
+          -1248
+        ],
+        "typeVersion": 1,
+        "id": "00886030-13ff-4a8b-8fd9-ba47bc19a651",
+        "name": "Sticky Note26"
+      },
+      {
+        "parameters": {
+          "content": "## Error Handling - No Address\n",
+          "height": 256,
+          "width": 512,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          4672,
+          32
+        ],
+        "typeVersion": 1,
+        "id": "efe7b09b-73f8-4205-a1a8-560858e197ff",
+        "name": "Sticky Note27"
+      },
+      {
+        "parameters": {
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          4720,
+          128
+        ],
+        "id": "f6114614-67ab-474b-b4c2-c3a75bc161eb",
+        "name": "Email Clinic for Manual Ordering2",
+        "webhookId": "154f893b-4513-43c4-8228-a8e5997d7f54",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $('Clean up Drug Name').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = false;\n}\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          5024,
+          128
+        ],
+        "id": "add54fb3-4b4e-48ef-9fcb-c4783e731f2b",
+        "name": "GrabUserDetails1"
+      },
+      {
+        "parameters": {
+          "content": "## Multiple Packages Issue\n\n1. ~~Do I send to sub flow~~ Fixed in Code\n2. ~~Do we aggrigate it before the if and work out post if.~~ We kinda aggrigate\n3. ~~Or do I just handball~~ We Handball Error",
+          "height": 176,
+          "width": 544,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          5424,
+          -880
+        ],
+        "typeVersion": 1,
+        "id": "8ee4d552-7f9c-49ec-87f5-57a495577588",
+        "name": "Sticky Note28"
+      },
+      {
+        "parameters": {
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          6080,
+          -192
+        ],
+        "id": "d88c0c65-eb24-4359-ae9b-561f9b42c8dc",
+        "name": "Email Clinic for Manual Ordering3",
+        "webhookId": "154f893b-4513-43c4-8228-a8e5997d7f54",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "content": "## Error Handling - To many Packages",
+          "height": 256,
+          "width": 272,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          6000,
+          -288
+        ],
+        "typeVersion": 1,
+        "id": "2c2c679c-8e52-4884-90cd-442dffd79ea5",
+        "name": "Sticky Note29"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "8bf67e8d-e85b-49cb-bd39-1bd24cb4cb67",
+                "leftValue": "={{ $json.FilterReason }}",
+                "rightValue": "DuplicateProductGroups",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          6448,
+          -512
+        ],
+        "id": "d09be4dc-63bb-4769-8df9-094e40c4810c",
+        "name": "To Many Products",
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "fieldsToAggregate": {
+            "fieldToAggregate": [
+              {
+                "fieldToAggregate": "products"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          6064,
+          -512
+        ],
+        "id": "b09eca9d-153e-4aaa-a10b-67a7b559663b",
+        "name": "Stop Silly Uneeded batches"
+      },
+      {
+        "parameters": {
+          "jsCode": "const agg = $input.first()?.json ?? {};\nconst products = Array.isArray(agg.products) ? agg.products : [];\n\n// 1) No product groups\nif (products.length === 0) {\n  return [{\n    json: {\n      FilterMeOut: true,\n      FilterReason: \"NoProducts\",\n    }\n  }];\n}\n\n// 2) Multiple product groups = duplicate data\nif (products.length > 1) {\n  return [{\n    json: {\n      FilterMeOut: true,\n      FilterReason: \"DuplicateProductGroups\",\n      GroupCount: products.length,\n    }\n  }];\n}\n\n// 3) Exactly ONE product group → PASS\nreturn [{\n  json: {\n    FilterMeOut: false,\n    FilterReason: \"OK\",\n    products: products[0], // unwrap ONE level\n  }\n}];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          6240,
+          -512
+        ],
+        "id": "2a3c6d19-930b-4f38-9b87-a7a46a0a486a",
+        "name": "Multiple / Null Prodcuts"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "d149344b-810e-42ab-9beb-8c9f5da883f7",
+                "leftValue": "={{ $json.FilterReason }}",
+                "rightValue": "NoProducts",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          6640,
+          -512
+        ],
+        "id": "104d4131-8363-48b0-9b94-62dac77bc36c",
+        "name": "No Products"
+      },
+      {
+        "parameters": {
+          "jsCode": "return [\n  {\n    json: {\n      CustomerFirstName: $('Guest Details').first().json.personal_info.first_name,\n      CustomerLastName: $('Guest Details').first().json.personal_info.last_name,\n      CustomerID: $('Guest Details').first().json.id,\n      CustomerCode: $('Guest Details').first().json.code,\n      ClinicID: $('Guest Details').first().json.center_id,\n    }\n  }\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          6672,
+          48
+        ],
+        "id": "d2b60335-2af3-48a1-b260-cc88be05a7e3",
+        "name": "Name Checker"
+      },
+      {
+        "parameters": {
+          "jsCode": "return [\n  {\n    json: {\n      CustomerFirstName: $('Guest Details').first().json.personal_info.first_name,\n      CustomerLastName: $('Guest Details').first().json.personal_info.last_name,\n      CustomerID: $('Guest Details').first().json.id,\n      CustomerCode: $('Guest Details').first().json.code,\n      ClinicID: $('Guest Details').first().json.center_id,\n    }\n  }\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          6272,
+          128
+        ],
+        "id": "562baf08-6ae1-41f7-8ee2-b9ed003d5363",
+        "name": "Name Checker 2"
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -1072,
+          -320
+        ],
+        "id": "d719ba9f-dd3f-49bd-ae50-35e24da97e15",
+        "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {
+          "content": "## No Consent Form",
+          "height": 272,
+          "width": 256,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          5152,
+          -608
+        ],
+        "typeVersion": 1,
+        "id": "8104b3a4-99a6-4aa6-961d-8b84a66ca30f",
+        "name": "Sticky Note20"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "5fad9901-df75-43cc-907c-89086732d5e3",
+                "leftValue": "={{ $('Consent Form Check').item.json.file[0].name }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          5232,
+          -496
+        ],
+        "id": "659ac4cd-a77a-45b2-a100-12c2d021093a",
+        "name": "If3"
+      },
+      {
+        "parameters": {
+          "content": "## No Concent Form",
+          "height": 256,
+          "width": 272,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          5488,
+          -288
+        ],
+        "typeVersion": 1,
+        "id": "9d1956d4-a0c4-4985-b2ae-d93a5f1f77b0",
+        "name": "Sticky Note30"
+      },
+      {
+        "parameters": {
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          5568,
+          -224
+        ],
+        "id": "ca3bf28a-7100-4716-b627-509e6883a67a",
+        "name": "Email Clinic for Manual Ordering4",
+        "webhookId": "154f893b-4513-43c4-8228-a8e5997d7f54",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "jsCode": "return [\n  {\n    json: {\n      CustomerFirstName: $('Guest Details').first().json.personal_info.first_name,\n      CustomerLastName: $('Guest Details').first().json.personal_info.last_name,\n      CustomerID: $('Guest Details').first().json.id,\n      CustomerCode: $('Guest Details').first().json.code,\n      ClinicID: $('Guest Details').first().json.center_id,\n      Error: \"No Consent Form\",\n    }\n  }\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          5840,
+          48
+        ],
+        "id": "10db0696-0e6d-4955-894b-a920d62d89f4",
+        "name": "Name Checker "
+      },
+      {
+        "parameters": {
+          "jsCode": "const baseUrl = 'https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx';\n\n// Pull values from previous nodes\nconst AppGroupId    = $('Clinic Previous Day Appointments').first().json.appointment_group_id;\nconst ServiceId     = $('Loop Over Items').first().json.service.id\nconst ServiceName   = $('Get Appointment Forms').first().json.service_name;\nconst GuestId       = $('Guest Details').first().json.id;\nconst AppointmentId = $('Format Data').first().json.AppointmentID;\n\n// Helper to build querystring with encoding\nfunction qs(params) {\n  return Object.keys(params)\n    .filter((k) => params[k] !== undefined && params[k] !== null && params[k] !== '')\n    .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(String(params[k]))}`)\n    .join('&');\n}\n\nconst query = qs({\n  AppGroupId,\n  ServiceId,\n  Service: ServiceName,\n  GuestId,\n  AppointmentId,\n});\n\nconst finalUrl = `${baseUrl}?${query}`;\n\nreturn [\n  {\n    json: {\n      AppointmentCustomDataUrl: finalUrl,\n    },\n  },\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          8432,
+          -528
+        ],
+        "id": "8cd12837-663e-443d-b713-156517de41d2",
+        "name": "Code in JavaScript"
+      }
+    ],
+    "connections": {
+      "Call 'ZenotiNZ-GetAuthToken'": {
+        "main": [
+          [
+            {
+              "node": "Get Clinc",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create Previous Date": {
+        "main": [
+          [
+            {
+              "node": "Clinic Previous Day Appointments",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Clinic Previous Day Appointments": {
+        "main": [
+          [
+            {
+              "node": "RemoveNonRequired",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Clinc": {
+        "main": [
+          [
+            {
+              "node": "Create Previous Date",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Appointment Forms": {
+        "main": [
+          [
+            {
+              "node": "Filter1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "Filter3",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter1": {
+        "main": [
+          [
+            {
+              "node": "Clean for IF",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Appointment Form Data1": {
+        "main": [
+          [
+            {
+              "node": "CleanUpAppointment",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Get Appointment Forms",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CleanUpAppointment": {
+        "main": [
+          [
+            {
+              "node": "Get Appointment Forms1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "RemoveNonRequired": {
+        "main": [
+          [
+            {
+              "node": "Clean for No Appointments",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Clean for IF": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "GrabUserDetails",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GrabUserDetails": {
+        "main": [
+          [
+            {
+              "node": "Appointment Form Data1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Guest Details",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Appointment Forms1": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter3": {
+        "main": [
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetPackges": {
+        "main": [
+          [
+            {
+              "node": "FilterLiveProducts",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "Consent Form Check",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check for Product": {
+        "main": [
+          [
+            {
+              "node": "Can Have product",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Can Have product": {
+        "main": [
+          [
+            {
+              "node": "Compound",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Cannot Be redemmed",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Generate INVOICE": {
+        "main": [
+          [
+            {
+              "node": "Add Product",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Cannot Be redemmed": {
+        "main": [
+          [
+            {
+              "node": "FAILED ORDERS MANUALL FIX",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Add Product": {
+        "main": [
+          [
+            {
+              "node": "Close Invoice",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Close Invoice": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items1": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Generate INVOICE",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          [
+            {
+              "node": "CLINIC INFO",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Guest Details": {
+        "main": [
+          [
+            {
+              "node": "Format Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Format Data": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Consent Form Check": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Delivery Location",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Delivery Location": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Clinic Address",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Guest Address",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Custom Address",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Email Clinic for Manual Ordering2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Guest Address": {
+        "main": [
+          [
+            {
+              "node": "Merge UpData",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Clinic Address": {
+        "main": [
+          [
+            {
+              "node": "Merge UpData",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Custom Address": {
+        "main": [
+          [
+            {
+              "node": "Merge UpData",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge UpData": {
+        "main": [
+          [
+            {
+              "node": "If3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Clean up Drug Name": {
+        "main": [
+          [
+            {
+              "node": "GetPackges",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "FilterLiveProducts": {
+        "main": [
+          [
+            {
+              "node": "Stop Silly Uneeded batches",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "FilterDown Drugs",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Clean for IF1": {
+        "main": [
+          [
+            {
+              "node": "If No Matching Package",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "FilterDown Drugs": {
+        "main": [
+          [
+            {
+              "node": "Clean for IF1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If No Matching Package": {
+        "main": [
+          [
+            {
+              "node": "Drug Compare",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Email Clinic for Manual Ordering",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Email Clinic for Manual Ordering": {
+        "main": [
+          [
+            {
+              "node": "PackagesAvaliable",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "PackagesAvaliable": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Drug Compare": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Client Doesnt Have Enough Balance",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Client Doesnt Have Enough Balance": {
+        "main": [
+          [
+            {
+              "node": "PackagesAvaliable",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Re-Grab All Details": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Convert to File": {
+        "main": [
+          [
+            {
+              "node": "Add an attachment",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Add an attachment": {
+        "main": [
+          [
+            {
+              "node": "Send a draft",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If2": {
+        "main": [
+          [
+            {
+              "node": "BringDataforward",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "CleanedNoAppointments",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Clean for No Appointments": {
+        "main": [
+          [
+            {
+              "node": "If2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "BringDataforward": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "BringDataForward2": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Email Clinic for Manual Ordering1": {
+        "main": [
+          [
+            {
+              "node": "Name Checker",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CleanedNoAppointments": {
+        "main": [
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Email Clinic for Manual Ordering2": {
+        "main": [
+          [
+            {
+              "node": "GrabUserDetails1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GrabUserDetails1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Email Clinic for Manual Ordering3": {
+        "main": [
+          [
+            {
+              "node": "Name Checker 2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "To Many Products": {
+        "main": [
+          [
+            {
+              "node": "No Products",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Email Clinic for Manual Ordering3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Stop Silly Uneeded batches": {
+        "main": [
+          [
+            {
+              "node": "Multiple / Null Prodcuts",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Multiple / Null Prodcuts": {
+        "main": [
+          [
+            {
+              "node": "To Many Products",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "No Products": {
+        "main": [
+          [
+            {
+              "node": "BringDataForward2",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Email Clinic for Manual Ordering1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Name Checker": {
+        "main": [
+          [
+            {
+              "node": "PackagesAvaliable",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Name Checker 2": {
+        "main": [
+          [
+            {
+              "node": "PackagesAvaliable",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "Call 'ZenotiNZ-GetAuthToken'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If3": {
+        "main": [
+          [
+            {
+              "node": "Clean up Drug Name",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Email Clinic for Manual Ordering4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Email Clinic for Manual Ordering4": {
+        "main": [
+          [
+            {
+              "node": "Name Checker ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Name Checker ": {
+        "main": [
+          [
+            {
+              "node": "PackagesAvaliable",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Re-Grab All Details",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 242fa9c5",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "242fa9c5-ba4b-477d-af04-c751f1088389",
+  "connections": {
+    "Call 'ZenotiNZ-GetAuthToken'": {
+      "main": [
+        [
+          {
+            "node": "Get Clinc",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Previous Date": {
+      "main": [
+        [
+          {
+            "node": "Clinic Previous Day Appointments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clinic Previous Day Appointments": {
+      "main": [
+        [
+          {
+            "node": "RemoveNonRequired",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Clinc": {
+      "main": [
+        [
+          {
+            "node": "Create Previous Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Appointment Forms": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Filter3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Clean for IF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appointment Form Data1": {
+      "main": [
+        [
+          {
+            "node": "CleanUpAppointment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get Appointment Forms",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CleanUpAppointment": {
+      "main": [
+        [
+          {
+            "node": "Get Appointment Forms1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RemoveNonRequired": {
+      "main": [
+        [
+          {
+            "node": "Clean for No Appointments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean for IF": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "GrabUserDetails",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GrabUserDetails": {
+      "main": [
+        [
+          {
+            "node": "Appointment Form Data1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Guest Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Appointment Forms1": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter3": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetPackges": {
+      "main": [
+        [
+          {
+            "node": "FilterLiveProducts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Consent Form Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for Product": {
+      "main": [
+        [
+          {
+            "node": "Can Have product",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Can Have product": {
+      "main": [
+        [
+          {
+            "node": "Compound",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cannot Be redemmed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate INVOICE": {
+      "main": [
+        [
+          {
+            "node": "Add Product",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cannot Be redemmed": {
+      "main": [
+        [
+          {
+            "node": "FAILED ORDERS MANUALL FIX",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Product": {
+      "main": [
+        [
+          {
+            "node": "Close Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Close Invoice": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate INVOICE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "CLINIC INFO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guest Details": {
+      "main": [
+        [
+          {
+            "node": "Format Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Data": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consent Form Check": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Delivery Location",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delivery Location": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Clinic Address",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Guest Address",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Custom Address",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email Clinic for Manual Ordering2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guest Address": {
+      "main": [
+        [
+          {
+            "node": "Merge UpData",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clinic Address": {
+      "main": [
+        [
+          {
+            "node": "Merge UpData",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Custom Address": {
+      "main": [
+        [
+          {
+            "node": "Merge UpData",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge UpData": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean up Drug Name": {
+      "main": [
+        [
+          {
+            "node": "GetPackges",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FilterLiveProducts": {
+      "main": [
+        [
+          {
+            "node": "Stop Silly Uneeded batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "FilterDown Drugs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean for IF1": {
+      "main": [
+        [
+          {
+            "node": "If No Matching Package",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FilterDown Drugs": {
+      "main": [
+        [
+          {
+            "node": "Clean for IF1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If No Matching Package": {
+      "main": [
+        [
+          {
+            "node": "Drug Compare",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email Clinic for Manual Ordering",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Clinic for Manual Ordering": {
+      "main": [
+        [
+          {
+            "node": "PackagesAvaliable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PackagesAvaliable": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Drug Compare": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Client Doesnt Have Enough Balance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Client Doesnt Have Enough Balance": {
+      "main": [
+        [
+          {
+            "node": "PackagesAvaliable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Re-Grab All Details": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Add an attachment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add an attachment": {
+      "main": [
+        [
+          {
+            "node": "Send a draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "BringDataforward",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CleanedNoAppointments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean for No Appointments": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BringDataforward": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BringDataForward2": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Clinic for Manual Ordering1": {
+      "main": [
+        [
+          {
+            "node": "Name Checker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CleanedNoAppointments": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Clinic for Manual Ordering2": {
+      "main": [
+        [
+          {
+            "node": "GrabUserDetails1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GrabUserDetails1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Clinic for Manual Ordering3": {
+      "main": [
+        [
+          {
+            "node": "Name Checker 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "To Many Products": {
+      "main": [
+        [
+          {
+            "node": "No Products",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email Clinic for Manual Ordering3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stop Silly Uneeded batches": {
+      "main": [
+        [
+          {
+            "node": "Multiple / Null Prodcuts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Multiple / Null Prodcuts": {
+      "main": [
+        [
+          {
+            "node": "To Many Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Products": {
+      "main": [
+        [
+          {
+            "node": "BringDataForward2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email Clinic for Manual Ordering1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Name Checker": {
+      "main": [
+        [
+          {
+            "node": "PackagesAvaliable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Name Checker 2": {
+      "main": [
+        [
+          {
+            "node": "PackagesAvaliable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Call 'ZenotiNZ-GetAuthToken'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Clean up Drug Name",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email Clinic for Manual Ordering4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Clinic for Manual Ordering4": {
+      "main": [
+        [
+          {
+            "node": "Name Checker ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Name Checker ": {
+      "main": [
+        [
+          {
+            "node": "PackagesAvaliable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Re-Grab All Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-09T01:04:16.632Z",
+  "id": "zAIYcDSMTH0KqEhr",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "ZenotiNZ-MedOrderPerClinic",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "PygQxZaLVrcaZiGx",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/PygQxZaLVrcaZiGx",
+          "cachedResultName": "ZenotiNZ-GetAuthToken"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -832,
+        -320
+      ],
+      "id": "ee95fde3-18c6-4625-b06d-f91c66a1e22d",
+      "name": "Call 'ZenotiNZ-GetAuthToken'"
+    },
+    {
+      "parameters": {
+        "url": "https://api.zenoti.com/v1/appointments",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "center_id",
+              "value": "={{ $('Get Clinc').first().json.Zenoti_ID }}"
+            },
+            {
+              "name": "start_date",
+              "value": "={{ $('Create Previous Date').item.json.start_date }}"
+            },
+            {
+              "name": "end_date",
+              "value": "={{ $('Create Previous Date').item.json.end_date }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -32,
+        -320
+      ],
+      "id": "571ab246-fbb0-4123-b906-47e5f583094c",
+      "name": "Clinic Previous Day Appointments",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Select your timezone offset here\nconst TZ_OFFSET_HOURS = 8; // Perth = 8, Brisbane = 10, Sydney = 11 (DST), NZ = 13\n\n// Helper to shift UTC time to target timezone\nconst shiftToTz = (date, offsetHours) => {\n  const shifted = new Date(date.getTime() + offsetHours * 3600 * 1000);\n  return shifted;\n};\n\n// Helper to format YYYY-MM-DD using shifted date\nconst formatLocal = (d) => {\n  const year = d.getUTCFullYear();\n  const month = String(d.getUTCMonth() + 1).padStart(2, '0');\n  const day = String(d.getUTCDate()).padStart(2, '0');\n  return `${year}-${month}-${day}`;\n};\n\n// Current UTC time\nconst nowUtc = new Date();\n\n// Convert to local timezone\nconst todayLocal = shiftToTz(nowUtc, TZ_OFFSET_HOURS);\n\n// Yesterday in local timezone\nconst yesterdayLocal = new Date(todayLocal.getTime() - 24 * 3600 * 1000);\n\n// Output\nreturn [\n  {\n    json: {\n      start_date: formatLocal(yesterdayLocal),\n      end_date: formatLocal(todayLocal),\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        -320
+      ],
+      "id": "0aed91db-3af9-4de3-9f6a-14428cdb1b88",
+      "name": "Create Previous Date"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pVbLONb8Gh393bg0",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinicsNZ",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/pVbLONb8Gh393bg0"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "code",
+              "keyValue": "={{ $('When clicking ‘Execute workflow’').item.json.code }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        -320
+      ],
+      "id": "d1ea02d4-3673-435b-b318-10be148b867c",
+      "name": "Get Clinc"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/appointments/{{ $('Loop Over Items').item.json.appointment_id }}/forms",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1712,
+        -432
+      ],
+      "id": "278c4418-1eaf-4ee8-ab82-417d2734cfdd",
+      "name": "Get Appointment Forms"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "689c654f-e3b6-4cb0-aa0c-4470444057b3",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "NZ Medical Prescription Form.",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1920,
+        -432
+      ],
+      "id": "ad99f6d9-647d-40bb-a23c-83c44ce37a72",
+      "name": "Filter1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1072,
+        -336
+      ],
+      "id": "f6b5d3aa-8e0d-4f3e-9efa-65b926d409c1",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/appointments/{{ $json.AppointmentID }}/forms_data",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "tag_Id",
+              "value": "={{ $json.CustomerFormVerisonID }}"
+            },
+            {
+              "name": "view_context",
+              "value": "0"
+            },
+            {
+              "name": "version_no",
+              "value": "0"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        3088,
+        -256
+      ],
+      "id": "5558facd-5234-41be-98fb-02b914107dd0",
+      "name": "Appointment Form Data1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\n\n// Get data and turn it into an object if it's a JSON string\nlet data = item.data;\n\nif (typeof data === 'string') {\n  try {\n    data = JSON.parse(data);\n  } catch (error) {\n    throw new Error('data is not valid JSON: ' + data);\n  }\n} else if (!data || typeof data !== 'object') {\n  data = {};\n}\n\n// Pull out first file for the signature\nconst file0 = (data.file && data.file[0]) || {};\n\nconst output = {\n  ...item,      // keep original fields (guest_data, is_form_submitted, etc.)\n  ...data,      // expand fields from parsed data\n  signatureUrl: file0.presignedUrl || null,\n};\n\n// Optional: remove nested data now that it's expanded\ndelete output.data;\n\nreturn [\n  {\n    json: output,\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3280,
+        -256
+      ],
+      "id": "bcc32d23-8e2b-4772-8314-2a9836543f17",
+      "name": "CleanUpAppointment"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1408,
+        -464
+      ],
+      "id": "b35dc26c-0193-43d1-bb9e-169102a3aa63",
+      "name": "Wait",
+      "webhookId": "59e6b3b0-5384-4de1-ba67-d4149bf6391b"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "fcb4db13-127c-4dbc-be8d-5262053148e3",
+              "leftValue": "={{ $json.service.name }}",
+              "rightValue": "Telehealth",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            },
+            {
+              "id": "9082b649-ff3b-4e04-a344-b7dcda4b9b14",
+              "leftValue": "={{ $json.service.name }}",
+              "rightValue": "Doctor",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        176,
+        -320
+      ],
+      "id": "c372698d-4bf4-4791-abef-d0d6c23f518c",
+      "name": "RemoveNonRequired",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2272,
+        -432
+      ],
+      "id": "ff2cf932-72b4-4306-bf90-b44d78147b89",
+      "name": "Clean for IF"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b10b2be5-bf59-4cc5-9a6f-882cb99725eb",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2448,
+        -416
+      ],
+      "id": "1c516501-0187-49d4-9622-7d499c85ef68",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "46a4d344-6343-4cdd-861c-420b8df2c7f9",
+              "leftValue": "={{ $json.packagesavailable }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1376,
+        -864
+      ],
+      "id": "856d0e80-2e12-4a2b-91e3-4228170a700d",
+      "name": "Filter3",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Safely get CustomerFormVersionID or fallback to 0\nlet formVersionId = 0;\ntry {\n  const hist = $input.first().json.form_history;\n  if (Array.isArray(hist) && hist[0]?.version_id) {\n    formVersionId = hist[0].version_id;\n  }\n} catch (e) {\n  formVersionId = 0;\n}\n\n// Build the output\nreturn [\n  {\n    json: {\n      AppointmentID: $('Wait').first().json.appointment_id,\n      CustomerFirstName: $('Wait').first().json.guest.first_name,\n      CustomerLastName: $('Wait').first().json.guest.last_name,\n      CustomerCode: $('Wait').first().json.guest.code,\n      CustomerFormVerisonID: formVersionId,\n      CustomerID: $('Wait').first().json.guest.id,\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2768,
+        -432
+      ],
+      "id": "7b0d24be-b833-4525-8539-311835af136d",
+      "name": "GrabUserDetails",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/appointments/{{ $('GrabUserDetails').item.json.AppointmentID }}/forms",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        3536,
+        -256
+      ],
+      "id": "f6ee4eb7-3849-48d3-9077-4738b4e66e25",
+      "name": "Get Appointment Forms1"
+    },
+    {
+      "parameters": {
+        "content": "## Per Clinic\n",
+        "height": 688,
+        "width": 8368
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -160,
+        -656
+      ],
+      "typeVersion": 1,
+      "id": "629e370d-3ebb-4bef-ab42-01c981c16fa3",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Clean non med order appointments",
+        "height": 288,
+        "width": 1296,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -80,
+        -384
+      ],
+      "typeVersion": 1,
+      "id": "a7e80250-4ab2-4d68-b0c4-19018d6cff78",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Validate That consent form is filled",
+        "height": 224,
+        "width": 592,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3488,
+        -320
+      ],
+      "typeVersion": 1,
+      "id": "90977796-0d9f-4cdf-b82d-e85620d01c05",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Need to Do somethnig with this data",
+        "height": 256,
+        "width": 384,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1216,
+        -960
+      ],
+      "typeVersion": 1,
+      "id": "868b1819-e907-4e3e-8b24-a777fa313717",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/guests/{{ $json.CustomerID }}/Packages",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "show_redeemable",
+              "value": "false"
+            },
+            {
+              "name": "center_id",
+              "value": "={{ $('Get Clinc').item.json.Zenoti_ID }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        5728,
+        -512
+      ],
+      "id": "b5336092-c7c4-49e3-b98e-56e4bf24a0d2",
+      "name": "GetPackges"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "855f7d29-527d-4c75-b265-f25d3479e450",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "SIDE EFFECTS FORM",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        3728,
+        -256
+      ],
+      "id": "4aed4eb9-9340-46d7-bdfa-fd0577aea7de",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "content": "## Product Checking",
+        "height": 768,
+        "width": 1712
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -624,
+        352
+      ],
+      "typeVersion": 1,
+      "id": "ed918380-d633-4083-96ac-b866abac51df",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -528,
+        832
+      ],
+      "id": "3bb11677-7775-4581-abf1-37628050009c",
+      "name": "Check for Product",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2b31abdf-9bd4-4db6-a234-98a5a0400767",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -272,
+        832
+      ],
+      "id": "76b44dbf-9bc7-4c4c-8254-ac51595bca2c",
+      "name": "Can Have product"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        688
+      ],
+      "id": "ee00b64a-ec22-4202-a665-a9334745cfe1",
+      "name": "Generate INVOICE"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        960
+      ],
+      "id": "866f2979-162b-4a92-a134-1c22794ecb01",
+      "name": "Cannot Be redemmed"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        336,
+        368
+      ],
+      "id": "93019bd1-2066-4c2f-b5da-57718059cb17",
+      "name": "Compound",
+      "webhookId": "835f00c0-2e11-4da0-8668-6fb0f97d9b24",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        464,
+        960
+      ],
+      "id": "cf4d15f2-ed38-43d4-b208-2c22858c23c4",
+      "name": "FAILED ORDERS MANUALL FIX",
+      "webhookId": "c9a59fa3-4ca1-4109-90ba-11d537f9c36b",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        688
+      ],
+      "id": "cd8167f5-d496-4958-879d-7020b88ee312",
+      "name": "Add Product"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        688
+      ],
+      "id": "08db07a2-81a7-454b-9ff6-69aabfa425fd",
+      "name": "Close Invoice"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        272,
+        672
+      ],
+      "id": "d381d5c7-2ce4-415e-bbc1-8e60dd0c52d5",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        640,
+        496
+      ],
+      "id": "2064da7e-8057-4b9c-9f00-907e3bc42103",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        848,
+        496
+      ],
+      "id": "871326cc-1242-4991-9088-a235bedbb9a1",
+      "name": "CLINIC INFO",
+      "webhookId": "74ada91a-e3e2-47b3-a43f-590ad5eb8089",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/guests/{{ $json.CustomerID }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        3536,
+        -528
+      ],
+      "id": "ecace02a-f026-48af-ba64-513357d59dbb",
+      "name": "Guest Details"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the raw DOB\nconst rawDob = $input.first().json.personal_info.date_of_birth;\n\n// Convert to dd/MM/yyyy format\nlet formattedDob = null;\n\nif (rawDob) {\n  const dateOnly = rawDob.split(\"T\")[0]; // \"1979-03-25\"\n  const [year, month, day] = dateOnly.split(\"-\");\n  formattedDob = `${day}/${month}/${year}`;\n}\n\n// Build the output\nreturn [\n  {\n    json: {\n      AppointmentID: $('Wait').first().json.appointment_id,\n      CustomerFirstName: $('Wait').first().json.guest.first_name,\n      CustomerLastName: $('Wait').first().json.guest.last_name,\n      CustomerCode: $('Wait').first().json.guest.code,\n      CustomerID: $('Wait').first().json.guest.id,\n      CustomerDOB: formattedDob,\n      CustomerEmail: $input.first().json.personal_info.email,\n      CustomerGender: $input.first().json.personal_info.gender_name,\n      CustomerCenterID: $input.first().json.center_id,\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3744,
+        -528
+      ],
+      "id": "315fd129-89f1-4473-b029-ba26ea45e0e1",
+      "name": "Format Data"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "AppointmentID",
+              "field2": "ClientAppointmentID"
+            }
+          ]
+        },
+        "joinMode": "keepEverything",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        4208,
+        -384
+      ],
+      "id": "8bb135e9-ccc7-4089-b8d0-20f1144e5a0d",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all items from the CleanUpAppointment node\nconst items = $('CleanUpAppointment').all();\n\n// Add your custom variables to each item\nfor (const item of items) {\n    item.json.ConsentFormFilled = $input.first().json.is_filled;\n    item.json.ConsentFormSubmitted = $input.first().json.is_submitted;\n    item.json.ClientAppointmentID = $('GrabUserDetails').first().json.AppointmentID;\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3920,
+        -256
+      ],
+      "id": "62084206-9949-442b-b752-f72b3b15d298",
+      "name": "Consent Form Check"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all incoming items\nconst items = $input.all();\n\nfor (const item of items) {\n  const boxes = item.json.selectBoxes || {};\n\n  // Work out which option is true\n  if (boxes.clinic) {\n    item.json.DeliveryLocation = 'clinic';\n  } else if (boxes.guest) {\n    item.json.DeliveryLocation = 'guest';\n  } else if (boxes.custom) {\n    item.json.DeliveryLocation = 'custom';\n  } else {\n    item.json.DeliveryLocation = 'unknown';\n  }\n}\n\n// Pass everything through with the new field added\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4368,
+        -384
+      ],
+      "id": "0b63b976-f10f-4d8c-a4ae-787271313874",
+      "name": "Delivery Location"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.DeliveryLocation }}",
+                    "rightValue": "clinic",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "8d4ab3ca-9811-461d-806b-1076dbe00812"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a6e7582d-a121-4ebe-99f5-eb3c32773f4e",
+                    "leftValue": "={{ $json.DeliveryLocation }}",
+                    "rightValue": "guest",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bc647ec7-6e18-4d7b-a214-6d59fc4e0e4e",
+                    "leftValue": "={{ $json.DeliveryLocation }}",
+                    "rightValue": "custom",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c05e7570-8e45-4bd2-9416-94f621df9136",
+                    "leftValue": "={{ $json.DeliveryLocation }}",
+                    "rightValue": "unknown",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        4528,
+        -400
+      ],
+      "id": "939d8832-abe4-4369-85cf-b9dde2fec6e2",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "content": "## DOB / Email / Gender",
+        "height": 192,
+        "width": 432,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3488,
+        -576
+      ],
+      "typeVersion": 1,
+      "id": "dd3c5c30-4d38-4fc4-bd80-885097f59a4a",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## Grab Form / Clean Form Data",
+        "height": 208,
+        "width": 384,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3040,
+        -320
+      ],
+      "typeVersion": 1,
+      "id": "3617ce9e-d7b9-479e-a673-9f7349537afd",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## Grab Forms from Appointment / Clean Data / Filter Out Non required forms",
+        "height": 288,
+        "width": 480,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1648,
+        -544
+      ],
+      "typeVersion": 1,
+      "id": "8dadda0c-71ca-44cb-92b8-a5823b0a8f03",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "## Remove Clients if No meds ordered",
+        "height": 288,
+        "width": 352,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2224,
+        -544
+      ],
+      "typeVersion": 1,
+      "id": "9839d478-73e9-4aba-b3c3-e08b924832b8",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "## Grab Client Details for Visbility and form version",
+        "height": 288,
+        "width": 288,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2672,
+        -544
+      ],
+      "typeVersion": 1,
+      "id": "4a52c495-b940-4a49-99f1-a6b29bf99ada",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "## Slow Process down",
+        "height": 240,
+        "width": 256,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1328,
+        -544
+      ],
+      "typeVersion": 1,
+      "id": "7e31a215-5e16-4234-88ef-864a1cdc0eae",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "content": "## Grab Auth Token / Clinics / Yesterdays Local Data",
+        "height": 352,
+        "width": 608,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -896,
+        -464
+      ],
+      "typeVersion": 1,
+      "id": "99eb1bdf-bc4d-47d2-807f-e33e615dadfa",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 528,
+        "width": 880
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1136,
+        -528
+      ],
+      "typeVersion": 1,
+      "id": "d2e60e82-f109-4448-aa84-21fc7e60d57e",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "42bc09ed-7e2a-4517-848f-e55011e3fdc9",
+              "leftValue": "={{ $json.invoice.status }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        5904,
+        -512
+      ],
+      "id": "9cc96dfe-823b-4774-9312-ae0cab5f4d8f",
+      "name": "FilterLiveProducts",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// GUEST DELIVERY NODE\n\nconst items = $input.all();\n\nfor (const item of items) {\n\tconst json = item.json;\n\n\t// --- 1. Rename fields for product & quantity ---\n\tif (json.select16 !== undefined) {\n\t\tjson.product = json.select16;\n\t\tdelete json.select16;\n\t}\n\n\tif (json.textField16 !== undefined) {\n\t\tjson.quantity = json.textField16;\n\t\tdelete json.textField16;\n\t}\n\n\t// --- 2. Build delivery address for GUEST deliveries ---\n\t// Using contentMacros.content14\n\tif (json.DeliveryLocation === 'guest'\n\t\t&& json.contentMacros\n\t\t&& json.contentMacros.content14) {\n\n\t\tconst c14 = json.contentMacros.content14;\n\n\t\tjson.DeliveryAddress1 = c14['[GuestAddress1]'] || '';\n\t\tjson.DeliveryCity     = c14['[GuestCity]'] || '';\n\n\t\tjson.DeliveryAddressFull = [\n\t\t\tjson.DeliveryAddress1,\n\t\t\tjson.DeliveryCity,\n\t\t].filter(Boolean).join(', ');\n\t}\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4704,
+        -416
+      ],
+      "id": "300a385f-491d-466c-9516-b9f69a583a41",
+      "name": "Guest Address"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all incoming items\nconst items = $input.all();\n\nfor (const item of items) {\n\tconst json = item.json;\n\n\t// --- 1. Rename fields for product & quantity ---\n\tif (json.select16 !== undefined) {\n\t\tjson.product = json.select16;\n\t\tdelete json.select16;\n\t}\n\n\tif (json.textField16 !== undefined) {\n\t\tjson.quantity = json.textField16;\n\t\tdelete json.textField16;\n\t}\n\n\t// --- 2. Build delivery address for CLINIC deliveries ---\n\t// We’re using contentMacros.content15 for clinic\n\tif (json.DeliveryLocation === 'clinic'\n\t\t&& json.contentMacros\n\t\t&& json.contentMacros.content15) {\n\n\t\tconst c15 = json.contentMacros.content15;\n\n\t\t// Map macros to cleaner fields\n\t\tjson.DeliveryAddress1 = c15['[CustomMacro2]'] || '';\n\t\tjson.DeliverySuburb  = c15['[CustomMacro3]'] || '';\n\t\tjson.DeliveryCity    = c15['[CustomMacro4]'] || '';\n\t\tjson.DeliveryPostcode = c15['[CustomMacro5]'] || '';\n\n\t\t// Optional: combined address line if you want it\n\t\tjson.DeliveryAddressFull = [\n\t\t\tjson.DeliveryAddress1,\n\t\t\tjson.DeliverySuburb,\n\t\t\tjson.DeliveryCity,\n\t\t\tjson.DeliveryPostcode,\n\t\t].filter(Boolean).join(', ');\n\t}\n}\n\n// Return updated items\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4704,
+        -560
+      ],
+      "id": "62110bb8-e988-4f9b-92ae-184c58d6f060",
+      "name": "Clinic Address"
+    },
+    {
+      "parameters": {
+        "jsCode": "// CUSTOM DELIVERY NODE\n\nconst items = $input.all();\n\n// Get the custom address from the first input item\nconst customAddress = $input.first().json.textField || '';\n\nfor (const item of items) {\n\tconst json = item.json;\n\n\t// --- 1. Rename fields for product & quantity ---\n\tif (json.select16 !== undefined) {\n\t\tjson.product = json.select16;\n\t\tdelete json.select16;\n\t}\n\n\tif (json.textField16 !== undefined) {\n\t\tjson.quantity = json.textField16;\n\t\tdelete json.textField16;\n\t}\n\n\t// --- 2. Build delivery address for CUSTOM deliveries ---\n\tif (json.DeliveryLocation === 'custom') {\n\t\t// Full address typed by user (same value as $input.first().json.textField)\n\t\tjson.DeliveryAddressFull = customAddress;\n\t}\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4704,
+        -288
+      ],
+      "id": "cb79a85d-bfa4-4381-bf47-e83d79c8995b",
+      "name": "Custom Address"
+    },
+    {
+      "parameters": {
+        "content": "## Amend Delivery Address / Refine Data",
+        "height": 464,
+        "width": 976,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4144,
+        -592
+      ],
+      "typeVersion": 1,
+      "id": "e7780154-0b2a-4ae3-993c-2870c981c6ee",
+      "name": "Sticky Note15"
+    },
+    {
+      "parameters": {
+        "content": "## Client Current Packages",
+        "height": 272,
+        "width": 2608,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        5712,
+        -608
+      ],
+      "typeVersion": 1,
+      "id": "5a3b6a9e-7894-4377-8294-f28d2ff72c9c",
+      "name": "Sticky Note16"
+    },
+    {
+      "parameters": {
+        "content": "## Cleaned Drug Name",
+        "height": 272,
+        "width": 256,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        5440,
+        -608
+      ],
+      "typeVersion": 1,
+      "id": "4d089655-11c3-455b-a32b-c7a09a589654",
+      "name": "Sticky Note17"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nfor (const item of items) {\n\tconst json = item.json;\n\n\t// --- Rename fields ---\n\tif (json.select13 !== undefined) {\n\t\tjson.doctorsDirections = json.select13;\n\t\tdelete json.select13;\n\t}\n\n\t// --- Remove unwanted top-level fields ---\n\tdelete json.guest_data;\n\tdelete json.selectBoxes;\n\tdelete json.file;\n\tdelete json.contentMacros;\n\tdelete json.signatureUrl;\n\tdelete json.dateTime1;\n\tdelete json.dateTime;\n\tdelete json.ClientAppointmentID;\n\n\t// Add more deletes here as needed\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4896,
+        -384
+      ],
+      "id": "162009c8-6283-4030-9082-c141475d2c2f",
+      "name": "Merge UpData"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\n// Field we are reading from\nconst targetField = \"product\";\n\nfunction formatNumber(numStr) {\n  if (numStr.length < 3) {\n    return numStr + \"%\";\n  }\n  const first = numStr[0];\n  const rest = numStr.slice(1);\n  return `${first}.${rest}%`;\n}\n\nfor (const item of items) {\n  const raw = item.json[targetField];\n\n  if (typeof raw === \"string\" && raw.length > 0) {\n\n    const parts = raw.match(/[A-Z][a-z]*|[0-9]+/g) || [];\n\n    const transformed = parts.map(p => {\n      if (/^\\d+$/.test(p)) {\n        return formatNumber(p);\n      }\n      return p;\n    });\n\n    item.json[\"ProductNameCleaned\"] = transformed.join(\" \");\n\n    if (/finasteride/i.test(raw)) {\n      item.json[\"ZenotiProductName\"] = \"Minoxidil + Finasteride Solution\";\n    } else {\n      item.json[\"ZenotiProductName\"] = \"Minoxidil Solution\";\n    }\n\n    // NEW — first 5 chars\n    item.json[\"ZenotiProductNameShort\"] = item.json[\"ZenotiProductName\"].slice(0, 5);\n\n    // NEW — last 5 chars\n    const zName = item.json[\"ZenotiProductName\"];\n    item.json[\"ZenotiProductNameEnd\"] = zName.slice(-4);\n\n  } else {\n    item.json[\"ProductNameCleaned\"] = \"\";\n    item.json[\"ZenotiProductName\"] = \"\";\n    item.json[\"ZenotiProductNameShort\"] = \"\";\n    item.json[\"ZenotiProductNameEnd\"] = \"\";\n  }\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5520,
+        -512
+      ],
+      "id": "45054cb6-e403-414f-bf0c-c62570715c31",
+      "name": "Clean up Drug Name"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "products",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        7056,
+        -512
+      ],
+      "id": "41df8be2-be42-4408-9014-70918a63e104",
+      "name": "Split Out",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "310efdec-6d82-42ae-bb86-dbeb99f6a3a4",
+              "leftValue": "={{ $json.product_type_info.name }}",
+              "rightValue": "={{ $('Clean up Drug Name').item.json.ZenotiProductNameShort }}",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            },
+            {
+              "id": "c2d0b2fa-256e-4577-965f-c78201617654",
+              "leftValue": "={{ $json.product_type_info.name }}",
+              "rightValue": "={{ $('Clean up Drug Name').item.json.ZenotiProductNameEnd }}",
+              "operator": {
+                "type": "string",
+                "operation": "endsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        7232,
+        -512
+      ],
+      "id": "f13a972f-9f55-4b2b-b095-d0d1ecc7fb36",
+      "name": "FilterDown Drugs",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        7472,
+        -512
+      ],
+      "id": "ecfda189-fd59-40f0-badc-6fa015504428",
+      "name": "Clean for IF1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b10b2be5-bf59-4cc5-9a6f-882cb99725eb",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        7680,
+        -512
+      ],
+      "id": "b3d15791-c97e-4be0-a0cd-a8732f26d74d",
+      "name": "If No Matching Package"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        6832,
+        -192
+      ],
+      "id": "e16c97cd-cd5c-47a8-8600-390f38433485",
+      "name": "Email Clinic for Manual Ordering",
+      "webhookId": "154f893b-4513-43c4-8228-a8e5997d7f54",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Error Handling - No Matching Products\n",
+        "height": 256,
+        "width": 272,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        6768,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "aa182cf0-56d6-4f98-9d23-27170ae1b031",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $('Clean up Drug Name').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = false;\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        7680,
+        128
+      ],
+      "id": "f90bae19-3493-451d-a68e-0ee971d9dd89",
+      "name": "PackagesAvaliable"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Items we want to OUTPUT (all fields kept)\nconst drugItems = $('Clean up Drug Name').all();\n\n// Previous node items (where balance lives)\nconst balanceItems = $input.all();\n\nconst output = [];\n\nfor (let i = 0; i < drugItems.length; i++) {\n  const drugItem = drugItems[i];\n\n  // Clone so we don't accidentally mutate shared references\n  const item = {\n    json: { ...drugItem.json },\n  };\n\n  // Get balance from previous node (same index if possible, else first one)\n  const balanceRaw = balanceItems[i]\n    ? balanceItems[i].json.balance\n    : (balanceItems[0]?.json.balance ?? 0);\n\n  // Quantity comes from Clean up Drug Name\n  const qtyRaw = drugItem.json.quantity;\n\n  // Make sure they're numbers\n  const balance = Number(balanceRaw) || 0;\n  const quantity = Number(qtyRaw) || 0;\n\n  // Do the maths\n  const remaining = balance - quantity;\n\n  // Add new fields\n  item.json.CanSubtract = remaining >= 0;\n  item.json.RemainingBalance = remaining;\n  item.json.ProductID = $input.first().json.product_type_info.id;\n\n  output.push(item);\n}\n\n// Return ALL Clean up Drug Name fields + new maths fields\nreturn output;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        7936,
+        -512
+      ],
+      "id": "235ca24d-1efa-4f32-95ae-7fca9da860e3",
+      "name": "Drug Compare"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d149344b-810e-42ab-9beb-8c9f5da883f7",
+              "leftValue": "={{ $json.CanSubtract }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        8160,
+        -512
+      ],
+      "id": "311f4ba6-500a-4f1f-a95c-0e2e35184248",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        7216,
+        -192
+      ],
+      "id": "d7914fa7-baf5-4dac-a85a-8767ddac5e0b",
+      "name": "Client Doesnt Have Enough Balance",
+      "webhookId": "38d9fd49-c566-4dd3-969d-cd92243f5410",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Error Handling - Not Enough Product\n",
+        "height": 256,
+        "width": 272,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        7168,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "20306ebb-6fd4-440c-908d-9a727c4478b1",
+      "name": "Sticky Note18"
+    },
+    {
+      "parameters": {
+        "content": "## Error Handling- Keep Flow Going",
+        "height": 224,
+        "width": 400,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        7536,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "dd2a9d2c-4d61-4f0f-aaca-30fcfeefe4fd",
+      "name": "Sticky Note19"
+    },
+    {
+      "parameters": {
+        "content": "## Return To Flow",
+        "height": 224,
+        "width": 208,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        8784,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "e8441e49-90b8-454d-8394-76b837e73b9d",
+      "name": "Sticky Note21"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $('Drug Compare').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = true;\n    item.json.CLinicABB = $('Get Clinc').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        8848,
+        128
+      ],
+      "id": "28d17a30-d2c5-4c80-8e8b-b4b8a71f3c1a",
+      "name": "Re-Grab All Details"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "fileName": "NZ_Medorder.xlsx",
+          "headerRow": true,
+          "sheetName": "={{ $('Get Clinc').first().json.Abb }}"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1440,
+        640
+      ],
+      "id": "ae56431d-6dea-4481-8f7d-f6cb7a5432a2",
+      "name": "Convert to File",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "resource": "messageAttachment",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $('Create a draft').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1712,
+        640
+      ],
+      "id": "5f42bef7-7d25-4f46-9e83-d535ee3745d1",
+      "name": "Add an attachment",
+      "webhookId": "58ea741a-311f-4726-bf3a-7df49a0a2581",
+      "executeOnce": true,
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "operation": "send",
+        "draftId": {
+          "__rl": true,
+          "value": "={{ $('Create a draft').item.json.id }}",
+          "mode": "id"
+        },
+        "to": "nicholas.ryall@ashleyandmartin.com.au"
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1936,
+        640
+      ],
+      "id": "b14a02c2-5a54-4767-9807-2f506dc41358",
+      "name": "Send a draft",
+      "webhookId": "4218c37c-f564-4377-b531-ada0de0b10f3",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Write File to excel and email - This needs to come up a level. Each line runs Individually so we can random lines to random sheets",
+        "height": 288,
+        "width": 800,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1360,
+        544
+      ],
+      "typeVersion": 1,
+      "id": "8b200b92-5948-430c-8c10-e8daf813e9af",
+      "name": "Sticky Note22"
+    },
+    {
+      "parameters": {
+        "content": "## This sets the clinic",
+        "height": 192,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -704,
+        -368
+      ],
+      "typeVersion": 1,
+      "id": "10cb3f87-8b28-4137-b206-a8e32c6a2de1",
+      "name": "Sticky Note24"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b10b2be5-bf59-4cc5-9a6f-882cb99725eb",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        624,
+        -320
+      ],
+      "id": "c400d5f9-1be1-441e-ac75-1f829cda050b",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        -320
+      ],
+      "id": "ddb63784-5488-4ea6-ba17-b46095dfab77",
+      "name": "Clean for No Appointments"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $('RemoveNonRequired').all();\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        -336
+      ],
+      "id": "04f1682d-2119-473a-b605-da4eafd8fb7a",
+      "name": "BringDataforward"
+    },
+    {
+      "parameters": {
+        "content": "## Error Handling - No Mathcing Appointments\n",
+        "height": 256,
+        "width": 272,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        544,
+        -928
+      ],
+      "typeVersion": 1,
+      "id": "1a05df70-44f7-4c10-9cb6-eedad0050c39",
+      "name": "Sticky Note23"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      FilterMeOut: true,\n      CustomerCenterID: $('Get Clinc').first().json.Zenoti_ID,\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        592,
+        -800
+      ],
+      "id": "ae812173-931c-4ead-bb7e-82a23514b78d",
+      "name": "CleanedNoAppointments"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $('FilterLiveProducts').all();\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6880,
+        -512
+      ],
+      "id": "f963ddf1-93e5-436f-a855-c48da559552a",
+      "name": "BringDataForward2"
+    },
+    {
+      "parameters": {
+        "content": "## Error Handling - No Invocies Matching\n(paid in full most likly)\n",
+        "height": 256,
+        "width": 272,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        6384,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "bc4dc0b0-b6d7-461c-9d43-9f8f539b5ced",
+      "name": "Sticky Note25"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        6432,
+        -192
+      ],
+      "id": "45eaf755-44bc-4d33-8fb6-be565c27bb0f",
+      "name": "Email Clinic for Manual Ordering1",
+      "webhookId": "154f893b-4513-43c4-8228-a8e5997d7f54",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "amount": 0
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1664,
+        -1152
+      ],
+      "id": "e4eb0ed0-d94d-40c9-ba08-d4ad19f6ea5d",
+      "name": "Wait1",
+      "webhookId": "e5015f0f-81f7-4e08-9b19-78a380eb4a72"
+    },
+    {
+      "parameters": {
+        "content": "## Brings all data out into ONE output",
+        "height": 256,
+        "width": 384,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1552,
+        -1248
+      ],
+      "typeVersion": 1,
+      "id": "00886030-13ff-4a8b-8fd9-ba47bc19a651",
+      "name": "Sticky Note26"
+    },
+    {
+      "parameters": {
+        "content": "## Error Handling - No Address\n",
+        "height": 256,
+        "width": 512,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4672,
+        32
+      ],
+      "typeVersion": 1,
+      "id": "efe7b09b-73f8-4205-a1a8-560858e197ff",
+      "name": "Sticky Note27"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        4720,
+        128
+      ],
+      "id": "f6114614-67ab-474b-b4c2-c3a75bc161eb",
+      "name": "Email Clinic for Manual Ordering2",
+      "webhookId": "154f893b-4513-43c4-8228-a8e5997d7f54",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $('Clean up Drug Name').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = false;\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5024,
+        128
+      ],
+      "id": "add54fb3-4b4e-48ef-9fcb-c4783e731f2b",
+      "name": "GrabUserDetails1"
+    },
+    {
+      "parameters": {
+        "content": "## Multiple Packages Issue\n\n1. ~~Do I send to sub flow~~ Fixed in Code\n2. ~~Do we aggrigate it before the if and work out post if.~~ We kinda aggrigate\n3. ~~Or do I just handball~~ We Handball Error",
+        "height": 176,
+        "width": 544,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        5424,
+        -880
+      ],
+      "typeVersion": 1,
+      "id": "8ee4d552-7f9c-49ec-87f5-57a495577588",
+      "name": "Sticky Note28"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        6080,
+        -192
+      ],
+      "id": "d88c0c65-eb24-4359-ae9b-561f9b42c8dc",
+      "name": "Email Clinic for Manual Ordering3",
+      "webhookId": "154f893b-4513-43c4-8228-a8e5997d7f54",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Error Handling - To many Packages",
+        "height": 256,
+        "width": 272,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        6000,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "2c2c679c-8e52-4884-90cd-442dffd79ea5",
+      "name": "Sticky Note29"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8bf67e8d-e85b-49cb-bd39-1bd24cb4cb67",
+              "leftValue": "={{ $json.FilterReason }}",
+              "rightValue": "DuplicateProductGroups",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        6448,
+        -512
+      ],
+      "id": "d09be4dc-63bb-4769-8df9-094e40c4810c",
+      "name": "To Many Products",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "products"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        6064,
+        -512
+      ],
+      "id": "b09eca9d-153e-4aaa-a10b-67a7b559663b",
+      "name": "Stop Silly Uneeded batches"
+    },
+    {
+      "parameters": {
+        "jsCode": "const agg = $input.first()?.json ?? {};\nconst products = Array.isArray(agg.products) ? agg.products : [];\n\n// 1) No product groups\nif (products.length === 0) {\n  return [{\n    json: {\n      FilterMeOut: true,\n      FilterReason: \"NoProducts\",\n    }\n  }];\n}\n\n// 2) Multiple product groups = duplicate data\nif (products.length > 1) {\n  return [{\n    json: {\n      FilterMeOut: true,\n      FilterReason: \"DuplicateProductGroups\",\n      GroupCount: products.length,\n    }\n  }];\n}\n\n// 3) Exactly ONE product group → PASS\nreturn [{\n  json: {\n    FilterMeOut: false,\n    FilterReason: \"OK\",\n    products: products[0], // unwrap ONE level\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6240,
+        -512
+      ],
+      "id": "2a3c6d19-930b-4f38-9b87-a7a46a0a486a",
+      "name": "Multiple / Null Prodcuts"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d149344b-810e-42ab-9beb-8c9f5da883f7",
+              "leftValue": "={{ $json.FilterReason }}",
+              "rightValue": "NoProducts",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        6640,
+        -512
+      ],
+      "id": "104d4131-8363-48b0-9b94-62dac77bc36c",
+      "name": "No Products"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      CustomerFirstName: $('Guest Details').first().json.personal_info.first_name,\n      CustomerLastName: $('Guest Details').first().json.personal_info.last_name,\n      CustomerID: $('Guest Details').first().json.id,\n      CustomerCode: $('Guest Details').first().json.code,\n      ClinicID: $('Guest Details').first().json.center_id,\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6672,
+        48
+      ],
+      "id": "d2b60335-2af3-48a1-b260-cc88be05a7e3",
+      "name": "Name Checker"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      CustomerFirstName: $('Guest Details').first().json.personal_info.first_name,\n      CustomerLastName: $('Guest Details').first().json.personal_info.last_name,\n      CustomerID: $('Guest Details').first().json.id,\n      CustomerCode: $('Guest Details').first().json.code,\n      ClinicID: $('Guest Details').first().json.center_id,\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6272,
+        128
+      ],
+      "id": "562baf08-6ae1-41f7-8ee2-b9ed003d5363",
+      "name": "Name Checker 2"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1072,
+        -320
+      ],
+      "id": "d719ba9f-dd3f-49bd-ae50-35e24da97e15",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "content": "## No Consent Form",
+        "height": 272,
+        "width": 256,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        5152,
+        -608
+      ],
+      "typeVersion": 1,
+      "id": "8104b3a4-99a6-4aa6-961d-8b84a66ca30f",
+      "name": "Sticky Note20"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5fad9901-df75-43cc-907c-89086732d5e3",
+              "leftValue": "={{ $('Consent Form Check').item.json.file[0].name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        5232,
+        -496
+      ],
+      "id": "659ac4cd-a77a-45b2-a100-12c2d021093a",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "content": "## No Concent Form",
+        "height": 256,
+        "width": 272,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        5488,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "9d1956d4-a0c4-4985-b2ae-d93a5f1f77b0",
+      "name": "Sticky Note30"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        5568,
+        -224
+      ],
+      "id": "ca3bf28a-7100-4716-b627-509e6883a67a",
+      "name": "Email Clinic for Manual Ordering4",
+      "webhookId": "154f893b-4513-43c4-8228-a8e5997d7f54",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      CustomerFirstName: $('Guest Details').first().json.personal_info.first_name,\n      CustomerLastName: $('Guest Details').first().json.personal_info.last_name,\n      CustomerID: $('Guest Details').first().json.id,\n      CustomerCode: $('Guest Details').first().json.code,\n      ClinicID: $('Guest Details').first().json.center_id,\n      Error: \"No Consent Form\",\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5840,
+        48
+      ],
+      "id": "10db0696-0e6d-4955-894b-a920d62d89f4",
+      "name": "Name Checker "
+    },
+    {
+      "parameters": {
+        "jsCode": "const baseUrl = 'https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx';\n\n// Pull values from previous nodes\nconst AppGroupId    = $('Clinic Previous Day Appointments').first().json.appointment_group_id;\nconst ServiceId     = $('Loop Over Items').first().json.service.id\nconst ServiceName   = $('Get Appointment Forms').first().json.service_name;\nconst GuestId       = $('Guest Details').first().json.id;\nconst AppointmentId = $('Format Data').first().json.AppointmentID;\n\n// Helper to build querystring with encoding\nfunction qs(params) {\n  return Object.keys(params)\n    .filter((k) => params[k] !== undefined && params[k] !== null && params[k] !== '')\n    .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(String(params[k]))}`)\n    .join('&');\n}\n\nconst query = qs({\n  AppGroupId,\n  ServiceId,\n  Service: ServiceName,\n  GuestId,\n  AppointmentId,\n});\n\nconst finalUrl = `${baseUrl}?${query}`;\n\nreturn [\n  {\n    json: {\n      AppointmentCustomDataUrl: finalUrl,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        8432,
+        -528
+      ],
+      "id": "8cd12837-663e-443d-b713-156517de41d2",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "When clicking ‘Execute workflow’": [
+      {
+        "json": {
+          "Zenoti_ID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "code": "AK",
+          "name": "Auckland",
+          "state": "Auckland",
+          "state_short_name": "",
+          "time_zone": "(UTC+12:00) Auckland, Wellington",
+          "address_1": "L6/5 Short St, Newmarket",
+          "address_2": "",
+          "postcode": 1010,
+          "display_number": "095207560",
+          "email": "Auckland@ashleyandmartin.co.nz",
+          "No_clients": null,
+          "Abb": "AUC",
+          "table_id": null,
+          "Country_Code": null,
+          "city": "Newmarket",
+          "id": 2,
+          "createdAt": "2025-12-09T00:49:44.432Z",
+          "updatedAt": "2025-12-12T04:09:32.201Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-09T01:04:16.634Z",
+      "createdAt": "2025-12-09T01:04:16.634Z",
+      "role": "workflow:owner",
+      "workflowId": "zAIYcDSMTH0KqEhr",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-07T23:11:13.536Z",
+  "versionId": "242fa9c5-ba4b-477d-af04-c751f1088389"
+}
