@@ -1,0 +1,111 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Execute a command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-01T00:47:18.930Z",
+  "id": "A103OL9tS3KfpVvD",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "AD - Exchange",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        -32
+      ],
+      "id": "ba2f6633-f8a2-43f1-a21c-10531315a501",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "cwd": "="
+      },
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [
+        304,
+        -32
+      ],
+      "id": "ae48892b-19c9-4bcf-8c4f-84384a21b5c5",
+      "name": "Execute a command",
+      "credentials": {
+        "sshPassword": {
+          "id": "SEXNVZKc31LJccvl",
+          "name": "SSH Password account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "“Enable-remotemailbox Emily.Hodgkinson@ashleyandmartin.com.au -remoteroutingaddress Emily.Hodgkinson@ashleyandmartin.com.au -domaincontroller AM-WA-DC01”"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        96,
+        -32
+      ],
+      "id": "8840ca91-0c3b-4a47-8a49-19f3c0f8e0cc",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-01T00:47:18.933Z",
+      "createdAt": "2025-12-01T00:47:18.933Z",
+      "role": "workflow:owner",
+      "workflowId": "A103OL9tS3KfpVvD",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-27T23:16:28.880Z",
+      "createdAt": "2025-11-27T23:16:28.880Z",
+      "id": "mDg4TH0DyIA1jzi0",
+      "name": "AD"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-01T00:50:21.000Z",
+  "versionId": "884bfef4-3bf4-410c-9cd6-0260510f3a9c"
+}
