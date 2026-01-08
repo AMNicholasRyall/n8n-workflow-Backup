@@ -1,0 +1,250 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Call 'Sharepoint Compared to Zenoti'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Sharepoint Compared to Zenoti'": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'BatchSizeChecker'": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute": {
+      "main": [
+        [
+          {
+            "node": "Call 'BatchSizeChecker'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2025-11-13T01:45:39.277Z",
+  "id": "SYr5jpV9aa79xYtH",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Batch Run Client Compare",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// Pull Abb + Zenoti_ID from the very first node\nconst source = $('Execute').first().json;\nconst Abb = source.Abb;\nconst Zenoti_ID = source.Zenoti_ID;\nconst table_id = source.table_id;\n\n// Get the aggregated data array from previous node\nconst data = $input.first().json.data || [];\n\n// For each batch, append Abb + Zenoti_ID\nreturn data.map(batch => {\n  return {\n    json: {\n      ...batch,\n      Abb,\n      Zenoti_ID,\n      table_id,\n    },\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        -144
+      ],
+      "id": "8cf00f0e-49f0-48c2-87be-85e696cb8e1a",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        512,
+        -144
+      ],
+      "id": "6e448af9-8bdf-412e-a10f-1669b812a253",
+      "name": "Loop Over Items",
+      "executeOnce": false,
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "xbVqyY2jxJ8M6DVh",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/xbVqyY2jxJ8M6DVh",
+          "cachedResultName": "Sharepoint Compared to Zenoti"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        912,
+        -128
+      ],
+      "id": "c6b22847-efec-4326-a6c0-dd1b42145399",
+      "name": "Call 'Sharepoint Compared to Zenoti'",
+      "executeOnce": false,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "eLi5KF32w354oeC0",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/eLi5KF32w354oeC0",
+          "cachedResultName": "BatchSizeChecker"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -160,
+        -144
+      ],
+      "id": "3b092e7a-3fdc-49e1-99a1-109c394da04e",
+      "name": "Call 'BatchSizeChecker'"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        64,
+        -144
+      ],
+      "id": "c1e1a0a1-841b-4f95-a31e-2e5c915186ce",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -384,
+        -144
+      ],
+      "id": "0c1a7209-c561-4440-9f39-d0c883a90ff3",
+      "name": "Execute"
+    },
+    {
+      "parameters": {
+        "toRecipients": "nicholas.ryall@ashleyandmartin.com.au",
+        "subject": "Error Catch",
+        "bodyContent": "=Sending details to loop\n\nBatch Start: {{ $json.batch_start }}\nRun Number: {{ $json.run_number }}\nSite: {{ $json.Abb }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        912,
+        -272
+      ],
+      "id": "56aead23-9cdc-4eb4-bd14-450e37e63042",
+      "name": "Send a message",
+      "webhookId": "3d3a6c78-d6e8-48fd-9fb2-96982715b906",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      },
+      "disabled": true
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-13T01:45:39.280Z",
+      "createdAt": "2025-11-13T01:45:39.280Z",
+      "role": "workflow:owner",
+      "workflowId": "SYr5jpV9aa79xYtH",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-13T05:47:15.147Z",
+      "createdAt": "2025-11-13T05:47:15.147Z",
+      "id": "dkYWH6XMkxWsDBNj",
+      "name": "CompareFlows"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-17T02:58:17.000Z",
+  "versionId": "289fbec0-2975-4ed2-b238-47220c6a1572"
+}
