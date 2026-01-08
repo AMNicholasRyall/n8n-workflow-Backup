@@ -1,0 +1,571 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk1": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Remove Those without Title",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Those without Title": {
+      "main": [
+        [
+          {
+            "node": "Filter Down",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out File Name": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pull Varaibles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pull Varaibles": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)1": {
+      "main": [
+        [
+          {
+            "node": "Pre If Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pre If Check": {
+      "main": [
+        [
+          {
+            "node": "If Match Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Match Found": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Non Match Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "User Match",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "User Match": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Non Match Code": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Normalise schema/order",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalise schema/order": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Down": {
+      "main": [
+        [
+          {
+            "node": "Split Out File Name",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "FTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-11T02:41:07.405Z",
+  "id": "fG2rcErC6sJeWZZ6",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Compare the Pair",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        784
+      ],
+      "id": "3a932ccb-f316-449a-aa6b-0a904a281963",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "fileSelector": "clinicdata.xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        784
+      ],
+      "id": "9d53cfdc-1867-4769-b776-43986a1ec9c0",
+      "name": "Read/Write Files from Disk1"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "sheetName": "PER"
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        32,
+        784
+      ],
+      "id": "e299aa71-69e8-41fc-ba89-805b7c5105ee",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Split data out of the Title field (\"Lastname, Firstname DOB\")\nconst results = [];\n\nfor (const item of $input.all()) {\n  const title = (item.json.Title ?? '').trim();\n  if (!title) continue; // skip if blank, just in case\n\n  let lastName = '';\n  let firstName = '';\n  let dob = '';\n\n  // Expect format like \"ARDILL, Jason 30.09.1971\"\n  const [rawLast, rawRest] = title.split(',', 2);\n\n  if (rawRest) {\n    lastName = rawLast.trim();\n\n    const parts = rawRest.trim().split(/\\s+/);\n    if (parts.length > 1) {\n      dob = parts.pop(); // last bit should be DOB\n      firstName = parts.join(' ').trim();\n    } else {\n      firstName = rawRest.trim();\n    }\n  } else {\n    // No comma found – fallback\n    const parts = title.split(/\\s+/);\n    if (parts.length > 2) {\n      dob = parts.pop();\n      firstName = parts.pop();\n      lastName = parts.join(' ');\n    } else {\n      lastName = title;\n    }\n  }\n\n  results.push({\n    json: {\n      ...item.json,\n      LastName: lastName,\n      FirstName: firstName,\n      DOB: dob\n    }\n  });\n}\n\nreturn results;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        784
+      ],
+      "id": "63ceac06-ea58-4ad2-899c-7a54a04a4ae2",
+      "name": "Split Out File Name"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Drop records without a usable Title\nconst kept = $input.all().filter(item => {\n  const t = (item.json?.Title ?? '').toString().trim();\n  return t.length > 0;\n});\n\nreturn kept;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        784
+      ],
+      "id": "7404f121-e122-4513-acec-765acbb2e117",
+      "name": "Remove Those without Title"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        912,
+        784
+      ],
+      "id": "26466fb7-f6ef-4ea7-b68d-dc4084011da0",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Grab current item in the loop\nconst cur = $json;  // this represents the current item in the loop\n\n// Extract what we care about\nconst ID   = cur.ID;\nconst first = cur.FirstName;\nconst last  = cur.LastName;\nconst dob   = cur.DOB || cur.DateOfBirth || cur.Client_DOB; // flexible field name\n\n// Return a simple view\nreturn [{\n  json: {\n    ID,\n    FirstName: first,\n    LastName: last,\n    DOB: dob\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1136,
+        704
+      ],
+      "id": "09cb0933-f57f-44d2-a5b5-6d64757f099d",
+      "name": "Pull Varaibles"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "zO3XjSfFleKBeEgJ",
+          "mode": "list",
+          "cachedResultName": "437772a1-e696-4a85-93e8-94a1b817702d",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/zO3XjSfFleKBeEgJ"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Client_LastName",
+              "condition": "ilike",
+              "keyValue": "={{ $json.LastName }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        704
+      ],
+      "id": "6548be27-42a9-4c04-a24f-d6ce8be755d7",
+      "name": "Get row(s)1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1584,
+        704
+      ],
+      "id": "14b550af-f951-4185-8a84-dffc083e3140",
+      "name": "Pre If Check"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "94360171-6fe8-4d86-b471-4a1333a87ca3",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1808,
+        704
+      ],
+      "id": "88575a4d-e0e3-4b62-abdc-72452350992a",
+      "name": "If Match Found"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2032,
+        608
+      ],
+      "id": "380fac0d-4d60-46f8-9531-03ccf10e6063",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Non-match: build from Loop Over Items1 and keep the \"matches: {}\" shape\nconst loop = $('Loop Over Items1').first().json || {};\n\n// Try to derive target fields from loop or parse from Title \"LAST, First DD.MM.YYYY\"\nfunction parseFromTitle(title) {\n  if (!title || typeof title !== 'string') return {};\n  const m = title.match(/^([^,]+),\\s*([^\\d]+?)\\s+(\\d{2}\\.\\d{2}\\.\\d{4})$/);\n  if (!m) return {};\n  const [ , last, first, dob ] = m;\n  return {\n    targetFirstName: first.trim(),\n    targetLastName: last.trim(),\n    targetDOB: dob.trim(),\n  };\n}\n\nconst parsed = parseFromTitle(loop.Title);\n\n// Prefer explicit fields on the loop, else fall back to parsed-from-Title, else empty\nconst targetFirstName = loop.targetFirstName ?? parsed.targetFirstName ?? '';\nconst targetLastName  = loop.targetLastName  ?? parsed.targetLastName  ?? '';\nconst targetDOB       = loop.targetDOB       ?? parsed.targetDOB       ?? '';\n\nreturn [{\n  json: {\n    // keep your search-result header fields\n    ID: loop.ID ?? '',\n    targetFirstName,\n    targetLastName,\n    targetDOB,\n    exists: false,\n\n    // IMPORTANT: matches is an OBJECT for your format (not an array)\n    matches: {\n      Client_ID: '',\n      Zenoti_ID: '',\n      Clinic_name: '',\n      Client_FirstName: '',\n      Client_LastName: '',\n      Client_DOB: '',\n      Client_Code: '',\n      Client_Tags: null,\n      id: '',\n      createdAt: '',\n      updatedAt: ''\n    },\n\n    // your two control fields\n    ZenotiMatch: false,\n    ClientCode: '',\n\n    // (optional) keep the file row context so you can normalise later without re-fetching\n    Title: loop.Title ?? '',\n    Modified: loop.Modified ?? '',\n    Created: loop.Created ?? '',\n    Link: loop.Link ?? '',\n    Name: loop.Name ?? '',\n    FilenameWithExtension: loop.FilenameWithExtension ?? '',\n    Path: loop.Path ?? '',\n    FullPath: loop.FullPath ?? '',\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2256,
+        800
+      ],
+      "id": "b73e58e0-8148-4b86-8296-08bf15bde572",
+      "name": "Non Match Code"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get list of client records\nconst clients = $input.first().json.data;\n\n// Get values from Loop Over Items\nconst loopItem = $('Loop Over Items1').first().json;\nconst targetFirstName = loopItem.FirstName;\nconst targetLastName = loopItem.LastName;\nconst targetDOB = loopItem.DOB || loopItem.DateOfBirth || loopItem.Client_DOB;\nconst targetID = loopItem.ID;\n\n// Filter for matches (case-sensitive)\nconst matches = clients.filter(client => client.Client_FirstName === targetFirstName);\n\n// Return result\nreturn [{\n  json: {\n    ID: targetID,\n    targetFirstName,\n    targetLastName,\n    targetDOB,\n    exists: matches.length > 0,\n    matches: matches\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2256,
+        608
+      ],
+      "id": "50060116-d7cf-45fb-ac8d-b6bdc3efe0f4",
+      "name": "User Match"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2480,
+        704
+      ],
+      "id": "a0d0dc2b-9a7d-44bd-8bd6-64c1a95704cb",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalise merged items → unified sheet row\nconst loop = $('Loop Over Items1').first().json;\n\nfunction firstMatch(src) {\n  const m = src?.matches;\n  if (!m) return null;\n  if (Array.isArray(m)) return m[0] ?? null;\n  if (typeof m === 'object') return Object.keys(m).length ? m : null; // matches as object\n  return null;\n}\n\nreturn $input.all().map(({ json: src }) => {\n  const m = firstMatch(src);\n  const code = (m?.Client_Code ?? src.ClientCode ?? '').toString();\n\n  // Determine \"matched\" robustly\n  const hasMatches =\n    Array.isArray(src.matches) ? src.matches.length > 0\n    : (src.matches && typeof src.matches === 'object' && Object.keys(src.matches).length > 0);\n\n  const matched = src.ZenotiMatch === true || !!code || (!!src.exists && hasMatches);\n\n  return {\n    json: {\n      // file row fields come from the loop context\n      ID: loop.ID ?? '',\n      Title: loop.Title ?? '',\n      Modified: loop.Modified ?? '',\n      Created: loop.Created ?? '',\n      Link: loop.Link ?? '',\n      Name: loop.Name ?? '',\n      FilenameWithExtension: loop.FilenameWithExtension ?? '',\n      Path: loop.Path ?? '',\n      FullPath: loop.FullPath ?? '',\n\n      // the two fields we’re updating\n      ZenotiMatch: matched,\n      ClientCode: code\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2768,
+        752
+      ],
+      "id": "e35c6b55-7cf2-4b71-962d-d2cf7b0a8398",
+      "name": "Normalise schema/order"
+    },
+    {
+      "parameters": {
+        "height": 848,
+        "width": 3616,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -544,
+        352
+      ],
+      "typeVersion": 1,
+      "id": "1d9e9e08-e0d0-4f89-8339-d67d697f640b",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// How many items you want per batch:\nconst batchSize = 1000;\n\n// Get all rows\nconst rows = $input.all();\n\n// Starting point for this slice (pass it in with a parameter or hard-code)\nconst start = $('When clicking ‘Execute workflow’').first().json.batch_start;  // change this manually if you're slicing manually\nconst end = start + batchSize - 1;\n\n// Slice the rows\nconst sliced = rows.slice(start, start + batchSize);\n\n// Attach range metadata\nreturn sliced.map(item => ({\n  json: {\n    ...item.json,\n    batch_start: start,\n    batch_end: end\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        784
+      ],
+      "id": "2ba63d3a-bc29-441c-9ab2-c22b904388fb",
+      "name": "Filter Down"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1248,
+        448
+      ],
+      "id": "ac7670d3-034b-4bcc-afea-02093da11b7e",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=cliniPERcdatacomparedB{{ $('When clicking ‘Execute workflow’').first().json.run_number }}.csv",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        1536,
+        448
+      ],
+      "id": "b030adfe-962c-476a-bfbf-3a5188cac47b",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "protocol": "sftp",
+        "operation": "upload",
+        "path": "=/C/AMLOGS/BATCH/{{ $json.fileName }}"
+      },
+      "type": "n8n-nodes-base.ftp",
+      "typeVersion": 1,
+      "position": [
+        1744,
+        448
+      ],
+      "id": "4c13c1e1-14cf-4ca2-b270-90a0726509e1",
+      "name": "FTP",
+      "credentials": {
+        "sftp": {
+          "id": "sbHKh6CJeP3rVwER",
+          "name": "FTP account"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-11T02:41:07.408Z",
+      "createdAt": "2025-11-11T02:41:07.408Z",
+      "role": "workflow:owner",
+      "workflowId": "fG2rcErC6sJeWZZ6",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-13T05:47:15.147Z",
+      "createdAt": "2025-11-13T05:47:15.147Z",
+      "id": "dkYWH6XMkxWsDBNj",
+      "name": "CompareFlows"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-13T05:47:24.000Z",
+  "versionId": "0184d3ac-cb59-4d9f-aba8-f3f5f046a09f"
+}
