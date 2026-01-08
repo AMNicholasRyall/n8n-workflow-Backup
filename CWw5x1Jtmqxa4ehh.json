@@ -1,0 +1,115 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "FTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FTP": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-28T02:52:40.038Z",
+  "id": "CWw5x1Jtmqxa4ehh",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "AD - Certifcate Pull",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        -64
+      ],
+      "id": "f82f61df-2d1e-4764-b4a2-d8ca8f3a3570",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "protocol": "sftp",
+        "path": "/C/AMLogs/BATCH/Master/CA-n8n.cer",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.ftp",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        -64
+      ],
+      "id": "4f4aee41-c59a-47ed-bd2e-a270780c6ddc",
+      "name": "FTP",
+      "credentials": {
+        "sftp": {
+          "id": "sbHKh6CJeP3rVwER",
+          "name": "FTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "AAM-Root-CA.cer",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        -64
+      ],
+      "id": "b274289b-34b3-4ba8-8720-34c5efe1331a",
+      "name": "Read/Write Files from Disk"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-28T02:52:40.042Z",
+      "createdAt": "2025-11-28T02:52:40.042Z",
+      "role": "workflow:owner",
+      "workflowId": "CWw5x1Jtmqxa4ehh",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-27T23:16:28.880Z",
+      "createdAt": "2025-11-27T23:16:28.880Z",
+      "id": "mDg4TH0DyIA1jzi0",
+      "name": "AD"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-28T03:02:49.000Z",
+  "versionId": "3e0f45c2-a7cf-4cba-b052-5d39ea1826e4"
+}
