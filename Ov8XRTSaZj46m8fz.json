@@ -1,0 +1,546 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-07T02:49:00.000Z",
+    "createdAt": "2026-01-07T02:48:58.536Z",
+    "versionId": "85e2a856-c88d-441b-bcdc-0f82ad8bfca7",
+    "workflowId": "Ov8XRTSaZj46m8fz",
+    "nodes": [
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://10.64.1.140:3000/run",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          512,
+          -112
+        ],
+        "id": "c844f82a-a023-4bd1-90b7-3b0208fc69c2",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "url": "http://10.64.1.140:3000/health",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -16,
+          -96
+        ],
+        "id": "23b3d6e0-004e-44e9-8c41-a85882691b9d",
+        "name": "HTTP Request1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "cf1c5f1f-2bde-4d14-b29a-026e8ca1a848",
+                "leftValue": "={{ $json.ok }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          192,
+          -96
+        ],
+        "id": "ec96437e-6675-4e61-ba4e-27d159d73677",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -640,
+          -192
+        ],
+        "id": "d624c6ff-9b4e-4a10-bf74-21fa1dae6a36",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "0 14 * * 5"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -640,
+          -320
+        ],
+        "id": "819acabd-9331-4bb4-b471-f238f01d8ed4",
+        "name": "Friday Arvo"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "50 15 * * 1-4"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -640,
+          112
+        ],
+        "id": "2108d40c-8dec-46dd-addd-ca458edb4175",
+        "name": "M-T Arvo"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "50 6 * * 1-5"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -640,
+          -32
+        ],
+        "id": "98d72023-96e6-4d26-a31a-d9299527cac1",
+        "name": "Morning 6.50"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          -640,
+          -464
+        ],
+        "id": "406bfcb2-cb93-43fb-9d39-685c2f3c36b7",
+        "name": "When clicking ‘Execute workflow’"
+      }
+    ],
+    "connections": {
+      "HTTP Request1": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Friday Arvo": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "M-T Arvo": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Morning 6.50": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 85e2a856",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "85e2a856-c88d-441b-bcdc-0f82ad8bfca7",
+  "connections": {
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Friday Arvo": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "M-T Arvo": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Morning 6.50": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-28T23:38:23.624Z",
+  "id": "Ov8XRTSaZj46m8fz",
+  "isArchived": false,
+  "meta": null,
+  "name": "Biotime - AutoClock",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://10.64.1.140:3000/run",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        512,
+        -112
+      ],
+      "id": "c844f82a-a023-4bd1-90b7-3b0208fc69c2",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "url": "http://10.64.1.140:3000/health",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -16,
+        -96
+      ],
+      "id": "23b3d6e0-004e-44e9-8c41-a85882691b9d",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "cf1c5f1f-2bde-4d14-b29a-026e8ca1a848",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        192,
+        -96
+      ],
+      "id": "ec96437e-6675-4e61-ba4e-27d159d73677",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -640,
+        -192
+      ],
+      "id": "d624c6ff-9b4e-4a10-bf74-21fa1dae6a36",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 14 * * 5"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -640,
+        -320
+      ],
+      "id": "819acabd-9331-4bb4-b471-f238f01d8ed4",
+      "name": "Friday Arvo"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "50 15 * * 1-4"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -640,
+        112
+      ],
+      "id": "2108d40c-8dec-46dd-addd-ca458edb4175",
+      "name": "M-T Arvo"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "50 6 * * 1-5"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -640,
+        -32
+      ],
+      "id": "98d72023-96e6-4d26-a31a-d9299527cac1",
+      "name": "Morning 6.50"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        -464
+      ],
+      "id": "406bfcb2-cb93-43fb-9d39-685c2f3c36b7",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-28T23:38:23.626Z",
+      "createdAt": "2025-12-28T23:38:23.626Z",
+      "role": "workflow:owner",
+      "workflowId": "Ov8XRTSaZj46m8fz",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": {
+    "node:Friday Arvo": {
+      "recurrenceRules": []
+    },
+    "node:M-T Arvo": {
+      "recurrenceRules": []
+    },
+    "node:Morning 6.50": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 3,
+  "updatedAt": "2026-01-07T02:48:58.536Z",
+  "versionId": "85e2a856-c88d-441b-bcdc-0f82ad8bfca7"
+}
