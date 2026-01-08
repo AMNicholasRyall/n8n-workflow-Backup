@@ -1,0 +1,131 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-11-13T05:50:17.125Z",
+  "id": "eLi5KF32w354oeC0",
+  "isArchived": false,
+  "meta": null,
+  "name": "BatchSizeChecker",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -128
+      ],
+      "id": "7a675875-cde3-4cf5-b45d-f4d3534527d2",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "fileSelector": "clinicdata.xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        224,
+        -128
+      ],
+      "id": "48b5126c-9ba9-4412-be94-c1f8cce5827a",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "sheetName": "={{ $('When clicking ‘Execute workflow’').item.json.Abb }}"
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        448,
+        -128
+      ],
+      "id": "be2a7f0f-4ee5-45af-8929-9f5562db63bc",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ----- SETTINGS YOU CAN CHANGE -----\nconst batchSize = 1000;   // how many items per batch\n// -----------------------------------\n\n// All incoming items for this clinic\nconst inputItems = $input.all();\nconst totalItems = inputItems.length;\n\n// 💡 Get clinic from the node where you set it\n// Rename this to your actual node name, eg. \"Clinic Settings\"\nconst clinic = $('When clicking ‘Execute workflow’').first().json.clinic;\n\n// How many batches we need\nconst totalBatches = Math.ceil(totalItems / batchSize);\n\nconst batches = [];\n\nfor (let i = 0; i < totalBatches; i++) {\n  const batchStart = i * batchSize;\n  const batchEnd   = Math.min(batchStart + batchSize - 1, totalItems - 1);\n  const runNumber  = i + 1;\n\n  batches.push({\n    json: {\n      clinic,\n      batch_start: batchStart,\n      batch_end: batchEnd,\n      batch_size: batchSize,\n      run_number: runNumber,\n      total_items: totalItems,\n    }\n  });\n}\n\nreturn batches;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        -128
+      ],
+      "id": "a0d06dcd-fe35-42ad-8ef1-17a45639955f",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-13T05:50:17.127Z",
+      "createdAt": "2025-11-13T05:50:17.127Z",
+      "role": "workflow:owner",
+      "workflowId": "eLi5KF32w354oeC0",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-13T05:47:15.147Z",
+      "createdAt": "2025-11-13T05:47:15.147Z",
+      "id": "dkYWH6XMkxWsDBNj",
+      "name": "CompareFlows"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-14T05:50:24.000Z",
+  "versionId": "6a788b4e-c20a-48a1-a690-c1f35b8687da"
+}
