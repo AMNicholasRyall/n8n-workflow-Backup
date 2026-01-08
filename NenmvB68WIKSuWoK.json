@@ -1,0 +1,615 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Microsoft Outlook": {
+      "main": [
+        [
+          {
+            "node": "CleanEmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft Outlook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Microsoft Outlook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CleanEmail": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchforEmployeeID": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "LDAP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manager Search": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Duplicate Role": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "UserExists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Manager Search",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "SearchforEmployeeID",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-06-03T02:08:12.750Z",
+  "id": "NenmvB68WIKSuWoK",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "New User",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "output": "raw",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        -110
+      ],
+      "id": "03c31256-6d44-40ed-8ec6-cb575c474f65",
+      "name": "Microsoft Outlook",
+      "webhookId": "2ae4d4c0-e633-44fc-8960-c7db74f2200f",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {
+          "custom": "contains(subject, 'IT Access For')",
+          "foldersToInclude": [
+            "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAAAAAEMAAA="
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlookTrigger",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        -110
+      ],
+      "id": "8ca5faa5-8f49-441f-9942-4692d4ca6a29",
+      "name": "Microsoft Outlook Trigger",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const htmlBody = $input.first().json.body?.content || '';\nconst emailId = $input.first().json.id;\n\n// 1. Strip HTML tags\nconst strippedBody = htmlBody\n  .replace(/<[^>]+>/g, '\\n')         // Remove all HTML tags\n  .replace(/&nbsp;/g, ' ')           // Replace HTML space\n  .replace(/&amp;/g, '&')            // Replace &\n  .replace(/\\n+/g, '\\n')             // Collapse newlines\n  .trim();\n\n// 2. Define regex patterns\nconst patterns = {\n  employeeId: /Employee ID:\\s*(.+)/i,\n  firstName: /First Name:\\s*(.+)/i,\n  lastName: /Last Name:\\s*(.+)/i,\n  position: /Position:\\s*(.+)/i,\n  location: /Location:\\s*(.+)/i,\n  startDate: /Start Date:\\s*(.+)/i,\n  managerEmail: /Manager Email:\\s*(.+)/i,\n};\n\n// 3. Extract values\nconst result = {\n  emailId,\n};\n\nfor (const [key, pattern] of Object.entries(patterns)) {\n  const match = strippedBody.match(pattern);\n  result[key] = match ? match[1].trim() : null;\n}\n\nreturn [{ json: result }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        140,
+        -110
+      ],
+      "id": "6d9df069-0552-4cb5-88eb-1c8070b27cd5",
+      "name": "CleanEmail"
+    },
+    {
+      "parameters": {
+        "baseDN": "OU=AMUsers,DC=AshleyandMartin,DC=local",
+        "searchFor": "(objectclass=user)",
+        "attribute": "employeeID",
+        "searchText": "={{ $json.employeeId }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.ldap",
+      "typeVersion": 1,
+      "position": [
+        580,
+        -210
+      ],
+      "id": "08c5630f-cc65-4a48-b8e0-ba856822c867",
+      "name": "SearchforEmployeeID",
+      "alwaysOutputData": true,
+      "credentials": {
+        "ldap": {
+          "id": "jytIHVQdPwtaxqUr",
+          "name": "LDAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7117cfe4-79b8-40b4-9d2c-1e3ae07d8912",
+              "leftValue": "={{ $json.isUserFound }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1020,
+        -210
+      ],
+      "id": "844f15c9-2096-4793-a45b-5edeae1a15b1",
+      "name": "If",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "errorMessage": "User Does In Fact Exist"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1240,
+        -260
+      ],
+      "id": "a8e0ac39-8b68-4baa-9e98-6c444d05d2d3",
+      "name": "Stop and Error"
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = $input.all();\nconst isUserFound = (\n  results.length !== 1 ||\n  Object.keys(results[0].json).length > 0\n);\n\nreturn [{\n  json: {\n    isUserFound\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        800,
+        -210
+      ],
+      "id": "4e579136-6b65-4ad5-945b-28755f5aab3e",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        1240,
+        -10
+      ],
+      "id": "13f66b90-c312-446f-8e8c-d66e9a21aa2f",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "baseDN": "OU=AMUsers,DC=AshleyandMartin,DC=local",
+        "searchFor": "(objectclass=user)",
+        "attribute": "mail",
+        "searchText": "={{ $json.managerEmail }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.ldap",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        40
+      ],
+      "id": "3ef839ca-b271-4598-b737-e62abe3e1aed",
+      "name": "Manager Search",
+      "credentials": {
+        "ldap": {
+          "id": "jytIHVQdPwtaxqUr",
+          "name": "LDAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "baseDN": "OU=AMUsers,DC=AshleyandMartin,DC=local",
+        "searchFor": "(objectclass=user)",
+        "attribute": "title",
+        "searchText": "=Administrator NZ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.ldap",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        300
+      ],
+      "id": "8d6514ce-f6fa-4885-8a2e-fea09e9d3abe",
+      "name": "Duplicate Role",
+      "credentials": {
+        "ldap": {
+          "id": "jytIHVQdPwtaxqUr",
+          "name": "LDAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = $input.all();\nconst isUserFound = (\n  results.length !== 1 ||\n  Object.keys(results[0].json).length > 0\n);\n\nreturn [{\n  json: {\n    isUserFound\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        300
+      ],
+      "id": "fb7adba7-7fa4-4e33-a98f-7ffd11d5651b",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7117cfe4-79b8-40b4-9d2c-1e3ae07d8912",
+              "leftValue": "={{ $json.isUserFound }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        140,
+        300
+      ],
+      "id": "a9a98753-36f2-427c-bda6-e5860314d5ce",
+      "name": "UserExists",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e7b4a903-66c3-4290-8854-8d8cf2d8cd39",
+              "leftValue": true,
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        360,
+        -110
+      ],
+      "id": "ef4e6689-88db-4946-93e2-b2cd02eff69a",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        620,
+        140
+      ],
+      "id": "08b553fa-46c1-45b2-b1f1-6e45aaa7dabd",
+      "name": "Form",
+      "webhookId": "673c75be-346d-46ee-a3f4-a2ade1739a5b"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "dn": "OU=AMUsers,DC=AshleyandMartin,DC=local",
+        "attributes": {
+          "attribute": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.ldap",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        20
+      ],
+      "id": "d2fa9b2a-334d-4ff9-bc03-851c78e72d8d",
+      "name": "LDAP",
+      "credentials": {
+        "ldap": {
+          "id": "jytIHVQdPwtaxqUr",
+          "name": "LDAP account"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "Microsoft Outlook": [
+      {
+        "json": {
+          "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('079e34a3-7a7d-46e6-aa22-bef344fc1147')/messages/$entity",
+          "@odata.etag": "W/\"CQAAABYAAAC6lWya7tyARpiJDLDZFvhbAAD0pLo/\"",
+          "id": "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQBGAAAAAAC0r8S3wHunQJniFwRUYTt0BwC6lWya7tyARpiJDLDZFvhbAAAAAAEMAAC6lWya7tyARpiJDLDZFvhbAAD1nqVRAAA=",
+          "createdDateTime": "2025-06-02T23:09:18Z",
+          "lastModifiedDateTime": "2025-06-02T23:14:24Z",
+          "changeKey": "CQAAABYAAAC6lWya7tyARpiJDLDZFvhbAAD0pLo/",
+          "categories": [],
+          "receivedDateTime": "2025-06-02T23:09:19Z",
+          "sentDateTime": "2025-06-02T23:09:06Z",
+          "hasAttachments": false,
+          "internetMessageId": "<0100019732e7e181-5a3edbd5-3341-4842-99a0-56c30d97c885-000000@email.amazonses.com>",
+          "subject": "IT Access For Olivia Judd Has Been Assigned",
+          "bodyPreview": "IT Access For Olivia Judd Has Been Assigned\r\n\r\nHi Nicholas,\r\n\r\nThe IT Access task has been assigned to you for action. Further information about this task as follows:\r\n\r\nDescription:\r\n\r\nTo be completed by IT after the paperwork is received.\r\n\r\n  *   Cre",
+          "importance": "normal",
+          "parentFolderId": "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAuAAAAAAC0r8S3wHunQJniFwRUYTt0AQC6lWya7tyARpiJDLDZFvhbAAAAAAEMAAA=",
+          "conversationId": "AAQkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAQAKjLFHCf7zdBsCW_mdAbquc=",
+          "conversationIndex": "AQHb1BNdqMsUcJ/vN0GwJb6Z0Buq5w==",
+          "isDeliveryReceiptRequested": null,
+          "isReadReceiptRequested": false,
+          "isRead": true,
+          "isDraft": false,
+          "webLink": "https://outlook.office365.com/owa/?ItemID=AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQBGAAAAAAC0r8S3wHunQJniFwRUYTt0BwC6lWya7tyARpiJDLDZFvhbAAAAAAEMAAC6lWya7tyARpiJDLDZFvhbAAD1nqVRAAA%3D&exvsurl=1&viewmodel=ReadMessageItem",
+          "inferenceClassification": "focused",
+          "body": {
+            "contentType": "html",
+            "content": "<html lang=\"en\"><head>\r\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"><meta name=\"robots\" content=\"noindex,nofollow\"></head><body style=\"background-color:#ffffff\"><table cellpadding=\"0\" cellspacing=\"0\" style=\"background-color:#ffffff; width:100%; border:none\"><tbody><tr><td style=\"width:100%; background-size:contain; background-color:#ffffff; background-repeat:no-repeat; background-position:right\"><div><img height=\"80\" class=\"default-logo-user\" src=\"cid:2358cdb02f3defb2690353905738e6b7@swift.generated\" style=\"padding:10px 20px 10px 20px\">&nbsp;</div></td></tr><tr><td style=\"font-family:Helvetica,Arial,sans-serif; background-color:#edece8; color:#034f59; font-weight:bold; padding:15px\">IT Access For Olivia Judd Has Been Assigned </td></tr><tr><td style=\"font-family:Helvetica,Arial,sans-serif; padding:10px 15px\"><p>Hi Nicholas,</p><p>The IT Access task has been assigned to you for action.&nbsp;Further information about this task as follows:</p><p>Description:&nbsp;</p><p>To be completed by IT after the paperwork is received.</p><ul><li>Create Network Login,</li><li>Create Email address,</li><li>Set Up email signature,</li><li>Create DocuSign Login,</li><li>Set up windows, pin Teams, Chrome/Edge &amp; bookmark Intranet, Zenoti, Biotime, DocuSign, ELMO</li><li>Create other system logins.</li></ul><p><i>Click&nbsp;<b>Start Task</b>&nbsp;and once the step(s) above are complete, please&nbsp;<b>mark this task as completed</b>.</i></p><p></p><p>Employee ID:&nbsp;COR034</p><p>First Name:&nbsp;Olivia</p><p>Last Name:&nbsp;Judd</p><p>Position:&nbsp;Operations Assistant</p><p>Location:&nbsp;Head Office</p><p>Start Date:&nbsp;09/06/2025</p><p>&nbsp;</p><p>Manager Email:&nbsp;Luke.Stadly@ashleyandmartin.com.au</p><p>To view further information on the assigned task, please click on the link below:</p><p><a href=\"https://urldefense.com/v3/__https://ashleyandmartin.elmotalent.com.au/tasks/1428?_l=1__;!!LTfEuMOXPNQik_U!yyarXv9n5sQce47nQUFo2AUCm7ucuCCt0o60Lotxa5Mi1t0fJw-Pji6xDQIhUizLyE7QbfiujCsmyIE0AG40rbivmBLgVU4$\">https://ashleyandmartin.elmotalent.com.au/tasks/1428?_l=1&nbsp;</a></p><p>Should you have any questions or difficulties accessing the system, please contact your System Administrator via hr@ashleyandmartin.com.au</p></td></tr><tr><td><hr style=\"color:#EEEEEE\"></td></tr><tr><td style=\"text-align:center; font-family:Helvetica,Arial,sans-serif; padding-bottom:10px\">© ELMO Software - All Rights Reserved </td></tr></tbody></table></body></html>"
+          },
+          "sender": {
+            "emailAddress": {
+              "name": "Human Resources",
+              "address": "hr@ashleyandmartin.com.au"
+            }
+          },
+          "from": {
+            "emailAddress": {
+              "name": "Human Resources",
+              "address": "hr@ashleyandmartin.com.au"
+            }
+          },
+          "toRecipients": [
+            {
+              "emailAddress": {
+                "name": "Nicholas Ryall",
+                "address": "nicholas.ryall@ashleyandmartin.com.au"
+              }
+            }
+          ],
+          "ccRecipients": [],
+          "bccRecipients": [],
+          "replyTo": [
+            {
+              "emailAddress": {
+                "name": "HR",
+                "address": "HR@ashleyandmartin.com.au"
+              }
+            }
+          ],
+          "flag": {
+            "flagStatus": "notFlagged"
+          }
+        }
+      }
+    ],
+    "CleanEmail": [
+      {
+        "json": {
+          "emailId": "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQBGAAAAAAC0r8S3wHunQJniFwRUYTt0BwC6lWya7tyARpiJDLDZFvhbAAAAAAEMAAC6lWya7tyARpiJDLDZFvhbAAD1nqVRAAA=",
+          "employeeId": "COR034",
+          "firstName": "Olivia",
+          "lastName": "Judd",
+          "position": "Operations Assistant",
+          "location": "Head Office",
+          "startDate": "09/06/2025",
+          "managerEmail": "Luke.Stadly@ashleyandmartin.com.au"
+        }
+      }
+    ],
+    "Microsoft Outlook Trigger": [
+      {
+        "json": {
+          "id": "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQBGAAAAAAC0r8S3wHunQJniFwRUYTt0BwC6lWya7tyARpiJDLDZFvhbAAAAAAEMAAC6lWya7tyARpiJDLDZFvhbAAD1nqVRAAA=",
+          "conversationId": "AAQkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAQAKjLFHCf7zdBsCW_mdAbquc=",
+          "subject": "IT Access For Olivia Judd Has Been Assigned",
+          "bodyPreview": "IT Access For Olivia Judd Has Been Assigned\r\n\r\nHi Nicholas,\r\n\r\nThe IT Access task has been assigned to you for action. Further information about this task as follows:\r\n\r\nDescription:\r\n\r\nTo be completed by IT after the paperwork is received.\r\n\r\n  *   Cre",
+          "from": "hr@ashleyandmartin.com.au",
+          "to": [
+            "nicholas.ryall@ashleyandmartin.com.au"
+          ],
+          "categories": [],
+          "hasAttachments": false
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-06-03T02:08:12.752Z",
+      "createdAt": "2025-06-03T02:08:12.752Z",
+      "role": "workflow:owner",
+      "workflowId": "NenmvB68WIKSuWoK",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-06-04T02:30:49.000Z",
+  "versionId": "6c8cf6ce-465e-4a7b-b575-1601eeeb2015"
+}
