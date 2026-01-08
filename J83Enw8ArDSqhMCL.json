@@ -1,0 +1,142 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-12-01T07:36:23.311Z",
+    "createdAt": "2025-12-01T07:36:23.311Z",
+    "versionId": "e5e709d0-713d-461b-92b3-7e1240c39276",
+    "workflowId": "J83Enw8ArDSqhMCL",
+    "nodes": [
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.errorTrigger",
+        "typeVersion": 1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "aefb74ee-eea9-435d-8255-a5ba03d510fc",
+        "name": "Error Trigger"
+      },
+      {
+        "parameters": {
+          "toRecipients": "monitoring",
+          "subject": "=n8n Error -  {{ $json.execution.id }}",
+          "bodyContent": "=Hi Team,\n\nLooks like there is a error in your flow. Go check it out\n{{ $json.execution.url }}\n\n{{ $json.execution.error.message }}\n\nRegards,\nAutomation",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          208,
+          0
+        ],
+        "id": "78ee331c-290e-457c-a3e0-87407fe91904",
+        "name": "Send a message",
+        "webhookId": "e40d80db-349b-4dec-bf9f-3fe05ac66eed",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Error Trigger": {
+        "main": [
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": null,
+    "description": null,
+    "autosaved": false
+  },
+  "activeVersionId": "e5e709d0-713d-461b-92b3-7e1240c39276",
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-01T07:34:32.859Z",
+  "id": "J83Enw8ArDSqhMCL",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Error Handling",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "aefb74ee-eea9-435d-8255-a5ba03d510fc",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "toRecipients": "monitoring",
+        "subject": "=n8n Error -  {{ $json.execution.id }}",
+        "bodyContent": "=Hi Team,\n\nLooks like there is a error in your flow. Go check it out\n{{ $json.execution.url }}\n\n{{ $json.execution.error.message }}\n\nRegards,\nAutomation",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "78ee331c-290e-457c-a3e0-87407fe91904",
+      "name": "Send a message",
+      "webhookId": "e40d80db-349b-4dec-bf9f-3fe05ac66eed",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-01T07:34:32.862Z",
+      "createdAt": "2025-12-01T07:34:32.862Z",
+      "role": "workflow:owner",
+      "workflowId": "J83Enw8ArDSqhMCL",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-01T07:36:23.000Z",
+  "versionId": "e5e709d0-713d-461b-92b3-7e1240c39276"
+}
