@@ -1,0 +1,87 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-01T05:40:07.249Z",
+  "id": "v1S3iJVUI5C0SD9Y",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Sharepoint - Delete Files",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "da5b2895-2db9-4145-97c6-f8f47c3e89bf",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://graph.microsoft.com/v1.0/sites/ashleyandmartincomau.sharepoint.com:/sites/ashleyandmartin.com.au?$select=id,sharepointIds",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftSharePointOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "6a833ba6-534a-47f9-9e23-26c10bf5e9ba",
+      "name": "HTTP Request",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        },
+        "microsoftExcelOAuth2Api": {
+          "id": "snb39Kzd4tl5cSJU",
+          "name": "Microsoft Excel account"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-01T05:40:07.251Z",
+      "createdAt": "2025-12-01T05:40:07.251Z",
+      "role": "workflow:owner",
+      "workflowId": "v1S3iJVUI5C0SD9Y",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-03T00:42:24.000Z",
+  "versionId": "04392438-d06f-444b-b6e2-d73f269ae0f1"
+}
