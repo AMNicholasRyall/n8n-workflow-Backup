@@ -1,0 +1,47 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {},
+  "createdAt": "2025-06-04T02:30:56.642Z",
+  "id": "hQUfzndst2d3TG9u",
+  "isArchived": true,
+  "meta": null,
+  "name": "DataClean",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -340,
+        -80
+      ],
+      "id": "05bbdee9-2c0b-46e1-9165-b1afe9455c55",
+      "name": "When clicking ‘Test workflow’"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-06-04T02:30:56.644Z",
+      "createdAt": "2025-06-04T02:30:56.644Z",
+      "role": "workflow:owner",
+      "workflowId": "hQUfzndst2d3TG9u",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-06-06T04:38:51.000Z",
+  "versionId": "d12bec2d-094c-4818-93af-3e9114b8584f"
+}
