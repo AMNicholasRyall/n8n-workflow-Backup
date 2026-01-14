@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-01-07T23:46:59.000Z",
-    "createdAt": "2026-01-07T23:46:57.452Z",
-    "versionId": "d4df6d27-0306-4fdc-a022-4f916a5bed10",
+    "updatedAt": "2026-01-12T23:48:07.000Z",
+    "createdAt": "2026-01-12T23:47:42.051Z",
+    "versionId": "01e19197-7a23-48a7-9a8a-241082d59eb3",
     "workflowId": "STUF6Fz9PaFzUwRx",
     "nodes": [
       {
@@ -13,8 +13,8 @@
         "type": "n8n-nodes-base.executeWorkflowTrigger",
         "typeVersion": 1.1,
         "position": [
-          -240,
-          -112
+          -640,
+          80
         ],
         "id": "3b81dc29-3dd4-410e-9e2e-a804baceef16",
         "name": "When Executed by Another Workflow"
@@ -41,8 +41,8 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          416,
-          -112
+          -192,
+          80
         ],
         "id": "bb0ad383-be7d-4479-9b52-8d4323c0e374",
         "name": "Call 'ZenotiNZ-GetAuthToken'"
@@ -80,8 +80,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          1408,
-          -112
+          704,
+          80
         ],
         "id": "921c960d-fcb8-4ea3-ac62-4ee685bc5e18",
         "name": "Generate Invoice With Meds",
@@ -109,8 +109,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          2192,
-          -96
+          1408,
+          80
         ],
         "id": "2777c1bd-d4c6-4407-9875-341f60b47595",
         "name": "Close Invoice"
@@ -145,8 +145,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          1680,
-          -112
+          928,
+          80
         ],
         "id": "c8308b5b-6122-4b4e-96cc-96b72d7880e2",
         "name": "Check Invoice Exists"
@@ -185,8 +185,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          608,
-          -112
+          32,
+          80
         ],
         "id": "4dc4d275-d260-4307-b9d7-40c366195564",
         "name": "Get Clinic Products"
@@ -199,8 +199,8 @@
         "type": "n8n-nodes-base.splitOut",
         "typeVersion": 1,
         "position": [
-          832,
-          -112
+          256,
+          80
         ],
         "id": "28ad2bdc-6c8b-4287-b08e-0d32ae9466a6",
         "name": "Split Out1"
@@ -232,8 +232,8 @@
         "type": "n8n-nodes-base.filter",
         "typeVersion": 2.3,
         "position": [
-          1104,
-          -112
+          480,
+          80
         ],
         "id": "00f9e88d-69ae-499c-bbf4-7641f27eb7e8",
         "name": "Filter3"
@@ -265,8 +265,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          1888,
-          -112
+          1120,
+          80
         ],
         "id": "29486a95-3a99-497f-a1e9-7f787ee392b1",
         "name": "If"
@@ -281,8 +281,8 @@
         "type": "n8n-nodes-base.microsoftOutlook",
         "typeVersion": 2,
         "position": [
-          1808,
-          112
+          1072,
+          320
         ],
         "id": "15919562-51b1-4ef5-b0db-709770bf0dda",
         "name": "Send a message",
@@ -298,12 +298,12 @@
         "parameters": {
           "content": "## Auth and Auto Trigger",
           "height": 272,
-          "width": 608
+          "width": 848
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          -272,
-          -192
+          -800,
+          -32
         ],
         "typeVersion": 1,
         "id": "546e4e29-e053-41f3-a0b9-d358eba319fa",
@@ -313,13 +313,13 @@
         "parameters": {
           "content": "## Get Clinics Prodcuts and Filter Down to correct",
           "height": 272,
-          "width": 624,
+          "width": 432,
           "color": 3
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          368,
-          -192
+          -32,
+          -32
         ],
         "typeVersion": 1,
         "id": "be9a5798-5eaf-48d3-9be2-6519d139de99",
@@ -333,8 +333,8 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          1024,
-          -192
+          400,
+          -32
         ],
         "typeVersion": 1,
         "id": "f04d025f-425d-4873-a8e6-8d9a018a1bf2",
@@ -344,12 +344,13 @@
         "parameters": {
           "content": "## Check Invoice",
           "height": 272,
+          "width": 256,
           "color": 3
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          1344,
-          -192
+          640,
+          -32
         ],
         "typeVersion": 1,
         "id": "2e2f5802-53de-408e-904c-96c9578d68e4",
@@ -363,8 +364,8 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          1632,
-          -192
+          880,
+          -32
         ],
         "typeVersion": 1,
         "id": "bcadd2d8-6566-4575-bf6f-59f2adbca5dd",
@@ -379,26 +380,12 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          2096,
-          -192
+          1312,
+          -32
         ],
         "typeVersion": 1,
         "id": "bd918053-5075-449c-a775-9497f083b60f",
         "name": "Sticky Note5"
-      },
-      {
-        "parameters": {
-          "aggregate": "aggregateAllItemData",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.aggregate",
-        "typeVersion": 1,
-        "position": [
-          2240,
-          608
-        ],
-        "id": "b485b0ce-b123-48bd-9737-70aeced7eaed",
-        "name": "Aggregate"
       },
       {
         "parameters": {
@@ -408,8 +395,8 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          3280,
-          -192
+          2320,
+          -32
         ],
         "typeVersion": 1,
         "id": "8c91c5e5-58cb-4dba-adcf-f3fdae5ece4d",
@@ -437,40 +424,11 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
-          144,
-          -112
+          -416,
+          80
         ],
         "id": "2cae9d05-bdd4-45d3-bf14-28b1aaa8cd32",
         "name": "Get row(s)"
-      },
-      {
-        "parameters": {
-          "jsCode": "return [\n  {\n    json: {\n      InvoiceID: $('Generate Invoice With Meds').first().json.invoice_id,\n      CustomerCode: $('When Executed by Another Workflow').first().json.CustomerCode,\n      CustomerFirstName: $('When Executed by Another Workflow').first().json.CustomerFirstName,\n      CustomerLastName: $('When Executed by Another Workflow').first().json.CustomerLastName,\n      ClinicAbb: $('When Executed by Another Workflow').first().json.CLinicABB,\n      Invoice: $('Check Invoice Exists').first().json.invoice.invoice_number_prefix$('Check Invoice Exists').first().json.invoice.invoice_number,\n      InvoiceClosed: $('Close Invoice').first().json.is_invoice_closed,\n      Medication: $('When Executed by Another Workflow').first().json.ProductNameCleaned,\n      Quantity: $('When Executed by Another Workflow').first().json.quantity,\n    }\n  }\n];"
-        },
-        "type": "n8n-nodes-base.code",
-        "typeVersion": 2,
-        "position": [
-          2000,
-          608
-        ],
-        "id": "f0080078-3c61-48cc-837c-cc2a816dfbf2",
-        "name": "Cleaned Data for Email"
-      },
-      {
-        "parameters": {
-          "content": "## Generate Email for Clinic",
-          "height": 272,
-          "width": 640,
-          "color": 3
-        },
-        "type": "n8n-nodes-base.stickyNote",
-        "position": [
-          1952,
-          512
-        ],
-        "typeVersion": 1,
-        "id": "a7001662-ca30-4c07-9687-35660400a798",
-        "name": "Sticky Note7"
       },
       {
         "parameters": {
@@ -479,8 +437,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          2512,
-          -96
+          1632,
+          80
         ],
         "id": "51cbec76-f5c0-4b61-99ff-480d53b353ea",
         "name": "Bring and Merge data."
@@ -493,8 +451,8 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          2416,
-          -192
+          1584,
+          -32
         ],
         "typeVersion": 1,
         "id": "bc4e0ab7-bf4e-417c-89c2-b7d1ac7de713",
@@ -509,8 +467,8 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          2736,
-          -192
+          1872,
+          -32
         ],
         "typeVersion": 1,
         "id": "c655ef0f-7aac-414b-b7d5-c59725d0bee6",
@@ -543,8 +501,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          2800,
-          -96
+          1920,
+          80
         ],
         "id": "b4838895-bcaa-4b25-8868-9d79db620d17",
         "name": "Get Appoint Details"
@@ -571,8 +529,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          2992,
-          -96
+          2112,
+          80
         ],
         "id": "cf8781d8-4d08-4b89-8be0-fac29e10e8ff",
         "name": "Close Appointment Invoice"
@@ -581,14 +539,14 @@
         "parameters": {
           "toRecipients": "={{ $('Get row(s)').item.json.email }}",
           "subject": "=Automation - Med Order - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
-          "bodyContent": "=Hi Team,\n\nAutomation has Ordered meds for following Patient.\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\nRemainingBalance = {{ $('When Executed by Another Workflow').item.json.RemainingBalance }}\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.invoice_number_prefix }}{{ $('Check Invoice Exists').item.json.invoice.invoice_number }}\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.id }}\n\nPleaese the Appointemtn is now closed!\n\nRegards,\nAutomation.",
+          "bodyContent": "=Hi Team,\n\nAutomation has Ordered meds for following Patient.\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\nRemainingBalance = {{ $('When Executed by Another Workflow').item.json.RemainingBalance }}\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.invoice_number_prefix }}{{ $('Check Invoice Exists').item.json.invoice.invoice_number }}\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.id }}\n\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\nPlease note the Appoitment is now closed!\n\nRegards,\nAutomation.",
           "additionalFields": {}
         },
         "type": "n8n-nodes-base.microsoftOutlook",
         "typeVersion": 2,
         "position": [
-          3360,
-          -96
+          2384,
+          80
         ],
         "id": "d073f5df-0976-46c1-83d0-901f58df37b4",
         "name": "Email Clinic",
@@ -708,27 +666,11 @@
           ]
         ]
       },
-      "Aggregate": {
-        "main": [
-          []
-        ]
-      },
       "Get row(s)": {
         "main": [
           [
             {
               "node": "Call 'ZenotiNZ-GetAuthToken'",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Cleaned Data for Email": {
-        "main": [
-          [
-            {
-              "node": "Aggregate",
               "type": "main",
               "index": 0
             }
@@ -780,11 +722,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version d4df6d27",
+    "name": "Version 01e19197",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "d4df6d27-0306-4fdc-a022-4f916a5bed10",
+  "activeVersionId": "01e19197-7a23-48a7-9a8a-241082d59eb3",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -892,27 +834,11 @@
         ]
       ]
     },
-    "Aggregate": {
-      "main": [
-        []
-      ]
-    },
     "Get row(s)": {
       "main": [
         [
           {
             "node": "Call 'ZenotiNZ-GetAuthToken'",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Cleaned Data for Email": {
-      "main": [
-        [
-          {
-            "node": "Aggregate",
             "type": "main",
             "index": 0
           }
@@ -978,8 +904,8 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -432,
-        -16
+        -640,
+        80
       ],
       "id": "3b81dc29-3dd4-410e-9e2e-a804baceef16",
       "name": "When Executed by Another Workflow"
@@ -1006,8 +932,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -32,
-        -16
+        -192,
+        80
       ],
       "id": "bb0ad383-be7d-4479-9b52-8d4323c0e374",
       "name": "Call 'ZenotiNZ-GetAuthToken'"
@@ -1045,8 +971,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        896,
-        -16
+        704,
+        80
       ],
       "id": "921c960d-fcb8-4ea3-ac62-4ee685bc5e18",
       "name": "Generate Invoice With Meds",
@@ -1074,8 +1000,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1584,
-        -16
+        1408,
+        80
       ],
       "id": "2777c1bd-d4c6-4407-9875-341f60b47595",
       "name": "Close Invoice"
@@ -1110,8 +1036,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1120,
-        -16
+        928,
+        80
       ],
       "id": "c8308b5b-6122-4b4e-96cc-96b72d7880e2",
       "name": "Check Invoice Exists"
@@ -1150,8 +1076,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        208,
-        -16
+        32,
+        80
       ],
       "id": "4dc4d275-d260-4307-b9d7-40c366195564",
       "name": "Get Clinic Products"
@@ -1164,8 +1090,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        416,
-        -16
+        256,
+        80
       ],
       "id": "28ad2bdc-6c8b-4287-b08e-0d32ae9466a6",
       "name": "Split Out1"
@@ -1197,8 +1123,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        640,
-        -16
+        480,
+        80
       ],
       "id": "00f9e88d-69ae-499c-bbf4-7641f27eb7e8",
       "name": "Filter3"
@@ -1230,8 +1156,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1296,
-        -16
+        1120,
+        80
       ],
       "id": "29486a95-3a99-497f-a1e9-7f787ee392b1",
       "name": "If"
@@ -1246,8 +1172,8 @@
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [
-        1248,
-        208
+        1072,
+        320
       ],
       "id": "15919562-51b1-4ef5-b0db-709770bf0dda",
       "name": "Send a message",
@@ -1263,12 +1189,12 @@
       "parameters": {
         "content": "## Auth and Auto Trigger",
         "height": 272,
-        "width": 608
+        "width": 848
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -480,
-        -112
+        -800,
+        -32
       ],
       "typeVersion": 1,
       "id": "546e4e29-e053-41f3-a0b9-d358eba319fa",
@@ -1283,8 +1209,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        128,
-        -112
+        -32,
+        -32
       ],
       "typeVersion": 1,
       "id": "be9a5798-5eaf-48d3-9be2-6519d139de99",
@@ -1298,8 +1224,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        560,
-        -112
+        400,
+        -32
       ],
       "typeVersion": 1,
       "id": "f04d025f-425d-4873-a8e6-8d9a018a1bf2",
@@ -1309,12 +1235,13 @@
       "parameters": {
         "content": "## Check Invoice",
         "height": 272,
+        "width": 256,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        832,
-        -112
+        640,
+        -32
       ],
       "typeVersion": 1,
       "id": "2e2f5802-53de-408e-904c-96c9578d68e4",
@@ -1328,8 +1255,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1072,
-        -112
+        880,
+        -32
       ],
       "typeVersion": 1,
       "id": "bcadd2d8-6566-4575-bf6f-59f2adbca5dd",
@@ -1344,26 +1271,12 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1504,
-        -112
+        1312,
+        -32
       ],
       "typeVersion": 1,
       "id": "bd918053-5075-449c-a775-9497f083b60f",
       "name": "Sticky Note5"
-    },
-    {
-      "parameters": {
-        "aggregate": "aggregateAllItemData",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.aggregate",
-      "typeVersion": 1,
-      "position": [
-        -16,
-        304
-      ],
-      "id": "b485b0ce-b123-48bd-9737-70aeced7eaed",
-      "name": "Aggregate"
     },
     {
       "parameters": {
@@ -1373,8 +1286,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        2544,
-        -112
+        2320,
+        -32
       ],
       "typeVersion": 1,
       "id": "8c91c5e5-58cb-4dba-adcf-f3fdae5ece4d",
@@ -1402,40 +1315,11 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        -240,
-        -16
+        -416,
+        80
       ],
       "id": "2cae9d05-bdd4-45d3-bf14-28b1aaa8cd32",
       "name": "Get row(s)"
-    },
-    {
-      "parameters": {
-        "jsCode": "return [\n  {\n    json: {\n      InvoiceID: $('Generate Invoice With Meds').first().json.invoice_id,\n      CustomerCode: $('When Executed by Another Workflow').first().json.CustomerCode,\n      CustomerFirstName: $('When Executed by Another Workflow').first().json.CustomerFirstName,\n      CustomerLastName: $('When Executed by Another Workflow').first().json.CustomerLastName,\n      ClinicAbb: $('When Executed by Another Workflow').first().json.CLinicABB,\n      Invoice: $('Check Invoice Exists').first().json.invoice.invoice_number_prefix$('Check Invoice Exists').first().json.invoice.invoice_number,\n      InvoiceClosed: $('Close Invoice').first().json.is_invoice_closed,\n      Medication: $('When Executed by Another Workflow').first().json.ProductNameCleaned,\n      Quantity: $('When Executed by Another Workflow').first().json.quantity,\n    }\n  }\n];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -240,
-        304
-      ],
-      "id": "f0080078-3c61-48cc-837c-cc2a816dfbf2",
-      "name": "Cleaned Data for Email"
-    },
-    {
-      "parameters": {
-        "content": "## Generate Email for Clinic",
-        "height": 272,
-        "width": 640,
-        "color": 3
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        -400,
-        192
-      ],
-      "typeVersion": 1,
-      "id": "a7001662-ca30-4c07-9687-35660400a798",
-      "name": "Sticky Note7"
     },
     {
       "parameters": {
@@ -1444,8 +1328,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1856,
-        -16
+        1632,
+        80
       ],
       "id": "51cbec76-f5c0-4b61-99ff-480d53b353ea",
       "name": "Bring and Merge data."
@@ -1458,8 +1342,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1776,
-        -112
+        1584,
+        -32
       ],
       "typeVersion": 1,
       "id": "bc4e0ab7-bf4e-417c-89c2-b7d1ac7de713",
@@ -1474,8 +1358,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        2064,
-        -112
+        1872,
+        -32
       ],
       "typeVersion": 1,
       "id": "c655ef0f-7aac-414b-b7d5-c59725d0bee6",
@@ -1508,8 +1392,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        2160,
-        -16
+        1920,
+        80
       ],
       "id": "b4838895-bcaa-4b25-8868-9d79db620d17",
       "name": "Get Appoint Details"
@@ -1536,8 +1420,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        2368,
-        -16
+        2112,
+        80
       ],
       "id": "cf8781d8-4d08-4b89-8be0-fac29e10e8ff",
       "name": "Close Appointment Invoice"
@@ -1546,14 +1430,14 @@
       "parameters": {
         "toRecipients": "={{ $('Get row(s)').item.json.email }}",
         "subject": "=Automation - Med Order - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
-        "bodyContent": "=Hi Team,\n\nAutomation has Ordered meds for following Patient.\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\nRemainingBalance = {{ $('When Executed by Another Workflow').item.json.RemainingBalance }}\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.invoice_number_prefix }}{{ $('Check Invoice Exists').item.json.invoice.invoice_number }}\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.id }}\n\nPleaese the Appointemtn is now closed!\n\nRegards,\nAutomation.",
+        "bodyContent": "=Hi Team,\n\nAutomation has Ordered meds for following Patient.\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\nRemainingBalance = {{ $('When Executed by Another Workflow').item.json.RemainingBalance }}\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.invoice_number_prefix }}{{ $('Check Invoice Exists').item.json.invoice.invoice_number }}\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.id }}\n\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\nPlease note the Appoitment is now closed!\n\nRegards,\nAutomation.",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [
-        2624,
-        -16
+        2384,
+        80
       ],
       "id": "d073f5df-0976-46c1-83d0-901f58df37b4",
       "name": "Email Clinic",
@@ -1567,51 +1451,7 @@
     }
   ],
   "origin": "n8n",
-  "pinData": {
-    "When Executed by Another Workflow": [
-      {
-        "json": {
-          "AppointmentID": "634d1717-5d63-405e-8821-f87d3eff0aa1",
-          "CustomerFirstName": "Leonardo",
-          "CustomerLastName": "Broederlow",
-          "CustomerCode": "AK8434",
-          "CustomerID": "dbf93f7f-6b40-4496-aa45-df9716995878",
-          "CustomerDOB": "17/09/1998",
-          "CustomerEmail": "sauvao953@gmail.com",
-          "CustomerGender": "Male",
-          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
-          "is_form_submitted": true,
-          "textField5": "Leonardo Broederlow",
-          "select6": "no",
-          "textField2": "Dr. Annemarie Hern NZMC 15150",
-          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
-          "btnFormioSubmit": false,
-          "ConsentFormFilled": false,
-          "ConsentFormSubmitted": false,
-          "DeliveryLocation": "guest",
-          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
-          "quantity": "1",
-          "DeliveryAddress1": "248 panama rd",
-          "DeliveryCity": "",
-          "DeliveryAddressFull": "248 panama rd",
-          "doctorsDirections": "ApplyToScalp",
-          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
-          "ZenotiProductName": "Minoxidil + Finasteride Solution",
-          "ZenotiProductNameShort": "Minox",
-          "ZenotiProductNameEnd": "tion",
-          "CanSubtract": true,
-          "RemainingBalance": 6,
-          "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
-          "packagesavailable": true,
-          "CLinicABB": "AUC",
-          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=bc9804d6-0bf4-4064-b37b-02c0aae65825&ServiceId=e18c697e-da48-4aee-a7a5-a0fd6c6fc0f6&Service=Doctor%20Scripts%201mth&GuestId=dbf93f7f-6b40-4496-aa45-df9716995878&AppointmentId=634d1717-5d63-405e-8821-f87d3eff0aa1"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -1644,6 +1484,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-01-07T23:56:11.527Z",
-  "versionId": "30f3e6ae-c831-433b-9e94-58fef15146ca"
+  "updatedAt": "2026-01-12T23:48:05.784Z",
+  "versionId": "01e19197-7a23-48a7-9a8a-241082d59eb3"
 }
