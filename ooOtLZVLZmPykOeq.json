@@ -96,7 +96,7 @@
       "main": [
         [
           {
-            "node": "Get row(s)",
+            "node": "Create Previous Date",
             "type": "main",
             "index": 0
           }
@@ -163,6 +163,28 @@
       "main": [
         [
           {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Previous Date": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
             "node": "Loop Over Items",
             "type": "main",
             "index": 0
@@ -182,7 +204,7 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -640,
+        -992,
         -64
       ],
       "id": "6412d3a9-6c85-43b4-882a-62afea4ccf68",
@@ -202,7 +224,7 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1,
       "position": [
-        -48,
+        -208,
         -64
       ],
       "id": "d76d64ef-03b2-47de-bb3b-c519022e28b5",
@@ -235,7 +257,7 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        112,
+        -48,
         -64
       ],
       "id": "fc4b8250-9a30-416b-aff9-660e39dacccf",
@@ -268,7 +290,7 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        288,
+        128,
         -64
       ],
       "id": "0131d5b2-7695-45af-a244-42370ee63768",
@@ -282,7 +304,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -80,
+        -240,
         -128
       ],
       "typeVersion": 1,
@@ -341,7 +363,7 @@
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [
-        -352,
+        -704,
         -64
       ],
       "id": "e1d54a21-0302-4352-8aaf-89701b419f1a",
@@ -360,12 +382,12 @@
       "parameters": {
         "content": "## Create Draft Email",
         "height": 288,
-        "width": 320,
+        "width": 288,
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -448,
+        -800,
         -176
       ],
       "typeVersion": 1,
@@ -376,11 +398,11 @@
       "parameters": {
         "content": "## Loop Over Each Clinic",
         "height": 560,
-        "width": 1920
+        "width": 2016
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        576,
+        480,
         -128
       ],
       "typeVersion": 1,
@@ -535,7 +557,7 @@
     },
     {
       "parameters": {
-        "content": "## List of things to do\n1. ~~Get DOB~~\n2. ~~Email Address~~\n3. ~~Gender~~\n4. ~~Reformatte Drugs Names~~\n5. ~~Select Correct Address~~\n6. ~~Compare to avalaible products for Client~~\n7. ~~Test with Multi Clinic~~\n8. Email EACH clinic a copy of there site to check out drugs <-- do we need to do this if I can invoice\n9. Format into excel <--\n10. Seperate Excel into tabs for each clinic\n11. ~~vCreate invoice - Need to test~~\n12. ~~Redeem products againts invoice - Need to test~~\n13. ~~Compare products againts what a customer still has~~\n14. Make a \"automation User in Zenoti\"\n15. New Email ACcount to send from that isnt nicholas\n16. ~~Hunt out monixdel or monox plus finistra~~\n17. Filter Out Error Orders\n18. ~~Need a filter for side effects not filled out~~\n19. ~~Work out emailing spreadsheets with different tabs~~\n20. ~~Build Out Parent flow that sends clinics down to here~~\n21. Work out what emails need to be sent to what flow.\n22. ~~How to check if a invoice has been made already and not do it.~~\n23. Build out manualy fix for each failed issue\na) Could do a manualy for that requires the invoice and customer ID for each paid in full\nb) same could be for each of the other ones oo\n24. ~~Fix no consent sign in~~ <-- IMPORTANT\n25. ~~Pull corret product ID for zenoti invoice~~\n26. ~~Update all zenoti oroducts to match with form~~\n27.\n\n100. ERROR HANDLING",
+        "content": "## List of things to do\n1. ~~Get DOB~~\n2. ~~Email Address~~\n3. ~~Gender~~\n4. ~~Reformatte Drugs Names~~\n5. ~~Select Correct Address~~\n6. ~~Compare to avalaible products for Client~~\n7. ~~Test with Multi Clinic~~\n8. Email EACH clinic a copy of there site to check out drugs <-- do we need to do this if I can invoice\n9. Format into excel <--\n10. Seperate Excel into tabs for each clinic\n11. ~~vCreate invoice - Need to test~~\n12. ~~Redeem products againts invoice - Need to test~~\n13. ~~Compare products againts what a customer still has~~\n14. Make a \"automation User in Zenoti\"\n15. New Email ACcount to send from that isnt nicholas\n16. ~~Hunt out monixdel or monox plus finistra~~\n17. Filter Out Error Orders\n18. ~~Need a filter for side effects not filled out~~\n19. ~~Work out emailing spreadsheets with different tabs~~\n20. ~~Build Out Parent flow that sends clinics down to here~~\n21. Work out what emails need to be sent to what flow.\n22. ~~How to check if a invoice has been made already and not do it.~~\n23. Build out manualy fix for each failed issue\na) Could do a manualy for that requires the invoice and customer ID for each paid in full\nb) same could be for each of the other ones oo\n24. ~~Fix no consent sign in~~ <-- IMPORTANT\n25. ~~Pull corret product ID for zenoti invoice~~\n26. ~~Update all zenoti oroducts to match with form~~\n27. Bring the clinic details further down into the flow to save on repeated steps\n28. See if we can get the ownerId of the form further dwn into the flow\n29. Think of options how to sent data to pharmacy\n\n100. ERROR HANDLING",
         "height": 928,
         "width": 720,
         "color": 4
@@ -609,7 +631,7 @@
     },
     {
       "parameters": {
-        "amount": 2
+        "amount": 1
       },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
@@ -648,11 +670,37 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        448,
+        288,
         -64
       ],
       "id": "7db49d68-f4bf-4768-a7f6-5c5b76ea1c50",
       "name": "Filter3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Select your timezone offset here\nconst TZ_OFFSET_HOURS = 8; // Perth = 8, Brisbane = 10, Sydney = 11 (DST), NZ = 13\n\n// Helper to shift UTC time to target timezone\nconst shiftToTz = (date, offsetHours) => {\n  const shifted = new Date(date.getTime() + offsetHours * 3600 * 1000);\n  return shifted;\n};\n\n// Helper to format YYYY-MM-DD using shifted date\nconst formatLocal = (d) => {\n  const year = d.getUTCFullYear();\n  const month = String(d.getUTCMonth() + 1).padStart(2, '0');\n  const day = String(d.getUTCDate()).padStart(2, '0');\n  return `${year}-${month}-${day}`;\n};\n\n// Current UTC time\nconst nowUtc = new Date();\n\n// Convert to local timezone\nconst todayLocal = shiftToTz(nowUtc, TZ_OFFSET_HOURS);\n\n// Yesterday in local timezone\nconst yesterdayLocal = new Date(todayLocal.getTime() - 24 * 3600 * 1000);\n\n// Output\nreturn [\n  {\n    json: {\n      start_date: formatLocal(yesterdayLocal),\n      end_date: formatLocal(todayLocal),\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -432,
+        -64
+      ],
+      "id": "5122905a-0a1a-4501-927c-c212ab61a6d4",
+      "name": "Create Previous Date"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.start_date = $('Create Previous Date').first().json.start_date;\n  item.json.end_date = $('Create Previous Date').first().json.end_date;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        -64
+      ],
+      "id": "428ca5b6-aac3-4dba-88dc-8b8f14eadf48",
+      "name": "Code in JavaScript"
     }
   ],
   "origin": "n8n",
@@ -683,6 +731,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-01-08T07:48:12.286Z",
-  "versionId": "a3440c36-9b94-4ce6-bfaa-34853b5c8b56"
+  "updatedAt": "2026-01-14T07:43:08.801Z",
+  "versionId": "d17f771f-6680-4a98-a0b4-ae8ac554dacf"
 }
