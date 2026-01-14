@@ -1,0 +1,380 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-13T00:05:43.000Z",
+    "createdAt": "2026-01-13T00:05:36.599Z",
+    "versionId": "be5e7755-86c7-4baf-b73d-493e610a7b42",
+    "workflowId": "rrmTef2524LtVz5E",
+    "nodes": [
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -416,
+          -80
+        ],
+        "id": "978bc0b8-70ca-4f43-a8a9-6997854f51a7",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "operation": "sendAndWait",
+          "toRecipients": "={{ $('Get row(s)').item.json.email }}",
+          "subject": "=Automation - Med Order - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
+          "message": "=Hi Team,\n\nCan you please confirm if the below paitent has paid in full? If so please click approve for the process to continie\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\n\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\n\nRegards,\nAutomation.",
+          "approvalOptions": {
+            "values": {
+              "approvalType": "double"
+            }
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          0,
+          -80
+        ],
+        "id": "86f727c3-117e-4840-87ac-a6fb1e095e29",
+        "name": "Send message and wait for response",
+        "webhookId": "dc1a9bc9-29cd-4f88-bc43-f82106160ae0",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "STUF6Fz9PaFzUwRx",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/STUF6Fz9PaFzUwRx",
+            "cachedResultName": "Zenoti - Order Meds"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {
+            "waitForSubWorkflow": false
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          416,
+          -80
+        ],
+        "id": "8d8905c8-6512-4533-935d-9527aa21dc2e",
+        "name": "Call 'Zenoti - Order Meds'"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "pVbLONb8Gh393bg0",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinicsNZ",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/pVbLONb8Gh393bg0"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Zenoti_ID",
+                "keyValue": "={{ $json.CustomerCenterID }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          -192,
+          -80
+        ],
+        "id": "39ca3f1b-9769-4b25-a1cb-e626c8739afd",
+        "name": "Get row(s)"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $('When Executed by Another Workflow').all();\n\nfor (const item of items) {\n  \titem.json.ManuallyApproved = true;\n}\n\nreturn items;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          208,
+          -80
+        ],
+        "id": "ab7be579-5cc8-40bd-be4c-173aedb4c055",
+        "name": "BringDataForward"
+      }
+    ],
+    "connections": {
+      "Send message and wait for response": {
+        "main": [
+          [
+            {
+              "node": "BringDataForward",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "Send message and wait for response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "BringDataForward": {
+        "main": [
+          [
+            {
+              "node": "Call 'Zenoti - Order Meds'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version be5e7755",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "be5e7755-86c7-4baf-b73d-493e610a7b42",
+  "connections": {
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "BringDataForward",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BringDataForward": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti - Order Meds'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-11T23:57:05.546Z",
+  "id": "rrmTef2524LtVz5E",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "ZenotiNZ-MedOrderPaidInFull",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -416,
+        -80
+      ],
+      "id": "978bc0b8-70ca-4f43-a8a9-6997854f51a7",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "toRecipients": "={{ $('Get row(s)').item.json.email }}",
+        "subject": "=Automation - Med Order - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
+        "message": "=Hi Team,\n\nCan you please confirm if the below paitent has paid in full? If so please click approve for the process to continie\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\n\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\n\nRegards,\nAutomation.",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -80
+      ],
+      "id": "86f727c3-117e-4840-87ac-a6fb1e095e29",
+      "name": "Send message and wait for response",
+      "webhookId": "dc1a9bc9-29cd-4f88-bc43-f82106160ae0",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "STUF6Fz9PaFzUwRx",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/STUF6Fz9PaFzUwRx",
+          "cachedResultName": "Zenoti - Order Meds"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        416,
+        -80
+      ],
+      "id": "8d8905c8-6512-4533-935d-9527aa21dc2e",
+      "name": "Call 'Zenoti - Order Meds'"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pVbLONb8Gh393bg0",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinicsNZ",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/pVbLONb8Gh393bg0"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Zenoti_ID",
+              "keyValue": "={{ $json.CustomerCenterID }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -192,
+        -80
+      ],
+      "id": "39ca3f1b-9769-4b25-a1cb-e626c8739afd",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $('When Executed by Another Workflow').all();\n\nfor (const item of items) {\n  \titem.json.ManuallyApproved = true;\n}\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        -80
+      ],
+      "id": "ab7be579-5cc8-40bd-be4c-173aedb4c055",
+      "name": "BringDataForward"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "J83Enw8ArDSqhMCL"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-11T23:57:05.549Z",
+      "createdAt": "2026-01-11T23:57:05.549Z",
+      "role": "workflow:owner",
+      "workflowId": "rrmTef2524LtVz5E",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-13T00:05:41.945Z",
+  "versionId": "be5e7755-86c7-4baf-b73d-493e610a7b42"
+}
