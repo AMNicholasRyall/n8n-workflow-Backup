@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-01-07T02:49:00.000Z",
-    "createdAt": "2026-01-07T02:48:58.536Z",
-    "versionId": "85e2a856-c88d-441b-bcdc-0f82ad8bfca7",
+    "updatedAt": "2026-01-08T23:02:33.000Z",
+    "createdAt": "2026-01-08T23:02:31.424Z",
+    "versionId": "268f96c5-408b-4a46-bc71-d92ae7b68cb7",
     "workflowId": "Ov8XRTSaZj46m8fz",
     "nodes": [
       {
@@ -24,8 +24,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          512,
-          -112
+          32,
+          -96
         ],
         "id": "c844f82a-a023-4bd1-90b7-3b0208fc69c2",
         "name": "HTTP Request"
@@ -47,7 +47,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          -16,
+          -416,
           -96
         ],
         "id": "23b3d6e0-004e-44e9-8c41-a85882691b9d",
@@ -80,7 +80,7 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          192,
+          -192,
           -96
         ],
         "id": "ec96437e-6675-4e61-ba4e-27d159d73677",
@@ -94,7 +94,7 @@
         "typeVersion": 1.1,
         "position": [
           -640,
-          -192
+          -96
         ],
         "id": "d624c6ff-9b4e-4a10-bf74-21fa1dae6a36",
         "name": "When Executed by Another Workflow"
@@ -114,7 +114,7 @@
         "typeVersion": 1.3,
         "position": [
           -640,
-          -320
+          -288
         ],
         "id": "819acabd-9331-4bb4-b471-f238f01d8ed4",
         "name": "Friday Arvo"
@@ -134,7 +134,7 @@
         "typeVersion": 1.3,
         "position": [
           -640,
-          112
+          288
         ],
         "id": "2108d40c-8dec-46dd-addd-ca458edb4175",
         "name": "M-T Arvo"
@@ -154,7 +154,7 @@
         "typeVersion": 1.3,
         "position": [
           -640,
-          -32
+          96
         ],
         "id": "98d72023-96e6-4d26-a31a-d9299527cac1",
         "name": "Morning 6.50"
@@ -165,7 +165,7 @@
         "typeVersion": 1,
         "position": [
           -640,
-          -464
+          -480
         ],
         "id": "406bfcb2-cb93-43fb-9d39-685c2f3c36b7",
         "name": "When clicking ‘Execute workflow’"
@@ -251,11 +251,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 85e2a856",
+    "name": "Version 268f96c5",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "85e2a856-c88d-441b-bcdc-0f82ad8bfca7",
+  "activeVersionId": "268f96c5-408b-4a46-bc71-d92ae7b68cb7",
   "connections": {
     "HTTP Request1": {
       "main": [
@@ -359,8 +359,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        512,
-        -112
+        32,
+        -96
       ],
       "id": "c844f82a-a023-4bd1-90b7-3b0208fc69c2",
       "name": "HTTP Request"
@@ -382,7 +382,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -16,
+        -416,
         -96
       ],
       "id": "23b3d6e0-004e-44e9-8c41-a85882691b9d",
@@ -415,7 +415,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        192,
+        -192,
         -96
       ],
       "id": "ec96437e-6675-4e61-ba4e-27d159d73677",
@@ -429,7 +429,7 @@
       "typeVersion": 1.1,
       "position": [
         -640,
-        -192
+        -96
       ],
       "id": "d624c6ff-9b4e-4a10-bf74-21fa1dae6a36",
       "name": "When Executed by Another Workflow"
@@ -449,7 +449,7 @@
       "typeVersion": 1.3,
       "position": [
         -640,
-        -320
+        -288
       ],
       "id": "819acabd-9331-4bb4-b471-f238f01d8ed4",
       "name": "Friday Arvo"
@@ -469,7 +469,7 @@
       "typeVersion": 1.3,
       "position": [
         -640,
-        112
+        288
       ],
       "id": "2108d40c-8dec-46dd-addd-ca458edb4175",
       "name": "M-T Arvo"
@@ -489,7 +489,7 @@
       "typeVersion": 1.3,
       "position": [
         -640,
-        -32
+        96
       ],
       "id": "98d72023-96e6-4d26-a31a-d9299527cac1",
       "name": "Morning 6.50"
@@ -500,7 +500,7 @@
       "typeVersion": 1,
       "position": [
         -640,
-        -464
+        -480
       ],
       "id": "406bfcb2-cb93-43fb-9d39-685c2f3c36b7",
       "name": "When clicking ‘Execute workflow’"
@@ -541,6 +541,6 @@
   },
   "tags": [],
   "triggerCount": 3,
-  "updatedAt": "2026-01-07T02:48:58.536Z",
-  "versionId": "85e2a856-c88d-441b-bcdc-0f82ad8bfca7"
+  "updatedAt": "2026-01-08T23:02:31.421Z",
+  "versionId": "268f96c5-408b-4a46-bc71-d92ae7b68cb7"
 }
