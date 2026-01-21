@@ -838,7 +838,7 @@
           "item": [
             {
               "mode": "everyX",
-              "value": 10,
+              "value": 5,
               "unit": "minutes"
             }
           ]
@@ -1136,11 +1136,11 @@
   ],
   "staticData": {
     "node:Microsoft Outlook Trigger": {
-      "lastTimeChecked": "2026-01-14T07:40:25.003+08:00"
+      "lastTimeChecked": "2026-01-21T09:00:25.003+08:00"
     }
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2025-12-30T00:16:41.696Z",
-  "versionId": "372a0c03-78b2-4a9d-a30a-de6f62a2e385"
+  "updatedAt": "2026-01-16T02:12:20.665Z",
+  "versionId": "77cadc53-7fbb-4e0c-b004-6fe685946894"
 }
