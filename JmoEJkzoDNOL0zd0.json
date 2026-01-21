@@ -1,0 +1,213 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get many items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many items": {
+      "main": [
+        [
+          {
+            "node": "Get an item",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get an item": {
+      "main": [
+        [
+          {
+            "node": "Remove Excess Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Excess Fields": {
+      "main": [
+        [
+          {
+            "node": "Re-Define Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-16T00:41:40.649Z",
+  "id": "JmoEJkzoDNOL0zd0",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Zenoti - Testing Sharpeoint List data extraction",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -224,
+        -64
+      ],
+      "id": "d41032b2-2419-4ee4-bcb0-7145052acc36",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "resource": "item",
+        "site": {
+          "__rl": true,
+          "value": "ashleyandmartincomau.sharepoint.com,d072e691-4945-4cb7-9d46-8ce09a647579,25bd0103-07ad-4698-92dc-5a919b01719b",
+          "mode": "list",
+          "cachedResultName": "A&M"
+        },
+        "list": {
+          "__rl": true,
+          "value": "0780fa0d-3676-42ec-9538-eefc92301ebc",
+          "mode": "list",
+          "cachedResultName": "NZ Med Orders"
+        },
+        "returnAll": true,
+        "options": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.microsoftSharePoint",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -64
+      ],
+      "id": "632705f8-96bc-4721-a02f-1d302f5cef4a",
+      "name": "Get many items",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "item",
+        "operation": "get",
+        "site": {
+          "__rl": true,
+          "value": "ashleyandmartincomau.sharepoint.com,d072e691-4945-4cb7-9d46-8ce09a647579,25bd0103-07ad-4698-92dc-5a919b01719b",
+          "mode": "list",
+          "cachedResultName": "A&M"
+        },
+        "list": {
+          "__rl": true,
+          "value": "0780fa0d-3676-42ec-9538-eefc92301ebc",
+          "mode": "list",
+          "cachedResultName": "NZ Med Orders"
+        },
+        "item": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "simplify": false,
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.microsoftSharePoint",
+      "typeVersion": 1,
+      "position": [
+        208,
+        -64
+      ],
+      "id": "b8d6a786-9b45-49a8-8b02-786e65ec1e2d",
+      "name": "Get an item",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "aed98ca8-c8e2-4b90-a0c0-f1cec42458c3",
+              "name": "fields",
+              "value": "={{ $json.fields }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        -64
+      ],
+      "id": "cff50192-abca-4a26-b1a2-e8e27a889275",
+      "name": "Remove Excess Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const fields = item.json.fields;\n\n  // Safety check in case one item doesn’t have fields\n  if (!fields) {\n    return { json: item.json };\n  }\n\n  // Remove SharePoint noise if present\n  delete fields[\"@odata.etag\"];\n\n  return {\n    json: fields\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        -64
+      ],
+      "id": "b3d21b27-8a8b-47d0-b366-58f7686e1d4c",
+      "name": "Re-Define Data"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-16T00:41:40.651Z",
+      "createdAt": "2026-01-16T00:41:40.651Z",
+      "role": "workflow:owner",
+      "workflowId": "JmoEJkzoDNOL0zd0",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-16T01:28:24.440Z",
+  "versionId": "df11a1ee-a486-48ac-a723-a29aec80be89"
+}
