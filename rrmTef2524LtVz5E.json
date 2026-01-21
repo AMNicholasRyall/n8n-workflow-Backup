@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-01-13T00:05:43.000Z",
-    "createdAt": "2026-01-13T00:05:36.599Z",
-    "versionId": "be5e7755-86c7-4baf-b73d-493e610a7b42",
+    "updatedAt": "2026-01-14T23:13:37.000Z",
+    "createdAt": "2026-01-14T23:13:36.243Z",
+    "versionId": "095d5d39-289b-48b5-a3a1-73f48f27403d",
     "workflowId": "rrmTef2524LtVz5E",
     "nodes": [
       {
@@ -72,7 +72,7 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          416,
+          624,
           -80
         ],
         "id": "8d8905c8-6512-4533-935d-9527aa21dc2e",
@@ -114,11 +114,44 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          208,
+          416,
           -80
         ],
         "id": "ab7be579-5cc8-40bd-be4c-173aedb4c055",
         "name": "BringDataForward"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "325e46ba-4343-46d4-9822-2bbec135a249",
+                "leftValue": "={{ $json.data.approved }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          208,
+          -80
+        ],
+        "id": "32718037-8fb8-47f6-9ed9-6d981acf4d1b",
+        "name": "If"
       }
     ],
     "connections": {
@@ -126,7 +159,7 @@
         "main": [
           [
             {
-              "node": "BringDataForward",
+              "node": "If",
               "type": "main",
               "index": 0
             }
@@ -165,20 +198,31 @@
             }
           ]
         ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "BringDataForward",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version be5e7755",
+    "name": "Version 095d5d39",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "be5e7755-86c7-4baf-b73d-493e610a7b42",
+  "activeVersionId": "095d5d39-289b-48b5-a3a1-73f48f27403d",
   "connections": {
     "Send message and wait for response": {
       "main": [
         [
           {
-            "node": "BringDataForward",
+            "node": "If",
             "type": "main",
             "index": 0
           }
@@ -212,6 +256,17 @@
         [
           {
             "node": "Call 'Zenoti - Order Meds'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "BringDataForward",
             "type": "main",
             "index": 0
           }
@@ -293,7 +348,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        416,
+        624,
         -80
       ],
       "id": "8d8905c8-6512-4533-935d-9527aa21dc2e",
@@ -335,11 +390,44 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        208,
+        416,
         -80
       ],
       "id": "ab7be579-5cc8-40bd-be4c-173aedb4c055",
       "name": "BringDataForward"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "325e46ba-4343-46d4-9822-2bbec135a249",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        -80
+      ],
+      "id": "32718037-8fb8-47f6-9ed9-6d981acf4d1b",
+      "name": "If"
     }
   ],
   "origin": "n8n",
@@ -375,6 +463,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-01-13T00:05:41.945Z",
-  "versionId": "be5e7755-86c7-4baf-b73d-493e610a7b42"
+  "updatedAt": "2026-01-14T23:18:30.801Z",
+  "versionId": "095d5d39-289b-48b5-a3a1-73f48f27403d"
 }
