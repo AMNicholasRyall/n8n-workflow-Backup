@@ -1,0 +1,326 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get API Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get API Token": {
+      "main": [
+        [
+          {
+            "node": "Get rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get rows": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-16T04:30:49.832Z",
+  "id": "Ui703gC5odGvTXcS",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SnipeIT - Location Creation",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -272,
+        -48
+      ],
+      "id": "7ac7cced-325a-4f9e-9a9c-0feaa28d2fcf",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "FVGc9R5kchTK7wsd",
+          "mode": "list",
+          "cachedResultName": "SnipeIT",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/FVGc9R5kchTK7wsd"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "User",
+              "keyValue": "nryall"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        -48
+      ],
+      "id": "f9f7a5a5-a7bc-47ba-b9cd-55b84521793a",
+      "name": "Get API Token"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://assets.ashleyandmartin.local/api/v1/locations",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json, application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Get API Token').first().json.Key }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $('Filter').item.json.ClinicName }}"
+            },
+            {
+              "name": "address",
+              "value": "={{ $('Filter').item.json.Address }}"
+            },
+            {
+              "name": "city",
+              "value": "={{ $('Filter').item.json.Suburb }}"
+            },
+            {
+              "name": "state",
+              "value": "={{ $('Filter').item.json.State }}"
+            },
+            {
+              "name": "country",
+              "value": "={{ $json.lastTwoCharacters }}"
+            },
+            {
+              "name": "zip",
+              "value": "={{ $('Loop Over Items').item.json.PostCode }}"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1072,
+        -48
+      ],
+      "id": "54d9a4b6-5d45-4a4e-ad7a-6a1fa2f437c3",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "resource": "table",
+        "operation": "getRows",
+        "workbook": {
+          "__rl": true,
+          "value": "012CMKCCFW6OBZYUQVEZG2KPB2TRGCYALP",
+          "mode": "list",
+          "cachedResultName": "AM-SiteDetails-Form",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B9C83F3B6-1552-4D26-A53C-3A9C4C2C016F%7D&file=AM-SiteDetails-Form.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
+        },
+        "worksheet": {
+          "__rl": true,
+          "value": "{69E7808D-7B2B-4566-96F0-3B4D8DC750D8}",
+          "mode": "list",
+          "cachedResultName": "SiteDetails",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B9C83F3B6-1552-4D26-A53C-3A9C4C2C016F%7D&file=AM-SiteDetails-Form.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=SiteDetails!A1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "{917ACF66-4D6E-4508-BB2E-360DCCD967F8}",
+          "mode": "list",
+          "cachedResultName": "SiteDetails",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B9C83F3B6-1552-4D26-A53C-3A9C4C2C016F%7D&file=AM-SiteDetails-Form.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=SiteDetails!A1:O22"
+        },
+        "returnAll": true,
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.microsoftExcel",
+      "typeVersion": 2.2,
+      "position": [
+        176,
+        -48
+      ],
+      "id": "6d0fe1ff-bf71-490a-b800-cf8f7198ea17",
+      "name": "Get rows",
+      "credentials": {
+        "microsoftExcelOAuth2Api": {
+          "id": "snb39Kzd4tl5cSJU",
+          "name": "Microsoft Excel account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "85e1fda3-3ba2-4ed9-a24d-1a3a56aa70e7",
+              "leftValue": "={{ $json.FormClinic }}",
+              "rightValue": "Temp ADE",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        400,
+        -48
+      ],
+      "id": "2fb16c8b-32b0-4da9-a34e-d0c59057a638",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "jsCode": "const value = $input.first().json.FormClinic;\n\n// Make sure it's treated as a string\nconst lastTwo = String(value).slice(-2);\n\nreturn [\n  {\n    json: {\n      lastTwoCharacters: lastTwo\n    }\n  }\n];\n\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        848,
+        -48
+      ],
+      "id": "31669496-6e0f-41c7-83f7-9f2c4a7b9513",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        624,
+        -48
+      ],
+      "id": "de53821e-d47d-43b7-bff2-e6c42dbbb809",
+      "name": "Loop Over Items"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-16T04:30:49.835Z",
+      "createdAt": "2026-01-16T04:30:49.835Z",
+      "role": "workflow:owner",
+      "workflowId": "Ui703gC5odGvTXcS",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-12-05T00:51:56.073Z",
+      "createdAt": "2025-12-05T00:51:56.073Z",
+      "id": "N5UMYKN3CMwB8JVM",
+      "name": "SnipeIT"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-16T05:14:41.128Z",
+  "versionId": "6b7c38d4-a24a-495c-8cd8-f1a4e2cd8ed9"
+}
