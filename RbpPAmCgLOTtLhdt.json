@@ -1,0 +1,292 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get API Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get API Token": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Append rows to table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-16T01:38:40.639Z",
+  "id": "RbpPAmCgLOTtLhdt",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Snipe-IT - Lenovo Warranty Table update",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        -16
+      ],
+      "id": "bff8fe12-42e9-4c20-bdd1-8a19711d6c3c",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "FVGc9R5kchTK7wsd",
+          "mode": "list",
+          "cachedResultName": "SnipeIT",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/FVGc9R5kchTK7wsd"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "User",
+              "keyValue": "nryall"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        -16
+      ],
+      "id": "91f85038-f600-4e0d-96b2-5c7b5efe0354",
+      "name": "Get API Token"
+    },
+    {
+      "parameters": {
+        "url": "https://assets.ashleyandmartin.local/api/v1/hardware",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "limit",
+              "value": "121"
+            },
+            {
+              "name": "offset",
+              "value": "0"
+            },
+            {
+              "name": "sort",
+              "value": "created_at"
+            },
+            {
+              "name": "order",
+              "value": "desc"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json, application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.Key }}"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        48,
+        -16
+      ],
+      "id": "0c9a5cfc-d612-430d-afe8-d4ffb4b0e179",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "rows",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        272,
+        -16
+      ],
+      "id": "229389cb-f13b-44a8-a38b-5c6cfffb0437",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a6a633e7-f1a1-4da5-a627-c9e3e73c4620",
+              "leftValue": "={{ $json.manufacturer.name }}",
+              "rightValue": "LENOVO",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        496,
+        -16
+      ],
+      "id": "de502056-e141-4162-93db-d2a75d98f7bc",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "resource": "table",
+        "workbook": {
+          "__rl": true,
+          "value": "012CMKCCGT4BTVOF67CVBIT2HEL4NFSSDK",
+          "mode": "list",
+          "cachedResultName": "Warranty_Batch_Lookup_Template",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B5767E0D3-DF17-4215-89E8-E45F1A59486A%7D&file=Warranty_Batch_Lookup_Template.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
+        },
+        "worksheet": {
+          "__rl": true,
+          "value": "{00000000-0001-0000-0000-000000000000}",
+          "mode": "list",
+          "cachedResultName": "Batch",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B5767E0D3-DF17-4215-89E8-E45F1A59486A%7D&file=Warranty_Batch_Lookup_Template.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Batch!A1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "{A98B5EB4-8A5B-4EB4-BA93-8D87FD880DE9}",
+          "mode": "list",
+          "cachedResultName": "LenovoWarranty",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B5767E0D3-DF17-4215-89E8-E45F1A59486A%7D&file=Warranty_Batch_Lookup_Template.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Batch!A1:C2"
+        },
+        "fieldsUi": {
+          "values": [
+            {
+              "column": "Machine Type",
+              "fieldValue": "={{ $json.model.name }}"
+            },
+            {
+              "column": "SerialOrIMEI",
+              "fieldValue": "={{ $json.serial }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftExcel",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        -16
+      ],
+      "id": "a3839091-f314-4f2f-8661-958fcc400522",
+      "name": "Append rows to table",
+      "credentials": {
+        "microsoftExcelOAuth2Api": {
+          "id": "snb39Kzd4tl5cSJU",
+          "name": "Microsoft Excel account"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-16T01:38:40.642Z",
+      "createdAt": "2026-01-16T01:38:40.642Z",
+      "role": "workflow:owner",
+      "workflowId": "RbpPAmCgLOTtLhdt",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-12-05T00:51:56.073Z",
+      "createdAt": "2025-12-05T00:51:56.073Z",
+      "id": "N5UMYKN3CMwB8JVM",
+      "name": "SnipeIT"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-16T02:50:12.457Z",
+  "versionId": "c5650ef9-ec81-47a1-af5f-bd2cc6c84a99"
+}
