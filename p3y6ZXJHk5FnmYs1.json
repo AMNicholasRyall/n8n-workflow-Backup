@@ -326,13 +326,7 @@
             "index": 1
           }
         ],
-        [
-          {
-            "node": "Failed No Groups",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     }
   },
@@ -453,7 +447,7 @@
     },
     {
       "parameters": {
-        "baseDN": "=OU={{ $json.name }},OU={{ $json.Country }},OU=AMUsers,DC=AshleyandMartin,DC=local",
+        "baseDN": "=OU={{ $('Email Cleanup').item.json.location }},OU={{ $json.Country }},OU=AMUsers,DC=AshleyandMartin,DC=local",
         "searchFor": "(objectclass=user)",
         "attribute": "sAMAccountName",
         "searchText": "={{ $('Email Cleanup').item.json.samAccountName }}",
@@ -477,7 +471,7 @@
     },
     {
       "parameters": {
-        "baseDN": "=OU={{ $('FindClinic').item.json.name }},OU={{ $('FindClinic').item.json.Country }},OU=AMUsers,DC=AshleyandMartin,DC=local",
+        "baseDN": "=OU={{ $('Email Cleanup').item.json.location }},OU={{ $('FindClinic').item.json.Country }},OU=AMUsers,DC=AshleyandMartin,DC=local",
         "searchFor": "(objectclass=user)",
         "attribute": "title",
         "searchText": "={{ $('Email Cleanup').item.json.position }}",
@@ -568,7 +562,7 @@
           "conditions": [
             {
               "keyName": "name",
-              "keyValue": "={{ $json.location }}"
+              "keyValue": "={{ $json.ClinicLocation }}"
             }
           ]
         }
@@ -640,7 +634,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Get the HTML body from previous node\nconst htmlBody = $input.first().json.body?.content || '';\n\n// 1) Normalise HTML into text\nlet text = htmlBody\n  .replace(/\\r\\n/g, '\\n')\n  .replace(/<br\\s*\\/?>/gi, '\\n')\n  .replace(/<\\/p>/gi, '\\n')\n  .replace(/<\\/div>/gi, '\\n');\n\n// Strip &nbsp; (both entity and actual NBSP char)\ntext = text\n  .replace(/&nbsp;/gi, ' ')\n  .replace(/\\u00A0/g, ' ');\n\n// Strip all remaining HTML tags\ntext = text.replace(/<[^>]+>/g, '');\n\n// Collapse multiple blank lines\ntext = text.replace(/\\n{2,}/g, '\\n').trim();\n\n// Helper to get lines of the form \"Label: value\"\nfunction getField(label) {\n  const regex = new RegExp('^[ \\\\t]*' + label + '\\\\s*:\\\\s*(.*)$', 'mi');\n  const match = text.match(regex);\n  if (!match) return '';\n  return match[1].replace(/&nbsp;/gi, ' ').replace(/\\u00A0/g, ' ').trim();\n}\n\nconst employeeId    = getField('Employee ID');\nconst firstName     = getField('First Name');\nconst lastName      = getField('Last Name');\nconst position      = getField('Position');\nconst location      = getField('Location');\nconst startDateRaw  = getField('Start Date');\nconst managerEmail  = getField('Manager Email');\n\n// Build firstname.lastname username\nlet usernameBase = '';\nif (firstName && lastName) {\n  usernameBase = `${firstName}.${lastName}`;\n  usernameBase = usernameBase\n    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '') // remove accents\n    .toLowerCase()\n    .replace(/[^a-z0-9.]/g, ''); // limit to safe chars\n}\n\n// AD fields\nlet samAccountName = usernameBase;\n\n// Enforce 20-char limit\nif (samAccountName.length > 20) {\n  samAccountName = samAccountName.substring(0, 20);\n}\n\nconst userPrincipalName = usernameBase\n  ? `${samAccountName}@ashleyandmartin.com.au`\n  : '';\n\nconst displayName = [firstName, lastName].filter(x => x).join(' ');\n\n// Return clean JSON\nreturn [{\n  json: {\n    employeeId,\n    firstName,\n    lastName,\n    position,\n    location,\n    startDate: startDateRaw,\n    managerEmail,\n    displayName,\n    samAccountName,\n    userPrincipalName\n  }\n}];\n"
+        "jsCode": "// Get the HTML body from previous node\nconst htmlBody = $input.first().json.body?.content || '';\n\n// 1) Normalise HTML into text\nlet text = htmlBody\n  .replace(/\\r\\n/g, '\\n')\n  .replace(/<br\\s*\\/?>/gi, '\\n')\n  .replace(/<\\/p>/gi, '\\n')\n  .replace(/<\\/div>/gi, '\\n');\n\n// Strip &nbsp; (both entity and actual NBSP char)\ntext = text\n  .replace(/&nbsp;/gi, ' ')\n  .replace(/\\u00A0/g, ' ');\n\n// Strip all remaining HTML tags\ntext = text.replace(/<[^>]+>/g, '');\n\n// Collapse multiple blank lines\ntext = text.replace(/\\n{2,}/g, '\\n').trim();\n\n// Helper to get lines of the form \"Label: value\"\nfunction getField(label) {\n  const regex = new RegExp('^[ \\\\t]*' + label + '\\\\s*:\\\\s*(.*)$', 'mi');\n  const match = text.match(regex);\n  if (!match) return '';\n  return match[1]\n    .replace(/&nbsp;/gi, ' ')\n    .replace(/\\u00A0/g, ' ')\n    .trim();\n}\n\n// Extract fields\nconst employeeId    = getField('Employee ID');\nconst firstName     = getField('First Name');\nconst lastName      = getField('Last Name');\nconst position      = getField('Position');\n\n// ClinicLocation WITH spaces (human readable)\nconst ClinicLocation = getField('Location');\n\n// location WITHOUT spaces (system / matching safe)\nconst location = ClinicLocation.replace(/\\s+/g, '');\n\nconst startDateRaw  = getField('Start Date');\nconst managerEmail  = getField('Manager Email');\n\n// Build firstname.lastname username\nlet usernameBase = '';\nif (firstName && lastName) {\n  usernameBase = `${firstName}.${lastName}`;\n  usernameBase = usernameBase\n    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '') // remove accents\n    .toLowerCase()\n    .replace(/[^a-z0-9.]/g, ''); // limit to safe chars\n}\n\n// AD fields\nlet samAccountName = usernameBase;\n\n// Enforce 20-character limit\nif (samAccountName.length > 20) {\n  samAccountName = samAccountName.substring(0, 20);\n}\n\nconst userPrincipalName = usernameBase\n  ? `${samAccountName}@ashleyandmartin.com.au`\n  : '';\n\nconst displayName = [firstName, lastName].filter(x => x).join(' ');\n\n// Return clean JSON\nreturn [{\n  json: {\n    employeeId,\n    firstName,\n    lastName,\n    position,\n\n    // Swapped + corrected spelling\n    ClinicLocation, // with spaces\n    location,       // without spaces\n\n    startDate: startDateRaw,\n    managerEmail,\n    displayName,\n    samAccountName,\n    userPrincipalName\n  }\n}];\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -670,7 +664,7 @@
     {
       "parameters": {
         "operation": "create",
-        "dn": "=CN={{ $('Email Cleanup').item.json.displayName }},OU={{ $('FindClinic').item.json.name }},OU={{ $('FindClinic').item.json.Country }},OU=AMUsers,DC=AshleyandMartin,DC=local",
+        "dn": "=CN={{ $('Email Cleanup').item.json.displayName }},OU={{ $('Email Cleanup').item.json.location }},OU={{ $('FindClinic').item.json.Country }},OU=AMUsers,DC=AshleyandMartin,DC=local",
         "attributes": {
           "attribute": [
             {
@@ -799,6 +793,7 @@
             }
           ]
         },
+        "joinMode": "enrichInput2",
         "options": {}
       },
       "type": "n8n-nodes-base.merge",
@@ -808,11 +803,12 @@
         -112
       ],
       "id": "7fcc54e5-52a4-4336-8c22-c4a6a37b0621",
-      "name": "Merge"
+      "name": "Merge",
+      "alwaysOutputData": false
     },
     {
       "parameters": {
-        "jsCode": "// Get the current item (from the LDAP node just before this Code node)\nconst item = $input.first().json;\n\n// This is your array of group DNs:\n// [\"CN=Staff - WHS,OU=Security Groups,...\", \"CN=Admin Staff - SG,OU=Security Groups,...\", ...]\nlet groups = item.memberOf || [];\n\n// Clean up, make sure it's an array of non-empty strings\ngroups = groups\n  .map(g => (g || '').trim())\n  .filter(g => g.length > 0);\n\n// Build the new user DN (same as you used in the Create step)\n// If you already have newUserDn in JSON, just read it instead.\nconst displayName = $('Email Cleanup').first().json.displayName;\nconst clinicName  = $('FindClinic').first().json.name;\nconst country     = $('FindClinic').first().json.Country;\n\nconst newUserDn = `CN=${displayName},OU=${clinicName},OU=${country},OU=AMUsers,DC=AshleyandMartin,DC=local`;\n\n// Map to one item per group\nreturn groups.map(groupDn => {\n  // Optional: just the CN for logging\n  const cnMatch = groupDn.match(/^CN=([^,]+)/i);\n  const groupName = cnMatch ? cnMatch[1] : groupDn;\n\n  return {\n    json: {\n      groupDn,      // full group DN from memberOf array\n      groupName,    // \"Staff - WHS\", \"Admin Staff - SG\", etc.\n      newUserDn     // DN of the user we just created\n    }\n  };\n});\n"
+        "jsCode": "// Get the current item (from the LDAP node just before this Code node)\nconst item = $input.first().json;\n\n// This is your array of group DNs:\n// [\"CN=Staff - WHS,OU=Security Groups,...\", \"CN=Admin Staff - SG,OU=Security Groups,...\", ...]\nlet groups = item.memberOf || [];\n\n// Clean up, make sure it's an array of non-empty strings\ngroups = groups\n  .map(g => (g || '').trim())\n  .filter(g => g.length > 0);\n\n// Build the new user DN (same as you used in the Create step)\n// If you already have newUserDn in JSON, just read it instead.\nconst displayName = $('Email Cleanup').first().json.displayName;\nconst clinicName  = $('FindClinic').first().json.name;\nconst country     = $('FindClinic').first().json.Country;\n\nconst newUserDn = `CN=${$('Email Cleanup').first().json.displayName},OU=${$('Email Cleanup').first().json.location},OU=Australia,OU=AMusers,DC=Ashleyandmartin,DC=Local`;\n\n\n// Map to one item per group\nreturn groups.map(groupDn => {\n  // Optional: just the CN for logging\n  const cnMatch = groupDn.match(/^CN=([^,]+)/i);\n  const groupName = cnMatch ? cnMatch[1] : groupDn;\n\n  return {\n    json: {\n      groupDn,      // full group DN from memberOf array\n      groupName,    // \"Staff - WHS\", \"Admin Staff - SG\", etc.\n      newUserDn     // DN of the user we just created\n    }\n  };\n});\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -848,7 +844,7 @@
           "add": [
             {
               "id": "member",
-              "value": "={{ $('Merge').item.json.dn }}"
+              "value": "={{ $('Merge').item.json.newUserDn }}"
             }
           ]
         }
@@ -877,7 +873,7 @@
           "add": [
             {
               "id": "member",
-              "value": "={{ $json.dn }}"
+              "value": "={{ $json.newUserDn }}"
             }
           ]
         }
@@ -1054,7 +1050,11 @@
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
-          "value": {}
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
         },
         "options": {}
       },
@@ -1086,7 +1086,7 @@
     },
     {
       "parameters": {
-        "unit": "minutes"
+        "amount": 1
       },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
@@ -1096,8 +1096,7 @@
       ],
       "id": "3a92f8ff-ccd5-4fc4-afdb-9652ddb5d0de",
       "name": "Wait1",
-      "webhookId": "108b5d04-cc03-4118-ac14-a9f3dca679b2",
-      "disabled": true
+      "webhookId": "108b5d04-cc03-4118-ac14-a9f3dca679b2"
     },
     {
       "parameters": {
@@ -1218,7 +1217,7 @@
       "parameters": {
         "toRecipients": "={{ $('Email Cleanup').item.json.managerEmail }}",
         "subject": "=New User -  {{ $('Email Cleanup').item.json.displayName }}",
-        "bodyContent": "=Hi {{ $('FindManager').item.json.givenName }}\n\nYour new staff {{ $('Email Cleanup').item.json.displayName }} is ready and setup to go.\n\nUsername:{{ $('Email Cleanup').item.json.samAccountName }}\nEmail:{{ $('Email Cleanup').item.json.userPrincipalName }}\nPassword: Welcome01\nSite: {{ $('Email Cleanup').item.json.location }}\nPosition: {{ $('Email Cleanup').item.json.position }}\n\nAny issue's please let It know.\n\nIt please manually make the Docusign accounts!\n\nRegards,\nNicholas",
+        "bodyContent": "=Hi {{ $('FindManager').first().json.cn }},\n\nYour new staff {{ $('Email Cleanup').item.json.displayName }} is ready and setup to go.\n\nUsername:{{ $('Email Cleanup').item.json.samAccountName }}\nEmail:{{ $('Email Cleanup').item.json.userPrincipalName }}\nPassword: Welcome01!@#\nSite: {{ $('Email Cleanup').item.json.location }}\nPosition: {{ $('Email Cleanup').item.json.position }}\n\nAny issue's please let It know.\n\nIt please manually make the Docusign accounts!\n\nRegards,\nNicholas",
         "additionalFields": {
           "ccRecipients": "monitoring@ashleyandmartin.com.au"
         }
@@ -1524,27 +1523,7 @@
     }
   ],
   "origin": "n8n",
-  "pinData": {
-    "Microsoft Outlook Trigger": [
-      {
-        "json": {
-          "id": "AAMkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQBGAAAAAAC0r8S3wHunQJniFwRUYTt0BwC6lWya7tyARpiJDLDZFvhbAAAAAAEMAAC6lWya7tyARpiJDLDZFvhbAAGHDFglAAA=",
-          "conversationId": "AAQkAGYxMGI4ZDA4LTEyODYtNDQxMC05YjE4LTFhMmFiNTE1YTg4ZQAQAMejG89t5UdLmJFE7lQcMu0=",
-          "subject": "IT Access For Grace Crogan Has Been Assigned",
-          "bodyPreview": "IT Access For Grace Crogan Has Been Assigned\r\n\r\nHi Nicholas,\r\n\r\nThe IT Access task has been assigned to you for action. Further information about this task as follows:\r\n\r\nDescription:\r\n\r\nTo be completed by IT after the paperwork is received.\r\n\r\n  *   Cr",
-          "from": "hr@ashleyandmartin.com.au",
-          "to": [
-            "nicholas.ryall@ashleyandmartin.com.au"
-          ],
-          "categories": [],
-          "hasAttachments": false
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -1580,6 +1559,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-01-09T04:32:11.685Z",
-  "versionId": "b2895416-ec56-49d0-b64e-631efaed4614"
+  "updatedAt": "2026-01-19T04:43:59.169Z",
+  "versionId": "43ca91f7-e6b9-4805-9c87-a612f14a6cab"
 }
