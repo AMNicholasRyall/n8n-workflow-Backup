@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-01-14T06:35:02.000Z",
-    "createdAt": "2026-01-14T06:35:00.466Z",
-    "versionId": "8f76210b-68e0-40ca-937c-f94fea9e7028",
+    "updatedAt": "2026-01-14T23:41:00.000Z",
+    "createdAt": "2026-01-14T23:40:59.055Z",
+    "versionId": "ba70cbfe-5911-40fb-bf9b-f3063cd905f3",
     "workflowId": "nTEpzvUO2Mr96Y0V",
     "nodes": [
       {
@@ -13,8 +13,8 @@
         "type": "n8n-nodes-base.executeWorkflowTrigger",
         "typeVersion": 1.1,
         "position": [
-          0,
-          -16
+          -304,
+          64
         ],
         "id": "47cb939c-b0c8-4670-8807-3e940b6080dd",
         "name": "When Executed by Another Workflow"
@@ -41,8 +41,8 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          224,
-          -16
+          -80,
+          64
         ],
         "id": "8aba2b29-e69f-408d-80f3-c7aaf0a79f87",
         "name": "Call 'ZenotiNZ-GetAuthToken'"
@@ -77,8 +77,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          448,
-          -16
+          144,
+          64
         ],
         "id": "ab13fa6a-fd45-4d93-8dc4-14965bcacfc8",
         "name": "Appointment Form Data1"
@@ -121,8 +121,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          896,
-          -16
+          592,
+          64
         ],
         "id": "9ce21944-1663-4f4e-afe2-026739e60bb0",
         "name": "Appointment Form Data"
@@ -154,8 +154,8 @@
         "type": "n8n-nodes-base.filter",
         "typeVersion": 2.3,
         "position": [
-          672,
-          -16
+          368,
+          64
         ],
         "id": "0d44e2bc-2752-4dda-ba29-6db2bf3e4163",
         "name": "Filter"
@@ -167,8 +167,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          1120,
-          -16
+          1040,
+          -32
         ],
         "id": "bf5abdb7-76f3-48fc-b595-62cf08e47c5e",
         "name": "FlattenOutput"
@@ -180,8 +180,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          1328,
-          -16
+          1264,
+          -32
         ],
         "id": "ef0c3e28-a5cc-428a-ae9c-bdd4beda084c",
         "name": "RemoveExcessFeilds"
@@ -193,11 +193,73 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          1536,
-          -16
+          1488,
+          -32
         ],
         "id": "6379c1d2-86a6-44d0-b544-d592826f7c10",
         "name": "ComparedAddress"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "b10b2be5-bf59-4cc5-9a6f-882cb99725eb",
+                "leftValue": "={{ $json.is_form_submitted }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          816,
+          64
+        ],
+        "id": "421a303a-a0f8-4bc8-8ad9-3a644e5d0b39",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1712,
+          64
+        ],
+        "id": "e43a9ba8-d1f3-4b87-b569-56fe8fe06953",
+        "name": "Wait",
+        "webhookId": "8151bc2c-eadf-4f34-bd90-5a30339298c4",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $('When Executed by Another Workflow').all();\n\nfor (const item of items) {\n\titem.json.addresscompared = false;\n}\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1488,
+          160
+        ],
+        "id": "5f4fcc56-5589-4012-b0e8-382239bf760e",
+        "name": "BringFeildsForward"
       }
     ],
     "connections": {
@@ -249,7 +311,7 @@
         "main": [
           [
             {
-              "node": "FlattenOutput",
+              "node": "If",
               "type": "main",
               "index": 0
             }
@@ -277,14 +339,54 @@
             }
           ]
         ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "FlattenOutput",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "BringFeildsForward",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "ComparedAddress": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "BringFeildsForward": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 8f76210b",
+    "name": "Version ba70cbfe",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "8f76210b-68e0-40ca-937c-f94fea9e7028",
+  "activeVersionId": "ba70cbfe-5911-40fb-bf9b-f3063cd905f3",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -334,7 +436,7 @@
       "main": [
         [
           {
-            "node": "FlattenOutput",
+            "node": "If",
             "type": "main",
             "index": 0
           }
@@ -362,6 +464,46 @@
           }
         ]
       ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "FlattenOutput",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "BringFeildsForward",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ComparedAddress": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BringFeildsForward": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2026-01-14T04:47:54.987Z",
@@ -377,8 +519,8 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        0,
-        -16
+        -304,
+        64
       ],
       "id": "47cb939c-b0c8-4670-8807-3e940b6080dd",
       "name": "When Executed by Another Workflow"
@@ -405,8 +547,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        224,
-        -16
+        -80,
+        64
       ],
       "id": "8aba2b29-e69f-408d-80f3-c7aaf0a79f87",
       "name": "Call 'ZenotiNZ-GetAuthToken'"
@@ -441,8 +583,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        448,
-        -16
+        144,
+        64
       ],
       "id": "ab13fa6a-fd45-4d93-8dc4-14965bcacfc8",
       "name": "Appointment Form Data1"
@@ -485,8 +627,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        896,
-        -16
+        592,
+        64
       ],
       "id": "9ce21944-1663-4f4e-afe2-026739e60bb0",
       "name": "Appointment Form Data"
@@ -518,8 +660,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        672,
-        -16
+        368,
+        64
       ],
       "id": "0d44e2bc-2752-4dda-ba29-6db2bf3e4163",
       "name": "Filter"
@@ -531,8 +673,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1120,
-        -16
+        1040,
+        -32
       ],
       "id": "bf5abdb7-76f3-48fc-b595-62cf08e47c5e",
       "name": "FlattenOutput"
@@ -544,8 +686,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1328,
-        -16
+        1264,
+        -32
       ],
       "id": "ef0c3e28-a5cc-428a-ae9c-bdd4beda084c",
       "name": "RemoveExcessFeilds"
@@ -557,11 +699,73 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1536,
-        -16
+        1488,
+        -32
       ],
       "id": "6379c1d2-86a6-44d0-b544-d592826f7c10",
       "name": "ComparedAddress"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b10b2be5-bf59-4cc5-9a6f-882cb99725eb",
+              "leftValue": "={{ $json.is_form_submitted }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        816,
+        64
+      ],
+      "id": "421a303a-a0f8-4bc8-8ad9-3a644e5d0b39",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1712,
+        64
+      ],
+      "id": "e43a9ba8-d1f3-4b87-b569-56fe8fe06953",
+      "name": "Wait",
+      "webhookId": "8151bc2c-eadf-4f34-bd90-5a30339298c4",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $('When Executed by Another Workflow').all();\n\nfor (const item of items) {\n\titem.json.addresscompared = false;\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1488,
+        160
+      ],
+      "id": "5f4fcc56-5589-4012-b0e8-382239bf760e",
+      "name": "BringFeildsForward"
     }
   ],
   "origin": "n8n",
@@ -596,6 +800,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-01-14T06:36:29.340Z",
-  "versionId": "8f76210b-68e0-40ca-937c-f94fea9e7028"
+  "updatedAt": "2026-01-14T23:45:29.877Z",
+  "versionId": "ba70cbfe-5911-40fb-bf9b-f3063cd905f3"
 }
