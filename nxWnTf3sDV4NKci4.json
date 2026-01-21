@@ -1,0 +1,87 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-15T00:30:36.347Z",
+  "id": "nxWnTf3sDV4NKci4",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "My workflow 4",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "fb64375e-8df1-46bc-93f2-f1a4b55aa425",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "toRecipients": "nicholas.ryall@ashleyandmartin.com.au",
+        "subject": "Test Email",
+        "bodyContent": "This is a test email.",
+        "additionalFields": {
+          "from": "noreply@ashleyandmartin.com.au"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "b47123f5-ca6c-4b5f-ad2c-f12917ef8817",
+      "name": "Send a message",
+      "webhookId": "5edfb0af-3702-4ff1-a646-1461627b067d",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-15T00:30:36.351Z",
+      "createdAt": "2026-01-15T00:30:36.351Z",
+      "role": "workflow:owner",
+      "workflowId": "nxWnTf3sDV4NKci4",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-15T00:40:34.000Z",
+  "versionId": "6b6dc481-80cf-4724-92d7-1848c31723dd"
+}
