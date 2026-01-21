@@ -1,0 +1,1145 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti-GetAuthToken'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Zenoti-GetAuthToken'": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)1": {
+      "main": [
+        [
+          {
+            "node": "ClientDeleted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ClientDeleted": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "GuestFormReuqest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GuestFormReuqest": {
+      "main": [
+        [
+          {
+            "node": "If-GuestFormNotSubmitted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If-GuestFormNotSubmitted": {
+      "main": [
+        [
+          {
+            "node": "Data Clean Up - Responce",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Guest - No Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Clean Up - Responce": {
+      "main": [
+        [
+          {
+            "node": "Upsert row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Guest - No Form": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert row(s)": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-20T04:55:18.302Z",
+  "id": "9P9RYpRLA3eOfa6V",
+  "isArchived": false,
+  "meta": null,
+  "name": "Zenoti - Guest Form Data",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        -16
+      ],
+      "id": "e98c19dd-b0a7-4262-a036-b0888b2520be",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        64,
+        -16
+      ],
+      "id": "55024bd8-89c2-4772-90a5-dc32f47eb277",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c4f03900-4365-47d1-a8f0-65daa2f7d8ef",
+              "leftValue": "={{ $json.Country_Code }}",
+              "rightValue": "AU",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "07a6f676-3aae-4988-9c17-e120bed26119",
+              "leftValue": "={{ $json.No_Clients }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        272,
+        -16
+      ],
+      "id": "53207e32-c517-4fe1-beb9-476d151e71a2",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "QA7Qdseg7ehAOWP6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+          "cachedResultName": "Zenoti-GetAuthToken"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -144,
+        -16
+      ],
+      "id": "929f1b1a-e95b-4c66-94e2-1491e70842e0",
+      "name": "Call 'Zenoti-GetAuthToken'"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "77e5873c-2123-4456-85f6-14baecc00400",
+              "leftValue": "={{ $json.code }}",
+              "rightValue": "AD",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        480,
+        -16
+      ],
+      "id": "0a253f89-929a-4699-bf4d-b4b30ea1b1b8",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "={{ $json.table_id }}",
+          "mode": "id"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "GuestFormSubmitted",
+              "condition": "isEmpty"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        688,
+        -16
+      ],
+      "id": "c91422b7-cc50-4011-a3a7-3e937b95350a",
+      "name": "Get row(s)1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "286aa9de-fbd3-45f8-a3f0-c24246d8408d",
+              "leftValue": "={{ $json.Client_LastName }}",
+              "rightValue": "Client",
+              "operator": {
+                "type": "string",
+                "operation": "notStartsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        896,
+        -16
+      ],
+      "id": "87f3946f-35d9-4f8e-89fa-4eca3803224e",
+      "name": "ClientDeleted"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1104,
+        -16
+      ],
+      "id": "7c929146-a058-408d-bdcc-092ef742495d",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1312,
+        80
+      ],
+      "id": "8974b5d1-2381-4fb7-ae8c-97d3c6dc774d",
+      "name": "Wait",
+      "webhookId": "e4af5f54-15a6-4ba9-b299-5f2f4f68da5f"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2896,
+        176
+      ],
+      "id": "484aedaa-da81-4140-bd08-d86b6c1eef11",
+      "name": "Wait1",
+      "webhookId": "cb954d13-86fd-46f5-9579-6e20abe750b2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/guests/{{ $json.Client_ID }}/Forms",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1568,
+        80
+      ],
+      "id": "11ae81fb-3d2d-45e0-a919-968e431ba953",
+      "name": "GuestFormReuqest",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e39688ae-e820-4177-9590-5f8b54f67d80",
+              "leftValue": "={{ $json.is_form_submitted }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1776,
+        80
+      ],
+      "id": "ec017535-49a3-47af-8806-c2cca7c7a0dc",
+      "name": "If-GuestFormNotSubmitted"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nfunction safeParseJson(str) {\n  if (typeof str !== \"string\" || !str.trim()) return {};\n  try {\n    return JSON.parse(str);\n  } catch (e) {\n    return { __parseError: String(e?.message || e), __raw: str };\n  }\n}\n\nfunction get(obj, path) {\n  const parts = path.split(\".\");\n  let cur = obj;\n  for (const p of parts) {\n    if (cur && Object.prototype.hasOwnProperty.call(cur, p)) cur = cur[p];\n    else return undefined;\n  }\n  return cur;\n}\n\n// Try multiple paths, return first non-null/undefined\nfunction pick(obj, paths, fallback = null) {\n  for (const p of paths) {\n    const v = get(obj, p);\n    if (v !== undefined && v !== null) return v;\n  }\n  return fallback;\n}\n\nfunction cleanString(v) {\n  if (typeof v !== \"string\") return v;\n  // trims whitespace + removes trailing newlines etc.\n  return v.replace(/\\r?\\n/g, \" \").trim();\n}\n\nreturn items.map((item) => {\n  const form = safeParseJson(item.json.data);\n\n  return {\n    json: {\n      // optional wrapper/meta\n      is_form_submitted: item.json.is_form_submitted ?? null,\n      last_submitted_date_in_utc: item.json.last_submitted_date_in_utc ?? null,\n\n      FirstName:      pick(form, [\"textfieldzenGIFirstName\"]),\n      LastName:       pick(form, [\"textfieldzenGILastName\"]),\n      AddressLineOne: cleanString(pick(form, [\"textareazenGIAddressOne\"])),\n      AddressLineTwo: cleanString(pick(form, [\"textareazenGIAddressTwo\"])),\n      City:           pick(form, [\"textfieldzenGICity\"]),\n      PostalCode:     pick(form, [\"textfieldzenGIPinCode\"]),\n      Country:        pick(form, [\"selectzenGICountry\"]),\n      State:          pick(form, [\"selectzenGIState\"]),\n      Email:          pick(form, [\"emailzenGIEmail\"]),\n\n      MobilePhone:       pick(form, [\"zenGIMobilePhone.phoneNumber\"]),\n      MobileCountryCode: pick(form, [\"zenGIMobilePhone.countryCode\"]),\n\n      DateOfBirth: pick(form, [\"datetimezenGIBirthday\"]),\n      Age:         pick(form, [\"number\"]),\n      Gender:      pick(form, [\"selectzenGIGender\"]),\n\n      // These two are stable in both samples\n      PreviousSteps: pick(form, [\"radio\"]),\n      HearAboutus:   pick(form, [\"select\"]),\n      SignedDate:    pick(form, [\"dateTime1\"]),\n      FormSubmitted: pick(form, [\"btnFormioSubmit\"]),\n\n      // ---- MEDICAL YES/NO QUESTIONS ----\n      // old numbering (radio2..radio14) vs new numbering (radio18..radio34)\n      HeartDisease:   pick(form, [\"radio2\", \"radio18\"]),\n      HighBlood:      pick(form, [\"radio3\", \"radio19\"]),\n      LivKidProstate: pick(form, [\"radio4\", \"radio20\"]),\n      Diabetes:       pick(form, [\"radio5\", \"radio21\"]),\n      Thyriod:        pick(form, [\"radio6\", \"radio22\"]),\n      AnemiaIron:     pick(form, [\"radio7\", \"radio23\"]),\n      PyschiatricCon: pick(form, [\"radio8\", \"radio24\"]),\n\n      // Skin conditions checkboxes moved from selectBoxes..selectBoxes8\n      // to selectBoxes9..selectBoxes17\n      Dermatitis:     pick(form, [\"selectBoxes.dermatitis\", \"selectBoxes9.dermatitis\"]),\n      Psoriasis:      pick(form, [\"selectBoxes1.psoriasis\", \"selectBoxes10.psoriasis\"]),\n      Eczema:         pick(form, [\"selectBoxes2.eczema\", \"selectBoxes11.eczema\"]),\n      Dandruff:       pick(form, [\"selectBoxes3.dandruff\", \"selectBoxes12.dandruff\"]),\n      ItchyScalp:     pick(form, [\"selectBoxes4.itchyScalp\", \"selectBoxes13.itchyScalp\"]),\n      DryScalp:       pick(form, [\"selectBoxes5.dryScalp\", \"selectBoxes14.dryScalp\"]),\n      OilyScalp:      pick(form, [\"selectBoxes6.oilyScalp\", \"selectBoxes15.oilyScalp\"]),\n      HairLoss:       pick(form, [\"selectBoxes7.hairLoss\", \"selectBoxes16.hairLoss\"]),\n      OtherCondition: pick(form, [\"selectBoxes8.other\", \"selectBoxes17.other\"]),\n\n      // Remaining questions (old radio9..radio17) don’t exist in sample 2 the same way,\n      // so we fallback to null unless you tell me the new mapping:\n      RecEmoIllSur:     pick(form, [\"radio9\", \"radio25\"]),\n      AttemptConceive:  pick(form, [\"radio10\", \"radio26\"]),\n      OtherMedical:     pick(form, [\"radio11\", \"radio27\"]),\n      MedicationIntake: pick(form, [\"radio12\", \"radio28\"]),\n      SteriodTest:      pick(form, [\"radio13\", \"radio29\"]),\n      AllericMedic:     pick(form, [\"radio14\", \"radio30\"]),\n      SpecificDiet:     pick(form, [\"radio15\", \"radio31\"]),\n      ConditionPresent: pick(form, [\"radio16\", \"radio32\"]),\n      AgeRange:         pick(form, [\"radio17\", \"radio33\"]),\n\n      Treatment:      cleanString(pick(form, [\"textField4\"])),\n      MedicalHistory: cleanString(pick(form, [\"textArea6\", \"textArea31\"])), // NOTE: your sample 2 uses textArea31 for diet\n      FamilyHistory:  cleanString(pick(form, [\"textArea16\", \"textArea32\"])), // sample 2 uses textArea32 for family\n      ContentMacros:  pick(form, [\"contentMacros\"], {}),\n\n      ParseError: pick(form, [\"__parseError\"], null),\n    },\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2048,
+        0
+      ],
+      "id": "37e1d384-d308-410d-9c3f-ab7836b9545c",
+      "name": "Data Clean Up - Responce"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "={{ $('Filter1').first().json.table_id }}",
+          "mode": "id"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $('Loop Over Items').item.json.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "GuestFormSubmitted": "={{ $json.is_form_submitted }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Client_ID",
+              "displayName": "Client_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Zenoti_ID",
+              "displayName": "Zenoti_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Clinic_name",
+              "displayName": "Clinic_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Client_DOB",
+              "displayName": "Client_DOB",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Client_Code",
+              "displayName": "Client_Code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Client_Tags",
+              "displayName": "Client_Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Client_FirstName",
+              "displayName": "Client_FirstName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Client_LastName",
+              "displayName": "Client_LastName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "GuestFormSubmitted",
+              "displayName": "GuestFormSubmitted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2256,
+        176
+      ],
+      "id": "b7a4b3e6-b09c-4590-8c48-deef5a33e43f",
+      "name": "Update Guest - No Form"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "={{ $('Filter1').first().json.table_id }}",
+          "mode": "id"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $('Loop Over Items').item.json.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "PostalCode": "={{ $json.PostalCode }}",
+            "Gender": "={{ $json.Gender }}",
+            "PreviousSteps": "={{ $json.PreviousSteps }}",
+            "HearAboutus": "={{ $json.HearAboutus }}",
+            "HeartDisease": "={{ $json.HeartDisease }}",
+            "HighBlood": "={{ $json.HighBlood }}",
+            "LivKidProstate": "={{ $json.LivKidProstate }}",
+            "Diabetes": "={{ $json.Diabetes }}",
+            "Thyriod": "={{ $json.Thyriod }}",
+            "AnemiaIron": "={{ $json.AnemiaIron }}",
+            "PyschiatricCon": "={{ $json.PyschiatricCon }}",
+            "Dermatitis": "={{ $json.Dermatitis }}",
+            "Psoriasis": "={{ $json.Psoriasis }}",
+            "Eczema": "={{ $json.Eczema }}",
+            "Dandruff": "={{ $json.Dandruff }}",
+            "ItchyScalp": "={{ $json.ItchyScalp }}",
+            "DryScalp": "={{ $json.DryScalp }}",
+            "OilyScalp": "={{ $json.OilyScalp }}",
+            "HairLoss": "={{ $json.HairLoss }}",
+            "OtherCondition": "={{ $json.OtherCondition }}",
+            "RecEmoIllSur": "={{ $json.RecEmoIllSur }}",
+            "AttemptConceive": "={{ $json.AttemptConceive }}",
+            "OtherMedical": "={{ $json.OtherMedical }}",
+            "MedicationIntake": "={{ $json.MedicationIntake }}",
+            "SteriodTest": "={{ $json.SteriodTest }}",
+            "AllericMedic": "={{ $json.AllericMedic }}",
+            "SpecificDiet": "={{ $json.SpecificDiet }}",
+            "ConditionPresent": "={{ $json.ConditionPresent }}",
+            "AgeRange": "={{ $json.AgeRange }}",
+            "Treatment": "={{ $json.Treatment }}",
+            "MedicalHistory": "={{ $json.MedicalHistory }}",
+            "FamilyHistory": "={{ $json.FamilyHistory }}",
+            "GuestFormSubmitted": true
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Client_ID",
+              "displayName": "Client_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Zenoti_ID",
+              "displayName": "Zenoti_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Clinic_name",
+              "displayName": "Clinic_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Client_DOB",
+              "displayName": "Client_DOB",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Client_Code",
+              "displayName": "Client_Code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Client_Tags",
+              "displayName": "Client_Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Client_FirstName",
+              "displayName": "Client_FirstName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Client_LastName",
+              "displayName": "Client_LastName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "GuestFormSubmitted",
+              "displayName": "GuestFormSubmitted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "PostalCode",
+              "displayName": "PostalCode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "PreviousSteps",
+              "displayName": "PreviousSteps",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "HearAboutus",
+              "displayName": "HearAboutus",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "HeartDisease",
+              "displayName": "HeartDisease",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "HighBlood",
+              "displayName": "HighBlood",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "LivKidProstate",
+              "displayName": "LivKidProstate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Diabetes",
+              "displayName": "Diabetes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Thyriod",
+              "displayName": "Thyriod",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AnemiaIron",
+              "displayName": "AnemiaIron",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "PyschiatricCon",
+              "displayName": "PyschiatricCon",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Dermatitis",
+              "displayName": "Dermatitis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Psoriasis",
+              "displayName": "Psoriasis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Eczema",
+              "displayName": "Eczema",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Dandruff",
+              "displayName": "Dandruff",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "ItchyScalp",
+              "displayName": "ItchyScalp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "DryScalp",
+              "displayName": "DryScalp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "OilyScalp",
+              "displayName": "OilyScalp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "HairLoss",
+              "displayName": "HairLoss",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "OtherCondition",
+              "displayName": "OtherCondition",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "RecEmoIllSur",
+              "displayName": "RecEmoIllSur",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AttemptConceive",
+              "displayName": "AttemptConceive",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "OtherMedical",
+              "displayName": "OtherMedical",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "MedicationIntake",
+              "displayName": "MedicationIntake",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "SteriodTest",
+              "displayName": "SteriodTest",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AllericMedic",
+              "displayName": "AllericMedic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "SpecificDiet",
+              "displayName": "SpecificDiet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "ConditionPresent",
+              "displayName": "ConditionPresent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AgeRange",
+              "displayName": "AgeRange",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Treatment",
+              "displayName": "Treatment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "MedicalHistory",
+              "displayName": "MedicalHistory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "FamilyHistory",
+              "displayName": "FamilyHistory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2256,
+        0
+      ],
+      "id": "ef0a2659-ebaa-440c-a7d9-515c025b833b",
+      "name": "Upsert row(s)"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-20T04:55:18.305Z",
+      "createdAt": "2026-01-20T04:55:18.305Z",
+      "role": "workflow:owner",
+      "workflowId": "9P9RYpRLA3eOfa6V",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-21T05:06:48.755Z",
+  "versionId": "113633a2-b471-40b9-9471-b29a6f826290"
+}
