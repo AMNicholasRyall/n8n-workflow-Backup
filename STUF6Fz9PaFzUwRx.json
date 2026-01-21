@@ -1460,7 +1460,6 @@
     "executionOrder": "v1",
     "availableInMCP": false,
     "timeSavedMode": "fixed",
-    "saveDataSuccessExecution": "all",
     "callerPolicy": "workflowsFromSameOwner",
     "errorWorkflow": "J83Enw8ArDSqhMCL",
     "timeSavedPerExecution": 1
@@ -1484,6 +1483,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-01-12T23:48:05.784Z",
+  "updatedAt": "2026-01-20T23:15:44.011Z",
   "versionId": "01e19197-7a23-48a7-9a8a-241082d59eb3"
 }
