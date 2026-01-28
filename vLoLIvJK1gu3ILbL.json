@@ -1,0 +1,1720 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-28T05:32:51.000Z",
+    "createdAt": "2026-01-28T05:32:50.642Z",
+    "versionId": "af7d8c54-a90a-4112-bc40-564f5c07cac3",
+    "workflowId": "vLoLIvJK1gu3ILbL",
+    "nodes": [
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          0,
+          -144
+        ],
+        "id": "e688db8c-a0c3-47ae-a7b4-379762f284ce",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "b26619fc-3777-49fc-90f6-d44350185646",
+                "name": "DriveID",
+                "value": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
+                "type": "string"
+              },
+              {
+                "id": "e3938eed-c906-42f2-91e5-ccc27073e519",
+                "name": "ItemsID",
+                "value": "01Y4DA4OOUVPWHSA2BN5G2YBSB6DOVI6HR",
+                "type": "string"
+              },
+              {
+                "id": "787846a3-bd50-4c4c-b787-46ec357f2836",
+                "name": "SiteID",
+                "value": "ashleyandmartincomau.sharepoint.com,d072e691-4945-4cb7-9d46-8ce09a647579,25bd0103-07ad-4698-92dc-5a919b01719b",
+                "type": "string"
+              },
+              {
+                "id": "62eb8164-be21-46b8-8ea9-e94fad593259",
+                "name": "MasterFolderID",
+                "value": "01Y4DA4OK2PDWUJLMKBZGKGZQITNHHJNPC",
+                "type": "string"
+              },
+              {
+                "id": "df326af1-0521-4c0b-95f9-02144322ce2a",
+                "name": "MasterExcelID",
+                "value": "01Y4DA4OOV3PS73DAJRRFZAKZZAQOF4563",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          224,
+          -144
+        ],
+        "id": "311005a4-d9f6-455a-8608-109bc799301e",
+        "name": "SetDriveID"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "b85de6a0-dac9-4047-b482-dbb591813cf8",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1120,
+          -144
+        ],
+        "id": "4ad59fda-142f-4ea5-8bb0-905fa858c73e",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "e5ab17b7-e65c-49b4-b82b-724bf46809f5",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          896,
+          -144
+        ],
+        "id": "67184ffe-b3b5-48d6-b6c6-e9117c52f844",
+        "name": "Filter",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.ItemsID }}/children?$top=200&$select=id,name,folder,file,createdDateTime,lastModifiedDateTime",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          448,
+          -144
+        ],
+        "id": "ed4b0829-5ae2-48bb-beed-b6a967b24ecc",
+        "name": "Search Inprogress Orders",
+        "credentials": {
+          "microsoftSharePointOAuth2Api": {
+            "id": "8eWNjQciijocacKo",
+            "name": "Microsoft SharePoint account"
+          },
+          "microsoftGraphSecurityOAuth2Api": {
+            "id": "7IYTPqhMSd9yOy8S",
+            "name": "Microsoft Graph Security account"
+          },
+          "microsoftOAuth2Api": {
+            "id": "yjHQESADfULqo4lZ",
+            "name": "Microsoft account"
+          },
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://graph.microsoft.com/v1.0/sites/{{ $('SetDriveID').item.json.SiteID }}/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('SetDriveID').item.json.ItemsID }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"name\": \"{{ $('When Executed by Another Workflow').item.json.StartDate }}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"rename\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1344,
+          48
+        ],
+        "id": "d943c9d3-d1bd-42ca-800d-21b71fc55e15",
+        "name": "Create Folder In Progress",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "site": {
+            "__rl": true,
+            "value": "={{ $('SetDriveID').item.json.SiteID }}",
+            "mode": "id"
+          },
+          "folder": {
+            "__rl": true,
+            "value": "={{ $('SetDriveID').item.json.MasterFolderID }}",
+            "mode": "id"
+          },
+          "file": {
+            "__rl": true,
+            "value": "={{ $('SetDriveID').item.json.MasterExcelID }}",
+            "mode": "id"
+          },
+          "requestOptions": {}
+        },
+        "type": "n8n-nodes-base.microsoftSharePoint",
+        "typeVersion": 1,
+        "position": [
+          1568,
+          48
+        ],
+        "id": "f029f9fb-429d-4a37-ae02-dc516dba52b6",
+        "name": "Download file",
+        "credentials": {
+          "microsoftSharePointOAuth2Api": {
+            "id": "8eWNjQciijocacKo",
+            "name": "Microsoft SharePoint account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "upload",
+          "site": {
+            "__rl": true,
+            "value": "={{ $('SetDriveID').item.json.SiteID }}",
+            "mode": "id"
+          },
+          "folder": {
+            "__rl": true,
+            "value": "={{ $('Create Folder In Progress').item.json.id }}",
+            "mode": "id"
+          },
+          "fileName": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
+          "fileContents": "data",
+          "requestOptions": {}
+        },
+        "type": "n8n-nodes-base.microsoftSharePoint",
+        "typeVersion": 1,
+        "position": [
+          1792,
+          48
+        ],
+        "id": "4bca491b-4198-4364-95f1-2b5e491f78e3",
+        "name": "Upload file",
+        "credentials": {
+          "microsoftSharePointOAuth2Api": {
+            "id": "8eWNjQciijocacKo",
+            "name": "Microsoft SharePoint account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          672,
+          -144
+        ],
+        "id": "e85c8b8f-160a-4c72-bbd5-ed16a573e5db",
+        "name": "Split Out",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          0,
+          -560
+        ],
+        "id": "00437dbe-58c1-4849-ace3-84a7113db7e6",
+        "name": "Clean for IF"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "b10b2be5-bf59-4cc5-9a6f-882cb99725eb",
+                "leftValue": "={{ $json.empty }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "false",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          224,
+          -560
+        ],
+        "id": "98194343-f195-4d24-a87f-dba1bb2203c2",
+        "name": "If1"
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1344,
+          -240
+        ],
+        "id": "cb8a2bd7-298b-487a-a40d-0decd34be5d1",
+        "name": "Check for Excel",
+        "credentials": {
+          "microsoftSharePointOAuth2Api": {
+            "id": "8eWNjQciijocacKo",
+            "name": "Microsoft SharePoint account"
+          },
+          "microsoftGraphSecurityOAuth2Api": {
+            "id": "7IYTPqhMSd9yOy8S",
+            "name": "Microsoft Graph Security account"
+          },
+          "microsoftOAuth2Api": {
+            "id": "yjHQESADfULqo4lZ",
+            "name": "Microsoft account"
+          },
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "site": {
+            "__rl": true,
+            "value": "={{ $('SetDriveID').item.json.SiteID }}",
+            "mode": "id"
+          },
+          "folder": {
+            "__rl": true,
+            "value": "={{ $('SetDriveID').item.json.MasterFolderID }}",
+            "mode": "id"
+          },
+          "file": {
+            "__rl": true,
+            "value": "={{ $('SetDriveID').item.json.MasterExcelID }}",
+            "mode": "id"
+          },
+          "requestOptions": {}
+        },
+        "type": "n8n-nodes-base.microsoftSharePoint",
+        "typeVersion": 1,
+        "position": [
+          2000,
+          -144
+        ],
+        "id": "b29a93cd-eab6-44f3-904b-bde7bb726819",
+        "name": "Download file1",
+        "credentials": {
+          "microsoftSharePointOAuth2Api": {
+            "id": "8eWNjQciijocacKo",
+            "name": "Microsoft SharePoint account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "upload",
+          "site": {
+            "__rl": true,
+            "value": "={{ $('SetDriveID').item.json.SiteID }}",
+            "mode": "id"
+          },
+          "folder": {
+            "__rl": true,
+            "value": "={{ $('Create Folder In Progress').item.json.id }}",
+            "mode": "id"
+          },
+          "fileName": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
+          "fileContents": "data",
+          "requestOptions": {}
+        },
+        "type": "n8n-nodes-base.microsoftSharePoint",
+        "typeVersion": 1,
+        "position": [
+          2224,
+          -144
+        ],
+        "id": "1518d5b7-596d-4ec0-876f-834835a8cddb",
+        "name": "Upload file1",
+        "credentials": {
+          "microsoftSharePointOAuth2Api": {
+            "id": "8eWNjQciijocacKo",
+            "name": "Microsoft SharePoint account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "6e1a84b7-6dfd-4ea5-b9e2-755eecf496e0",
+                "leftValue": "={{ $json.value[0].name }}",
+                "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1568,
+          -240
+        ],
+        "id": "f6f6df5a-bdcf-4ab1-b802-b5f86f699670",
+        "name": "If for File"
+      },
+      {
+        "parameters": {
+          "jsCode": "// ---- GET TABLE COLUMNS ----\nconst first = $input.first().json;\n\nconst colsArray =\n  first.value ??\n  first.columns?.value ??\n  first.tableColumns?.value;\n\nif (!Array.isArray(colsArray)) {\n  throw new Error(\"Columns array not found. Ensure Get Table Columns is merged in.\");\n}\n\nconst tableColumns = colsArray\n  .slice()\n  .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))\n  .map(c => c.name);\n\nconst colSet = new Set(tableColumns);\n\n// Client + product data (per your workflow)\nconst client = $('When Executed by Another Workflow').first().json;\n\n// ---- HELPERS ----\nconst toNullIfEmpty = (v) => (v === undefined || v === \"\" ? null : v);\n\nconst toNumberOrNull = (v) => {\n  if (v === undefined || v === \"\" || v === null) return null;\n  const n = Number(v);\n  return Number.isFinite(n) ? n : v;\n};\n\nconst normalise = (s) => String(s ?? \"\")\n  .toLowerCase()\n  .trim()\n  .replace(/\\+/g, \" \")\n  .replace(/[%]/g, \" percent \")\n  .replace(/[^a-z0-9]+/g, \"\");\n\nconst normalisedColLookup = new Map();\nfor (const col of tableColumns) {\n  const k = normalise(col);\n  if (k && !normalisedColLookup.has(k)) normalisedColLookup.set(k, col);\n}\n\nconst resolveProductColumn = (productNameCleaned) => {\n  if (!productNameCleaned) return null;\n  if (colSet.has(productNameCleaned)) return productNameCleaned;\n  return normalisedColLookup.get(normalise(productNameCleaned)) ?? null;\n};\n\n// DOB parsing (DD/MM/YYYY, YYYY-MM-DD, ISO)\nconst parseDob = (dobValue) => {\n  if (!dobValue) return null;\n\n  const s = String(dobValue).trim();\n\n  const dmy = s.match(/^(\\d{1,2})\\/(\\d{1,2})\\/(\\d{4})$/);\n  if (dmy) return new Date(Number(dmy[3]), Number(dmy[2]) - 1, Number(dmy[1]));\n\n  const ymd = s.match(/^(\\d{4})-(\\d{2})-(\\d{2})$/);\n  if (ymd) return new Date(Number(ymd[1]), Number(ymd[2]) - 1, Number(ymd[3]));\n\n  const d = new Date(s);\n  return Number.isNaN(d.getTime()) ? null : d;\n};\n\nconst calcAge = (dobValue) => {\n  const d = parseDob(dobValue);\n  if (!d) return null;\n\n  const now = new Date();\n  let age = now.getFullYear() - d.getFullYear();\n\n  const hadBirthday =\n    now.getMonth() > d.getMonth() ||\n    (now.getMonth() === d.getMonth() && now.getDate() >= d.getDate());\n\n  if (!hadBirthday) age -= 1;\n\n  return age;\n};\n\n// ---- BASE FIELD MAP (client object) ----\nconst baseMap = {\n  \"Guest Code\": \"CustomerCode\",\n  \"D.O.B\": \"CustomerDOB\",\n  \"Email\": \"CustomerEmail\",\n  \"Center\": \"CLinicABB\",\n  \"Delivery Address\": \"DeliveryAddressFull\",\n};\n\n// ---- BUILD ROW ----\nconst row = Object.fromEntries(tableColumns.map(c => [c, null]));\n\n// Guest Name\nconst fullName = [client.CustomerFirstName, client.CustomerLastName]\n  .filter(Boolean)\n  .join(\" \")\n  .trim();\n\nif (colSet.has(\"Guest Name\")) row[\"Guest Name\"] = toNullIfEmpty(fullName);\n\n// Base mapped fields\nfor (const [excelCol, clientKey] of Object.entries(baseMap)) {\n  if (colSet.has(excelCol)) {\n    row[excelCol] = toNullIfEmpty(client[clientKey]);\n  }\n}\n\n// Gender (header has trailing space)\nif (colSet.has(\"Gender \")) row[\"Gender \"] = toNullIfEmpty(client.CustomerGender);\n\n// Age (derived)\nif (colSet.has(\"Age\")) row[\"Age\"] = calcAge(client.CustomerDOB);\n\n// Product → quantity\nconst productCol = resolveProductColumn(client.ProductNameCleaned);\nif (productCol) {\n  row[productCol] = toNumberOrNull(client.quantity);\n}\n\n// ---- OUTPUT FOR GRAPH ----\nconst rowArray = tableColumns.map(c => row[c]);\nconst hasAnyValue = rowArray.some(v => v !== null && v !== undefined && v !== \"\");\n\nif (!hasAnyValue) {\n  throw new Error(\"Row is blank (all null). Not inserting into Excel. Check source fields/mapping.\");\n}\n\nreturn [{ json: { values: [rowArray] } }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2096,
+          -352
+        ],
+        "id": "c4aa56bd-3710-4dec-8e77-ce23eb694ca1",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.value[0].id }}/workbook/tables('ZenotiClientData')/columns",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$select",
+                "value": "name,index"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1856,
+          -352
+        ],
+        "id": "f2fcfd25-4a24-48e7-9140-e1c9c639230f",
+        "name": "Get Excel Headings",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Check for Excel').item.json.value[0].id }}/workbook/tables('ZenotiClientData')/rows/add",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "values",
+                "value": "={{ $json.values }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          2304,
+          -352
+        ],
+        "id": "3a290bf0-603c-44f2-8d10-9bc3f6732f6e",
+        "name": "HTTP Request",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "SetDriveID",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SetDriveID": {
+        "main": [
+          [
+            {
+              "node": "Search Inprogress Orders",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Check for Excel",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Create Folder In Progress",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search Inprogress Orders": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create Folder In Progress": {
+        "main": [
+          [
+            {
+              "node": "Download file",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Download file": {
+        "main": [
+          [
+            {
+              "node": "Upload file",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Clean for IF": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [],
+          []
+        ]
+      },
+      "Check for Excel": {
+        "main": [
+          [
+            {
+              "node": "If for File",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Download file1": {
+        "main": [
+          [
+            {
+              "node": "Upload file1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If for File": {
+        "main": [
+          [
+            {
+              "node": "Get Excel Headings",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Download file1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Excel Headings": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version af7d8c54",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "af7d8c54-a90a-4112-bc40-564f5c07cac3",
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "SetDriveID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SetDriveID": {
+      "main": [
+        [
+          {
+            "node": "Search Inprogress Orders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Check for Excel",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Folder In Progress",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Inprogress Orders": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Folder In Progress": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean for IF": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "Check for Excel": {
+      "main": [
+        [
+          {
+            "node": "If for File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file1": {
+      "main": [
+        [
+          {
+            "node": "Upload file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If for File": {
+      "main": [
+        [
+          {
+            "node": "Get Excel Headings",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Excel Headings": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "Check for Excel1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for Excel1": {
+      "main": [
+        [
+          {
+            "node": "If for File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If for File1": {
+      "main": [
+        [
+          {
+            "node": "Get Excel Headings",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file1": {
+      "main": [
+        [
+          {
+            "node": "Check for Excel2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for Excel2": {
+      "main": [
+        [
+          {
+            "node": "If for File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If for File2": {
+      "main": [
+        [
+          {
+            "node": "Get Excel Headings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-28T00:58:36.028Z",
+  "id": "vLoLIvJK1gu3ILbL",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Zenoti - AddtoSpreadSheet",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "    {\n        \"AppointmentID\": \"02c4d226-b636-4154-ab7d-6101e6137ee3\",\n        \"CustomerFirstName\": \"Chris\",\n        \"CustomerLastName\": \"Wooller\",\n        \"CustomerCode\": \"1087236-GAK\",\n        \"CustomerID\": \"5950a1f2-81e4-4963-826d-82730b92a385\",\n        \"CustomerDOB\": \"29/06/1998\",\n        \"CustomerEmail\": \"chriswooller@icloud.com\",\n        \"CustomerGender\": \"Male\",\n        \"CustomerCenterID\": \"fb9c0794-12d3-4a8a-b989-5b72dc947163\",\n        \"is_form_submitted\": true,\n        \"textField5\": \"Chris Wooller\",\n        \"select6\": \"no\",\n        \"textField2\": \"Dr Annemarie Hern 15150\",\n        \"textField4\": \"L6/5 Short Street, Newmarket, Auckland 1010\",\n        \"btnFormioSubmit\": false,\n        \"ConsentFormFilled\": true,\n        \"ConsentFormSubmitted\": true,\n        \"DeliveryLocation\": \"guest\",\n        \"product\": \"7Minoxidil001RetinoicAcid025FinasterideLotion\",\n        \"quantity\": \"2\",\n        \"DeliveryAddress1\": \"186A Rosebank Road\",\n        \"DeliveryCity\": \"Auckland\",\n        \"DeliveryAddressFull\": \"186A Rosebank Road, Auckland\",\n        \"doctorsDirections\": \"ApplyToScalp\",\n        \"addresscompared\": true,\n        \"ProductNameCleaned\": \"7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion\",\n        \"ZenotiProductName\": \"Minoxidil + Finasteride Solution\",\n        \"ZenotiProductNameShort\": \"Minox\",\n        \"ZenotiProductNameEnd\": \"tion\",\n        \"CanSubtract\": true,\n        \"RemainingBalance\": 5,\n        \"ProductID\": \"8e1f12d0-2f24-44ca-8cb3-c2411968a150\",\n        \"packagesavailable\": true,\n        \"perfectrun\": true,\n        \"CLinicABB\": \"AUC\",\n        \"scriptURL\": \"https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=2574223c-24d1-4c51-b28c-00e1d8d3362c&ServiceId=bd40d312-aa94-4846-a7af-0317831639d3&Service=Telehealth%20Re-Enrolment&GuestId=5950a1f2-81e4-4963-826d-82730b92a385&AppointmentId=02c4d226-b636-4154-ab7d-6101e6137ee3\",\n        \"StartDate\": \"2026-01-27\"\n    }"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        -216
+      ],
+      "id": "e688db8c-a0c3-47ae-a7b4-379762f284ce",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b26619fc-3777-49fc-90f6-d44350185646",
+              "name": "DriveID",
+              "value": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
+              "type": "string"
+            },
+            {
+              "id": "e3938eed-c906-42f2-91e5-ccc27073e519",
+              "name": "ItemsID",
+              "value": "01Y4DA4OOUVPWHSA2BN5G2YBSB6DOVI6HR",
+              "type": "string"
+            },
+            {
+              "id": "787846a3-bd50-4c4c-b787-46ec357f2836",
+              "name": "SiteID",
+              "value": "ashleyandmartincomau.sharepoint.com,d072e691-4945-4cb7-9d46-8ce09a647579,25bd0103-07ad-4698-92dc-5a919b01719b",
+              "type": "string"
+            },
+            {
+              "id": "62eb8164-be21-46b8-8ea9-e94fad593259",
+              "name": "MasterFolderID",
+              "value": "01Y4DA4OK2PDWUJLMKBZGKGZQITNHHJNPC",
+              "type": "string"
+            },
+            {
+              "id": "df326af1-0521-4c0b-95f9-02144322ce2a",
+              "name": "MasterExcelID",
+              "value": "01Y4DA4OOV3PS73DAJRRFZAKZZAQOF4563",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        -216
+      ],
+      "id": "311005a4-d9f6-455a-8608-109bc799301e",
+      "name": "SetDriveID"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b85de6a0-dac9-4047-b482-dbb591813cf8",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1120,
+        -216
+      ],
+      "id": "4ad59fda-142f-4ea5-8bb0-905fa858c73e",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e5ab17b7-e65c-49b4-b82b-724bf46809f5",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        896,
+        -216
+      ],
+      "id": "67184ffe-b3b5-48d6-b6c6-e9117c52f844",
+      "name": "Filter",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.ItemsID }}/children?$top=200&$select=id,name,folder,file,createdDateTime,lastModifiedDateTime",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        448,
+        -216
+      ],
+      "id": "ed4b0829-5ae2-48bb-beed-b6a967b24ecc",
+      "name": "Search Inprogress Orders",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        },
+        "microsoftGraphSecurityOAuth2Api": {
+          "id": "7IYTPqhMSd9yOy8S",
+          "name": "Microsoft Graph Security account"
+        },
+        "microsoftOAuth2Api": {
+          "id": "yjHQESADfULqo4lZ",
+          "name": "Microsoft account"
+        },
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/sites/{{ $('SetDriveID').item.json.SiteID }}/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('SetDriveID').item.json.ItemsID }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $('When Executed by Another Workflow').item.json.StartDate }}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"rename\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1408,
+        -64
+      ],
+      "id": "d943c9d3-d1bd-42ca-800d-21b71fc55e15",
+      "name": "Create Folder In Progress",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "site": {
+          "__rl": true,
+          "value": "={{ $('SetDriveID').item.json.SiteID }}",
+          "mode": "id"
+        },
+        "folder": {
+          "__rl": true,
+          "value": "={{ $('SetDriveID').item.json.MasterFolderID }}",
+          "mode": "id"
+        },
+        "file": {
+          "__rl": true,
+          "value": "={{ $('SetDriveID').item.json.MasterExcelID }}",
+          "mode": "id"
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.microsoftSharePoint",
+      "typeVersion": 1,
+      "position": [
+        1632,
+        -64
+      ],
+      "id": "f029f9fb-429d-4a37-ae02-dc516dba52b6",
+      "name": "Download file",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "site": {
+          "__rl": true,
+          "value": "={{ $('SetDriveID').item.json.SiteID }}",
+          "mode": "id"
+        },
+        "folder": {
+          "__rl": true,
+          "value": "={{ $('Create Folder In Progress').item.json.id }}",
+          "mode": "id"
+        },
+        "fileName": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
+        "fileContents": "data",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.microsoftSharePoint",
+      "typeVersion": 1,
+      "position": [
+        1856,
+        -64
+      ],
+      "id": "4bca491b-4198-4364-95f1-2b5e491f78e3",
+      "name": "Upload file",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        672,
+        -216
+      ],
+      "id": "e85c8b8f-160a-4c72-bbd5-ed16a573e5db",
+      "name": "Split Out",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -560
+      ],
+      "id": "00437dbe-58c1-4849-ace3-84a7113db7e6",
+      "name": "Clean for IF"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b10b2be5-bf59-4cc5-9a6f-882cb99725eb",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        -560
+      ],
+      "id": "98194343-f195-4d24-a87f-dba1bb2203c2",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1408,
+        -432
+      ],
+      "id": "cb8a2bd7-298b-487a-a40d-0decd34be5d1",
+      "name": "Check for Excel",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        },
+        "microsoftGraphSecurityOAuth2Api": {
+          "id": "7IYTPqhMSd9yOy8S",
+          "name": "Microsoft Graph Security account"
+        },
+        "microsoftOAuth2Api": {
+          "id": "yjHQESADfULqo4lZ",
+          "name": "Microsoft account"
+        },
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "site": {
+          "__rl": true,
+          "value": "={{ $('SetDriveID').item.json.SiteID }}",
+          "mode": "id"
+        },
+        "folder": {
+          "__rl": true,
+          "value": "={{ $('SetDriveID').item.json.MasterFolderID }}",
+          "mode": "id"
+        },
+        "file": {
+          "__rl": true,
+          "value": "={{ $('SetDriveID').item.json.MasterExcelID }}",
+          "mode": "id"
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.microsoftSharePoint",
+      "typeVersion": 1,
+      "position": [
+        1408,
+        -224
+      ],
+      "id": "b29a93cd-eab6-44f3-904b-bde7bb726819",
+      "name": "Download file1",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "site": {
+          "__rl": true,
+          "value": "={{ $('SetDriveID').item.json.SiteID }}",
+          "mode": "id"
+        },
+        "folder": {
+          "__rl": true,
+          "value": "={{ $('Create Folder In Progress').item.json.id }}",
+          "mode": "id"
+        },
+        "fileName": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
+        "fileContents": "data",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.microsoftSharePoint",
+      "typeVersion": 1,
+      "position": [
+        1632,
+        -224
+      ],
+      "id": "1518d5b7-596d-4ec0-876f-834835a8cddb",
+      "name": "Upload file1",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6e1a84b7-6dfd-4ea5-b9e2-755eecf496e0",
+              "leftValue": "={{ $json.value[0].name }}",
+              "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1632,
+        -432
+      ],
+      "id": "f6f6df5a-bdcf-4ab1-b802-b5f86f699670",
+      "name": "If for File"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ---- GET TABLE COLUMNS ----\nconst first = $input.first().json;\n\nconst colsArray =\n  first.value ??\n  first.columns?.value ??\n  first.tableColumns?.value;\n\nif (!Array.isArray(colsArray)) {\n  throw new Error(\"Columns array not found. Ensure Get Table Columns is merged in.\");\n}\n\nconst tableColumns = colsArray\n  .slice()\n  .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))\n  .map(c => c.name);\n\nconst colSet = new Set(tableColumns);\n\n// Client + product data (per your workflow)\nconst client = $('When Executed by Another Workflow').first().json;\n\n// ---- HELPERS ----\nconst toNullIfEmpty = (v) => (v === undefined || v === \"\" ? null : v);\n\nconst toNumberOrNull = (v) => {\n  if (v === undefined || v === \"\" || v === null) return null;\n  const n = Number(v);\n  return Number.isFinite(n) ? n : v;\n};\n\nconst normalise = (s) => String(s ?? \"\")\n  .toLowerCase()\n  .trim()\n  .replace(/\\+/g, \" \")\n  .replace(/[%]/g, \" percent \")\n  .replace(/[^a-z0-9]+/g, \"\");\n\nconst normalisedColLookup = new Map();\nfor (const col of tableColumns) {\n  const k = normalise(col);\n  if (k && !normalisedColLookup.has(k)) normalisedColLookup.set(k, col);\n}\n\nconst resolveProductColumn = (productNameCleaned) => {\n  if (!productNameCleaned) return null;\n  if (colSet.has(productNameCleaned)) return productNameCleaned;\n  return normalisedColLookup.get(normalise(productNameCleaned)) ?? null;\n};\n\n// DOB parsing (DD/MM/YYYY, YYYY-MM-DD, ISO)\nconst parseDob = (dobValue) => {\n  if (!dobValue) return null;\n\n  const s = String(dobValue).trim();\n\n  const dmy = s.match(/^(\\d{1,2})\\/(\\d{1,2})\\/(\\d{4})$/);\n  if (dmy) return new Date(Number(dmy[3]), Number(dmy[2]) - 1, Number(dmy[1]));\n\n  const ymd = s.match(/^(\\d{4})-(\\d{2})-(\\d{2})$/);\n  if (ymd) return new Date(Number(ymd[1]), Number(ymd[2]) - 1, Number(ymd[3]));\n\n  const d = new Date(s);\n  return Number.isNaN(d.getTime()) ? null : d;\n};\n\nconst calcAge = (dobValue) => {\n  const d = parseDob(dobValue);\n  if (!d) return null;\n\n  const now = new Date();\n  let age = now.getFullYear() - d.getFullYear();\n\n  const hadBirthday =\n    now.getMonth() > d.getMonth() ||\n    (now.getMonth() === d.getMonth() && now.getDate() >= d.getDate());\n\n  if (!hadBirthday) age -= 1;\n\n  return age;\n};\n\n// ---- BASE FIELD MAP (client object) ----\nconst baseMap = {\n  \"Guest Code\": \"CustomerCode\",\n  \"D.O.B\": \"CustomerDOB\",\n  \"Email\": \"CustomerEmail\",\n  \"Center\": \"CLinicABB\",\n  \"Delivery Address\": \"DeliveryAddressFull\",\n};\n\n// ---- BUILD ROW ----\nconst row = Object.fromEntries(tableColumns.map(c => [c, null]));\n\n// Guest Name\nconst fullName = [client.CustomerFirstName, client.CustomerLastName]\n  .filter(Boolean)\n  .join(\" \")\n  .trim();\n\nif (colSet.has(\"Guest Name\")) row[\"Guest Name\"] = toNullIfEmpty(fullName);\n\n// Base mapped fields\nfor (const [excelCol, clientKey] of Object.entries(baseMap)) {\n  if (colSet.has(excelCol)) {\n    row[excelCol] = toNullIfEmpty(client[clientKey]);\n  }\n}\n\n// Gender (header has trailing space)\nif (colSet.has(\"Gender \")) row[\"Gender \"] = toNullIfEmpty(client.CustomerGender);\n\n// Age (derived)\nif (colSet.has(\"Age\")) row[\"Age\"] = calcAge(client.CustomerDOB);\n\n// Product → quantity\nconst productCol = resolveProductColumn(client.ProductNameCleaned);\nif (productCol) {\n  row[productCol] = toNumberOrNull(client.quantity);\n}\n\n// ---- OUTPUT FOR GRAPH ----\nconst rowArray = tableColumns.map(c => row[c]);\nconst hasAnyValue = rowArray.some(v => v !== null && v !== undefined && v !== \"\");\n\nif (!hasAnyValue) {\n  throw new Error(\"Row is blank (all null). Not inserting into Excel. Check source fields/mapping.\");\n}\n\nreturn [{ json: { values: [rowArray] } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2864,
+        -240
+      ],
+      "id": "c4aa56bd-3710-4dec-8e77-ce23eb694ca1",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.value[0].id }}/workbook/tables('ZenotiClientData')/columns",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$select",
+              "value": "name,index"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2640,
+        -240
+      ],
+      "id": "f2fcfd25-4a24-48e7-9140-e1c9c639230f",
+      "name": "Get Excel Headings",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Check for Excel').item.json.value[0].id }}/workbook/tables('ZenotiClientData')/rows/add",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "values",
+              "value": "={{ $json.values }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        3088,
+        -240
+      ],
+      "id": "3a290bf0-603c-44f2-8d10-9bc3f6732f6e",
+      "name": "HTTP Request",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2080,
+        -64
+      ],
+      "id": "250b9568-12a6-4470-84f6-8e6bd5b54bb4",
+      "name": "Check for Excel1",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        },
+        "microsoftGraphSecurityOAuth2Api": {
+          "id": "7IYTPqhMSd9yOy8S",
+          "name": "Microsoft Graph Security account"
+        },
+        "microsoftOAuth2Api": {
+          "id": "yjHQESADfULqo4lZ",
+          "name": "Microsoft account"
+        },
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6e1a84b7-6dfd-4ea5-b9e2-755eecf496e0",
+              "leftValue": "={{ $json.value[0].name }}",
+              "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2304,
+        -64
+      ],
+      "id": "461ea9e9-6e1c-4cd6-bb57-c5780cfbe66d",
+      "name": "If for File1"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1856,
+        -224
+      ],
+      "id": "c27423b4-984a-4db2-8af7-b13a225acc51",
+      "name": "Check for Excel2",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        },
+        "microsoftGraphSecurityOAuth2Api": {
+          "id": "7IYTPqhMSd9yOy8S",
+          "name": "Microsoft Graph Security account"
+        },
+        "microsoftOAuth2Api": {
+          "id": "yjHQESADfULqo4lZ",
+          "name": "Microsoft account"
+        },
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6e1a84b7-6dfd-4ea5-b9e2-755eecf496e0",
+              "leftValue": "={{ $json.value[0].name }}",
+              "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2080,
+        -224
+      ],
+      "id": "77f5593f-1cc2-46c2-912f-33511cc8440c",
+      "name": "If for File2"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "AppointmentID": "02c4d226-b636-4154-ab7d-6101e6137ee3",
+          "CustomerFirstName": "Chris",
+          "CustomerLastName": "Wooller",
+          "CustomerCode": "1087236-GAK",
+          "CustomerID": "5950a1f2-81e4-4963-826d-82730b92a385",
+          "CustomerDOB": "29/06/1998",
+          "CustomerEmail": "chriswooller@icloud.com",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": true,
+          "textField5": "Chris Wooller",
+          "select6": "no",
+          "textField2": "Dr Annemarie Hern 15150",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "2",
+          "DeliveryAddress1": "186A Rosebank Road",
+          "DeliveryCity": "Auckland",
+          "DeliveryAddressFull": "186A Rosebank Road, Auckland",
+          "doctorsDirections": "ApplyToScalp",
+          "addresscompared": true,
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
+          "ZenotiProductName": "Minoxidil + Finasteride Solution",
+          "ZenotiProductNameShort": "Minox",
+          "ZenotiProductNameEnd": "tion",
+          "CanSubtract": true,
+          "RemainingBalance": 5,
+          "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
+          "packagesavailable": true,
+          "perfectrun": true,
+          "CLinicABB": "AUC",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=2574223c-24d1-4c51-b28c-00e1d8d3362c&ServiceId=bd40d312-aa94-4846-a7af-0317831639d3&Service=Telehealth%20Re-Enrolment&GuestId=5950a1f2-81e4-4963-826d-82730b92a385&AppointmentId=02c4d226-b636-4154-ab7d-6101e6137ee3",
+          "StartDate": "2026-01-27"
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-28T00:58:36.031Z",
+      "createdAt": "2026-01-28T00:58:36.031Z",
+      "role": "workflow:owner",
+      "workflowId": "vLoLIvJK1gu3ILbL",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2026-01-21T23:52:55.489Z",
+      "createdAt": "2026-01-21T23:52:55.489Z",
+      "id": "OXsRoYm7kDVlpgY1",
+      "name": "NZ"
+    },
+    {
+      "updatedAt": "2026-01-21T23:52:51.063Z",
+      "createdAt": "2026-01-21T23:52:51.063Z",
+      "id": "OuUcDlUQOF4Dgotd",
+      "name": "MedOrder"
+    },
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-28T05:52:21.809Z",
+  "versionId": "e64ca6f3-5208-4709-aaba-e571d65e5d6f"
+}
