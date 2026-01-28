@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-01-12T23:48:07.000Z",
-    "createdAt": "2026-01-12T23:47:42.051Z",
-    "versionId": "01e19197-7a23-48a7-9a8a-241082d59eb3",
+    "updatedAt": "2026-01-28T05:34:32.000Z",
+    "createdAt": "2026-01-28T05:34:30.028Z",
+    "versionId": "9143440d-d12d-4eed-bacf-5e0e8a9d7c60",
     "workflowId": "STUF6Fz9PaFzUwRx",
     "nodes": [
       {
@@ -13,7 +13,7 @@
         "type": "n8n-nodes-base.executeWorkflowTrigger",
         "typeVersion": 1.1,
         "position": [
-          -640,
+          -992,
           80
         ],
         "id": "3b81dc29-3dd4-410e-9e2e-a804baceef16",
@@ -41,7 +41,7 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          -192,
+          -304,
           80
         ],
         "id": "bb0ad383-be7d-4479-9b52-8d4323c0e374",
@@ -80,7 +80,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          704,
+          464,
           80
         ],
         "id": "921c960d-fcb8-4ea3-ac62-4ee685bc5e18",
@@ -145,7 +145,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          928,
+          720,
           80
         ],
         "id": "c8308b5b-6122-4b4e-96cc-96b72d7880e2",
@@ -185,7 +185,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          32,
+          -80,
           80
         ],
         "id": "4dc4d275-d260-4307-b9d7-40c366195564",
@@ -199,7 +199,7 @@
         "type": "n8n-nodes-base.splitOut",
         "typeVersion": 1,
         "position": [
-          256,
+          80,
           80
         ],
         "id": "28ad2bdc-6c8b-4287-b08e-0d32ae9466a6",
@@ -232,7 +232,7 @@
         "type": "n8n-nodes-base.filter",
         "typeVersion": 2.3,
         "position": [
-          480,
+          272,
           80
         ],
         "id": "00f9e88d-69ae-499c-bbf4-7641f27eb7e8",
@@ -265,8 +265,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          1120,
-          80
+          1024,
+          96
         ],
         "id": "29486a95-3a99-497f-a1e9-7f787ee392b1",
         "name": "If"
@@ -281,8 +281,8 @@
         "type": "n8n-nodes-base.microsoftOutlook",
         "typeVersion": 2,
         "position": [
-          1072,
-          320
+          1088,
+          304
         ],
         "id": "15919562-51b1-4ef5-b0db-709770bf0dda",
         "name": "Send a message",
@@ -298,11 +298,11 @@
         "parameters": {
           "content": "## Auth and Auto Trigger",
           "height": 272,
-          "width": 848
+          "width": 1056
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          -800,
+          -1072,
           -32
         ],
         "typeVersion": 1,
@@ -313,12 +313,12 @@
         "parameters": {
           "content": "## Get Clinics Prodcuts and Filter Down to correct",
           "height": 272,
-          "width": 432,
+          "width": 528,
           "color": 3
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          -32,
+          -128,
           -32
         ],
         "typeVersion": 1,
@@ -359,12 +359,12 @@
       {
         "parameters": {
           "content": "## Check for 0 Cost",
-          "height": 480,
-          "width": 432
+          "height": 512,
+          "width": 416
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          880,
+          896,
           -32
         ],
         "typeVersion": 1,
@@ -416,7 +416,7 @@
             "conditions": [
               {
                 "keyName": "Zenoti_ID",
-                "keyValue": "={{ $json.CustomerCenterID }}"
+                "keyValue": "={{ $('When Executed by Another Workflow').item.json.CustomerCenterID }}"
               }
             ]
           }
@@ -424,7 +424,7 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
-          -416,
+          -752,
           80
         ],
         "id": "2cae9d05-bdd4-45d3-bf14-28b1aaa8cd32",
@@ -437,7 +437,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          1632,
+          1680,
           80
         ],
         "id": "51cbec76-f5c0-4b61-99ff-480d53b353ea",
@@ -501,7 +501,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          1920,
+          1936,
           80
         ],
         "id": "b4838895-bcaa-4b25-8868-9d79db620d17",
@@ -529,7 +529,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          2112,
+          2144,
           80
         ],
         "id": "cf8781d8-4d08-4b89-8be0-fac29e10e8ff",
@@ -545,7 +545,7 @@
         "type": "n8n-nodes-base.microsoftOutlook",
         "typeVersion": 2,
         "position": [
-          2384,
+          2416,
           80
         ],
         "id": "d073f5df-0976-46c1-83d0-901f58df37b4",
@@ -557,6 +557,122 @@
             "name": "nryall@ash"
           }
         }
+      },
+      {
+        "parameters": {
+          "toRecipients": "={{ $('Get row(s)').item.json.email }}",
+          "subject": "=Automation - Med Order - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
+          "bodyContent": "=Hi Team,\n\nThis client most likley has a manual order for Finasteride, please manually process.\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\n\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\nNothing has been actioned for this client.\n\nRegards,\nAutomation.",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          -256,
+          368
+        ],
+        "id": "0ea839a4-52cb-4111-93f7-b33401f5a112",
+        "name": "Send a message2",
+        "webhookId": "7f0de5bb-4566-4fa0-9698-1d8e350c4d53",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": 0
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          2784,
+          432
+        ],
+        "id": "d1effb71-489e-4386-98fa-2c10897bab66",
+        "name": "Wait",
+        "webhookId": "27a4b495-233d-40a1-b34d-a5499a79caa3"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "9597eb94-ffd7-4342-9669-0127476e67ba",
+                "leftValue": "={{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -544,
+          80
+        ],
+        "id": "12a6115e-6925-45db-95b2-bb22635d56bf",
+        "name": "If1"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $('When Executed by Another Workflow').all();\n\n// Pull once, not inside the loop\nconst invoiceDateRaw = $('Check Invoice Exists').first().json.invoice.invoice_date;\n\n// Format YYYY-MM-DD\nconst invoiceDate = new Date(invoiceDateRaw).toISOString().split('T')[0];\n\nfor (const item of items) {\n  item.json.InvoiceNumber = true;\n  item.json.Invoicedate = invoiceDate;\n}\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2992,
+          432
+        ],
+        "id": "e085fe55-0c8b-4360-b0e2-1da59c8f1620",
+        "name": "Code in JavaScript",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "vLoLIvJK1gu3ILbL",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/vLoLIvJK1gu3ILbL",
+            "cachedResultName": "Zenoti - AddtoSpreadSheet"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {
+            "waitForSubWorkflow": false
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          3200,
+          432
+        ],
+        "id": "6f366035-ce9a-4440-8461-29bcb656fedc",
+        "name": "Call 'Zenoti - AddtoSpreadSheet'",
+        "disabled": true
       }
     ],
     "connections": {
@@ -670,7 +786,7 @@
         "main": [
           [
             {
-              "node": "Call 'ZenotiNZ-GetAuthToken'",
+              "node": "If1",
               "type": "main",
               "index": 0
             }
@@ -679,7 +795,13 @@
       },
       "Send a message": {
         "main": [
-          []
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
         ]
       },
       "Bring and Merge data.": {
@@ -717,16 +839,73 @@
       },
       "Email Clinic": {
         "main": [
-          []
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send a message2": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "Call 'ZenotiNZ-GetAuthToken'",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Send a message2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Call 'Zenoti - AddtoSpreadSheet'",
+              "type": "main",
+              "index": 0
+            }
+          ]
         ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 01e19197",
+    "name": "Version 9143440d",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "01e19197-7a23-48a7-9a8a-241082d59eb3",
+  "activeVersionId": "9143440d-d12d-4eed-bacf-5e0e8a9d7c60",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -838,7 +1017,7 @@
       "main": [
         [
           {
-            "node": "Call 'ZenotiNZ-GetAuthToken'",
+            "node": "If1",
             "type": "main",
             "index": 0
           }
@@ -847,7 +1026,13 @@
     },
     "Send a message": {
       "main": [
-        []
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Bring and Merge data.": {
@@ -885,7 +1070,64 @@
     },
     "Email Clinic": {
       "main": [
-        []
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message2": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Call 'ZenotiNZ-GetAuthToken'",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti - AddtoSpreadSheet'",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
@@ -904,7 +1146,7 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -640,
+        -992,
         80
       ],
       "id": "3b81dc29-3dd4-410e-9e2e-a804baceef16",
@@ -932,7 +1174,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -192,
+        -304,
         80
       ],
       "id": "bb0ad383-be7d-4479-9b52-8d4323c0e374",
@@ -971,7 +1213,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        704,
+        464,
         80
       ],
       "id": "921c960d-fcb8-4ea3-ac62-4ee685bc5e18",
@@ -1036,7 +1278,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        928,
+        720,
         80
       ],
       "id": "c8308b5b-6122-4b4e-96cc-96b72d7880e2",
@@ -1076,7 +1318,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        32,
+        -80,
         80
       ],
       "id": "4dc4d275-d260-4307-b9d7-40c366195564",
@@ -1090,7 +1332,7 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        256,
+        80,
         80
       ],
       "id": "28ad2bdc-6c8b-4287-b08e-0d32ae9466a6",
@@ -1123,7 +1365,7 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        480,
+        272,
         80
       ],
       "id": "00f9e88d-69ae-499c-bbf4-7641f27eb7e8",
@@ -1156,8 +1398,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1120,
-        80
+        1024,
+        96
       ],
       "id": "29486a95-3a99-497f-a1e9-7f787ee392b1",
       "name": "If"
@@ -1172,8 +1414,8 @@
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [
-        1072,
-        320
+        1088,
+        304
       ],
       "id": "15919562-51b1-4ef5-b0db-709770bf0dda",
       "name": "Send a message",
@@ -1189,11 +1431,11 @@
       "parameters": {
         "content": "## Auth and Auto Trigger",
         "height": 272,
-        "width": 848
+        "width": 1056
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -800,
+        -1072,
         -32
       ],
       "typeVersion": 1,
@@ -1204,12 +1446,12 @@
       "parameters": {
         "content": "## Get Clinics Prodcuts and Filter Down to correct",
         "height": 272,
-        "width": 432,
+        "width": 528,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -32,
+        -128,
         -32
       ],
       "typeVersion": 1,
@@ -1250,12 +1492,12 @@
     {
       "parameters": {
         "content": "## Check for 0 Cost",
-        "height": 480,
-        "width": 432
+        "height": 512,
+        "width": 416
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        880,
+        896,
         -32
       ],
       "typeVersion": 1,
@@ -1307,7 +1549,7 @@
           "conditions": [
             {
               "keyName": "Zenoti_ID",
-              "keyValue": "={{ $json.CustomerCenterID }}"
+              "keyValue": "={{ $('When Executed by Another Workflow').item.json.CustomerCenterID }}"
             }
           ]
         }
@@ -1315,7 +1557,7 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        -416,
+        -752,
         80
       ],
       "id": "2cae9d05-bdd4-45d3-bf14-28b1aaa8cd32",
@@ -1328,7 +1570,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1632,
+        1680,
         80
       ],
       "id": "51cbec76-f5c0-4b61-99ff-480d53b353ea",
@@ -1392,7 +1634,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1920,
+        1936,
         80
       ],
       "id": "b4838895-bcaa-4b25-8868-9d79db620d17",
@@ -1420,7 +1662,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        2112,
+        2144,
         80
       ],
       "id": "cf8781d8-4d08-4b89-8be0-fac29e10e8ff",
@@ -1436,7 +1678,7 @@
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [
-        2384,
+        2416,
         80
       ],
       "id": "d073f5df-0976-46c1-83d0-901f58df37b4",
@@ -1448,6 +1690,122 @@
           "name": "nryall@ash"
         }
       }
+    },
+    {
+      "parameters": {
+        "toRecipients": "={{ $('Get row(s)').item.json.email }}",
+        "subject": "=Automation - Med Order - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
+        "bodyContent": "=Hi Team,\n\nThis client most likley has a manual order for Finasteride, please manually process.\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\n\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\nNothing has been actioned for this client.\n\nRegards,\nAutomation.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        -256,
+        368
+      ],
+      "id": "0ea839a4-52cb-4111-93f7-b33401f5a112",
+      "name": "Send a message2",
+      "webhookId": "7f0de5bb-4566-4fa0-9698-1d8e350c4d53",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 0
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2784,
+        432
+      ],
+      "id": "d1effb71-489e-4386-98fa-2c10897bab66",
+      "name": "Wait",
+      "webhookId": "27a4b495-233d-40a1-b34d-a5499a79caa3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9597eb94-ffd7-4342-9669-0127476e67ba",
+              "leftValue": "={{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -544,
+        80
+      ],
+      "id": "12a6115e-6925-45db-95b2-bb22635d56bf",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $('When Executed by Another Workflow').all();\n\n// Pull once, not inside the loop\nconst invoiceDateRaw = $('Check Invoice Exists').first().json.invoice.invoice_date;\n\n// Format YYYY-MM-DD\nconst invoiceDate = new Date(invoiceDateRaw).toISOString().split('T')[0];\n\nfor (const item of items) {\n  item.json.InvoiceNumber = true;\n  item.json.Invoicedate = invoiceDate;\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2992,
+        432
+      ],
+      "id": "e085fe55-0c8b-4360-b0e2-1da59c8f1620",
+      "name": "Code in JavaScript",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "vLoLIvJK1gu3ILbL",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/vLoLIvJK1gu3ILbL",
+          "cachedResultName": "Zenoti - AddtoSpreadSheet"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        3200,
+        432
+      ],
+      "id": "6f366035-ce9a-4440-8461-29bcb656fedc",
+      "name": "Call 'Zenoti - AddtoSpreadSheet'",
+      "disabled": true
     }
   ],
   "origin": "n8n",
@@ -1483,6 +1841,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-01-20T23:15:44.011Z",
-  "versionId": "01e19197-7a23-48a7-9a8a-241082d59eb3"
+  "updatedAt": "2026-01-28T05:34:41.075Z",
+  "versionId": "9143440d-d12d-4eed-bacf-5e0e8a9d7c60"
 }
