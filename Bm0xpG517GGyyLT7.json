@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-01-20T23:29:54.000Z",
-    "createdAt": "2026-01-20T23:29:53.083Z",
-    "versionId": "280144fb-dc67-4236-bbe4-680e9932ccaa",
+    "updatedAt": "2026-01-21T23:34:41.000Z",
+    "createdAt": "2026-01-21T23:34:39.882Z",
+    "versionId": "fb64dd46-6791-457a-aef6-c36b573353e1",
     "workflowId": "Bm0xpG517GGyyLT7",
     "nodes": [
       {
@@ -132,7 +132,7 @@
         "parameters": {
           "toRecipients": "={{ $('When Executed by Another Workflow').item.json.clinicemail }}",
           "subject": "=Automation - Med Order - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
-          "bodyContent": "=Hi Team,\n\nAutomation has failed to identify a packge with a enough products avalaible for the below customer. They where previously identified has have too many packages.\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\n\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\nRegards,\nAutomation.",
+          "bodyContent": "=Hi Team,\n\nAutomation has failed to identify a package with a enough products avalaible for the below customer. They where previously identified has have too many packages.\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\n\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\nRegards,\nAutomation.",
           "additionalFields": {}
         },
         "type": "n8n-nodes-base.microsoftOutlook",
@@ -673,11 +673,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 280144fb",
+    "name": "Version fb64dd46",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "280144fb-dc67-4236-bbe4-680e9932ccaa",
+  "activeVersionId": "fb64dd46-6791-457a-aef6-c36b573353e1",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -973,7 +973,7 @@
       "parameters": {
         "toRecipients": "={{ $('When Executed by Another Workflow').item.json.clinicemail }}",
         "subject": "=Automation - Med Order - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
-        "bodyContent": "=Hi Team,\n\nAutomation has failed to identify a packge with a enough products avalaible for the below customer. They where previously identified has have too many packages.\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\n\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\nRegards,\nAutomation.",
+        "bodyContent": "=Hi Team,\n\nAutomation has failed to identify a package with a enough products avalaible for the below customer. They where previously identified has have too many packages.\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\n\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\nRegards,\nAutomation.",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.microsoftOutlook",
@@ -1383,6 +1383,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-01-20T23:29:53.082Z",
-  "versionId": "280144fb-dc67-4236-bbe4-680e9932ccaa"
+  "updatedAt": "2026-01-21T23:34:39.881Z",
+  "versionId": "fb64dd46-6791-457a-aef6-c36b573353e1"
 }
