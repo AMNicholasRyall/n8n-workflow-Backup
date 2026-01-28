@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-01-20T23:29:45.000Z",
-    "createdAt": "2026-01-20T23:29:43.388Z",
-    "versionId": "e31edc57-927f-433b-8b36-5e4db470a86c",
+    "updatedAt": "2026-01-28T01:17:11.000Z",
+    "createdAt": "2026-01-28T01:16:20.305Z",
+    "versionId": "bc601edc-cda5-470b-a10b-208fdfee50d9",
     "workflowId": "zAIYcDSMTH0KqEhr",
     "nodes": [
       {
@@ -1885,7 +1885,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const items = $('Clean up Drug Name').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = false;\n    item.json.paidinfull = true;\n    item.json.CLinicABB = $('When clicking ‘Execute workflow’').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl\n}\n\nreturn items;\n"
+          "jsCode": "const items = $('Clean up Drug Name').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = false;\n    item.json.paidinfull = true;\n    item.json.CLinicABB = $('When clicking ‘Execute workflow’').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl;\n    item.json.StartDate = $('When clicking ‘Execute workflow’').first().json.start_date\n}\n\nreturn items;\n"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -2197,7 +2197,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const items = $('Drug Compare').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = true;\n    item.json.perfectrun = true;\n    item.json.CLinicABB = $('When clicking ‘Execute workflow’').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl\n}\n\nreturn items;\n"
+          "jsCode": "const items = $('Drug Compare').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = true;\n    item.json.perfectrun = true;\n    item.json.CLinicABB = $('When clicking ‘Execute workflow’').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl;\n    item.json.StartDate = $('When clicking ‘Execute workflow’').first().json.start_date\n}\n\nreturn items;\n"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -2349,7 +2349,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const items = $('Clean up Drug Name').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = false;\n    item.json.paidinfull = true;\n    item.json.CLinicABB = $('When clicking ‘Execute workflow’').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl\n    item.json.clinicemail = $('When clicking ‘Execute workflow’').first().json.email\n}\n\nreturn items;\n"
+          "jsCode": "const items = $('Clean up Drug Name').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = false;\n    item.json.paidinfull = true;\n    item.json.CLinicABB = $('When clicking ‘Execute workflow’').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl\n    item.json.clinicemail = $('When clicking ‘Execute workflow’').first().json.email\n    item.json.StartDate = $('When clicking ‘Execute workflow’').first().json.start_date\n  \n}\n\nreturn items;\n"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -3304,11 +3304,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version e31edc57",
+    "name": "Version bc601edc",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "e31edc57-927f-433b-8b36-5e4db470a86c",
+  "activeVersionId": "bc601edc-cda5-470b-a10b-208fdfee50d9",
   "connections": {
     "Call 'ZenotiNZ-GetAuthToken'": {
       "main": [
@@ -6138,7 +6138,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const items = $('Clean up Drug Name').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = false;\n    item.json.paidinfull = true;\n    item.json.CLinicABB = $('When clicking ‘Execute workflow’').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl\n}\n\nreturn items;\n"
+        "jsCode": "const items = $('Clean up Drug Name').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = false;\n    item.json.paidinfull = true;\n    item.json.CLinicABB = $('When clicking ‘Execute workflow’').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl;\n    item.json.StartDate = $('When clicking ‘Execute workflow’').first().json.start_date\n}\n\nreturn items;\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -6450,7 +6450,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const items = $('Drug Compare').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = true;\n    item.json.perfectrun = true;\n    item.json.CLinicABB = $('When clicking ‘Execute workflow’').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl\n}\n\nreturn items;\n"
+        "jsCode": "const items = $('Drug Compare').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = true;\n    item.json.perfectrun = true;\n    item.json.CLinicABB = $('When clicking ‘Execute workflow’').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl;\n    item.json.StartDate = $('When clicking ‘Execute workflow’').first().json.start_date\n}\n\nreturn items;\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -6602,7 +6602,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const items = $('Clean up Drug Name').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = false;\n    item.json.paidinfull = true;\n    item.json.CLinicABB = $('When clicking ‘Execute workflow’').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl\n    item.json.clinicemail = $('When clicking ‘Execute workflow’').first().json.email\n}\n\nreturn items;\n"
+        "jsCode": "const items = $('Clean up Drug Name').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = false;\n    item.json.paidinfull = true;\n    item.json.CLinicABB = $('When clicking ‘Execute workflow’').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl\n    item.json.clinicemail = $('When clicking ‘Execute workflow’').first().json.email\n    item.json.StartDate = $('When clicking ‘Execute workflow’').first().json.start_date\n  \n}\n\nreturn items;\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -6676,6 +6676,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-01-20T23:29:43.387Z",
-  "versionId": "e31edc57-927f-433b-8b36-5e4db470a86c"
+  "updatedAt": "2026-01-28T01:16:20.303Z",
+  "versionId": "bc601edc-cda5-470b-a10b-208fdfee50d9"
 }
