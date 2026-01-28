@@ -1,0 +1,1789 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-22T02:43:59.000Z",
+    "createdAt": "2026-01-22T02:43:57.836Z",
+    "versionId": "c4b2c172-29b1-4305-b251-b5ec90c8ccca",
+    "workflowId": "nFqRBuyciWksrpPE",
+    "nodes": [
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "QA7Qdseg7ehAOWP6",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+            "cachedResultName": "Zenoti-GetAuthToken"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          176,
+          -32
+        ],
+        "id": "9894d6f3-d75f-4a55-ab88-f4be41b3ebeb",
+        "name": "Call 'Zenoti-GetAuthToken'"
+      },
+      {
+        "parameters": {
+          "content": "## Grab Clinics",
+          "height": 288,
+          "width": 224,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          560,
+          -160
+        ],
+        "typeVersion": 1,
+        "id": "4d2def9f-1e65-4fab-ab7c-bb3ef74126bf",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "content": "## Auth / Zenoti Token",
+          "height": 288,
+          "width": 432
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -112,
+          -160
+        ],
+        "typeVersion": 1,
+        "id": "f8f5fc33-2bfa-450c-9396-f0fcd5ec5708",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "## Filter to AUS",
+          "height": 288,
+          "width": 224
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          784,
+          -160
+        ],
+        "typeVersion": 1,
+        "id": "45624661-296b-478c-a5f1-3e35acf8e873",
+        "name": "Sticky Note2"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a3b018e8-0372-41f3-b71f-b21a2c1eaf3f",
+                "leftValue": "={{ $json.Country_Code }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          848,
+          -32
+        ],
+        "id": "82e7aedc-b32f-468f-ab70-63c3f3836e28",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "content": "## Grab New Patients",
+          "height": 288,
+          "width": 224
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1392,
+          48
+        ],
+        "typeVersion": 1,
+        "id": "f21612e2-25a7-40a7-9435-26bf4ee73cfa",
+        "name": "Sticky Note4"
+      },
+      {
+        "parameters": {
+          "url": "https://api.zenoti.com/v1/guests",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "center_id",
+                "value": "={{ $json.Zenoti_ID }}"
+              },
+              {
+                "name": "page",
+                "value": "1"
+              },
+              {
+                "name": "size",
+                "value": "1"
+              },
+              {
+                "name": "last_updated",
+                "value": "={{ $('Set Date').item.json.date_one_week_ago }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1440,
+          176
+        ],
+        "id": "6802fc30-22aa-4096-add8-ce51c1ae1302",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Select your timezone offset here\nconst TZ_OFFSET_HOURS = 8; // Perth = 8, Brisbane = 10, Sydney = 11 (DST), NZ = 13\n\n// Helper to shift UTC time to target timezone\nconst shiftToTz = (date, offsetHours) => {\n  return new Date(date.getTime() + offsetHours * 3600 * 1000);\n};\n\n// Helper to format YYYY-MM-DD using shifted date\nconst formatLocal = (d) => {\n  const year = d.getUTCFullYear();\n  const month = String(d.getUTCMonth() + 1).padStart(2, '0');\n  const day = String(d.getUTCDate()).padStart(2, '0');\n  return `${year}-${month}-${day}`;\n};\n\n// Current UTC time\nconst nowUtc = new Date();\n\n// Convert to local timezone\nconst todayLocal = shiftToTz(nowUtc, TZ_OFFSET_HOURS);\n\n// One week ago in local timezone\nconst oneWeekAgoLocal = new Date(todayLocal.getTime() - 7 * 24 * 3600 * 1000);\n\n// Output just the date from 1 week ago\nreturn [\n  {\n    json: {\n      date_one_week_ago: formatLocal(oneWeekAgoLocal),\n    }\n  }\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          400,
+          -32
+        ],
+        "id": "8152dd18-5d68-4be5-94e1-d503975b7c0a",
+        "name": "Set Date"
+      },
+      {
+        "parameters": {
+          "content": "## Set Previous Week",
+          "height": 288,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          320,
+          -160
+        ],
+        "typeVersion": 1,
+        "id": "f6d4a81a-e964-4fc2-ac55-5d0524a241d2",
+        "name": "Sticky Note5"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lsINP70DmcZtIj4M",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinics",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+          },
+          "returnAll": true
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1,
+        "position": [
+          624,
+          -32
+        ],
+        "id": "e0de4a6b-ef8a-4682-9f47-b0f9ad8906d8",
+        "name": "Get Clinics"
+      },
+      {
+        "parameters": {
+          "content": "## Split Out Runs",
+          "height": 288,
+          "width": 224,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1616,
+          48
+        ],
+        "typeVersion": 1,
+        "id": "81d74ea5-d04d-4fee-afb9-735c577e7a13",
+        "name": "Sticky Note6"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "dataTableId": {
+            "__rl": true,
+            "value": "={{ $('Loop Over Items').item.json.table_id }}",
+            "mode": "id"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Client_Code",
+                "keyValue": "={{ $json.code }}"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "GuestFormSubmitted": "={{ null }}",
+              "Client_ID": "={{ $json.id }}",
+              "Zenoti_ID": "={{ $json.center_id }}",
+              "Clinic_name": "={{ $json.center_name }}",
+              "Client_DOB": "={{ $json.personal_info.date_of_birth }}",
+              "Client_Code": "={{ $json.code }}",
+              "Client_Tags": "={{ $json.tags }}",
+              "Client_FirstName": "={{ $json.personal_info.first_name }}",
+              "Client_LastName": "={{ $json.personal_info.last_name }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Client_ID",
+                "displayName": "Client_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "Zenoti_ID",
+                "displayName": "Zenoti_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "Clinic_name",
+                "displayName": "Clinic_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "Client_DOB",
+                "displayName": "Client_DOB",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "Client_Code",
+                "displayName": "Client_Code",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "Client_Tags",
+                "displayName": "Client_Tags",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "Client_FirstName",
+                "displayName": "Client_FirstName",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "Client_LastName",
+                "displayName": "Client_LastName",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "GuestFormSubmitted",
+                "displayName": "GuestFormSubmitted",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "PostalCode",
+                "displayName": "PostalCode",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Gender",
+                "displayName": "Gender",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "PreviousSteps",
+                "displayName": "PreviousSteps",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "HearAboutus",
+                "displayName": "HearAboutus",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "HeartDisease",
+                "displayName": "HeartDisease",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "HighBlood",
+                "displayName": "HighBlood",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "LivKidProstate",
+                "displayName": "LivKidProstate",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Diabetes",
+                "displayName": "Diabetes",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Thyriod",
+                "displayName": "Thyriod",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "AnemiaIron",
+                "displayName": "AnemiaIron",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "PyschiatricCon",
+                "displayName": "PyschiatricCon",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Dermatitis",
+                "displayName": "Dermatitis",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Psoriasis",
+                "displayName": "Psoriasis",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Eczema",
+                "displayName": "Eczema",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Dandruff",
+                "displayName": "Dandruff",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "ItchyScalp",
+                "displayName": "ItchyScalp",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "DryScalp",
+                "displayName": "DryScalp",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "OilyScalp",
+                "displayName": "OilyScalp",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "HairLoss",
+                "displayName": "HairLoss",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "OtherCondition",
+                "displayName": "OtherCondition",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "RecEmoIllSur",
+                "displayName": "RecEmoIllSur",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "AttemptConceive",
+                "displayName": "AttemptConceive",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "OtherMedical",
+                "displayName": "OtherMedical",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "MedicationIntake",
+                "displayName": "MedicationIntake",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "SteriodTest",
+                "displayName": "SteriodTest",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "AllericMedic",
+                "displayName": "AllericMedic",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "SpecificDiet",
+                "displayName": "SpecificDiet",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "ConditionPresent",
+                "displayName": "ConditionPresent",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "AgeRange",
+                "displayName": "AgeRange",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Treatment",
+                "displayName": "Treatment",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "MedicalHistory",
+                "displayName": "MedicalHistory",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "FamilyHistory",
+                "displayName": "FamilyHistory",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1,
+        "position": [
+          1888,
+          176
+        ],
+        "id": "850f8c98-8bc5-4fd7-8324-89a0aafb84a3",
+        "name": "UpdateTable"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "guests",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1664,
+          176
+        ],
+        "id": "546d4176-5905-46e8-8de8-be54005d900e",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "content": "## Update Table",
+          "height": 288,
+          "width": 224
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1840,
+          48
+        ],
+        "typeVersion": 1,
+        "id": "f18f344f-3ecc-4e0e-9192-d6a8f4092e47",
+        "name": "Sticky Note7"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          1184,
+          -32
+        ],
+        "id": "bd13db17-c205-4230-babd-2ca3706d7813",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "weeks",
+                "triggerAtHour": 1
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -16,
+          -32
+        ],
+        "id": "2905142a-36d7-4978-82d2-90c6a85f6482",
+        "name": "Schedule Trigger"
+      }
+    ],
+    "connections": {
+      "Call 'Zenoti-GetAuthToken'": {
+        "main": [
+          [
+            {
+              "node": "Set Date",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set Date": {
+        "main": [
+          [
+            {
+              "node": "Get Clinics",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Clinics": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "UpdateTable",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [],
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "UpdateTable": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Call 'Zenoti-GetAuthToken'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version c4b2c172",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "c4b2c172-29b1-4305-b251-b5ec90c8ccca",
+  "connections": {
+    "Call 'Zenoti-GetAuthToken'": {
+      "main": [
+        [
+          {
+            "node": "Set Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Date": {
+      "main": [
+        [
+          {
+            "node": "Get Clinics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Clinics": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "UpdateTable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UpdateTable": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti-GetAuthToken'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-21T23:52:14.940Z",
+  "id": "nFqRBuyciWksrpPE",
+  "isArchived": false,
+  "meta": null,
+  "name": "Zenoti - Automaticaly Update Clinics",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "QA7Qdseg7ehAOWP6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+          "cachedResultName": "Zenoti-GetAuthToken"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        176,
+        -32
+      ],
+      "id": "9894d6f3-d75f-4a55-ab88-f4be41b3ebeb",
+      "name": "Call 'Zenoti-GetAuthToken'"
+    },
+    {
+      "parameters": {
+        "content": "## Grab Clinics",
+        "height": 288,
+        "width": 224,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        560,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "4d2def9f-1e65-4fab-ab7c-bb3ef74126bf",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Auth / Zenoti Token",
+        "height": 288,
+        "width": 432
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -112,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "f8f5fc33-2bfa-450c-9396-f0fcd5ec5708",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Filter to AUS",
+        "height": 288,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        784,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "45624661-296b-478c-a5f1-3e35acf8e873",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a3b018e8-0372-41f3-b71f-b21a2c1eaf3f",
+              "leftValue": "={{ $json.Country_Code }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        848,
+        -32
+      ],
+      "id": "82e7aedc-b32f-468f-ab70-63c3f3836e28",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "content": "## Grab New Patients",
+        "height": 288,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1392,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "f21612e2-25a7-40a7-9435-26bf4ee73cfa",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "url": "https://api.zenoti.com/v1/guests",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "center_id",
+              "value": "={{ $json.Zenoti_ID }}"
+            },
+            {
+              "name": "page",
+              "value": "1"
+            },
+            {
+              "name": "size",
+              "value": "1"
+            },
+            {
+              "name": "last_updated",
+              "value": "={{ $('Set Date').item.json.date_one_week_ago }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1440,
+        176
+      ],
+      "id": "6802fc30-22aa-4096-add8-ce51c1ae1302",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Select your timezone offset here\nconst TZ_OFFSET_HOURS = 8; // Perth = 8, Brisbane = 10, Sydney = 11 (DST), NZ = 13\n\n// Helper to shift UTC time to target timezone\nconst shiftToTz = (date, offsetHours) => {\n  return new Date(date.getTime() + offsetHours * 3600 * 1000);\n};\n\n// Helper to format YYYY-MM-DD using shifted date\nconst formatLocal = (d) => {\n  const year = d.getUTCFullYear();\n  const month = String(d.getUTCMonth() + 1).padStart(2, '0');\n  const day = String(d.getUTCDate()).padStart(2, '0');\n  return `${year}-${month}-${day}`;\n};\n\n// Current UTC time\nconst nowUtc = new Date();\n\n// Convert to local timezone\nconst todayLocal = shiftToTz(nowUtc, TZ_OFFSET_HOURS);\n\n// One week ago in local timezone\nconst oneWeekAgoLocal = new Date(todayLocal.getTime() - 7 * 24 * 3600 * 1000);\n\n// Output just the date from 1 week ago\nreturn [\n  {\n    json: {\n      date_one_week_ago: formatLocal(oneWeekAgoLocal),\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        -32
+      ],
+      "id": "8152dd18-5d68-4be5-94e1-d503975b7c0a",
+      "name": "Set Date"
+    },
+    {
+      "parameters": {
+        "content": "## Set Previous Week",
+        "height": 288,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        320,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "f6d4a81a-e964-4fc2-ac55-5d0524a241d2",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        624,
+        -32
+      ],
+      "id": "e0de4a6b-ef8a-4682-9f47-b0f9ad8906d8",
+      "name": "Get Clinics"
+    },
+    {
+      "parameters": {
+        "content": "## Split Out Runs",
+        "height": 288,
+        "width": 224,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1616,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "81d74ea5-d04d-4fee-afb9-735c577e7a13",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "={{ $('Loop Over Items').item.json.table_id }}",
+          "mode": "id"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Client_Code",
+              "keyValue": "={{ $json.code }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "GuestFormSubmitted": "={{ null }}",
+            "Client_ID": "={{ $json.id }}",
+            "Zenoti_ID": "={{ $json.center_id }}",
+            "Clinic_name": "={{ $json.center_name }}",
+            "Client_DOB": "={{ $json.personal_info.date_of_birth }}",
+            "Client_Code": "={{ $json.code }}",
+            "Client_Tags": "={{ $json.tags }}",
+            "Client_FirstName": "={{ $json.personal_info.first_name }}",
+            "Client_LastName": "={{ $json.personal_info.last_name }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Client_ID",
+              "displayName": "Client_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Zenoti_ID",
+              "displayName": "Zenoti_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Clinic_name",
+              "displayName": "Clinic_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Client_DOB",
+              "displayName": "Client_DOB",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Client_Code",
+              "displayName": "Client_Code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Client_Tags",
+              "displayName": "Client_Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Client_FirstName",
+              "displayName": "Client_FirstName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Client_LastName",
+              "displayName": "Client_LastName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "GuestFormSubmitted",
+              "displayName": "GuestFormSubmitted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "PostalCode",
+              "displayName": "PostalCode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "PreviousSteps",
+              "displayName": "PreviousSteps",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "HearAboutus",
+              "displayName": "HearAboutus",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "HeartDisease",
+              "displayName": "HeartDisease",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "HighBlood",
+              "displayName": "HighBlood",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "LivKidProstate",
+              "displayName": "LivKidProstate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Diabetes",
+              "displayName": "Diabetes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Thyriod",
+              "displayName": "Thyriod",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "AnemiaIron",
+              "displayName": "AnemiaIron",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "PyschiatricCon",
+              "displayName": "PyschiatricCon",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Dermatitis",
+              "displayName": "Dermatitis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Psoriasis",
+              "displayName": "Psoriasis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Eczema",
+              "displayName": "Eczema",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Dandruff",
+              "displayName": "Dandruff",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "ItchyScalp",
+              "displayName": "ItchyScalp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "DryScalp",
+              "displayName": "DryScalp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "OilyScalp",
+              "displayName": "OilyScalp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "HairLoss",
+              "displayName": "HairLoss",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "OtherCondition",
+              "displayName": "OtherCondition",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "RecEmoIllSur",
+              "displayName": "RecEmoIllSur",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "AttemptConceive",
+              "displayName": "AttemptConceive",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "OtherMedical",
+              "displayName": "OtherMedical",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "MedicationIntake",
+              "displayName": "MedicationIntake",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "SteriodTest",
+              "displayName": "SteriodTest",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "AllericMedic",
+              "displayName": "AllericMedic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "SpecificDiet",
+              "displayName": "SpecificDiet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "ConditionPresent",
+              "displayName": "ConditionPresent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "AgeRange",
+              "displayName": "AgeRange",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Treatment",
+              "displayName": "Treatment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "MedicalHistory",
+              "displayName": "MedicalHistory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "FamilyHistory",
+              "displayName": "FamilyHistory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        1888,
+        176
+      ],
+      "id": "850f8c98-8bc5-4fd7-8324-89a0aafb84a3",
+      "name": "UpdateTable"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "guests",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1664,
+        176
+      ],
+      "id": "546d4176-5905-46e8-8de8-be54005d900e",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "content": "## Update Table",
+        "height": 288,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1840,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "f18f344f-3ecc-4e0e-9192-d6a8f4092e47",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1184,
+        -32
+      ],
+      "id": "bd13db17-c205-4230-babd-2ca3706d7813",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtHour": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -16,
+        -32
+      ],
+      "id": "2905142a-36d7-4978-82d2-90c6a85f6482",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "J83Enw8ArDSqhMCL"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-21T23:52:14.942Z",
+      "createdAt": "2026-01-21T23:52:14.942Z",
+      "role": "workflow:owner",
+      "workflowId": "nFqRBuyciWksrpPE",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    },
+    {
+      "updatedAt": "2026-01-21T23:52:24.742Z",
+      "createdAt": "2026-01-21T23:52:24.742Z",
+      "id": "gBgZjsV5vc1ZGBw4",
+      "name": "AUS"
+    },
+    {
+      "updatedAt": "2026-01-21T23:52:43.781Z",
+      "createdAt": "2026-01-21T23:52:43.781Z",
+      "id": "tSPVlYc8mYIqN1Zn",
+      "name": "Clients"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-01-22T02:44:05.833Z",
+  "versionId": "c4b2c172-29b1-4305-b251-b5ec90c8ccca"
+}
