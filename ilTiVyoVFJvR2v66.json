@@ -1,0 +1,158 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Search a file": {
+      "main": [
+        [
+          {
+            "node": "Download a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download a file": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Search a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-02-03T07:26:35.755Z",
+  "id": "ilTiVyoVFJvR2v66",
+  "isArchived": false,
+  "meta": null,
+  "name": "My workflow 5",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "960e61de-f1af-4f40-84f1-6e866aee17bc",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "query": "Zenoti-GuestFormData.xlsx"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "95378454-769a-4e6d-b92e-1ed2f267dc0d",
+      "name": "Search a file",
+      "executeOnce": true,
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "YQJEXWiBLg1Zt1YR",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        432,
+        0
+      ],
+      "id": "36ea41fb-5ced-441c-bc99-01b2bfd0d30d",
+      "name": "Download a file",
+      "executeOnce": true,
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "YQJEXWiBLg1Zt1YR",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "site": {
+          "__rl": true,
+          "value": "ashleyandmartincomau.sharepoint.com,b36f54fe-6363-4f80-a917-80ea79163f8f,e253e1e6-f0a2-48df-99ae-a6211683cee6",
+          "mode": "list",
+          "cachedResultName": "HeadOffice"
+        },
+        "folder": {
+          "__rl": true,
+          "value": "01B6E6QFLOHI7RD75M3ZAZGOK2L55CWEYX",
+          "mode": "list",
+          "cachedResultName": "Zenoti Data"
+        },
+        "fileName": "=Zenoti-GuestFormData-{{ $today.toISODate() }}.xlsx",
+        "fileContents": "data",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.microsoftSharePoint",
+      "typeVersion": 1,
+      "position": [
+        640,
+        0
+      ],
+      "id": "16c18f73-3b8e-4977-819e-aed518f84478",
+      "name": "Upload file",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-02-03T07:26:35.758Z",
+      "createdAt": "2026-02-03T07:26:35.758Z",
+      "role": "workflow:owner",
+      "workflowId": "ilTiVyoVFJvR2v66",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-02-03T07:26:35.755Z",
+  "versionId": "aeefefe8-0cfc-4c51-aee9-00c833291b83"
+}
