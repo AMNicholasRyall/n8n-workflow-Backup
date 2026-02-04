@@ -63,7 +63,7 @@
       "main": [
         [
           {
-            "node": "Loop Over Items1",
+            "node": "Filter",
             "type": "main",
             "index": 0
           }
@@ -114,7 +114,7 @@
       "main": [
         [
           {
-            "node": "Download a file",
+            "node": "Filter1",
             "type": "main",
             "index": 0
           }
@@ -126,6 +126,28 @@
         [
           {
             "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Download a file",
             "type": "main",
             "index": 0
           }
@@ -220,7 +242,7 @@
             {
               "id": "ad267cac-9f94-4b27-9974-7132788b52f9",
               "leftValue": "={{ $json.code }}",
-              "rightValue": "CW",
+              "rightValue": "DN",
               "operator": {
                 "type": "string",
                 "operation": "equals"
@@ -302,7 +324,7 @@
       "type": "n8n-nodes-base.microsoftExcel",
       "typeVersion": 2.2,
       "position": [
-        400,
+        848,
         400
       ],
       "id": "776928e3-fe15-40a2-acff-9b2409b09c27",
@@ -325,7 +347,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -64,
+        384,
         256
       ],
       "id": "7fdb2298-6c4b-4d0a-90b7-2d132559b102",
@@ -338,7 +360,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        176,
+        624,
         352
       ],
       "id": "5602598e-0db8-48b4-b67b-0fc82972575a",
@@ -401,7 +423,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -128,
+        288,
         96
       ],
       "typeVersion": 1,
@@ -412,7 +434,7 @@
       "parameters": {
         "content": "## Replace Excel File in IT common",
         "height": 288,
-        "width": 784
+        "width": 976
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
@@ -452,11 +474,12 @@
       "type": "n8n-nodes-base.microsoftOneDrive",
       "typeVersion": 1,
       "position": [
-        608,
+        800,
         -80
       ],
       "id": "bb0ee832-3e32-49aa-821a-c6a3531f730f",
       "name": "Download a file",
+      "executeOnce": true,
       "credentials": {
         "microsoftOneDriveOAuth2Api": {
           "id": "YQJEXWiBLg1Zt1YR",
@@ -486,7 +509,7 @@
       "type": "n8n-nodes-base.microsoftSharePoint",
       "typeVersion": 1,
       "position": [
-        816,
+        1040,
         -80
       ],
       "id": "4a085139-5898-4772-90c3-ae1f73364904",
@@ -497,10 +520,101 @@
           "name": "Microsoft SharePoint account"
         }
       }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6db8b354-b7a6-455e-be5c-ce27e9d68c45",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": 23240,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        16,
+        256
+      ],
+      "id": "8b71cfee-ca88-4daa-b2b6-e0f621163943",
+      "name": "Filter",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Filter For failure",
+        "height": 304,
+        "width": 416
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -128,
+        96
+      ],
+      "typeVersion": 1,
+      "id": "98b16fce-268d-4f06-af7d-1bc9121ccb3e",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "67b1511a-9744-4217-9189-25432989de5f",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "Zenoti-GuestFormData.xlsx",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        592,
+        -80
+      ],
+      "id": "dc612219-0634-4079-866f-352fb21ab66e",
+      "name": "Filter1"
     }
   ],
   "origin": "n8n",
-  "pinData": {},
+  "pinData": {
+    "When clicking ‘Execute workflow’": [
+      {
+        "json": {},
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -534,6 +648,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-01-27T23:52:44.643Z",
-  "versionId": "9772d0c7-3ea0-4725-b145-f3bb2037a8fd"
+  "updatedAt": "2026-02-04T06:41:13.578Z",
+  "versionId": "4a4b1a78-269b-420f-b35f-53af72b39a6e"
 }
