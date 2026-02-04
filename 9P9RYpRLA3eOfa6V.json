@@ -82,7 +82,13 @@
     },
     "Loop Over Items": {
       "main": [
-        [],
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
         [
           {
             "node": "Wait",
@@ -180,7 +186,9 @@
   "createdAt": "2026-01-20T04:55:18.302Z",
   "id": "9P9RYpRLA3eOfa6V",
   "isArchived": false,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "name": "Zenoti - Guest Form Data",
   "nodes": [
     {
@@ -301,7 +309,7 @@
             {
               "id": "77e5873c-2123-4456-85f6-14baecc00400",
               "leftValue": "={{ $json.code }}",
-              "rightValue": "GS",
+              "rightValue": "SY",
               "operator": {
                 "type": "string",
                 "operation": "equals"
@@ -375,6 +383,33 @@
                 "type": "string",
                 "operation": "notEquals"
               }
+            },
+            {
+              "id": "62a49766-9157-4132-9bf4-b40749c3fb98",
+              "leftValue": "={{ $json.Client_ID }}",
+              "rightValue": "78020BC3-AAB1-4D02-9DDA-681822B2FE5C",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "9b5af234-720f-4206-af4e-5987727deda6",
+              "leftValue": "={{ $json.Client_ID }}",
+              "rightValue": "C81F54E9-BBB7-4D3E-8A79-41FCBB43C25E",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "391a60c5-ad77-4f79-9f84-12eddcfe19c4",
+              "leftValue": "={{ $json.Client_ID }}",
+              "rightValue": "C6AA3870-DCDC-4036-9F02-0DBABE569337",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
             }
           ],
           "combinator": "and"
@@ -397,8 +432,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -816,
-        320
+        -832,
+        560
       ],
       "id": "7c929146-a058-408d-bdcc-092ef742495d",
       "name": "Loop Over Items"
@@ -410,8 +445,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        -608,
-        416
+        -624,
+        656
       ],
       "id": "8974b5d1-2381-4fb7-ae8c-97d3c6dc774d",
       "name": "Wait",
@@ -424,8 +459,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        976,
-        512
+        960,
+        752
       ],
       "id": "484aedaa-da81-4140-bd08-d86b6c1eef11",
       "name": "Wait1",
@@ -451,7 +486,9 @@
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
-            {}
+            {
+              "name": "="
+            }
           ]
         },
         "options": {}
@@ -459,8 +496,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -352,
-        416
+        -368,
+        656
       ],
       "id": "11ae81fb-3d2d-45e0-a919-968e431ba953",
       "name": "GuestFormReuqest",
@@ -494,8 +531,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -144,
-        416
+        -160,
+        656
       ],
       "id": "ec017535-49a3-47af-8806-c2cca7c7a0dc",
       "name": "If-GuestFormNotSubmitted"
@@ -507,8 +544,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        128,
-        336
+        112,
+        576
       ],
       "id": "37e1d384-d308-410d-9c3f-ab7836b9545c",
       "name": "Data Clean Up - Responce"
@@ -634,8 +671,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        336,
-        512
+        320,
+        752
       ],
       "id": "b7a4b3e6-b09c-4590-8c48-deef5a33e43f",
       "name": "Update Guest - No Form"
@@ -1113,8 +1150,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        336,
-        336
+        320,
+        576
       ],
       "id": "ef0a2659-ebaa-440c-a7d9-515c025b833b",
       "name": "Upsert row(s)"
@@ -1174,8 +1211,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -864,
-        240
+        -880,
+        480
       ],
       "typeVersion": 1,
       "id": "bb212a0d-7b39-40ae-8b8c-9dc9f1cafda7",
@@ -1189,8 +1226,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -416,
-        240
+        -432,
+        480
       ],
       "typeVersion": 1,
       "id": "82453515-3aad-4e0c-ba33-f70380128156",
@@ -1204,8 +1241,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -160,
-        240
+        -176,
+        480
       ],
       "typeVersion": 1,
       "id": "e93db07c-d70e-494e-b413-b46dd529ef72",
@@ -1219,8 +1256,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        80,
-        240
+        64,
+        480
       ],
       "typeVersion": 1,
       "id": "1cee87d2-5165-4794-a3b5-78eb14e9f817",
@@ -1235,12 +1272,51 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        560,
-        240
+        544,
+        480
       ],
       "typeVersion": 1,
       "id": "d742222d-8a25-49ac-a511-4bdea6cd6301",
       "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## Email me its done",
+        "height": 288,
+        "width": 432
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -448,
+        192
+      ],
+      "typeVersion": 1,
+      "id": "71c34e7d-2d2f-4f5c-b462-08ad3b65a8d4",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "toRecipients": "nicholas.ryall@ashleyandmartin.com.au",
+        "subject": "N8N Flow - Comppleted",
+        "bodyContent": "Hi Nicholas,\n\nYou Guest Form flow has completed.\n\nRegards,\nAutomation",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        -320,
+        288
+      ],
+      "id": "31207000-9b7d-4984-b1a1-4257765eb96b",
+      "name": "Send a message",
+      "webhookId": "bf4b0c8d-df44-4d36-9bda-507952308e50",
+      "executeOnce": true,
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "syr2VMZLsiSBjaSJ",
+          "name": "nryall@ash"
+        }
+      }
     }
   ],
   "origin": "n8n",
@@ -1260,7 +1336,10 @@
   },
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "J83Enw8ArDSqhMCL"
   },
   "shared": [
     {
@@ -1281,6 +1360,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-01-28T07:37:52.306Z",
-  "versionId": "fa8ed7b7-aa64-4bf8-a4e8-46a098dd03b0"
+  "updatedAt": "2026-02-04T06:39:41.342Z",
+  "versionId": "fe84126c-f148-48d1-9cc0-412e6916b3b6"
 }
