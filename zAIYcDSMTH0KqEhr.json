@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-01-28T01:17:11.000Z",
-    "createdAt": "2026-01-28T01:16:20.305Z",
-    "versionId": "bc601edc-cda5-470b-a10b-208fdfee50d9",
+    "updatedAt": "2026-01-28T23:16:22.000Z",
+    "createdAt": "2026-01-28T23:08:18.202Z",
+    "versionId": "23dd852c-6f63-42b7-8c7c-b47d15469b80",
     "workflowId": "zAIYcDSMTH0KqEhr",
     "nodes": [
       {
@@ -1289,7 +1289,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const items = $('Clean up Drug Name').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = false;\n    item.json.paidinfull = true;\n    item.json.CLinicABB = $('When clicking ‘Execute workflow’').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl\n}\n\nreturn items;\n"
+          "jsCode": "const items = $('MedOrderCheck').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = false;\n    item.json.paidinfull = true;\n    item.json.CLinicABB = $('When clicking ‘Execute workflow’').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl\n}\n\nreturn items;\n"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -3304,11 +3304,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version bc601edc",
+    "name": "Version 23dd852c",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "bc601edc-cda5-470b-a10b-208fdfee50d9",
+  "activeVersionId": "23dd852c-6f63-42b7-8c7c-b47d15469b80",
   "connections": {
     "Call 'ZenotiNZ-GetAuthToken'": {
       "main": [
@@ -5542,7 +5542,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const items = $('Clean up Drug Name').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = false;\n    item.json.paidinfull = true;\n    item.json.CLinicABB = $('When clicking ‘Execute workflow’').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl\n}\n\nreturn items;\n"
+        "jsCode": "const items = $('MedOrderCheck').all();\n\nfor (const item of items) {\n\titem.json.packagesavailable = false;\n    item.json.paidinfull = true;\n    item.json.CLinicABB = $('When clicking ‘Execute workflow’').first().json.Abb;\n    item.json.scriptURL = $input.first().json.AppointmentCustomDataUrl\n}\n\nreturn items;\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -6638,8 +6638,8 @@
           "id": 2,
           "createdAt": "2025-12-09T00:49:44.432Z",
           "updatedAt": "2025-12-12T04:09:32.201Z",
-          "start_date": "2026-01-17",
-          "end_date": "2026-01-18"
+          "start_date": "2026-01-28",
+          "end_date": "2026-01-29"
         },
         "pairedItem": {
           "item": 0
@@ -6676,6 +6676,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-01-28T01:16:20.303Z",
-  "versionId": "bc601edc-cda5-470b-a10b-208fdfee50d9"
+  "updatedAt": "2026-01-28T23:16:20.890Z",
+  "versionId": "23dd852c-6f63-42b7-8c7c-b47d15469b80"
 }
