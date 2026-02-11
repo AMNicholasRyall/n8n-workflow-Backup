@@ -1,0 +1,36 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {},
+  "createdAt": "2026-02-05T04:34:08.896Z",
+  "id": "bLSAaIX5B5ikqioH",
+  "isArchived": true,
+  "meta": null,
+  "name": "Email Testing",
+  "nodes": [],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-02-05T04:34:08.898Z",
+      "createdAt": "2026-02-05T04:34:08.898Z",
+      "role": "workflow:owner",
+      "workflowId": "bLSAaIX5B5ikqioH",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-02-05T05:00:53.000Z",
+  "versionId": "6c28ae13-cbfa-4e10-ac2c-e6008e3f5cd1"
+}
