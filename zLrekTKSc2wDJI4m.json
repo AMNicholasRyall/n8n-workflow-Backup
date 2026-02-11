@@ -1,53 +1,535 @@
 {
-  "active": false,
-  "activeVersion": null,
-  "activeVersionId": null,
-  "connections": {
-    "When clicking ‘Execute workflow’": {
-      "main": [
-        [
-          {
-            "node": "Get API Token",
-            "type": "main",
-            "index": 0
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-02-11T06:25:05.000Z",
+    "createdAt": "2026-02-11T06:25:03.311Z",
+    "versionId": "971b1ebf-75d2-4f0e-9736-4bb3316b145f",
+    "workflowId": "zLrekTKSc2wDJI4m",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "FVGc9R5kchTK7wsd",
+            "mode": "list",
+            "cachedResultName": "SnipeIT",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/FVGc9R5kchTK7wsd"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "User",
+                "keyValue": "nryall"
+              }
+            ]
           }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1,
+        "position": [
+          96,
+          -224
+        ],
+        "id": "4c4f3e56-69c4-4a9b-8423-7d81f354a739",
+        "name": "Get API Token"
+      },
+      {
+        "parameters": {
+          "jsCode": "// ===============================\n// INPUT VARIABLES (EDIT THESE)\n// ===============================\n\n// Put whatever variables you want to pass forward:\nconst out = {\n  Model: $('When Executed by Another Workflow').first().json.model,\n  Manufacturer: $('When Executed by Another Workflow').first().json.manufacturer,\n};\n\n// ===============================\n// OUTPUT CLEAN JSON\n// ===============================\nreturn [\n  {\n    json: out\n  }\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          768,
+          -128
+        ],
+        "id": "146e0e55-3123-453d-9c0d-04041f331a36",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "AJWEF7ZOfEBBJhwF",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/AJWEF7ZOfEBBJhwF",
+            "cachedResultName": "SnipeIT-DeviceModel/ManCreate"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {
+            "waitForSubWorkflow": true
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          992,
+          -128
+        ],
+        "id": "48cbac22-e726-49ec-90d2-820e2da04b2a",
+        "name": "Call 'SnipeIT-DeviceModelCreate'"
+      },
+      {
+        "parameters": {
+          "jsCode": "const data = {\n  archived: false,\n  warranty_months: null,\n  depreciate: false,\n  supplier_id: null,\n  requestable: false,\n  rtd_location_id: null,\n  location_id: null,\n  asset_tag: $('When Executed by Another Workflow').first().json.serialNumber,\n  model_id: $input.first().json.ModelID,\n  serial: $('When Executed by Another Workflow').first().json.serialNumber,\n  status_id: 2,\n  name: $('When Executed by Another Workflow').first().json.deviceName\n};\n\nreturn [{ json: data }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1216,
+          -128
+        ],
+        "id": "65cfb825-37ae-4872-88a5-959fd93e5ae2",
+        "name": "Code in JavaScript1"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://assets.ashleyandmartin.local/api/v1/hardware",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{ $('Get API Token').first().json.Key }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify($json) }}",
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1440,
+          -128
+        ],
+        "id": "964c34d9-0aba-4979-9296-b3dcd649a533",
+        "name": "CreateDevice"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          1888,
+          -224
+        ],
+        "id": "2e349626-9c67-486b-82bb-99abc082a5ab",
+        "name": "Aggregate"
+      },
+      {
+        "parameters": {
+          "url": "https://assets.ashleyandmartin.local/api/v1/hardware",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "limit",
+                "value": "2"
+              },
+              {
+                "name": "offset",
+                "value": "0"
+              },
+              {
+                "name": "search",
+                "value": "={{ $json.payload.name }}"
+              },
+              {
+                "name": "sort",
+                "value": "created_at"
+              },
+              {
+                "name": "order",
+                "value": "desc"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{ $('Get API Token').item.json.Key }}"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1664,
+          -128
+        ],
+        "id": "1d7be6f8-e360-4ac6-afa6-80ffdd5e3557",
+        "name": "Search for Device1"
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -128,
+          -224
+        ],
+        "id": "cb061cb2-4be8-4703-9232-a8d0ff75654f",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "6a9a2842-20fa-4f33-b7a0-c0fdecc4a8be",
+                "leftValue": "={{ $json.serial }}",
+                "rightValue": "={{ $('When Executed by Another Workflow').item.json.serialNumber }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          544,
+          -224
+        ],
+        "id": "945e7529-84dc-4dbd-a0df-0d0db1378023",
+        "name": "If2"
+      },
+      {
+        "parameters": {
+          "url": "=https://assets.ashleyandmartin.local/api/v1/hardware/bytag/{{ $('When Executed by Another Workflow').item.json.serialNumber }}",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "deleted",
+                "value": "false"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{ $json.Key }}"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          320,
+          -224
+        ],
+        "id": "e5aec2c1-8093-43a0-98ff-d54cbda812ae",
+        "name": "SearchViaSN"
+      },
+      {
+        "parameters": {
+          "url": "https://assets.ashleyandmartin.local/api/v1/hardware",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "limit",
+                "value": "2"
+              },
+              {
+                "name": "offset",
+                "value": "0"
+              },
+              {
+                "name": "search",
+                "value": "={{ $json.payload.name }}"
+              },
+              {
+                "name": "sort",
+                "value": "created_at"
+              },
+              {
+                "name": "order",
+                "value": "desc"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{ $('Get API Token').item.json.Key }}"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1664,
+          -320
+        ],
+        "id": "a5c05fff-7697-4235-ba62-1c6bd9dd2530",
+        "name": "Re-check Device Exist"
+      },
+      {
+        "parameters": {
+          "method": "PUT",
+          "url": "=https://assets.ashleyandmartin.local/api/v1/hardware/{{ $json.id }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json, application/json"
+              },
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{ $('Get API Token').item.json.Key }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"name\": \"{{ $('When Executed by Another Workflow').item.json.deviceName }}\",\n  \"asset_tag\": \"{{ $json.asset_tag }}\",\n  \"status_id\": \"{{ $json.status_label.id }}\",\n  \"model_id\": \"{{ $json.model.id }}\"\n}",
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1440,
+          -320
+        ],
+        "id": "5cea5503-5588-438f-a23b-1155f6b58915",
+        "name": "Update Name"
+      },
+      {
+        "parameters": {
+          "jsCode": "const data = {\n  SnipeITDeviceID: $input.first().json.data[0].rows[0].id,\n  SnipeITDeviceSN: $input.first().json.data[0].rows[0].serial,\n  DeviceID: $('When Executed by Another Workflow').first().json.id,\n  DeviceName: $input.first().json.data[0].rows[0].name\n};\n\nreturn [{ json: data }];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2112,
+          -224
+        ],
+        "id": "cbffd334-81d6-4935-99ad-0754a76eda54",
+        "name": "Bring Forward Data"
+      }
+    ],
+    "connections": {
+      "Get API Token": {
+        "main": [
+          [
+            {
+              "node": "SearchViaSN",
+              "type": "main",
+              "index": 0
+            }
+          ]
         ]
-      ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Call 'SnipeIT-DeviceModelCreate'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "node": "CreateDevice",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'SnipeIT-DeviceModelCreate'": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CreateDevice": {
+        "main": [
+          [
+            {
+              "node": "Search for Device1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          [
+            {
+              "node": "Bring Forward Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search for Device1": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Get API Token",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If2": {
+        "main": [
+          [
+            {
+              "node": "Update Name",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SearchViaSN": {
+        "main": [
+          [
+            {
+              "node": "If2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Re-check Device Exist": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update Name": {
+        "main": [
+          [
+            {
+              "node": "Re-check Device Exist",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
     },
+    "authors": "Nicholas Ryall",
+    "name": "Version 971b1ebf",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "971b1ebf-75d2-4f0e-9736-4bb3316b145f",
+  "connections": {
     "Get API Token": {
       "main": [
         [
           {
-            "node": "Search for Device",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Search for Device": {
-      "main": [
-        [
-          {
-            "node": "If",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If": {
-      "main": [
-        [
-          {
-            "node": "Code in JavaScript",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Aggregate",
+            "node": "SearchViaSN",
             "type": "main",
             "index": 0
           }
@@ -102,7 +584,7 @@
       "main": [
         [
           {
-            "node": "Code in JavaScript2",
+            "node": "Bring Forward Data",
             "type": "main",
             "index": 0
           }
@@ -119,6 +601,68 @@
           }
         ]
       ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get API Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Update Name",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchViaSN": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Re-check Device Exist": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Name": {
+      "main": [
+        [
+          {
+            "node": "Re-check Device Exist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-12-08T01:36:25.071Z",
@@ -127,17 +671,6 @@
   "meta": null,
   "name": "SnipeIT-CreateDevice",
   "nodes": [
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
-      "position": [
-        -240,
-        -64
-      ],
-      "id": "ab37e2ac-54ce-46f7-bee3-7820499ee02c",
-      "name": "When clicking ‘Execute workflow’"
-    },
     {
       "parameters": {
         "operation": "get",
@@ -161,107 +694,20 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1,
       "position": [
-        -16,
-        -64
+        96,
+        -224
       ],
       "id": "4c4f3e56-69c4-4a9b-8423-7d81f354a739",
       "name": "Get API Token"
     },
     {
       "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "b33a4937-bef9-436e-a20c-6f028bf0b48f",
-              "leftValue": "={{ $json.total }}",
-              "rightValue": 0,
-              "operator": {
-                "type": "number",
-                "operation": "equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        432,
-        -64
-      ],
-      "id": "5250fc12-0542-4a64-a7ad-9c76731c2d89",
-      "name": "If"
-    },
-    {
-      "parameters": {
-        "url": "https://assets.ashleyandmartin.local/api/v1/hardware",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "limit",
-              "value": "2"
-            },
-            {
-              "name": "offset",
-              "value": "0"
-            },
-            {
-              "name": "search",
-              "value": "={{ $('When clicking ‘Execute workflow’').item.json.deviceName }}"
-            },
-            {
-              "name": "sort",
-              "value": "created_at"
-            },
-            {
-              "name": "order",
-              "value": "desc"
-            }
-          ]
-        },
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Accept",
-              "value": "application/json"
-            },
-            {
-              "name": "Authorization",
-              "value": "=Bearer {{ $json.Key }}"
-            }
-          ]
-        },
-        "options": {
-          "allowUnauthorizedCerts": true
-        }
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        208,
-        -64
-      ],
-      "id": "37282c80-f533-4f14-821e-8e490f5d055f",
-      "name": "Search for Device"
-    },
-    {
-      "parameters": {
-        "jsCode": "// ===============================\n// INPUT VARIABLES (EDIT THESE)\n// ===============================\n\n// Put whatever variables you want to pass forward:\nconst out = {\n  Model: $('When clicking ‘Execute workflow’').first().json.model,\n  Manufacturer: $('When clicking ‘Execute workflow’').first().json.manufacturer,\n};\n\n// ===============================\n// OUTPUT CLEAN JSON\n// ===============================\nreturn [\n  {\n    json: out\n  }\n];\n"
+        "jsCode": "// ===============================\n// INPUT VARIABLES (EDIT THESE)\n// ===============================\n\n// Put whatever variables you want to pass forward:\nconst out = {\n  Model: $('When Executed by Another Workflow').first().json.model,\n  Manufacturer: $('When Executed by Another Workflow').first().json.manufacturer,\n};\n\n// ===============================\n// OUTPUT CLEAN JSON\n// ===============================\nreturn [\n  {\n    json: out\n  }\n];\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        656,
+        768,
         -128
       ],
       "id": "146e0e55-3123-453d-9c0d-04041f331a36",
@@ -278,14 +724,20 @@
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
-          "value": {}
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
         },
-        "options": {}
+        "options": {
+          "waitForSubWorkflow": true
+        }
       },
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        880,
+        992,
         -128
       ],
       "id": "48cbac22-e726-49ec-90d2-820e2da04b2a",
@@ -293,12 +745,12 @@
     },
     {
       "parameters": {
-        "jsCode": "const data = {\n  archived: false,\n  warranty_months: null,\n  depreciate: false,\n  supplier_id: null,\n  requestable: false,\n  rtd_location_id: null,\n  location_id: null,\n  asset_tag: $('When clicking ‘Execute workflow’').first().json.serialNumber,\n  model_id: $input.first().json.ModelID,\n  serial: $('When clicking ‘Execute workflow’').first().json.serialNumber,\n  status_id: 2,\n  name: $('When clicking ‘Execute workflow’').first().json.deviceName\n};\n\nreturn [{ json: data }];"
+        "jsCode": "const data = {\n  archived: false,\n  warranty_months: null,\n  depreciate: false,\n  supplier_id: null,\n  requestable: false,\n  rtd_location_id: null,\n  location_id: null,\n  asset_tag: $('When Executed by Another Workflow').first().json.serialNumber,\n  model_id: $input.first().json.ModelID,\n  serial: $('When Executed by Another Workflow').first().json.serialNumber,\n  status_id: 2,\n  name: $('When Executed by Another Workflow').first().json.deviceName\n};\n\nreturn [{ json: data }];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1104,
+        1216,
         -128
       ],
       "id": "65cfb825-37ae-4872-88a5-959fd93e5ae2",
@@ -331,7 +783,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1328,
+        1440,
         -128
       ],
       "id": "964c34d9-0aba-4979-9296-b3dcd649a533",
@@ -345,24 +797,11 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        1856,
-        16
+        1888,
+        -224
       ],
       "id": "2e349626-9c67-486b-82bb-99abc082a5ab",
       "name": "Aggregate"
-    },
-    {
-      "parameters": {
-        "jsCode": "const data = {\n  SnipeITDeviceID: $input.first().json.data[0].rows[0].id,\n  SnipeITDeviceSN: $input.first().json.data[0].rows[0].serial,\n  DeviceID: $('When clicking ‘Execute workflow’').first().json.id,\n  DeviceName: $input.first().json.data[0].rows[0].name\n};\n\nreturn [{ json: data }];\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2096,
-        16
-      ],
-      "id": "cbffd334-81d6-4935-99ad-0754a76eda54",
-      "name": "Code in JavaScript2"
     },
     {
       "parameters": {
@@ -412,47 +851,231 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1568,
+        1664,
         -128
       ],
       "id": "1d7be6f8-e360-4ac6-afa6-80ffdd5e3557",
       "name": "Search for Device1"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -128,
+        -224
+      ],
+      "id": "cb061cb2-4be8-4703-9232-a8d0ff75654f",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6a9a2842-20fa-4f33-b7a0-c0fdecc4a8be",
+              "leftValue": "={{ $json.serial }}",
+              "rightValue": "={{ $('When Executed by Another Workflow').item.json.serialNumber }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        544,
+        -224
+      ],
+      "id": "945e7529-84dc-4dbd-a0df-0d0db1378023",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "url": "=https://assets.ashleyandmartin.local/api/v1/hardware/bytag/{{ $('When Executed by Another Workflow').item.json.serialNumber }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "deleted",
+              "value": "false"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.Key }}"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        320,
+        -224
+      ],
+      "id": "e5aec2c1-8093-43a0-98ff-d54cbda812ae",
+      "name": "SearchViaSN"
+    },
+    {
+      "parameters": {
+        "url": "https://assets.ashleyandmartin.local/api/v1/hardware",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "limit",
+              "value": "2"
+            },
+            {
+              "name": "offset",
+              "value": "0"
+            },
+            {
+              "name": "search",
+              "value": "={{ $json.payload.name }}"
+            },
+            {
+              "name": "sort",
+              "value": "created_at"
+            },
+            {
+              "name": "order",
+              "value": "desc"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Get API Token').item.json.Key }}"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1664,
+        -320
+      ],
+      "id": "a5c05fff-7697-4235-ba62-1c6bd9dd2530",
+      "name": "Re-check Device Exist"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://assets.ashleyandmartin.local/api/v1/hardware/{{ $json.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json, application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Get API Token').item.json.Key }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $('When Executed by Another Workflow').item.json.deviceName }}\",\n  \"asset_tag\": \"{{ $json.asset_tag }}\",\n  \"status_id\": \"{{ $json.status_label.id }}\",\n  \"model_id\": \"{{ $json.model.id }}\"\n}",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1440,
+        -320
+      ],
+      "id": "5cea5503-5588-438f-a23b-1155f6b58915",
+      "name": "Update Name"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = {\n  SnipeITDeviceID: $input.first().json.data[0].rows[0].id,\n  SnipeITDeviceSN: $input.first().json.data[0].rows[0].serial,\n  DeviceID: $('When Executed by Another Workflow').first().json.id,\n  DeviceName: $input.first().json.data[0].rows[0].name\n};\n\nreturn [{ json: data }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2112,
+        -224
+      ],
+      "id": "cbffd334-81d6-4935-99ad-0754a76eda54",
+      "name": "Bring Forward Data"
     }
   ],
   "origin": "n8n",
   "pinData": {
-    "When clicking ‘Execute workflow’": [
+    "When Executed by Another Workflow": [
       {
         "json": {
           "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/managedDevices/$entity",
-          "id": "c01063b5-a898-4c68-bdc1-e7a719993470",
-          "userId": "0c2b1b39-fd09-4909-a071-1b0ebe2e6ced",
-          "deviceName": "LAPTOP-M9EV1A9N",
-          "ownerType": "personal",
-          "managedDeviceOwnerType": "personal",
+          "id": "38dc038f-bdc8-48f4-bf40-ac1f8186cbe6",
+          "userId": "a7de74fb-9fdf-4b4f-9f23-e005bd003770",
+          "deviceName": "GOL03",
+          "ownerType": "company",
+          "managedDeviceOwnerType": "company",
           "managementState": "managed",
-          "enrolledDateTime": "2024-10-14T06:44:20.6950051Z",
-          "lastSyncDateTime": "2025-12-06T01:46:40.7747632Z",
+          "enrolledDateTime": "2023-10-26T04:04:20.4313079Z",
+          "lastSyncDateTime": "2026-02-10T23:06:39.1990416Z",
           "chassisType": "laptop",
           "operatingSystem": "Windows",
           "deviceType": "windowsRT",
           "complianceState": "compliant",
           "jailBroken": "Unknown",
           "managementAgent": "mdm",
-          "osVersion": "10.0.26100.7171",
-          "easActivated": true,
-          "easDeviceId": "BD97A141F2CFE52409C38E70E95960C9",
-          "easActivationDateTime": "2024-10-14T06:45:42.4893098Z",
+          "osVersion": "10.0.26100.7623",
+          "easActivated": false,
+          "easDeviceId": null,
+          "easActivationDateTime": "0001-01-01T00:00:00Z",
           "aadRegistered": true,
           "azureADRegistered": true,
-          "deviceEnrollmentType": "windowsAutoEnrollment",
+          "deviceEnrollmentType": "windowsCoManagement",
           "lostModeState": "disabled",
           "activationLockBypassCode": null,
-          "emailAddress": "Rohana.Samat@ashleyandmartin.com.au",
-          "azureActiveDirectoryDeviceId": "4d58fc0e-0d3f-4fc0-bf13-4de32f0e83f3",
-          "azureADDeviceId": "4d58fc0e-0d3f-4fc0-bf13-4de32f0e83f3",
+          "emailAddress": "Luke.Stadly@ashleyandmartin.com.au",
+          "azureActiveDirectoryDeviceId": "5ca9d197-14ef-4ad6-994e-9bee2bd7ba7b",
+          "azureADDeviceId": "5ca9d197-14ef-4ad6-994e-9bee2bd7ba7b",
           "deviceRegistrationState": "registered",
-          "deviceCategoryDisplayName": "",
+          "deviceCategoryDisplayName": "GOL",
           "isSupervised": false,
           "exchangeLastSuccessfulSyncDateTime": "0001-01-01T00:00:00Z",
           "exchangeAccessState": "none",
@@ -460,30 +1083,30 @@
           "remoteAssistanceSessionUrl": "",
           "remoteAssistanceSessionErrorDetails": "",
           "isEncrypted": false,
-          "userPrincipalName": "rsamat@ashleyandmartin.com.au",
-          "enrolledByUserPrincipalName": "rsamat@ashleyandmartin.com.au",
-          "model": "Aspire A315-55G",
-          "manufacturer": "Acer",
+          "userPrincipalName": "lstadly@ashleyandmartin.com.au",
+          "enrolledByUserPrincipalName": "igriffiths@ashleyandmartin.com.au",
+          "model": "11DT004AAU",
+          "manufacturer": "LENOVO",
           "imei": null,
           "complianceGracePeriodExpirationDateTime": "9999-12-31T23:59:59.9999999Z",
-          "serialNumber": "NXHNTSG00301405F527600",
+          "serialNumber": "PC1W7ADL",
           "phoneNumber": null,
           "androidSecurityPatchLevel": null,
-          "userDisplayName": "Rohana Samat",
+          "userDisplayName": "Luke Stadly",
           "configurationManagerClientEnabledFeatures": null,
-          "wiFiMacAddress": "E4AAEA76F121",
+          "wiFiMacAddress": "AC82478CFB95",
           "deviceHealthAttestationState": null,
           "subscriberCarrier": "",
           "meid": null,
-          "totalStorageSpaceInBytes": 254952865792,
-          "freeStorageSpaceInBytes": 144932077568,
-          "managedDeviceName": "rsamat_Windows_10/14/2024_6:44 AM",
-          "partnerReportedThreatState": "unknown",
+          "totalStorageSpaceInBytes": 254721130496,
+          "freeStorageSpaceInBytes": 73083650048,
+          "managedDeviceName": "igriffiths_Windows_10/26/2023_4:04 AM",
+          "partnerReportedThreatState": "secured",
           "retireAfterDateTime": "9999-12-31T23:59:59.9999999Z",
           "preferMdmOverGroupPolicyAppliedDateTime": "0001-01-01T00:00:00Z",
           "autopilotEnrolled": false,
           "requireUserEnrollmentApproval": null,
-          "managementCertificateExpirationDate": "2026-05-03T01:19:03Z",
+          "managementCertificateExpirationDate": "2026-11-19T10:46:28Z",
           "iccid": "",
           "udid": "",
           "roleScopeTagIds": [
@@ -494,14 +1117,14 @@
           "notes": null,
           "configurationManagerClientHealthState": null,
           "configurationManagerClientInformation": null,
-          "ethernetMacAddress": "00090FAA0001",
+          "ethernetMacAddress": "38F3AB1C5FE9",
           "physicalMemoryInBytes": 0,
           "processorArchitecture": "unknown",
           "specificationVersion": null,
-          "joinType": "azureADRegistered",
-          "skuFamily": "Home",
+          "joinType": "hybridAzureADJoined",
+          "skuFamily": "Pro",
           "securityPatchLevel": null,
-          "skuNumber": 101,
+          "skuNumber": 48,
           "managementFeatures": "none",
           "enrollmentProfileName": "",
           "bootstrapTokenEscrowed": false,
@@ -551,8 +1174,16 @@
           "deviceActionResults": [],
           "usersLoggedOn": [
             {
-              "userId": "0c2b1b39-fd09-4909-a071-1b0ebe2e6ced",
-              "lastLogOnDateTime": "2025-12-06T01:46:40.9001732Z"
+              "userId": "5322dd08-4511-4500-8afc-23f005dacefb",
+              "lastLogOnDateTime": "2026-01-21T22:23:42.4144963Z"
+            },
+            {
+              "userId": "401a97ef-599f-407b-93de-362c8facde08",
+              "lastLogOnDateTime": "2026-01-22T03:13:01.8454187Z"
+            },
+            {
+              "userId": "5322dd08-4511-4500-8afc-23f005dacefb",
+              "lastLogOnDateTime": "2026-02-10T23:00:51.9660473Z"
             }
           ],
           "chromeOSDeviceInfo": [],
@@ -560,6 +1191,9 @@
           "deviceIdentityAttestationDetail": {
             "deviceIdentityAttestationStatus": "unknown"
           }
+        },
+        "pairedItem": {
+          "item": 0
         }
       }
     ]
@@ -573,6 +1207,8 @@
     "callerPolicy": "workflowsFromSameOwner",
     "availableInMCP": false,
     "timeSavedPerExecution": 5,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
     "saveDataSuccessExecution": "all"
   },
   "shared": [
@@ -594,6 +1230,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-12-08T07:11:32.000Z",
-  "versionId": "b34ba170-31c3-4f5a-9772-082b14c9ff2e"
+  "updatedAt": "2026-02-11T06:25:03.310Z",
+  "versionId": "971b1ebf-75d2-4f0e-9736-4bb3316b145f"
 }
