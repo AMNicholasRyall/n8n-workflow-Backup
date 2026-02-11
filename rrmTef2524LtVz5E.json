@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-01-14T23:13:37.000Z",
-    "createdAt": "2026-01-14T23:13:36.243Z",
-    "versionId": "095d5d39-289b-48b5-a3a1-73f48f27403d",
+    "updatedAt": "2026-02-05T05:01:43.000Z",
+    "createdAt": "2026-02-05T05:01:41.211Z",
+    "versionId": "e2a466be-239e-428b-8116-a58836e56023",
     "workflowId": "rrmTef2524LtVz5E",
     "nodes": [
       {
@@ -43,8 +43,8 @@
         "webhookId": "dc1a9bc9-29cd-4f88-bc43-f82106160ae0",
         "credentials": {
           "microsoftOutlookOAuth2Api": {
-            "id": "syr2VMZLsiSBjaSJ",
-            "name": "nryall@ash"
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
           }
         }
       },
@@ -212,11 +212,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 095d5d39",
+    "name": "Version e2a466be",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "095d5d39-289b-48b5-a3a1-73f48f27403d",
+  "activeVersionId": "e2a466be-239e-428b-8116-a58836e56023",
   "connections": {
     "Send message and wait for response": {
       "main": [
@@ -319,8 +319,8 @@
       "webhookId": "dc1a9bc9-29cd-4f88-bc43-f82106160ae0",
       "credentials": {
         "microsoftOutlookOAuth2Api": {
-          "id": "syr2VMZLsiSBjaSJ",
-          "name": "nryall@ash"
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
         }
       }
     },
@@ -463,6 +463,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-01-14T23:18:30.801Z",
-  "versionId": "095d5d39-289b-48b5-a3a1-73f48f27403d"
+  "updatedAt": "2026-02-05T05:01:41.211Z",
+  "versionId": "e2a466be-239e-428b-8116-a58836e56023"
 }
