@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-01-28T05:34:32.000Z",
-    "createdAt": "2026-01-28T05:34:30.028Z",
-    "versionId": "9143440d-d12d-4eed-bacf-5e0e8a9d7c60",
+    "updatedAt": "2026-02-05T05:02:44.000Z",
+    "createdAt": "2026-02-05T05:02:40.932Z",
+    "versionId": "2638260c-2dc3-406b-b2cc-549e8f62461f",
     "workflowId": "STUF6Fz9PaFzUwRx",
     "nodes": [
       {
@@ -289,8 +289,8 @@
         "webhookId": "7f0de5bb-4566-4fa0-9698-1d8e350c4d53",
         "credentials": {
           "microsoftOutlookOAuth2Api": {
-            "id": "syr2VMZLsiSBjaSJ",
-            "name": "nryall@ash"
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
           }
         }
       },
@@ -553,8 +553,8 @@
         "webhookId": "c09feca6-a64a-4285-87fe-82e85c9a6dc7",
         "credentials": {
           "microsoftOutlookOAuth2Api": {
-            "id": "syr2VMZLsiSBjaSJ",
-            "name": "nryall@ash"
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
           }
         }
       },
@@ -576,8 +576,8 @@
         "webhookId": "7f0de5bb-4566-4fa0-9698-1d8e350c4d53",
         "credentials": {
           "microsoftOutlookOAuth2Api": {
-            "id": "syr2VMZLsiSBjaSJ",
-            "name": "nryall@ash"
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
           }
         }
       },
@@ -901,11 +901,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 9143440d",
+    "name": "Version 2638260c",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "9143440d-d12d-4eed-bacf-5e0e8a9d7c60",
+  "activeVersionId": "2638260c-2dc3-406b-b2cc-549e8f62461f",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -1422,8 +1422,8 @@
       "webhookId": "7f0de5bb-4566-4fa0-9698-1d8e350c4d53",
       "credentials": {
         "microsoftOutlookOAuth2Api": {
-          "id": "syr2VMZLsiSBjaSJ",
-          "name": "nryall@ash"
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
         }
       }
     },
@@ -1686,8 +1686,8 @@
       "webhookId": "c09feca6-a64a-4285-87fe-82e85c9a6dc7",
       "credentials": {
         "microsoftOutlookOAuth2Api": {
-          "id": "syr2VMZLsiSBjaSJ",
-          "name": "nryall@ash"
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
         }
       }
     },
@@ -1709,8 +1709,8 @@
       "webhookId": "7f0de5bb-4566-4fa0-9698-1d8e350c4d53",
       "credentials": {
         "microsoftOutlookOAuth2Api": {
-          "id": "syr2VMZLsiSBjaSJ",
-          "name": "nryall@ash"
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
         }
       }
     },
@@ -1841,6 +1841,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-01-28T05:34:41.075Z",
-  "versionId": "9143440d-d12d-4eed-bacf-5e0e8a9d7c60"
+  "updatedAt": "2026-02-05T05:02:40.931Z",
+  "versionId": "2638260c-2dc3-406b-b2cc-549e8f62461f"
 }
