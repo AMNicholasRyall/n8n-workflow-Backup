@@ -309,7 +309,7 @@
             {
               "id": "77e5873c-2123-4456-85f6-14baecc00400",
               "leftValue": "={{ $json.code }}",
-              "rightValue": "SY",
+              "rightValue": "SM",
               "operator": {
                 "type": "string",
                 "operation": "equals"
@@ -1360,6 +1360,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-02-04T06:39:41.342Z",
-  "versionId": "fe84126c-f148-48d1-9cc0-412e6916b3b6"
+  "updatedAt": "2026-02-11T06:52:53.580Z",
+  "versionId": "da7991eb-0de5-4442-8f80-708df90c4e08"
 }
