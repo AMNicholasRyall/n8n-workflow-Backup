@@ -1,19 +1,612 @@
 {
-  "active": false,
-  "activeVersion": null,
-  "activeVersionId": null,
-  "connections": {
-    "When clicking ‘Execute workflow’": {
-      "main": [
-        [
-          {
-            "node": "Get API Token",
-            "type": "main",
-            "index": 0
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-02-11T05:03:49.000Z",
+    "createdAt": "2026-02-11T05:03:47.955Z",
+    "versionId": "f7ece8cd-aa95-46bd-9cf5-23c9dd91c6e0",
+    "workflowId": "AJWEF7ZOfEBBJhwF",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "FVGc9R5kchTK7wsd",
+            "mode": "list",
+            "cachedResultName": "SnipeIT",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/FVGc9R5kchTK7wsd"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "User",
+                "keyValue": "nryall"
+              }
+            ]
           }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1,
+        "position": [
+          224,
+          64
+        ],
+        "id": "0057f90c-5d0d-4b0b-8768-3976a9456e89",
+        "name": "Get API Token"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "0a96321b-deae-4132-a4cf-6798fd74fc9a",
+                "leftValue": "={{ $json.total }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          672,
+          64
+        ],
+        "id": "a5797458-deaa-4af6-8066-30441a55c3e5",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "url": "https://assets.ashleyandmartin.local/api/v1/models",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "limit",
+                "value": "50"
+              },
+              {
+                "name": "search",
+                "value": "={{ $('When clicking ‘Execute workflow’').item.json.Model }}"
+              },
+              {
+                "name": "sort",
+                "value": "created_at"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json, application/json"
+              },
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{ $json.Key }}"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          448,
+          64
+        ],
+        "id": "c44c2037-5f4b-45c0-8a22-b40d645850cf",
+        "name": "Model Search"
+      },
+      {
+        "parameters": {
+          "url": "=https://assets.ashleyandmartin.local/api/v1/manufacturers?name={{ $('When clicking ‘Execute workflow’').item.json.Manufacturer }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json, application/json"
+              },
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{ $('Get API Token').item.json.Key }}"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          896,
+          -32
+        ],
+        "id": "ff3aa49e-1676-4d90-96b8-9fa284c983e9",
+        "name": "Manufacturer Search"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "9a69a1a5-aabd-44af-b46b-e70f737c4b30",
+                "leftValue": "={{ $json.total }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          1120,
+          -32
+        ],
+        "id": "941f7d4b-d3d0-4924-9078-aff9852c951f",
+        "name": "If1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "e0bba1fc-c36a-49a0-a768-7e41fe07f3dd",
+                "leftValue": "={{ $json.status }}",
+                "rightValue": "success",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          1568,
+          -128
+        ],
+        "id": "bcc5fa9e-7224-435f-9b11-81c7051439b4",
+        "name": "If2"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://assets.ashleyandmartin.local/api/v1/manufacturers",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json, application/json"
+              },
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{ $('Get API Token').item.json.Key }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "name",
+                "value": "={{ $('When clicking ‘Execute workflow’').item.json.Manufacturer }}"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1344,
+          -128
+        ],
+        "id": "6bdafaa2-6719-417f-b193-6f9451cf6ca8",
+        "name": "Create Manufacturer"
+      },
+      {
+        "parameters": {
+          "toRecipients": "monitoring@ashleyandmartin.com.au",
+          "subject": "=Automation - {{ $execution }} Broke",
+          "bodyContent": "Hi Team,\nSomething went wrong please take a look\nRegards,\nAutomation",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          1792,
+          -32
+        ],
+        "id": "d6a1be50-1894-4679-942a-4213dd0b7ef3",
+        "name": "Send a message",
+        "webhookId": "d2edb888-a82d-43fe-bbc7-5badb50ef9ad",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "syr2VMZLsiSBjaSJ",
+            "name": "nryall@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://assets.ashleyandmartin.local/api/v1/models",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{ $('Get API Token').item.json.Key }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "name",
+                "value": "={{ $('When clicking ‘Execute workflow’').item.json.Model }}"
+              },
+              {
+                "name": "category_id",
+                "value": "2"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1792,
+          -224
+        ],
+        "id": "dfdb0988-8694-497e-bd1f-f43ec09916c3",
+        "name": "Create Model"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://assets.ashleyandmartin.local/api/v1/models",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{ $('Get API Token').item.json.Key }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "name",
+                "value": "={{ $('When clicking ‘Execute workflow’').item.json.Model }}"
+              },
+              {
+                "name": "category_id",
+                "value": "2"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1344,
+          64
+        ],
+        "id": "964ba087-6885-4abc-a31b-6c898833ef11",
+        "name": "Create Model1"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Ignore all input and return a clean success object\nreturn [\n  {\n    json: {\n      success: true,\n      ModelID: $('Model Search').first().json.rows[0].id\n    }\n  }\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          896,
+          160
+        ],
+        "id": "7fd5986f-ca18-42d6-afb1-056ea65099ba",
+        "name": "SuccessSend"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Ignore all input and return a clean success object\nreturn [\n  {\n    json: {\n      success: true,\n      ModelID: $input.first().json.payload.id\n    }\n  }\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2016,
+          -224
+        ],
+        "id": "f082cb2a-7edc-4f1d-9e38-4acc8ede5433",
+        "name": "SuccessSend1"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Ignore all input and return a clean success object\nreturn [\n  {\n    json: {\n      success: true,\n      ModelID: $input.first().json.payload.id\n    }\n  }\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1568,
+          64
+        ],
+        "id": "82e88066-4869-4975-8e83-1ab89e2795b7",
+        "name": "SuccessSend2"
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -16,
+          64
+        ],
+        "id": "526edca9-c0e8-4398-862e-8222927a0ce3",
+        "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          2528,
+          176
+        ],
+        "id": "eca92246-cd67-4533-b737-22bf2cc295bc",
+        "name": "Wait",
+        "webhookId": "2d8900cd-0443-4d8c-b5db-cb7f76b023ea",
+        "disabled": true
+      }
+    ],
+    "connections": {
+      "Get API Token": {
+        "main": [
+          [
+            {
+              "node": "Model Search",
+              "type": "main",
+              "index": 0
+            }
+          ]
         ]
-      ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Manufacturer Search",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "SuccessSend",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Model Search": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Manufacturer Search": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "Create Manufacturer",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Create Model1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create Manufacturer": {
+        "main": [
+          [
+            {
+              "node": "If2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If2": {
+        "main": [
+          [
+            {
+              "node": "Create Model",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create Model1": {
+        "main": [
+          [
+            {
+              "node": "SuccessSend2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create Model": {
+        "main": [
+          [
+            {
+              "node": "SuccessSend1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "Get API Token",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SuccessSend": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SuccessSend2": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send a message": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SuccessSend1": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
     },
+    "authors": "Nicholas Ryall",
+    "name": "Version f7ece8cd",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "f7ece8cd-aa95-46bd-9cf5-23c9dd91c6e0",
+  "connections": {
     "Get API Token": {
       "main": [
         [
@@ -133,6 +726,61 @@
           }
         ]
       ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get API Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SuccessSend": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SuccessSend2": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SuccessSend1": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-12-08T01:44:20.496Z",
@@ -143,17 +791,6 @@
   },
   "name": "SnipeIT-DeviceModel/ManCreate",
   "nodes": [
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
-      "position": [
-        0,
-        64
-      ],
-      "id": "91312880-8028-4250-b19f-07587ae82b64",
-      "name": "When clicking ‘Execute workflow’"
-    },
     {
       "parameters": {
         "operation": "get",
@@ -543,6 +1180,32 @@
       ],
       "id": "82e88066-4869-4975-8e83-1ab89e2795b7",
       "name": "SuccessSend2"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -16,
+        64
+      ],
+      "id": "526edca9-c0e8-4398-862e-8222927a0ce3",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2528,
+        176
+      ],
+      "id": "eca92246-cd67-4533-b737-22bf2cc295bc",
+      "name": "Wait",
+      "webhookId": "2d8900cd-0443-4d8c-b5db-cb7f76b023ea",
+      "disabled": true
     }
   ],
   "origin": "n8n",
@@ -554,7 +1217,9 @@
   "settings": {
     "executionOrder": "v1",
     "callerPolicy": "workflowsFromSameOwner",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL"
   },
   "shared": [
     {
@@ -575,6 +1240,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-12-08T04:29:24.000Z",
-  "versionId": "dc328279-85a1-4582-8552-5074233cd8b2"
+  "updatedAt": "2026-02-11T05:03:47.954Z",
+  "versionId": "f7ece8cd-aa95-46bd-9cf5-23c9dd91c6e0"
 }
