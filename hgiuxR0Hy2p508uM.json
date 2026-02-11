@@ -1,19 +1,314 @@
 {
-  "active": false,
-  "activeVersion": null,
-  "activeVersionId": null,
-  "connections": {
-    "When clicking ‘Execute workflow’": {
-      "main": [
-        [
-          {
-            "node": "Get API Token",
-            "type": "main",
-            "index": 0
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-02-11T06:29:10.000Z",
+    "createdAt": "2026-02-11T06:29:08.369Z",
+    "versionId": "2d3baf86-4757-4e48-bea2-c461b9168b69",
+    "workflowId": "hgiuxR0Hy2p508uM",
+    "nodes": [
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://assets.ashleyandmartin.local/api/v1/hardware/{{ $('When clicking ‘Execute workflow’').item.json.SnipeITDeviceID }}/checkout",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{ $('Get API Token').item.json.Key }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "checkout_to_type",
+                "value": "user"
+              },
+              {
+                "name": "status_id",
+                "value": "2"
+              },
+              {
+                "name": "assigned_user",
+                "value": "={{ $('When clicking ‘Execute workflow’').item.json.SnipeITUserID }}"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": true
           }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1136,
+          48
+        ],
+        "id": "621c33e0-613f-4763-8c8b-77bf5c07ccc5",
+        "name": "Assign Hardware"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "FVGc9R5kchTK7wsd",
+            "mode": "list",
+            "cachedResultName": "SnipeIT",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/FVGc9R5kchTK7wsd"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "User",
+                "keyValue": "nryall"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1,
+        "position": [
+          224,
+          -32
+        ],
+        "id": "cf0b1bfd-b22b-481b-af25-fa307e26cf83",
+        "name": "Get API Token"
+      },
+      {
+        "parameters": {
+          "url": "=https://assets.ashleyandmartin.local/api/v1/hardware/byserial/{{ $('When clicking ‘Execute workflow’').item.json.SnipeITDeviceSN }}",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {}
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{ $json.Key }}"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          448,
+          -32
+        ],
+        "id": "59faf57f-af07-4566-9cc4-d27c0835ba1a",
+        "name": "Search for Device"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "33b49fca-4373-4c9d-82bf-6d1b3243de30",
+                "leftValue": "={{ $json.rows[0].assigned_to.username }}",
+                "rightValue": "={{ $('When clicking ‘Execute workflow’').item.json.SnipeITUserEmail }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          672,
+          -32
+        ],
+        "id": "413bb60c-c791-41b8-91dc-525d299bc06a",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://assets.ashleyandmartin.local/api/v1/hardware/{{ $json.rows[0].id }}/checkin",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json, application/json"
+              },
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{ $('Get API Token').item.json.Key }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "status_id",
+                "value": "2"
+              },
+              {
+                "name": "name",
+                "value": "={{ $json.rows[0].name }}"
+              },
+              {}
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          896,
+          48
+        ],
+        "id": "55f8ef1f-4c86-43b0-b43e-4800da5889c5",
+        "name": "CheckInHardware"
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -16,
+          -32
+        ],
+        "id": "2e21f9e9-fe78-450a-9323-2d6cba2b1ee9",
+        "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          1424,
+          -48
+        ],
+        "id": "c5b041b4-b1b1-41bf-8e4a-64dbbf1be053",
+        "name": "Aggregate"
+      }
+    ],
+    "connections": {
+      "Get API Token": {
+        "main": [
+          [
+            {
+              "node": "Search for Device",
+              "type": "main",
+              "index": 0
+            }
+          ]
         ]
-      ]
+      },
+      "Search for Device": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "CheckInHardware",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CheckInHardware": {
+        "main": [
+          [
+            {
+              "node": "Assign Hardware",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "Get API Token",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          []
+        ]
+      },
+      "Assign Hardware": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
     },
+    "authors": "Nicholas Ryall",
+    "name": "Version 2d3baf86",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "2d3baf86-4757-4e48-bea2-c461b9168b69",
+  "connections": {
     "Get API Token": {
       "main": [
         [
@@ -54,7 +349,7 @@
         ]
       ]
     },
-    "Aggregate": {
+    "CheckInHardware": {
       "main": [
         [
           {
@@ -65,7 +360,23 @@
         ]
       ]
     },
-    "CheckInHardware": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get API Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        []
+      ]
+    },
+    "Assign Hardware": {
       "main": [
         [
           {
@@ -83,17 +394,6 @@
   "meta": null,
   "name": "SnipeIT - Checkout Hardware",
   "nodes": [
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
-      "position": [
-        0,
-        -32
-      ],
-      "id": "47bea663-8b10-4e60-bce2-c6855c584752",
-      "name": "When clicking ‘Execute workflow’"
-    },
     {
       "parameters": {
         "method": "POST",
@@ -135,8 +435,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1344,
-        -32
+        1136,
+        48
       ],
       "id": "621c33e0-613f-4763-8c8b-77bf5c07ccc5",
       "name": "Assign Hardware"
@@ -216,12 +516,11 @@
           "conditions": [
             {
               "id": "33b49fca-4373-4c9d-82bf-6d1b3243de30",
-              "leftValue": "={{ $json.rows[0].assigned_to }}",
-              "rightValue": "Ready to Deploy",
+              "leftValue": "={{ $json.rows[0].assigned_to.username }}",
+              "rightValue": "={{ $('When clicking ‘Execute workflow’').item.json.SnipeITUserEmail }}",
               "operator": {
-                "type": "object",
-                "operation": "empty",
-                "singleValue": true
+                "type": "string",
+                "operation": "equals"
               }
             }
           ],
@@ -238,24 +537,6 @@
       ],
       "id": "413bb60c-c791-41b8-91dc-525d299bc06a",
       "name": "If"
-    },
-    {
-      "parameters": {
-        "fieldsToAggregate": {
-          "fieldToAggregate": [
-            {}
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.aggregate",
-      "typeVersion": 1,
-      "position": [
-        1120,
-        -32
-      ],
-      "id": "c5b041b4-b1b1-41bf-8e4a-64dbbf1be053",
-      "name": "Aggregate"
     },
     {
       "parameters": {
@@ -283,8 +564,9 @@
             },
             {
               "name": "name",
-              "value": "={{ $('When clicking ‘Execute workflow’').item.json.SnipeITDeviceSN }}"
-            }
+              "value": "={{ $json.rows[0].name }}"
+            },
+            {}
           ]
         },
         "options": {
@@ -295,14 +577,59 @@
       "typeVersion": 4.3,
       "position": [
         896,
-        40
+        48
       ],
       "id": "55f8ef1f-4c86-43b0-b43e-4800da5889c5",
       "name": "CheckInHardware"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -16,
+        -32
+      ],
+      "id": "2e21f9e9-fe78-450a-9323-2d6cba2b1ee9",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        -48
+      ],
+      "id": "c5b041b4-b1b1-41bf-8e4a-64dbbf1be053",
+      "name": "Aggregate"
     }
   ],
   "origin": "n8n",
-  "pinData": {},
+  "pinData": {
+    "When clicking ‘Execute workflow’": [
+      {
+        "json": {
+          "SnipeITDeviceID": 93,
+          "SnipeITDeviceSN": "PC1W7ADL",
+          "DeviceID": "38dc038f-bdc8-48f4-bf40-ac1f8186cbe6",
+          "DeviceName": "GOL03",
+          "SnipeITUserID": 77,
+          "SnipeITUserEmail": "Ian.Griffiths@ashleyandmartin.com.au",
+          "NoLoggedInUser": false
+        },
+        "binary": {},
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -311,7 +638,9 @@
     "executionOrder": "v1",
     "saveDataSuccessExecution": "all",
     "callerPolicy": "workflowsFromSameOwner",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL"
   },
   "shared": [
     {
@@ -332,6 +661,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-12-08T06:08:44.000Z",
-  "versionId": "7cf6a311-f5b4-4dd4-9359-f5b0c62c3cb7"
+  "updatedAt": "2026-02-11T06:29:08.368Z",
+  "versionId": "2d3baf86-4757-4e48-bea2-c461b9168b69"
 }
