@@ -242,7 +242,7 @@
             {
               "id": "ad267cac-9f94-4b27-9974-7132788b52f9",
               "leftValue": "={{ $json.code }}",
-              "rightValue": "DN",
+              "rightValue": "BB",
               "operator": {
                 "type": "string",
                 "operation": "equals"
@@ -648,6 +648,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-02-04T06:41:13.578Z",
-  "versionId": "4a4b1a78-269b-420f-b35f-53af72b39a6e"
+  "updatedAt": "2026-02-11T06:53:19.192Z",
+  "versionId": "ffb83ce4-5ae5-48b2-87cd-5523fd686146"
 }
