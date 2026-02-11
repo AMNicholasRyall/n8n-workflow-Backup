@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-01-28T23:16:22.000Z",
-    "createdAt": "2026-01-28T23:08:18.202Z",
-    "versionId": "23dd852c-6f63-42b7-8c7c-b47d15469b80",
+    "updatedAt": "2026-02-08T23:19:14.000Z",
+    "createdAt": "2026-02-08T23:19:13.304Z",
+    "versionId": "2849c4c1-be01-4b13-ad6f-90cede1efd11",
     "workflowId": "zAIYcDSMTH0KqEhr",
     "nodes": [
       {
@@ -1591,7 +1591,8 @@
           -800
         ],
         "id": "ae812173-931c-4ead-bb7e-82a23514b78d",
-        "name": "CleanedNoAppointments"
+        "name": "CleanedNoAppointments",
+        "alwaysOutputData": true
       },
       {
         "parameters": {
@@ -3304,11 +3305,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 23dd852c",
+    "name": "Version 2849c4c1",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "23dd852c-6f63-42b7-8c7c-b47d15469b80",
+  "activeVersionId": "2849c4c1-be01-4b13-ad6f-90cede1efd11",
   "connections": {
     "Call 'ZenotiNZ-GetAuthToken'": {
       "main": [
@@ -5844,7 +5845,8 @@
         -800
       ],
       "id": "ae812173-931c-4ead-bb7e-82a23514b78d",
-      "name": "CleanedNoAppointments"
+      "name": "CleanedNoAppointments",
+      "alwaysOutputData": true
     },
     {
       "parameters": {
@@ -6676,6 +6678,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-01-28T23:16:20.890Z",
-  "versionId": "23dd852c-6f63-42b7-8c7c-b47d15469b80"
+  "updatedAt": "2026-02-08T23:19:13.301Z",
+  "versionId": "2849c4c1-be01-4b13-ad6f-90cede1efd11"
 }
