@@ -1,0 +1,650 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get API Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Break Down Device Details": {
+      "main": [
+        [
+          {
+            "node": "Call 'SnipeIT-CreateDevice'",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List all Managed Devices": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get API Token": {
+      "main": [
+        [
+          {
+            "node": "List all Managed Devices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'SnipeIT - Create User'": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'SnipeIT-CreateDevice'": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Call 'SnipeIT - Create User'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'SnipeIT - Checkout Hardware'": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Break Down Device Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call 'SnipeIT - Checkout Hardware'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-02-11T04:36:19.589Z",
+  "id": "4BxhNbmvPpnwoO4r",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "SnipeIT - Machine/User Import New Devices",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -144
+      ],
+      "id": "5c69fcba-94a6-4032-8957-f57aa6816bdc",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        672,
+        -144
+      ],
+      "id": "86dffc1e-8014-4827-81a1-131e69e9acb8",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/beta/deviceManagement/managedDevices/{{ $json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftEntraOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1344,
+        -224
+      ],
+      "id": "cca0e939-8e3e-448d-bfa2-73ebd439454f",
+      "name": "Break Down Device Details",
+      "executeOnce": false,
+      "credentials": {
+        "microsoftEntraOAuth2Api": {
+          "id": "KdYKykHvS322gNtb",
+          "name": "Microsoft Entra ID (Azure Active Directory) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://graph.microsoft.com/v1.0/deviceManagement/managedDevices",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftEntraOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        448,
+        -144
+      ],
+      "id": "582a295a-7ff2-4807-914d-8f4fc3fbe4a0",
+      "name": "List all Managed Devices",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        },
+        "microsoftEntraOAuth2Api": {
+          "id": "KdYKykHvS322gNtb",
+          "name": "Microsoft Entra ID (Azure Active Directory) account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "FVGc9R5kchTK7wsd",
+          "mode": "list",
+          "cachedResultName": "SnipeIT",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/FVGc9R5kchTK7wsd"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "User",
+              "keyValue": "nryall"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        224,
+        -144
+      ],
+      "id": "57e86bfe-e5d3-467b-9a7b-f7acdab71b58",
+      "name": "Get API Token"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "sNQEsKgWgHjhAbHy",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/sNQEsKgWgHjhAbHy",
+          "cachedResultName": "SnipeIT - Create User"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        2016,
+        -224
+      ],
+      "id": "7453cd9e-97ad-43b1-bfa7-4499b00b5070",
+      "name": "Call 'SnipeIT - Create User'"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "zLrekTKSc2wDJI4m",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/zLrekTKSc2wDJI4m",
+          "cachedResultName": "SnipeIT-CreateDevice"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        2688,
+        -384
+      ],
+      "id": "61bcfb7a-dfd7-4b6d-a972-872b6e7bd248",
+      "name": "Call 'SnipeIT-CreateDevice'",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = {\n  LastLoggedUser: $input.first().json.emailAddress,\n  LastLoggedOnUserID: $input.first().json.usersLoggedOn[0].userId\n};\n\nreturn [{ json: data }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1792,
+        -224
+      ],
+      "id": "53b87e4a-b969-4696-81af-18680b833b55",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = {\n  SnipeITUserID: $input.first().json.data[0].UserID,\n  SnipeITUserEmail: $input.first().json.data[0].UserEmail,\n  DeviceID: $('Break Down Device Details').first().json.id,\n  NoLoggedInUser: false\n};\n\nreturn [{ json: data }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2240,
+        -224
+      ],
+      "id": "84f4fcf1-7c37-4bbf-ad9f-e7acb87648d9",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "DeviceID",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2912,
+        -224
+      ],
+      "id": "4583ae68-3072-45a2-ae46-1413119860c8",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "hgiuxR0Hy2p508uM",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/hgiuxR0Hy2p508uM",
+          "cachedResultName": "SnipeIT - Checkout Hardware"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        3360,
+        -32
+      ],
+      "id": "47873963-d4f4-404e-bab9-7f9e0a7787ab",
+      "name": "Call 'SnipeIT - Checkout Hardware'"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        896,
+        -144
+      ],
+      "id": "939eaa07-a6dc-41e3-9c3a-c18ca0aa7a41",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1120,
+        -224
+      ],
+      "id": "e5c6a648-bd56-407b-96e2-a0693e6e92fa",
+      "name": "Wait",
+      "webhookId": "98ffc477-1760-43db-b5c4-02b989cc407e"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0a4f63b4-f7be-4167-91b8-eae23dc7d0ff",
+              "leftValue": "={{ $json.usersLoggedOn }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1568,
+        -128
+      ],
+      "id": "40ece3d9-a963-4313-a980-4e88d41d7559",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "=data",
+        "include": "allFieldsExcept",
+        "options": {
+          "includeBinaries": false
+        }
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2464,
+        -128
+      ],
+      "id": "99da6706-c3cf-4fb0-a8ba-36bfff4ee1dd",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = {\n  DeviceID: $('Break Down Device Details').first().json.id,\n  NoLoggedInUser: true\n};\n\nreturn [{ json: data }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2240,
+        -32
+      ],
+      "id": "25fae9ff-5263-4352-ae05-1f40f8086963",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e7c30706-87f0-4061-a86d-a2268022b577",
+              "leftValue": "={{ $json.NoLoggedInUser }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3136,
+        -224
+      ],
+      "id": "77fd6149-edb5-4d6b-b613-16d9ca2533af",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const out = [];\n\nfor (const item of $input.all()) {\n  const j = item.json;\n\n  // If the node wrapped things in a \"data\" array, unwrap it\n  if (Array.isArray(j.data)) {\n    for (const entry of j.data) {\n      out.push({ json: entry });\n    }\n  } else {\n    // If there's no \"data\", keep the item as-is\n    out.push({ json: j });\n  }\n}\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2688,
+        -128
+      ],
+      "id": "78f7b9e6-7c3c-4274-ac88-28f2a5c46157",
+      "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        3584,
+        -32
+      ],
+      "id": "81ec49ea-e5c6-4da3-b514-1dc4faebe52e",
+      "name": "Aggregate1"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-02-11T04:36:19.592Z",
+      "createdAt": "2026-02-11T04:36:19.592Z",
+      "role": "workflow:owner",
+      "workflowId": "4BxhNbmvPpnwoO4r",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-12-05T00:51:56.073Z",
+      "createdAt": "2025-12-05T00:51:56.073Z",
+      "id": "N5UMYKN3CMwB8JVM",
+      "name": "SnipeIT"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-02-11T04:54:42.000Z",
+  "versionId": "7b5cde91-36e0-4b7b-987e-c2af8fa604a5"
+}
