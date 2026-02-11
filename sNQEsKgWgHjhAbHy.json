@@ -1,19 +1,435 @@
 {
-  "active": false,
-  "activeVersion": null,
-  "activeVersionId": null,
-  "connections": {
-    "When clicking ‘Execute workflow’": {
-      "main": [
-        [
-          {
-            "node": "APIKey",
-            "type": "main",
-            "index": 0
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-02-11T05:49:34.000Z",
+    "createdAt": "2026-02-11T05:49:33.168Z",
+    "versionId": "86436cdc-6942-4e64-9d9e-0a6154d01d8d",
+    "workflowId": "sNQEsKgWgHjhAbHy",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "FVGc9R5kchTK7wsd",
+            "mode": "list",
+            "cachedResultName": "SnipeIT",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/FVGc9R5kchTK7wsd"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "User",
+                "keyValue": "nryall"
+              }
+            ]
           }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1,
+        "position": [
+          -608,
+          -240
+        ],
+        "id": "df4a4df8-76d7-4640-b5be-1074e081610e",
+        "name": "APIKey"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "e513bb3f-4079-436d-b91c-fa8dd53aec9e",
+                "leftValue": "={{ $json.total }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          64,
+          -240
+        ],
+        "id": "06f88385-2f8b-44f2-b5e8-e588647a9c85",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "url": "https://assets.ashleyandmartin.local/api/v1/users",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "search",
+                "value": "={{ $json.mail }}"
+              },
+              {
+                "name": "limit",
+                "value": "50"
+              },
+              {
+                "name": "offset",
+                "value": "0"
+              },
+              {
+                "name": "sort",
+                "value": "created_at"
+              },
+              {
+                "name": "order",
+                "value": "desc"
+              },
+              {
+                "name": "deleted",
+                "value": "false"
+              },
+              {
+                "name": "all",
+                "value": "false"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json, application/json"
+              },
+              {
+                "name": "=Authorization",
+                "value": "=Bearer {{$('APIKey').first().json.Key}}"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -160,
+          -240
+        ],
+        "id": "f05ec499-020a-4796-bba3-052594ee8f0f",
+        "name": "Check for User",
+        "executeOnce": true
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://assets.ashleyandmartin.local/api/v1/users",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{ $('APIKey').item.json.Key }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify($json) }}",
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          512,
+          -336
+        ],
+        "id": "b621468e-a5e9-4692-8be3-d1e4c55774b8",
+        "name": "Create User"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Ignore all input and return a clean success object\nreturn [\n  {\n    json: {\n      success: true,\n      UserID: $input.first().json.rows[0].id,\n      UserEmail: $input.first().json.rows[0].email\n      \n    }\n  }\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          320,
+          -96
+        ],
+        "id": "eddff474-8e25-42cc-ae3b-5fd18a9e9b7f",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "jsCode": "const data = {\n  groups: [],\n  autoassign_licenses: false,\n  vip: false,\n  first_name: $('Find User').first().json.givenName,\n  last_name: $('Find User').first().json.surname,\n  username: $('Find User').first().json.userPrincipalName,\n  password: \"Welcome01!\",\n  password_confirmation: \"Welcome01!\",\n  jobtitle: $('Find User').first().json.jobTitle,\n  email: $('Find User').first().json.mail\n};\n\nreturn [{ json: data }];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          288,
+          -336
+        ],
+        "id": "536c6321-1ae0-4192-97a0-2c3fc2eab5b2",
+        "name": "Code in JavaScript1"
+      },
+      {
+        "parameters": {
+          "content": "Builds out code for new User",
+          "height": 208,
+          "width": 672
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          224,
+          -384
+        ],
+        "typeVersion": 1,
+        "id": "ac9fcc41-30cd-444d-a73a-0b9460b4109a",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "Check to find out of user exist or not in SnipeIT",
+          "height": 224,
+          "width": 416,
+          "color": 2
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -208,
+          -304
+        ],
+        "typeVersion": 1,
+        "id": "56cb21e9-23e3-4704-8c56-a1a02534ce49",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "content": "Found User dumps data back to previous flow with a success",
+          "height": 208,
+          "width": 288,
+          "color": 5
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          224,
+          -144
+        ],
+        "typeVersion": 1,
+        "id": "934a0cdf-0381-480c-bac0-dc373ddb19b3",
+        "name": "Sticky Note2"
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/users/{{ $('When clicking ‘Execute workflow’').item.json.LastLoggedOnUserID }}",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "microsoftEntraOAuth2Api",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -384,
+          -240
+        ],
+        "id": "919de700-efa6-482d-977b-185efa493ac1",
+        "name": "Find User",
+        "executeOnce": false,
+        "credentials": {
+          "microsoftEntraOAuth2Api": {
+            "id": "KdYKykHvS322gNtb",
+            "name": "Microsoft Entra ID (Azure Active Directory) account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// Ignore all input and return a clean success object\nreturn [\n  {\n    json: {\n      success: true,\n      UserID: $input.first().json.payload.id,\n      UserEmail: $input.first().json.payload.username\n    }\n  }\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          736,
+          -336
+        ],
+        "id": "be61347d-9792-4f09-9407-8467aa0ed2fa",
+        "name": "Code in JavaScript2"
+      },
+      {
+        "parameters": {
+          "content": "Checks 365 for User Details",
+          "height": 224,
+          "width": 224
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -448,
+          -304
+        ],
+        "typeVersion": 1,
+        "id": "9c749b9b-ae94-4f34-97e0-3e8d070936ce",
+        "name": "Sticky Note3"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          1056,
+          -224
+        ],
+        "id": "1b265d10-0284-4a65-a5ec-5d7bd44e1b8c",
+        "name": "Aggregate"
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -832,
+          -240
+        ],
+        "id": "dbc3dc4b-5632-41ba-baf2-31f8774ba07d",
+        "name": "When clicking ‘Execute workflow’"
+      }
+    ],
+    "connections": {
+      "APIKey": {
+        "main": [
+          [
+            {
+              "node": "Find User",
+              "type": "main",
+              "index": 0
+            }
+          ]
         ]
-      ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check for User": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "node": "Create User",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Find User": {
+        "main": [
+          [
+            {
+              "node": "Check for User",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create User": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript2": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "APIKey",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
     },
+    "authors": "Nicholas Ryall",
+    "name": "Version 86436cdc",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "86436cdc-6942-4e64-9d9e-0a6154d01d8d",
+  "connections": {
     "APIKey": {
       "main": [
         [
@@ -108,6 +524,17 @@
           }
         ]
       ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "APIKey",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-12-05T02:47:31.703Z",
@@ -116,17 +543,6 @@
   "meta": null,
   "name": "SnipeIT - Create User",
   "nodes": [
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
-      "position": [
-        -832,
-        -240
-      ],
-      "id": "716a8278-7d9b-4d25-886e-12a3bd2c13a2",
-      "name": "When clicking ‘Execute workflow’"
-    },
     {
       "parameters": {
         "operation": "get",
@@ -421,6 +837,19 @@
       ],
       "id": "1b265d10-0284-4a65-a5ec-5d7bd44e1b8c",
       "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -832,
+        -240
+      ],
+      "id": "dbc3dc4b-5632-41ba-baf2-31f8774ba07d",
+      "name": "When clicking ‘Execute workflow’"
     }
   ],
   "origin": "n8n",
@@ -456,6 +885,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-12-08T05:24:29.000Z",
-  "versionId": "06c22ec9-0de9-42b9-9790-085f02c4a92e"
+  "updatedAt": "2026-02-11T05:49:39.009Z",
+  "versionId": "86436cdc-6942-4e64-9d9e-0a6154d01d8d"
 }
