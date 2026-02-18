@@ -242,7 +242,7 @@
             {
               "id": "ad267cac-9f94-4b27-9974-7132788b52f9",
               "leftValue": "={{ $json.code }}",
-              "rightValue": "BB",
+              "rightValue": "SM",
               "operator": {
                 "type": "string",
                 "operation": "equals"
@@ -534,7 +534,7 @@
             {
               "id": "6db8b354-b7a6-455e-be5c-ce27e9d68c45",
               "leftValue": "={{ $json.id }}",
-              "rightValue": 23240,
+              "rightValue": 29440,
               "operator": {
                 "type": "number",
                 "operation": "gt"
@@ -648,6 +648,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-02-11T06:53:19.192Z",
-  "versionId": "ffb83ce4-5ae5-48b2-87cd-5523fd686146"
+  "updatedAt": "2026-02-16T22:54:27.746Z",
+  "versionId": "a3a5dae6-1bf5-4c4b-aa7f-ce4fb998911a"
 }
