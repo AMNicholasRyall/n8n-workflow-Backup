@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-02-05T05:02:44.000Z",
-    "createdAt": "2026-02-05T05:02:40.932Z",
-    "versionId": "2638260c-2dc3-406b-b2cc-549e8f62461f",
+    "updatedAt": "2026-02-18T02:34:41.000Z",
+    "createdAt": "2026-02-18T02:34:40.138Z",
+    "versionId": "715efd9c-95a9-4e4c-a9ec-4c2867b9b1e4",
     "workflowId": "STUF6Fz9PaFzUwRx",
     "nodes": [
       {
@@ -275,7 +275,7 @@
         "parameters": {
           "toRecipients": "={{ $('Get row(s)').item.json.email }}",
           "subject": "=Automation - Med Order - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
-          "bodyContent": "=Hi Team,\n\nAutomation has failed to Order Meds for the below\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\nRemainingBalance = {{ $('When Executed by Another Workflow').item.json.RemainingBalance }}\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\nCustomer is being charged for meds, please resolve manually.\n\nSum Total = ${{ $json.invoice.total_price.sum_total }}\n\nRegards,\nAutomation.",
+          "bodyContent": "=Hi Team,\n\nAutomation has failed to Order Meds for the below.\n\nTHIS ORDER HAS BEEN ADDED TO THE MED ORDER SPREAD SHEET\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\nRemainingBalance = {{ $('When Executed by Another Workflow').item.json.RemainingBalance }}\nScript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.invoice_number_prefix }}{{ $('Check Invoice Exists').item.json.invoice.invoice_number }}\nInvoiceID = {{ $('Check Invoice Exists').item.json.invoice.id }}\n\nCustomer is being charged for meds, please resolve manually.\n\nSum Total = ${{ $json.invoice.total_price.sum_total }}\n\nRegards,\nAutomation.",
           "additionalFields": {}
         },
         "type": "n8n-nodes-base.microsoftOutlook",
@@ -640,7 +640,21 @@
           432
         ],
         "id": "e085fe55-0c8b-4360-b0e2-1da59c8f1620",
-        "name": "Code in JavaScript",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "amount": 0
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          2336,
+          656
+        ],
+        "id": "67794cda-9aae-4def-90fa-a2226e507ae0",
+        "name": "Wait1",
+        "webhookId": "27a4b495-233d-40a1-b34d-a5499a79caa3",
         "disabled": true
       },
       {
@@ -661,7 +675,7 @@
             "convertFieldsToString": true
           },
           "options": {
-            "waitForSubWorkflow": false
+            "waitForSubWorkflow": true
           }
         },
         "type": "n8n-nodes-base.executeWorkflow",
@@ -671,8 +685,7 @@
           432
         ],
         "id": "6f366035-ce9a-4440-8461-29bcb656fedc",
-        "name": "Call 'Zenoti - AddtoSpreadSheet'",
-        "disabled": true
+        "name": "Call 'Zenoti - AddtoSpreadSheet'"
       }
     ],
     "connections": {
@@ -852,7 +865,7 @@
         "main": [
           [
             {
-              "node": "Wait",
+              "node": "Wait1",
               "type": "main",
               "index": 0
             }
@@ -898,14 +911,25 @@
             }
           ]
         ]
+      },
+      "Call 'Zenoti - AddtoSpreadSheet'": {
+        "main": [
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 2638260c",
+    "name": "Version 715efd9c",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "2638260c-2dc3-406b-b2cc-549e8f62461f",
+  "activeVersionId": "715efd9c-95a9-4e4c-a9ec-4c2867b9b1e4",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -1083,7 +1107,7 @@
       "main": [
         [
           {
-            "node": "Wait",
+            "node": "Wait1",
             "type": "main",
             "index": 0
           }
@@ -1124,6 +1148,17 @@
         [
           {
             "node": "Call 'Zenoti - AddtoSpreadSheet'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Zenoti - AddtoSpreadSheet'": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
             "type": "main",
             "index": 0
           }
@@ -1408,7 +1443,7 @@
       "parameters": {
         "toRecipients": "={{ $('Get row(s)').item.json.email }}",
         "subject": "=Automation - Med Order - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
-        "bodyContent": "=Hi Team,\n\nAutomation has failed to Order Meds for the below\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\nRemainingBalance = {{ $('When Executed by Another Workflow').item.json.RemainingBalance }}\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\nCustomer is being charged for meds, please resolve manually.\n\nSum Total = ${{ $json.invoice.total_price.sum_total }}\n\nRegards,\nAutomation.",
+        "bodyContent": "=Hi Team,\n\nAutomation has failed to Order Meds for the below.\n\nTHIS ORDER HAS BEEN ADDED TO THE MED ORDER SPREAD SHEET\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\nRemainingBalance = {{ $('When Executed by Another Workflow').item.json.RemainingBalance }}\nScript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.invoice_number_prefix }}{{ $('Check Invoice Exists').item.json.invoice.invoice_number }}\nInvoiceID = {{ $('Check Invoice Exists').item.json.invoice.id }}\n\nCustomer is being charged for meds, please resolve manually.\n\nSum Total = ${{ $json.invoice.total_price.sum_total }}\n\nRegards,\nAutomation.",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.microsoftOutlook",
@@ -1773,7 +1808,21 @@
         432
       ],
       "id": "e085fe55-0c8b-4360-b0e2-1da59c8f1620",
-      "name": "Code in JavaScript",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "amount": 0
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2336,
+        656
+      ],
+      "id": "67794cda-9aae-4def-90fa-a2226e507ae0",
+      "name": "Wait1",
+      "webhookId": "27a4b495-233d-40a1-b34d-a5499a79caa3",
       "disabled": true
     },
     {
@@ -1794,7 +1843,7 @@
           "convertFieldsToString": true
         },
         "options": {
-          "waitForSubWorkflow": false
+          "waitForSubWorkflow": true
         }
       },
       "type": "n8n-nodes-base.executeWorkflow",
@@ -1804,12 +1853,58 @@
         432
       ],
       "id": "6f366035-ce9a-4440-8461-29bcb656fedc",
-      "name": "Call 'Zenoti - AddtoSpreadSheet'",
-      "disabled": true
+      "name": "Call 'Zenoti - AddtoSpreadSheet'"
     }
   ],
   "origin": "n8n",
-  "pinData": {},
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "AppointmentID": "f5e4e008-2336-4c20-afe8-943a9eb8d729",
+          "CustomerFirstName": "Jm",
+          "CustomerLastName": "Maribong",
+          "CustomerCode": "AK8897",
+          "CustomerID": "4463bbe8-d72e-47fd-b2f0-c2c3b6506d8a",
+          "CustomerDOB": "08/06/2001",
+          "CustomerEmail": "maribong.jm2.1@gmail.com",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": true,
+          "textField5": "Jm Maribong",
+          "select6": "no",
+          "textField2": "Dr Annemarie Hern 15150",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "2",
+          "DeliveryAddress1": "2b/21 Saint Jude Street",
+          "DeliveryCity": "Avondale",
+          "DeliveryAddressFull": "2b/21 Saint Jude Street, Avondale",
+          "doctorsDirections": "ApplyToScalp",
+          "addresscompared": true,
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
+          "ZenotiProductName": "Minoxidil + Finasteride Solution",
+          "ZenotiProductNameShort": "Minox",
+          "ZenotiProductNameEnd": "tion",
+          "CanSubtract": true,
+          "RemainingBalance": 5,
+          "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
+          "packagesavailable": true,
+          "perfectrun": true,
+          "CLinicABB": "AUC",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=75c3214f-4ead-4302-8829-3d9666545344&ServiceId=c881a110-4440-40fc-9e81-918d918bc7a3&Service=Telehealth%20First&GuestId=4463bbe8-d72e-47fd-b2f0-c2c3b6506d8a&AppointmentId=f5e4e008-2336-4c20-afe8-943a9eb8d729",
+          "StartDate": "2026-02-17"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -1820,7 +1915,8 @@
     "timeSavedMode": "fixed",
     "callerPolicy": "workflowsFromSameOwner",
     "errorWorkflow": "J83Enw8ArDSqhMCL",
-    "timeSavedPerExecution": 1
+    "timeSavedPerExecution": 1,
+    "saveDataSuccessExecution": "all"
   },
   "shared": [
     {
@@ -1841,6 +1937,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-02-05T05:02:40.931Z",
-  "versionId": "2638260c-2dc3-406b-b2cc-549e8f62461f"
+  "updatedAt": "2026-02-18T02:34:40.137Z",
+  "versionId": "715efd9c-95a9-4e4c-a9ec-4c2867b9b1e4"
 }
