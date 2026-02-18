@@ -1,0 +1,808 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-02-13T04:47:26.000Z",
+    "createdAt": "2026-02-13T04:47:24.802Z",
+    "versionId": "eed0a16b-82f6-4d5d-b010-5f0c6e5820f2",
+    "workflowId": "v4DDI6vWpoiymMuW",
+    "nodes": [
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -144,
+          -312
+        ],
+        "id": "a55077b5-bd05-4e77-9f43-79ccea8a0f31",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "f39f1503-da91-4376-afb6-c360f0599b2a",
+                "leftValue": "={{ $json.ok }}",
+                "rightValue": false,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          304,
+          -240
+        ],
+        "id": "365eb60f-a203-47c9-866b-37ba29ecc8a2",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "url": "http://10.64.1.140:3000/health",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          80,
+          -240
+        ],
+        "id": "1e31adca-f682-4126-b1af-349bc7f29214",
+        "name": "CheckPlayWrightisUp"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "ee04d079-16ba-4a57-b6aa-498aca009dfa",
+                "name": "address",
+                "value": "={{ $('When Executed by Another Workflow').item.json.DeliveryAddress1 }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          528,
+          -312
+        ],
+        "id": "c9ad3cf4-da27-41b9-b864-18090d927776",
+        "name": "Set Address"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http:///10.64.1.140:3000/regioncheck",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "address",
+                "value": "={{ $json.address }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          752,
+          -312
+        ],
+        "id": "99dbf60b-48f0-460f-9063-b897f2a48a48",
+        "name": "Check Region"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "f23d0e48-4ad9-45c7-b918-58508e436980",
+                "leftValue": "={{ $json.ok }}",
+                "rightValue": false,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          976,
+          -312
+        ],
+        "id": "b01cfcf0-213a-4ca1-96f5-7037e156ffed",
+        "name": "If1"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "ee04d079-16ba-4a57-b6aa-498aca009dfa",
+                "name": "region",
+                "value": "Unknown",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1200,
+          -144
+        ],
+        "id": "6b94b20d-0423-4e0f-bd61-41e5a5362bcb",
+        "name": "Set Unknown Region"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "05bc7029-9b76-4269-84e2-f77428259f0e",
+                "name": "Region",
+                "value": "={{ $('Check Region').item.json.status }}",
+                "type": "string"
+              },
+              {
+                "id": "17482d1a-a4bb-4c1d-8846-91405f11dbd0",
+                "name": "RegionConfidence",
+                "value": "={{ $('Check Region').item.json.confidence }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1200,
+          -360
+        ],
+        "id": "dd52d921-d7ac-4af9-b354-f13293a928e8",
+        "name": "Add Region"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1648,
+          -312
+        ],
+        "id": "bb1ff91f-c4c7-4743-859e-7d279fbad46c",
+        "name": "Wait",
+        "webhookId": "8b72a576-5b8b-40bf-83f9-331228934b13",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineAll",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          1424,
+          -432
+        ],
+        "id": "fef43dc6-b00c-4dc6-aba8-3a0c39083273",
+        "name": "Merge"
+      }
+    ],
+    "connections": {
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "CheckPlayWrightisUp",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CheckPlayWrightisUp": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Set Address",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Set Unknown Region",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set Address": {
+        "main": [
+          [
+            {
+              "node": "Check Region",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check Region": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "Add Region",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Set Unknown Region",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set Unknown Region": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Add Region": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version eed0a16b",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "eed0a16b-82f6-4d5d-b010-5f0c6e5820f2",
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "CheckPlayWrightisUp",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CheckPlayWrightisUp": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Set Address",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Unknown Region",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Address": {
+      "main": [
+        [
+          {
+            "node": "Check Region",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Region": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Add Region",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Unknown Region",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Unknown Region": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Region": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-02-13T01:00:39.121Z",
+  "id": "v4DDI6vWpoiymMuW",
+  "isArchived": false,
+  "meta": null,
+  "name": "ZenotiNZ - RegionCheck",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -144,
+        -312
+      ],
+      "id": "a55077b5-bd05-4e77-9f43-79ccea8a0f31",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f39f1503-da91-4376-afb6-c360f0599b2a",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        304,
+        -240
+      ],
+      "id": "365eb60f-a203-47c9-866b-37ba29ecc8a2",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "http://10.64.1.140:3000/health",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        80,
+        -240
+      ],
+      "id": "1e31adca-f682-4126-b1af-349bc7f29214",
+      "name": "CheckPlayWrightisUp"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ee04d079-16ba-4a57-b6aa-498aca009dfa",
+              "name": "address",
+              "value": "={{ $('When Executed by Another Workflow').item.json.DeliveryAddress1 }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        528,
+        -312
+      ],
+      "id": "c9ad3cf4-da27-41b9-b864-18090d927776",
+      "name": "Set Address"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http:///10.64.1.140:3000/regioncheck",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "address",
+              "value": "={{ $json.address }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        752,
+        -312
+      ],
+      "id": "99dbf60b-48f0-460f-9063-b897f2a48a48",
+      "name": "Check Region"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f23d0e48-4ad9-45c7-b918-58508e436980",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        976,
+        -312
+      ],
+      "id": "b01cfcf0-213a-4ca1-96f5-7037e156ffed",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ee04d079-16ba-4a57-b6aa-498aca009dfa",
+              "name": "region",
+              "value": "Unknown",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1200,
+        -144
+      ],
+      "id": "6b94b20d-0423-4e0f-bd61-41e5a5362bcb",
+      "name": "Set Unknown Region"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "05bc7029-9b76-4269-84e2-f77428259f0e",
+              "name": "Region",
+              "value": "={{ $('Check Region').item.json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "17482d1a-a4bb-4c1d-8846-91405f11dbd0",
+              "name": "RegionConfidence",
+              "value": "={{ $('Check Region').item.json.confidence }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1200,
+        -360
+      ],
+      "id": "dd52d921-d7ac-4af9-b354-f13293a928e8",
+      "name": "Add Region"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1648,
+        -312
+      ],
+      "id": "bb1ff91f-c4c7-4743-859e-7d279fbad46c",
+      "name": "Wait",
+      "webhookId": "8b72a576-5b8b-40bf-83f9-331228934b13",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1424,
+        -432
+      ],
+      "id": "fef43dc6-b00c-4dc6-aba8-3a0c39083273",
+      "name": "Merge"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "AppointmentID": "53b63a2f-e3c5-4096-8006-180e014fc7f5",
+          "CustomerFirstName": "Bibek",
+          "CustomerLastName": "Acharya Chhetri",
+          "CustomerCode": "AK8741",
+          "CustomerID": "49973cf7-4e7f-439b-9f21-9765e2cafc0b",
+          "CustomerDOB": "21/07/2000",
+          "CustomerEmail": "bibek.chhetri842@gmail.com",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": true,
+          "textField5": "Bibek Acharya Chhetri",
+          "select6": "no",
+          "textField2": "Dr Annemarie Hern 15150",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "2",
+          "DeliveryAddress1": "43 Girrahween Drive, Totara Vale, Auckland, 0629",
+          "DeliveryCity": "",
+          "DeliveryAddressFull": "43 Girrahween Drive, Totara Vale, Auckland, 0629",
+          "doctorsDirections": "ApplyToScalp",
+          "addresscompared": true
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "timeSavedPerExecution": 1,
+    "saveDataSuccessExecution": "all"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-02-13T01:00:39.126Z",
+      "createdAt": "2026-02-13T01:00:39.126Z",
+      "role": "workflow:owner",
+      "workflowId": "v4DDI6vWpoiymMuW",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2026-01-21T23:52:55.489Z",
+      "createdAt": "2026-01-21T23:52:55.489Z",
+      "id": "OXsRoYm7kDVlpgY1",
+      "name": "NZ"
+    },
+    {
+      "updatedAt": "2026-01-21T23:52:51.063Z",
+      "createdAt": "2026-01-21T23:52:51.063Z",
+      "id": "OuUcDlUQOF4Dgotd",
+      "name": "MedOrder"
+    },
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-02-13T04:47:24.801Z",
+  "versionId": "eed0a16b-82f6-4d5d-b010-5f0c6e5820f2"
+}
