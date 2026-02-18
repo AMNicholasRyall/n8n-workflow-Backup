@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-01-14T23:41:00.000Z",
-    "createdAt": "2026-01-14T23:40:59.055Z",
-    "versionId": "ba70cbfe-5911-40fb-bf9b-f3063cd905f3",
+    "updatedAt": "2026-02-13T04:41:24.000Z",
+    "createdAt": "2026-02-13T04:41:22.903Z",
+    "versionId": "9dcf166a-9137-46ee-bdb3-abbd2e8501d9",
     "workflowId": "nTEpzvUO2Mr96Y0V",
     "nodes": [
       {
@@ -260,6 +260,37 @@
         ],
         "id": "5f4fcc56-5589-4012-b0e8-382239bf760e",
         "name": "BringFeildsForward"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "v4DDI6vWpoiymMuW",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/v4DDI6vWpoiymMuW",
+            "cachedResultName": "ZenotiNZ - RegionCheck"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {
+            "waitForSubWorkflow": false
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          1920,
+          64
+        ],
+        "id": "d35a925b-6886-4c59-8251-c1e5d56604b9",
+        "name": "Call 'ZenotiNZ - RegionCheck'",
+        "disabled": true
       }
     ],
     "connections": {
@@ -379,14 +410,25 @@
             }
           ]
         ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Call 'ZenotiNZ - RegionCheck'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version ba70cbfe",
+    "name": "Version 9dcf166a",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "ba70cbfe-5911-40fb-bf9b-f3063cd905f3",
+  "activeVersionId": "9dcf166a-9137-46ee-bdb3-abbd2e8501d9",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -499,6 +541,17 @@
         [
           {
             "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Call 'ZenotiNZ - RegionCheck'",
             "type": "main",
             "index": 0
           }
@@ -766,10 +819,76 @@
       ],
       "id": "5f4fcc56-5589-4012-b0e8-382239bf760e",
       "name": "BringFeildsForward"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "v4DDI6vWpoiymMuW",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/v4DDI6vWpoiymMuW",
+          "cachedResultName": "ZenotiNZ - RegionCheck"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1920,
+        64
+      ],
+      "id": "d35a925b-6886-4c59-8251-c1e5d56604b9",
+      "name": "Call 'ZenotiNZ - RegionCheck'",
+      "disabled": true
     }
   ],
   "origin": "n8n",
-  "pinData": {},
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "AppointmentID": "b9bebaab-4324-4cd7-8049-f0cae80e8d4c",
+          "CustomerFirstName": "Geoff",
+          "CustomerLastName": "Lovegrove",
+          "CustomerCode": "AK2096",
+          "CustomerID": "05c55956-28ab-46db-a038-e87ad67c2af2",
+          "CustomerDOB": "26/10/1973",
+          "CustomerEmail": "Geoff.lovegrove@therentshop.co.nz",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": true,
+          "textField5": "Geoff Lovegrove",
+          "select6": "no",
+          "textField2": "Dr Annemarie Hern 15150",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "2",
+          "DeliveryAddress1": "1520B State Highway 10",
+          "DeliveryCity": "Northland",
+          "DeliveryAddressFull": "1520B State Highway 10, Northland",
+          "doctorsDirections": "ApplyToScalp"
+        },
+        "binary": {},
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -778,7 +897,6 @@
     "executionOrder": "v1",
     "availableInMCP": false,
     "timeSavedMode": "fixed",
-    "saveDataSuccessExecution": "all",
     "callerPolicy": "workflowsFromSameOwner"
   },
   "shared": [
@@ -800,6 +918,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-01-14T23:45:29.877Z",
-  "versionId": "ba70cbfe-5911-40fb-bf9b-f3063cd905f3"
+  "updatedAt": "2026-02-13T04:41:22.902Z",
+  "versionId": "9dcf166a-9137-46ee-bdb3-abbd2e8501d9"
 }
