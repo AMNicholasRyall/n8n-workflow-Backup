@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-02-08T23:19:14.000Z",
-    "createdAt": "2026-02-08T23:19:13.304Z",
-    "versionId": "2849c4c1-be01-4b13-ad6f-90cede1efd11",
+    "updatedAt": "2026-02-12T23:00:36.000Z",
+    "createdAt": "2026-02-12T23:00:34.303Z",
+    "versionId": "288bffd5-03fa-4043-ba5e-8dcf60942d61",
     "workflowId": "zAIYcDSMTH0KqEhr",
     "nodes": [
       {
@@ -1582,20 +1582,6 @@
       },
       {
         "parameters": {
-          "jsCode": "return [\n  {\n    json: {\n      FilterMeOut: true,\n      CustomerCenterID: $('Get Clinc').first().json.Zenoti_ID,\n    }\n  }\n];\n"
-        },
-        "type": "n8n-nodes-base.code",
-        "typeVersion": 2,
-        "position": [
-          592,
-          -800
-        ],
-        "id": "ae812173-931c-4ead-bb7e-82a23514b78d",
-        "name": "CleanedNoAppointments",
-        "alwaysOutputData": true
-      },
-      {
-        "parameters": {
           "jsCode": "const items = $('FilterLiveProducts').all();\n\nreturn items;"
         },
         "type": "n8n-nodes-base.code",
@@ -2360,6 +2346,29 @@
         ],
         "id": "562baf08-6ae1-41f7-8ee2-b9ed003d5363",
         "name": "DataClenseTooManyPackages"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "f1d84ac0-68bc-48d3-b19f-8b1f1b9bc0d2",
+                "name": "Appointment",
+                "value": "NoAppointments",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          608,
+          -800
+        ],
+        "id": "7889edc1-100c-44cf-8815-2b0005efef9d",
+        "name": "Edit Fields"
       }
     ],
     "connections": {
@@ -2942,7 +2951,7 @@
           ],
           [
             {
-              "node": "CleanedNoAppointments",
+              "node": "Edit Fields",
               "type": "main",
               "index": 0
             }
@@ -2976,17 +2985,6 @@
           [
             {
               "node": "Split Out",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "CleanedNoAppointments": {
-        "main": [
-          [
-            {
-              "node": "Wait1",
               "type": "main",
               "index": 0
             }
@@ -3302,14 +3300,25 @@
             }
           ]
         ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 2849c4c1",
+    "name": "Version 288bffd5",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "2849c4c1-be01-4b13-ad6f-90cede1efd11",
+  "activeVersionId": "288bffd5-03fa-4043-ba5e-8dcf60942d61",
   "connections": {
     "Call 'ZenotiNZ-GetAuthToken'": {
       "main": [
@@ -3890,7 +3899,7 @@
         ],
         [
           {
-            "node": "CleanedNoAppointments",
+            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
@@ -3924,17 +3933,6 @@
         [
           {
             "node": "Split Out",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "CleanedNoAppointments": {
-      "main": [
-        [
-          {
-            "node": "Wait1",
             "type": "main",
             "index": 0
           }
@@ -4245,6 +4243,17 @@
         [
           {
             "node": "Call 'ZenotiNZ-TooManyPackages'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
             "type": "main",
             "index": 0
           }
@@ -5836,20 +5845,6 @@
     },
     {
       "parameters": {
-        "jsCode": "return [\n  {\n    json: {\n      FilterMeOut: true,\n      CustomerCenterID: $('Get Clinc').first().json.Zenoti_ID,\n    }\n  }\n];\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        592,
-        -800
-      ],
-      "id": "ae812173-931c-4ead-bb7e-82a23514b78d",
-      "name": "CleanedNoAppointments",
-      "alwaysOutputData": true
-    },
-    {
-      "parameters": {
         "jsCode": "const items = $('FilterLiveProducts').all();\n\nreturn items;"
       },
       "type": "n8n-nodes-base.code",
@@ -6614,6 +6609,29 @@
       ],
       "id": "562baf08-6ae1-41f7-8ee2-b9ed003d5363",
       "name": "DataClenseTooManyPackages"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f1d84ac0-68bc-48d3-b19f-8b1f1b9bc0d2",
+              "name": "Appointment",
+              "value": "NoAppointments",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        608,
+        -800
+      ],
+      "id": "7889edc1-100c-44cf-8815-2b0005efef9d",
+      "name": "Edit Fields"
     }
   ],
   "origin": "n8n",
@@ -6640,8 +6658,8 @@
           "id": 2,
           "createdAt": "2025-12-09T00:49:44.432Z",
           "updatedAt": "2025-12-12T04:09:32.201Z",
-          "start_date": "2026-01-28",
-          "end_date": "2026-01-29"
+          "start_date": "2026-02-12",
+          "end_date": "2026-02-13"
         },
         "pairedItem": {
           "item": 0
@@ -6678,6 +6696,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-02-08T23:19:13.301Z",
-  "versionId": "2849c4c1-be01-4b13-ad6f-90cede1efd11"
+  "updatedAt": "2026-02-12T23:00:34.301Z",
+  "versionId": "288bffd5-03fa-4043-ba5e-8dcf60942d61"
 }
