@@ -1,0 +1,1790 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-02-23T01:08:22.000Z",
+    "createdAt": "2026-02-23T01:08:21.291Z",
+    "versionId": "9b367f2b-1c5e-45c2-9311-8227f92d51a9",
+    "workflowId": "YYDNByD72f7oe3LN",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "={{ $json.table_id }}",
+            "mode": "id"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "AddedtoExcel",
+                "condition": "isEmpty"
+              }
+            ]
+          },
+          "returnAll": true
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          -96,
+          144
+        ],
+        "id": "40c6d3c1-8125-4aa3-9ce4-3fb35afbb4fd",
+        "name": "Get row(s)1",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "resource": "table",
+          "workbook": {
+            "__rl": true,
+            "value": "012CMKCCEIUS5SMQO3TJHLPAEWDF2Y2LYB",
+            "mode": "list",
+            "cachedResultName": "Zenoti-GuestFormData",
+            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
+          },
+          "worksheet": {
+            "__rl": true,
+            "value": "{00000000-0001-0000-0000-000000000000}",
+            "mode": "list",
+            "cachedResultName": "Sheet1",
+            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1"
+          },
+          "table": {
+            "__rl": true,
+            "value": "{574F5FEF-D38D-4DD1-97B6-E3BD9F13CC9A}",
+            "mode": "list",
+            "cachedResultName": "GuestFormData",
+            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1:AN2"
+          },
+          "dataMode": "autoMap",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.microsoftExcel",
+        "typeVersion": 2.2,
+        "position": [
+          816,
+          288
+        ],
+        "id": "07c8f6f1-e47d-4029-aa96-ee249eebf291",
+        "name": "Append rows to table",
+        "executeOnce": false,
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "microsoftExcelOAuth2Api": {
+            "id": "snb39Kzd4tl5cSJU",
+            "name": "Microsoft Excel account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "batchSize": 20,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          336,
+          128
+        ],
+        "id": "09d211c4-ed20-4630-819b-779698ae9544",
+        "name": "Loop Over Items1"
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          560,
+          272
+        ],
+        "id": "dbb21322-db01-45b0-a70d-770f4ff1f218",
+        "name": "Wait",
+        "webhookId": "8595834c-7ca4-4ddf-8859-4685f9e3d1e3"
+      },
+      {
+        "parameters": {
+          "content": "## Grab Clinic Clients",
+          "height": 336,
+          "width": 368,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -144,
+          16
+        ],
+        "typeVersion": 1,
+        "id": "f19fe407-9522-4792-88d3-8a69fb020d41",
+        "name": "Sticky Note2"
+      },
+      {
+        "parameters": {
+          "content": "## Batch loop of uploading Clients to Excel",
+          "height": 512,
+          "width": 704,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          224,
+          16
+        ],
+        "typeVersion": 1,
+        "id": "91b150fb-f049-4003-bcda-68b41248a09f",
+        "name": "Sticky Note3"
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -368,
+          144
+        ],
+        "id": "a4617432-2325-41f4-85d1-96eb6c1426c4",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "content": "## In Bound Clinic",
+          "height": 336,
+          "width": 368
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -512,
+          16
+        ],
+        "typeVersion": 1,
+        "id": "23b145f8-6c33-4f53-8f0b-bd0e08edf029",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "## Update Table",
+          "height": 288,
+          "width": 368,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          928,
+          240
+        ],
+        "typeVersion": 1,
+        "id": "7fb398ff-8cf0-4979-a1f9-d0c294008ad9",
+        "name": "Sticky Note4"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "dataTableId": {
+            "__rl": true,
+            "value": "={{ $('When Executed by Another Workflow').item.json.table_id }}",
+            "mode": "id"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyValue": "={{ $('Wait').item.json.id }}"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "AddedtoExcel": "True"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Client_ID",
+                "displayName": "Client_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Zenoti_ID",
+                "displayName": "Zenoti_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Clinic_name",
+                "displayName": "Clinic_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Client_DOB",
+                "displayName": "Client_DOB",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Client_Code",
+                "displayName": "Client_Code",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Client_Tags",
+                "displayName": "Client_Tags",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Client_FirstName",
+                "displayName": "Client_FirstName",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Client_LastName",
+                "displayName": "Client_LastName",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "GuestFormSubmitted",
+                "displayName": "GuestFormSubmitted",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "PostalCode",
+                "displayName": "PostalCode",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Gender",
+                "displayName": "Gender",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "PreviousSteps",
+                "displayName": "PreviousSteps",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "HearAboutus",
+                "displayName": "HearAboutus",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "HeartDisease",
+                "displayName": "HeartDisease",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "HighBlood",
+                "displayName": "HighBlood",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "LivKidProstate",
+                "displayName": "LivKidProstate",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Diabetes",
+                "displayName": "Diabetes",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Thyriod",
+                "displayName": "Thyriod",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "AnemiaIron",
+                "displayName": "AnemiaIron",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "PyschiatricCon",
+                "displayName": "PyschiatricCon",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Dermatitis",
+                "displayName": "Dermatitis",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Psoriasis",
+                "displayName": "Psoriasis",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Eczema",
+                "displayName": "Eczema",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Dandruff",
+                "displayName": "Dandruff",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "ItchyScalp",
+                "displayName": "ItchyScalp",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "DryScalp",
+                "displayName": "DryScalp",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "OilyScalp",
+                "displayName": "OilyScalp",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "HairLoss",
+                "displayName": "HairLoss",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "OtherCondition",
+                "displayName": "OtherCondition",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "RecEmoIllSur",
+                "displayName": "RecEmoIllSur",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "AttemptConceive",
+                "displayName": "AttemptConceive",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "OtherMedical",
+                "displayName": "OtherMedical",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "MedicationIntake",
+                "displayName": "MedicationIntake",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "SteriodTest",
+                "displayName": "SteriodTest",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "AllericMedic",
+                "displayName": "AllericMedic",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "SpecificDiet",
+                "displayName": "SpecificDiet",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "ConditionPresent",
+                "displayName": "ConditionPresent",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "AgeRange",
+                "displayName": "AgeRange",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Treatment",
+                "displayName": "Treatment",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "MedicalHistory",
+                "displayName": "MedicalHistory",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "FamilyHistory",
+                "displayName": "FamilyHistory",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "AddedtoExcel",
+                "displayName": "AddedtoExcel",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          816,
+          416
+        ],
+        "id": "caf42eda-f3d9-4896-b86c-dc38aaec77a2",
+        "name": "Upsert row(s)"
+      },
+      {
+        "parameters": {
+          "mode": "chooseBranch"
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          1088,
+          336
+        ],
+        "id": "e9f5f13a-0335-465d-8d66-11244d5ce603",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "ee86aa17-791e-4b76-9735-fffc8d9ecc94",
+                "leftValue": "={{ Object.keys($json).length }}",
+                "rightValue": "0",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          80,
+          144
+        ],
+        "id": "fe7b9c4d-640e-486f-bf39-fb8d808890d5",
+        "name": "If1",
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "amount": 0
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          672,
+          592
+        ],
+        "id": "36e28980-72e8-4478-aa8d-52a9830dbefd",
+        "name": "Wait1",
+        "webhookId": "211d3edb-5d24-4c8f-8dc0-2dc052ffe242",
+        "alwaysOutputData": true,
+        "executeOnce": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "76808df0-58df-4a14-b84d-5e0bf20c7405",
+                "name": "name",
+                "value": "={{ $('When Executed by Another Workflow').item.json.name }}",
+                "type": "string"
+              },
+              {
+                "id": "44787aca-f854-4f37-8531-1bdc8db0d6ea",
+                "name": "ExcelUpdate",
+                "value": "Completed",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          880,
+          592
+        ],
+        "id": "9d1a116f-92c7-4294-af4f-af8b4cf9a5fb",
+        "name": "Edit Fields"
+      }
+    ],
+    "connections": {
+      "Get row(s)1": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Append rows to table": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Loop Over Items1": {
+        "main": [
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Append rows to table",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Upsert row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Upsert row(s)": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait1": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 9b367f2b",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "9b367f2b-1c5e-45c2-9311-8227f92d51a9",
+  "connections": {
+    "Get row(s)1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append rows to table": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Append rows to table",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Upsert row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert row(s)": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-02-19T07:11:10.046Z",
+  "id": "YYDNByD72f7oe3LN",
+  "isArchived": false,
+  "meta": null,
+  "name": "Zenoti - Guest Data to Excel - Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "={{ $json.table_id }}",
+          "mode": "id"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "AddedtoExcel",
+              "condition": "isEmpty"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -96,
+        144
+      ],
+      "id": "40c6d3c1-8125-4aa3-9ce4-3fb35afbb4fd",
+      "name": "Get row(s)1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "resource": "table",
+        "workbook": {
+          "__rl": true,
+          "value": "012CMKCCEIUS5SMQO3TJHLPAEWDF2Y2LYB",
+          "mode": "list",
+          "cachedResultName": "Zenoti-GuestFormData",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
+        },
+        "worksheet": {
+          "__rl": true,
+          "value": "{00000000-0001-0000-0000-000000000000}",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "{574F5FEF-D38D-4DD1-97B6-E3BD9F13CC9A}",
+          "mode": "list",
+          "cachedResultName": "GuestFormData",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1:AN2"
+        },
+        "dataMode": "autoMap",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftExcel",
+      "typeVersion": 2.2,
+      "position": [
+        816,
+        288
+      ],
+      "id": "07c8f6f1-e47d-4029-aa96-ee249eebf291",
+      "name": "Append rows to table",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "microsoftExcelOAuth2Api": {
+          "id": "snb39Kzd4tl5cSJU",
+          "name": "Microsoft Excel account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 20,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        336,
+        128
+      ],
+      "id": "09d211c4-ed20-4630-819b-779698ae9544",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        272
+      ],
+      "id": "dbb21322-db01-45b0-a70d-770f4ff1f218",
+      "name": "Wait",
+      "webhookId": "8595834c-7ca4-4ddf-8859-4685f9e3d1e3"
+    },
+    {
+      "parameters": {
+        "content": "## Grab Clinic Clients",
+        "height": 336,
+        "width": 368,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -144,
+        16
+      ],
+      "typeVersion": 1,
+      "id": "f19fe407-9522-4792-88d3-8a69fb020d41",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Batch loop of uploading Clients to Excel",
+        "height": 512,
+        "width": 704,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        224,
+        16
+      ],
+      "typeVersion": 1,
+      "id": "91b150fb-f049-4003-bcda-68b41248a09f",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -368,
+        144
+      ],
+      "id": "a4617432-2325-41f4-85d1-96eb6c1426c4",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "content": "## In Bound Clinic",
+        "height": 336,
+        "width": 368
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -512,
+        16
+      ],
+      "typeVersion": 1,
+      "id": "23b145f8-6c33-4f53-8f0b-bd0e08edf029",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Update Table",
+        "height": 288,
+        "width": 368,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        928,
+        240
+      ],
+      "typeVersion": 1,
+      "id": "7fb398ff-8cf0-4979-a1f9-d0c294008ad9",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "={{ $('When Executed by Another Workflow').item.json.table_id }}",
+          "mode": "id"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $('Wait').item.json.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "AddedtoExcel": "True"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Client_ID",
+              "displayName": "Client_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Zenoti_ID",
+              "displayName": "Zenoti_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Clinic_name",
+              "displayName": "Clinic_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Client_DOB",
+              "displayName": "Client_DOB",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Client_Code",
+              "displayName": "Client_Code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Client_Tags",
+              "displayName": "Client_Tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Client_FirstName",
+              "displayName": "Client_FirstName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Client_LastName",
+              "displayName": "Client_LastName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "GuestFormSubmitted",
+              "displayName": "GuestFormSubmitted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "PostalCode",
+              "displayName": "PostalCode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "PreviousSteps",
+              "displayName": "PreviousSteps",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "HearAboutus",
+              "displayName": "HearAboutus",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "HeartDisease",
+              "displayName": "HeartDisease",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "HighBlood",
+              "displayName": "HighBlood",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "LivKidProstate",
+              "displayName": "LivKidProstate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Diabetes",
+              "displayName": "Diabetes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Thyriod",
+              "displayName": "Thyriod",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "AnemiaIron",
+              "displayName": "AnemiaIron",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "PyschiatricCon",
+              "displayName": "PyschiatricCon",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Dermatitis",
+              "displayName": "Dermatitis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Psoriasis",
+              "displayName": "Psoriasis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Eczema",
+              "displayName": "Eczema",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Dandruff",
+              "displayName": "Dandruff",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "ItchyScalp",
+              "displayName": "ItchyScalp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "DryScalp",
+              "displayName": "DryScalp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "OilyScalp",
+              "displayName": "OilyScalp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "HairLoss",
+              "displayName": "HairLoss",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "OtherCondition",
+              "displayName": "OtherCondition",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "RecEmoIllSur",
+              "displayName": "RecEmoIllSur",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "AttemptConceive",
+              "displayName": "AttemptConceive",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "OtherMedical",
+              "displayName": "OtherMedical",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "MedicationIntake",
+              "displayName": "MedicationIntake",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "SteriodTest",
+              "displayName": "SteriodTest",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "AllericMedic",
+              "displayName": "AllericMedic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "SpecificDiet",
+              "displayName": "SpecificDiet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "ConditionPresent",
+              "displayName": "ConditionPresent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "AgeRange",
+              "displayName": "AgeRange",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Treatment",
+              "displayName": "Treatment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "MedicalHistory",
+              "displayName": "MedicalHistory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "FamilyHistory",
+              "displayName": "FamilyHistory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "AddedtoExcel",
+              "displayName": "AddedtoExcel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        816,
+        416
+      ],
+      "id": "caf42eda-f3d9-4896-b86c-dc38aaec77a2",
+      "name": "Upsert row(s)"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch"
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1088,
+        336
+      ],
+      "id": "e9f5f13a-0335-465d-8d66-11244d5ce603",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ee86aa17-791e-4b76-9735-fffc8d9ecc94",
+              "leftValue": "={{ Object.keys($json).length }}",
+              "rightValue": "0",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        80,
+        144
+      ],
+      "id": "fe7b9c4d-640e-486f-bf39-fb8d808890d5",
+      "name": "If1",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "amount": 0
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        592
+      ],
+      "id": "36e28980-72e8-4478-aa8d-52a9830dbefd",
+      "name": "Wait1",
+      "webhookId": "211d3edb-5d24-4c8f-8dc0-2dc052ffe242",
+      "alwaysOutputData": true,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "76808df0-58df-4a14-b84d-5e0bf20c7405",
+              "name": "name",
+              "value": "={{ $('When Executed by Another Workflow').item.json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "44787aca-f854-4f37-8531-1bdc8db0d6ea",
+              "name": "ExcelUpdate",
+              "value": "Completed",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        592
+      ],
+      "id": "9d1a116f-92c7-4294-af4f-af8b4cf9a5fb",
+      "name": "Edit Fields"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "Zenoti_ID": "b0ffaa9d-5ccc-4771-95ae-43e9d4819104",
+          "code": "AD",
+          "name": "Adelaide",
+          "state": "South Australia",
+          "state_short_name": "SA",
+          "time_zone": "(UTC+09:30) Adelaide",
+          "address_1": "223 Flinders Street",
+          "address_2": "The black WOTSO building",
+          "city": "Adelaide",
+          "postcode": 0,
+          "display_number": "0882271577",
+          "email": "adelaide@ashleyandmartin.com.au",
+          "No_Clients": 22947,
+          "Abb": "ADE",
+          "table_id": "iaTsV9px13OrTCWt",
+          "Country_Code": "AU",
+          "Country": "Australia",
+          "id": 3,
+          "createdAt": "2025-11-07T02:19:53.355Z",
+          "updatedAt": "2026-01-22T00:46:24.974Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "saveDataSuccessExecution": "all"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-02-19T07:11:10.048Z",
+      "createdAt": "2026-02-19T07:11:10.048Z",
+      "role": "workflow:owner",
+      "workflowId": "YYDNByD72f7oe3LN",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    },
+    {
+      "updatedAt": "2025-11-27T23:16:28.880Z",
+      "createdAt": "2025-11-27T23:16:28.880Z",
+      "id": "mDg4TH0DyIA1jzi0",
+      "name": "AD"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-02-23T01:08:21.290Z",
+  "versionId": "9b367f2b-1c5e-45c2-9311-8227f92d51a9"
+}
