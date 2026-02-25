@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-01-22T02:43:59.000Z",
-    "createdAt": "2026-01-22T02:43:57.836Z",
-    "versionId": "c4b2c172-29b1-4305-b251-b5ec90c8ccca",
+    "updatedAt": "2026-02-23T01:38:35.000Z",
+    "createdAt": "2026-02-23T01:38:33.773Z",
+    "versionId": "0c4fa80e-b4df-42d9-b7da-6ad7d69a29f1",
     "workflowId": "nFqRBuyciWksrpPE",
     "nodes": [
       {
@@ -38,7 +38,7 @@
         "parameters": {
           "content": "## Grab Clinics",
           "height": 288,
-          "width": 224,
+          "width": 480,
           "color": 4
         },
         "type": "n8n-nodes-base.stickyNote",
@@ -67,56 +67,6 @@
       },
       {
         "parameters": {
-          "content": "## Filter to AUS",
-          "height": 288,
-          "width": 224
-        },
-        "type": "n8n-nodes-base.stickyNote",
-        "position": [
-          784,
-          -160
-        ],
-        "typeVersion": 1,
-        "id": "45624661-296b-478c-a5f1-3e35acf8e873",
-        "name": "Sticky Note2"
-      },
-      {
-        "parameters": {
-          "conditions": {
-            "options": {
-              "caseSensitive": true,
-              "leftValue": "",
-              "typeValidation": "loose",
-              "version": 3
-            },
-            "conditions": [
-              {
-                "id": "a3b018e8-0372-41f3-b71f-b21a2c1eaf3f",
-                "leftValue": "={{ $json.Country_Code }}",
-                "rightValue": "",
-                "operator": {
-                  "type": "string",
-                  "operation": "exists",
-                  "singleValue": true
-                }
-              }
-            ],
-            "combinator": "and"
-          },
-          "looseTypeValidation": true,
-          "options": {}
-        },
-        "type": "n8n-nodes-base.filter",
-        "typeVersion": 2.3,
-        "position": [
-          848,
-          -32
-        ],
-        "id": "82e7aedc-b32f-468f-ab70-63c3f3836e28",
-        "name": "Filter"
-      },
-      {
-        "parameters": {
           "content": "## Grab New Patients",
           "height": 288,
           "width": 224
@@ -124,7 +74,7 @@
         "type": "n8n-nodes-base.stickyNote",
         "position": [
           1392,
-          48
+          64
         ],
         "typeVersion": 1,
         "id": "f21612e2-25a7-40a7-9435-26bf4ee73cfa",
@@ -141,12 +91,8 @@
                 "value": "={{ $json.Zenoti_ID }}"
               },
               {
-                "name": "page",
-                "value": "1"
-              },
-              {
                 "name": "size",
-                "value": "1"
+                "value": "50"
               },
               {
                 "name": "last_updated",
@@ -167,20 +113,38 @@
               }
             ]
           },
-          "options": {}
+          "options": {
+            "pagination": {
+              "pagination": {
+                "parameters": {
+                  "parameters": [
+                    {
+                      "name": "page",
+                      "value": "={{ $pageCount + 1 }}"
+                    }
+                  ]
+                },
+                "limitPagesFetched": true,
+                "maxRequests": "={{ Math.ceil($response.body.page_Info.total / $response.body.page_Info.size) }}",
+                "requestInterval": 1000
+              }
+            }
+          }
         },
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          1440,
-          176
+          1456,
+          192
         ],
         "id": "6802fc30-22aa-4096-add8-ce51c1ae1302",
-        "name": "HTTP Request"
+        "name": "HTTP Request",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
       },
       {
         "parameters": {
-          "jsCode": "// Select your timezone offset here\nconst TZ_OFFSET_HOURS = 8; // Perth = 8, Brisbane = 10, Sydney = 11 (DST), NZ = 13\n\n// Helper to shift UTC time to target timezone\nconst shiftToTz = (date, offsetHours) => {\n  return new Date(date.getTime() + offsetHours * 3600 * 1000);\n};\n\n// Helper to format YYYY-MM-DD using shifted date\nconst formatLocal = (d) => {\n  const year = d.getUTCFullYear();\n  const month = String(d.getUTCMonth() + 1).padStart(2, '0');\n  const day = String(d.getUTCDate()).padStart(2, '0');\n  return `${year}-${month}-${day}`;\n};\n\n// Current UTC time\nconst nowUtc = new Date();\n\n// Convert to local timezone\nconst todayLocal = shiftToTz(nowUtc, TZ_OFFSET_HOURS);\n\n// One week ago in local timezone\nconst oneWeekAgoLocal = new Date(todayLocal.getTime() - 7 * 24 * 3600 * 1000);\n\n// Output just the date from 1 week ago\nreturn [\n  {\n    json: {\n      date_one_week_ago: formatLocal(oneWeekAgoLocal),\n    }\n  }\n];\n"
+          "jsCode": "const TZ_OFFSET_HOURS = 8; // Adjust if needed\n\nconst shiftToTz = (date, offsetHours) =>\n  new Date(date.getTime() + offsetHours * 3600 * 1000);\n\nconst formatLocal = (d) =>\n  `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;\n\nconst nowUtc = new Date();\nconst todayLocal = shiftToTz(nowUtc, TZ_OFFSET_HOURS);\n\nconst sevenDaysAgoLocal = new Date(\n  todayLocal.getTime() - (7 * 24 * 60 * 60 * 1000)\n);\n\nreturn [\n  {\n    json: {\n      date_one_week_ago: formatLocal(sevenDaysAgoLocal),\n    }\n  }\n];\n"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -193,7 +157,7 @@
       },
       {
         "parameters": {
-          "content": "## Set Previous Week",
+          "content": "## Set Previous Month",
           "height": 288,
           "color": 3
         },
@@ -237,7 +201,7 @@
         "type": "n8n-nodes-base.stickyNote",
         "position": [
           1616,
-          48
+          64
         ],
         "typeVersion": 1,
         "id": "81d74ea5-d04d-4fee-afb9-735c577e7a13",
@@ -263,7 +227,6 @@
           "columns": {
             "mappingMode": "defineBelow",
             "value": {
-              "GuestFormSubmitted": "={{ null }}",
               "Client_ID": "={{ $json.id }}",
               "Zenoti_ID": "={{ $json.center_id }}",
               "Clinic_name": "={{ $json.center_name }}",
@@ -363,7 +326,7 @@
                 "display": true,
                 "type": "boolean",
                 "readOnly": false,
-                "removed": false
+                "removed": true
               },
               {
                 "id": "PostalCode",
@@ -694,11 +657,12 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1,
         "position": [
-          1888,
-          176
+          2128,
+          192
         ],
         "id": "850f8c98-8bc5-4fd7-8324-89a0aafb84a3",
-        "name": "UpdateTable"
+        "name": "UpdateTable",
+        "executeOnce": false
       },
       {
         "parameters": {
@@ -708,22 +672,22 @@
         "type": "n8n-nodes-base.splitOut",
         "typeVersion": 1,
         "position": [
-          1664,
-          176
+          1680,
+          192
         ],
         "id": "546d4176-5905-46e8-8de8-be54005d900e",
         "name": "Split Out"
       },
       {
         "parameters": {
-          "content": "## Update Table",
+          "content": "## Re-Order",
           "height": 288,
           "width": 224
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
           1840,
-          48
+          64
         ],
         "typeVersion": 1,
         "id": "f18f344f-3ecc-4e0e-9192-d6a8f4092e47",
@@ -736,7 +700,7 @@
         "type": "n8n-nodes-base.splitInBatches",
         "typeVersion": 3,
         "position": [
-          1184,
+          1136,
           -32
         ],
         "id": "bd13db17-c205-4230-babd-2ca3706d7813",
@@ -761,6 +725,143 @@
         ],
         "id": "2905142a-36d7-4978-82d2-90c6a85f6482",
         "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a44b5738-4a5e-4f26-9482-0d224446c743",
+                "leftValue": "={{ $json.code }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              },
+              {
+                "id": "b128d7a0-b6a6-48e2-9553-d8b6afe3c8e6",
+                "leftValue": "={{ $json.code }}",
+                "rightValue": "=HO",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals"
+                }
+              },
+              {
+                "id": "9ea08198-2cb9-4865-844a-2ed220f44338",
+                "leftValue": "={{ $json.code }}",
+                "rightValue": "CO",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals"
+                }
+              },
+              {
+                "id": "27fe0ea3-72fa-476c-a673-ecc409f8ed39",
+                "leftValue": "={{ $json.code }}",
+                "rightValue": "TH",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals"
+                }
+              },
+              {
+                "id": "30d9abce-ae42-4261-a393-c3725ec75198",
+                "leftValue": "={{ $json.Abb }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          912,
+          -32
+        ],
+        "id": "5013540e-0d1d-431d-aa6a-92f5087a9d84",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "sortFieldsUi": {
+            "sortField": [
+              {
+                "fieldName": "created_date",
+                "order": "descending"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.sort",
+        "typeVersion": 1,
+        "position": [
+          1888,
+          192
+        ],
+        "id": "fd57fb72-1e14-4691-bb5d-7e09bf08751f",
+        "name": "Sort"
+      },
+      {
+        "parameters": {
+          "content": "## Update Table",
+          "height": 288,
+          "width": 224,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          2064,
+          64
+        ],
+        "typeVersion": 1,
+        "id": "f2de5eb2-65f1-4c32-8a77-a28b339781f3",
+        "name": "Sticky Note8"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "iBxNrn0gRuIrQ93a",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/iBxNrn0gRuIrQ93a",
+            "cachedResultName": "Zenoti - Guest Form Data - Automated"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          1456,
+          -240
+        ],
+        "id": "dbfb13a7-f612-49fc-98b3-b28065542042",
+        "name": "Call 'Zenoti - Guest Form Data - Automated'",
+        "executeOnce": true
       }
     ],
     "connections": {
@@ -769,17 +870,6 @@
           [
             {
               "node": "Set Date",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Filter": {
-        "main": [
-          [
-            {
-              "node": "Loop Over Items",
               "type": "main",
               "index": 0
             }
@@ -823,7 +913,7 @@
         "main": [
           [
             {
-              "node": "UpdateTable",
+              "node": "Sort",
               "type": "main",
               "index": 0
             }
@@ -832,7 +922,13 @@
       },
       "Loop Over Items": {
         "main": [
-          [],
+          [
+            {
+              "node": "Call 'Zenoti - Guest Form Data - Automated'",
+              "type": "main",
+              "index": 0
+            }
+          ],
           [
             {
               "node": "HTTP Request",
@@ -863,31 +959,42 @@
             }
           ]
         ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Sort": {
+        "main": [
+          [
+            {
+              "node": "UpdateTable",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version c4b2c172",
+    "name": "Version 0c4fa80e",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "c4b2c172-29b1-4305-b251-b5ec90c8ccca",
+  "activeVersionId": "0c4fa80e-b4df-42d9-b7da-6ad7d69a29f1",
   "connections": {
     "Call 'Zenoti-GetAuthToken'": {
       "main": [
         [
           {
             "node": "Set Date",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Filter": {
-      "main": [
-        [
-          {
-            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
@@ -931,7 +1038,7 @@
       "main": [
         [
           {
-            "node": "UpdateTable",
+            "node": "Sort",
             "type": "main",
             "index": 0
           }
@@ -940,7 +1047,13 @@
     },
     "Loop Over Items": {
       "main": [
-        [],
+        [
+          {
+            "node": "Call 'Zenoti - Guest Form Data - Automated'",
+            "type": "main",
+            "index": 0
+          }
+        ],
         [
           {
             "node": "HTTP Request",
@@ -966,6 +1079,28 @@
         [
           {
             "node": "Call 'Zenoti-GetAuthToken'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort": {
+      "main": [
+        [
+          {
+            "node": "UpdateTable",
             "type": "main",
             "index": 0
           }
@@ -1011,7 +1146,7 @@
       "parameters": {
         "content": "## Grab Clinics",
         "height": 288,
-        "width": 224,
+        "width": 480,
         "color": 4
       },
       "type": "n8n-nodes-base.stickyNote",
@@ -1040,56 +1175,6 @@
     },
     {
       "parameters": {
-        "content": "## Filter to AUS",
-        "height": 288,
-        "width": 224
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        784,
-        -160
-      ],
-      "typeVersion": 1,
-      "id": "45624661-296b-478c-a5f1-3e35acf8e873",
-      "name": "Sticky Note2"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "loose",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "a3b018e8-0372-41f3-b71f-b21a2c1eaf3f",
-              "leftValue": "={{ $json.Country_Code }}",
-              "rightValue": "",
-              "operator": {
-                "type": "string",
-                "operation": "exists",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "looseTypeValidation": true,
-        "options": {}
-      },
-      "type": "n8n-nodes-base.filter",
-      "typeVersion": 2.3,
-      "position": [
-        848,
-        -32
-      ],
-      "id": "82e7aedc-b32f-468f-ab70-63c3f3836e28",
-      "name": "Filter"
-    },
-    {
-      "parameters": {
         "content": "## Grab New Patients",
         "height": 288,
         "width": 224
@@ -1097,7 +1182,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         1392,
-        48
+        64
       ],
       "typeVersion": 1,
       "id": "f21612e2-25a7-40a7-9435-26bf4ee73cfa",
@@ -1114,12 +1199,8 @@
               "value": "={{ $json.Zenoti_ID }}"
             },
             {
-              "name": "page",
-              "value": "1"
-            },
-            {
               "name": "size",
-              "value": "1"
+              "value": "50"
             },
             {
               "name": "last_updated",
@@ -1140,20 +1221,38 @@
             }
           ]
         },
-        "options": {}
+        "options": {
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "page",
+                    "value": "={{ $pageCount + 1 }}"
+                  }
+                ]
+              },
+              "limitPagesFetched": true,
+              "maxRequests": "={{ Math.ceil($response.body.page_Info.total / $response.body.page_Info.size) }}",
+              "requestInterval": 1000
+            }
+          }
+        }
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1440,
-        176
+        1456,
+        192
       ],
       "id": "6802fc30-22aa-4096-add8-ce51c1ae1302",
-      "name": "HTTP Request"
+      "name": "HTTP Request",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
-        "jsCode": "// Select your timezone offset here\nconst TZ_OFFSET_HOURS = 8; // Perth = 8, Brisbane = 10, Sydney = 11 (DST), NZ = 13\n\n// Helper to shift UTC time to target timezone\nconst shiftToTz = (date, offsetHours) => {\n  return new Date(date.getTime() + offsetHours * 3600 * 1000);\n};\n\n// Helper to format YYYY-MM-DD using shifted date\nconst formatLocal = (d) => {\n  const year = d.getUTCFullYear();\n  const month = String(d.getUTCMonth() + 1).padStart(2, '0');\n  const day = String(d.getUTCDate()).padStart(2, '0');\n  return `${year}-${month}-${day}`;\n};\n\n// Current UTC time\nconst nowUtc = new Date();\n\n// Convert to local timezone\nconst todayLocal = shiftToTz(nowUtc, TZ_OFFSET_HOURS);\n\n// One week ago in local timezone\nconst oneWeekAgoLocal = new Date(todayLocal.getTime() - 7 * 24 * 3600 * 1000);\n\n// Output just the date from 1 week ago\nreturn [\n  {\n    json: {\n      date_one_week_ago: formatLocal(oneWeekAgoLocal),\n    }\n  }\n];\n"
+        "jsCode": "const TZ_OFFSET_HOURS = 8; // Adjust if needed\n\nconst shiftToTz = (date, offsetHours) =>\n  new Date(date.getTime() + offsetHours * 3600 * 1000);\n\nconst formatLocal = (d) =>\n  `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;\n\nconst nowUtc = new Date();\nconst todayLocal = shiftToTz(nowUtc, TZ_OFFSET_HOURS);\n\nconst sevenDaysAgoLocal = new Date(\n  todayLocal.getTime() - (7 * 24 * 60 * 60 * 1000)\n);\n\nreturn [\n  {\n    json: {\n      date_one_week_ago: formatLocal(sevenDaysAgoLocal),\n    }\n  }\n];\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1166,7 +1265,7 @@
     },
     {
       "parameters": {
-        "content": "## Set Previous Week",
+        "content": "## Set Previous Month",
         "height": 288,
         "color": 3
       },
@@ -1210,7 +1309,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         1616,
-        48
+        64
       ],
       "typeVersion": 1,
       "id": "81d74ea5-d04d-4fee-afb9-735c577e7a13",
@@ -1236,7 +1335,6 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "GuestFormSubmitted": "={{ null }}",
             "Client_ID": "={{ $json.id }}",
             "Zenoti_ID": "={{ $json.center_id }}",
             "Clinic_name": "={{ $json.center_name }}",
@@ -1336,7 +1434,7 @@
               "display": true,
               "type": "boolean",
               "readOnly": false,
-              "removed": false
+              "removed": true
             },
             {
               "id": "PostalCode",
@@ -1667,11 +1765,12 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1,
       "position": [
-        1888,
-        176
+        2128,
+        192
       ],
       "id": "850f8c98-8bc5-4fd7-8324-89a0aafb84a3",
-      "name": "UpdateTable"
+      "name": "UpdateTable",
+      "executeOnce": false
     },
     {
       "parameters": {
@@ -1681,22 +1780,22 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        1664,
-        176
+        1680,
+        192
       ],
       "id": "546d4176-5905-46e8-8de8-be54005d900e",
       "name": "Split Out"
     },
     {
       "parameters": {
-        "content": "## Update Table",
+        "content": "## Re-Order",
         "height": 288,
         "width": 224
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         1840,
-        48
+        64
       ],
       "typeVersion": 1,
       "id": "f18f344f-3ecc-4e0e-9192-d6a8f4092e47",
@@ -1709,7 +1808,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        1184,
+        1136,
         -32
       ],
       "id": "bd13db17-c205-4230-babd-2ca3706d7813",
@@ -1734,6 +1833,143 @@
       ],
       "id": "2905142a-36d7-4978-82d2-90c6a85f6482",
       "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a44b5738-4a5e-4f26-9482-0d224446c743",
+              "leftValue": "={{ $json.code }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "b128d7a0-b6a6-48e2-9553-d8b6afe3c8e6",
+              "leftValue": "={{ $json.code }}",
+              "rightValue": "=HO",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "9ea08198-2cb9-4865-844a-2ed220f44338",
+              "leftValue": "={{ $json.code }}",
+              "rightValue": "CO",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "27fe0ea3-72fa-476c-a673-ecc409f8ed39",
+              "leftValue": "={{ $json.code }}",
+              "rightValue": "TH",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "30d9abce-ae42-4261-a393-c3725ec75198",
+              "leftValue": "={{ $json.Abb }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        912,
+        -32
+      ],
+      "id": "5013540e-0d1d-431d-aa6a-92f5087a9d84",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "created_date",
+              "order": "descending"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        1888,
+        192
+      ],
+      "id": "fd57fb72-1e14-4691-bb5d-7e09bf08751f",
+      "name": "Sort"
+    },
+    {
+      "parameters": {
+        "content": "## Update Table",
+        "height": 288,
+        "width": 224,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2064,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "f2de5eb2-65f1-4c32-8a77-a28b339781f3",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "iBxNrn0gRuIrQ93a",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/iBxNrn0gRuIrQ93a",
+          "cachedResultName": "Zenoti - Guest Form Data - Automated"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1456,
+        -240
+      ],
+      "id": "dbfb13a7-f612-49fc-98b3-b28065542042",
+      "name": "Call 'Zenoti - Guest Form Data - Automated'",
+      "executeOnce": true
     }
   ],
   "origin": "n8n",
@@ -1747,7 +1983,8 @@
     "availableInMCP": false,
     "timeSavedMode": "fixed",
     "callerPolicy": "workflowsFromSameOwner",
-    "errorWorkflow": "J83Enw8ArDSqhMCL"
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "saveExecutionProgress": true
   },
   "shared": [
     {
@@ -1784,6 +2021,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-01-22T02:44:05.833Z",
-  "versionId": "c4b2c172-29b1-4305-b251-b5ec90c8ccca"
+  "updatedAt": "2026-02-23T01:38:33.772Z",
+  "versionId": "0c4fa80e-b4df-42d9-b7da-6ad7d69a29f1"
 }
