@@ -1,0 +1,1477 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-02-23T01:31:20.000Z",
+    "createdAt": "2026-02-23T01:31:18.801Z",
+    "versionId": "34062dee-7e59-42c8-8d81-84c7cffe2638",
+    "workflowId": "iBxNrn0gRuIrQ93a",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lsINP70DmcZtIj4M",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinics",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+          },
+          "returnAll": true
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          480,
+          80
+        ],
+        "id": "74115f24-ad1f-4b23-b66a-c2f3e3e0d8e3",
+        "name": "Get row(s)"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "={{ $json.table_id }}",
+            "mode": "id"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "GuestFormSubmitted",
+                "condition": "isEmpty"
+              }
+            ]
+          },
+          "returnAll": true
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          64,
+          528
+        ],
+        "id": "4b04bb46-8080-4db3-b631-a24bf4dda78a",
+        "name": "Get row(s)1",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "content": "## Auth / Zenoti Token",
+          "height": 288,
+          "width": 432
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          0,
+          0
+        ],
+        "typeVersion": 1,
+        "id": "d4a4cc41-704d-418e-95f1-d0a6503feb47",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "## Grab All Clinics",
+          "height": 288,
+          "width": 560,
+          "color": 2
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          432,
+          0
+        ],
+        "typeVersion": 1,
+        "id": "3cfc94c2-d041-437b-87e8-c4b25f552416",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "content": "## Grab Client who's guest form we have not checked",
+          "height": 288,
+          "width": 432
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          16,
+          400
+        ],
+        "typeVersion": 1,
+        "id": "6abcef70-afbd-4099-9e97-6c65034a34d4",
+        "name": "Sticky Note2"
+      },
+      {
+        "parameters": {
+          "content": "## Update Excel",
+          "height": 288,
+          "width": 288
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1776,
+          0
+        ],
+        "typeVersion": 1,
+        "id": "9bf648e5-7f95-4689-af57-24749566a18a",
+        "name": "Sticky Note8"
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          64,
+          80
+        ],
+        "id": "462c0a94-ffc3-4e2d-8c01-7d673bf25ecc",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a44b5738-4a5e-4f26-9482-0d224446c743",
+                "leftValue": "={{ $json.code }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              },
+              {
+                "id": "b128d7a0-b6a6-48e2-9553-d8b6afe3c8e6",
+                "leftValue": "={{ $json.code }}",
+                "rightValue": "=HO",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals"
+                }
+              },
+              {
+                "id": "9ea08198-2cb9-4865-844a-2ed220f44338",
+                "leftValue": "={{ $json.code }}",
+                "rightValue": "CO",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals"
+                }
+              },
+              {
+                "id": "27fe0ea3-72fa-476c-a673-ecc409f8ed39",
+                "leftValue": "={{ $json.code }}",
+                "rightValue": "TH",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals"
+                }
+              },
+              {
+                "id": "30d9abce-ae42-4261-a393-c3725ec75198",
+                "leftValue": "={{ $json.Abb }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          752,
+          80
+        ],
+        "id": "cbe03ad2-6971-4fa4-a2d8-feea3cc40c85",
+        "name": "Filter2"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          1104,
+          80
+        ],
+        "id": "827c813d-6e64-4d83-a681-468406132866",
+        "name": "ClinicLoop"
+      },
+      {
+        "parameters": {
+          "content": "## Loop Per Clinics",
+          "height": 288,
+          "width": 432
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          992,
+          0
+        ],
+        "typeVersion": 1,
+        "id": "b12f27e5-b35e-487d-88a8-f2f8dbf1e09a",
+        "name": "Sticky Note9"
+      },
+      {
+        "parameters": {
+          "content": "## If For Empty Queries",
+          "height": 288,
+          "color": 2
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          448,
+          400
+        ],
+        "typeVersion": 1,
+        "id": "6beb7217-9fbc-4739-94ea-666127651e15",
+        "name": "Sticky Note10"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "ee86aa17-791e-4b76-9735-fffc8d9ecc94",
+                "leftValue": "={{ Object.keys($json).length }}",
+                "rightValue": "0",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          512,
+          496
+        ],
+        "id": "26c18ea4-f85c-49d8-8fc7-a1c66188c665",
+        "name": "If1"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "yqeBXeXVYyJMD9S6",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/yqeBXeXVYyJMD9S6",
+            "cachedResultName": "Zenoti - Guest Form Data - Collector"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "table_id_firstItem": "={{ $('ClinicLoop').first().json.table_id }}"
+            },
+            "matchingColumns": [
+              "table_id_firstItem"
+            ],
+            "schema": [
+              {
+                "id": "table_id_firstItem",
+                "displayName": "table_id_firstItem",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.2,
+        "position": [
+          848,
+          496
+        ],
+        "name": "Call Zenoti - Guest Form Data - Collector",
+        "id": "d1455a53-eaf3-4eec-ad28-67bfea5d4ae1"
+      },
+      {
+        "parameters": {
+          "content": "## Grab Client who's guest form we have not checked",
+          "height": 288,
+          "width": 432
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          688,
+          400
+        ],
+        "typeVersion": 1,
+        "id": "8a063574-9a24-4014-a417-e77f2587b544",
+        "name": "Sticky Note3"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "YYDNByD72f7oe3LN",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/YYDNByD72f7oe3LN",
+            "cachedResultName": "Zenoti - Guest Data to Excel - Automation"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {
+            "waitForSubWorkflow": true
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          1856,
+          112
+        ],
+        "id": "eab50497-a66d-49b6-bf72-587f8c4e1d98",
+        "name": "Call 'Zenoti - Guest Data to Excel - Automation'",
+        "executeOnce": false
+      },
+      {
+        "parameters": {
+          "content": "## Re- Grab Clinics",
+          "height": 288,
+          "width": 352,
+          "color": 2
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1424,
+          0
+        ],
+        "typeVersion": 1,
+        "id": "4da115e6-4c08-4dab-8c32-17f0d81815a9",
+        "name": "Sticky Note4"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lsINP70DmcZtIj4M",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinics",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "table_id",
+                "condition": "isNotEmpty"
+              }
+            ]
+          },
+          "returnAll": true
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          1504,
+          112
+        ],
+        "id": "c5b94931-4088-4ba4-b05a-49c06fd38c3e",
+        "name": "Get row(s)2",
+        "executeOnce": true
+      },
+      {
+        "parameters": {
+          "operation": "search",
+          "query": "Zenoti-GuestFormData.xlsx"
+        },
+        "type": "n8n-nodes-base.microsoftOneDrive",
+        "typeVersion": 1,
+        "position": [
+          2176,
+          112
+        ],
+        "id": "34f9523c-6830-4c38-9beb-7e7ef3bdf163",
+        "name": "Search a file",
+        "executeOnce": true,
+        "credentials": {
+          "microsoftOneDriveOAuth2Api": {
+            "id": "YQJEXWiBLg1Zt1YR",
+            "name": "Microsoft Drive account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "download",
+          "fileId": "={{ $json.id }}"
+        },
+        "type": "n8n-nodes-base.microsoftOneDrive",
+        "typeVersion": 1,
+        "position": [
+          2576,
+          112
+        ],
+        "id": "6e065b34-1bc0-4040-a818-9c0fcafacd73",
+        "name": "Download a file",
+        "executeOnce": true,
+        "credentials": {
+          "microsoftOneDriveOAuth2Api": {
+            "id": "YQJEXWiBLg1Zt1YR",
+            "name": "Microsoft Drive account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "upload",
+          "site": {
+            "__rl": true,
+            "value": "ashleyandmartincomau.sharepoint.com,b36f54fe-6363-4f80-a917-80ea79163f8f,e253e1e6-f0a2-48df-99ae-a6211683cee6",
+            "mode": "list",
+            "cachedResultName": "HeadOffice"
+          },
+          "folder": {
+            "__rl": true,
+            "value": "01B6E6QFLOHI7RD75M3ZAZGOK2L55CWEYX",
+            "mode": "list",
+            "cachedResultName": "Zenoti Data"
+          },
+          "fileName": "=Zenoti-GuestFormData-{{ $today.toISODate() }}.xlsx",
+          "fileContents": "data",
+          "requestOptions": {}
+        },
+        "type": "n8n-nodes-base.microsoftSharePoint",
+        "typeVersion": 1,
+        "position": [
+          2816,
+          112
+        ],
+        "id": "6920bab9-aef1-4e59-92a3-be8e1245b930",
+        "name": "Upload file",
+        "credentials": {
+          "microsoftSharePointOAuth2Api": {
+            "id": "8eWNjQciijocacKo",
+            "name": "Microsoft SharePoint account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "67b1511a-9744-4217-9189-25432989de5f",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "Zenoti-GuestFormData.xlsx",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          2368,
+          112
+        ],
+        "id": "266658e5-ef00-4b1e-916f-70fcd92c7a45",
+        "name": "Filter1"
+      },
+      {
+        "parameters": {
+          "content": "## Replace Excel File in IT common",
+          "height": 288,
+          "width": 976
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          2064,
+          0
+        ],
+        "typeVersion": 1,
+        "id": "7129cb50-33f5-420b-bd29-8c707e32ec1d",
+        "name": "Sticky Note5"
+      }
+    ],
+    "connections": {
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "Filter2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)1": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter2": {
+        "main": [
+          [
+            {
+              "node": "ClinicLoop",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "ClinicLoop": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)2",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Get row(s)1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "Call Zenoti - Guest Form Data - Collector",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "ClinicLoop",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call Zenoti - Guest Form Data - Collector": {
+        "main": [
+          [
+            {
+              "node": "ClinicLoop",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)2": {
+        "main": [
+          [
+            {
+              "node": "Call 'Zenoti - Guest Data to Excel - Automation'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search a file": {
+        "main": [
+          [
+            {
+              "node": "Filter1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Download a file": {
+        "main": [
+          [
+            {
+              "node": "Upload file",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter1": {
+        "main": [
+          [
+            {
+              "node": "Download a file",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'Zenoti - Guest Data to Excel - Automation'": {
+        "main": [
+          [
+            {
+              "node": "Search a file",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 34062dee",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "34062dee-7e59-42c8-8d81-84c7cffe2638",
+  "connections": {
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Filter2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter2": {
+      "main": [
+        [
+          {
+            "node": "ClinicLoop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ClinicLoop": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Call Zenoti - Guest Form Data - Collector",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ClinicLoop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Zenoti - Guest Form Data - Collector": {
+      "main": [
+        [
+          {
+            "node": "ClinicLoop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)2": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti - Guest Data to Excel - Automation'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search a file": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download a file": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Download a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Zenoti - Guest Data to Excel - Automation'": {
+      "main": [
+        [
+          {
+            "node": "Search a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-02-19T05:22:31.828Z",
+  "id": "iBxNrn0gRuIrQ93a",
+  "isArchived": false,
+  "meta": null,
+  "name": "Zenoti - Guest Form Data - Automated",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        80
+      ],
+      "id": "74115f24-ad1f-4b23-b66a-c2f3e3e0d8e3",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "={{ $json.table_id }}",
+          "mode": "id"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "GuestFormSubmitted",
+              "condition": "isEmpty"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        64,
+        528
+      ],
+      "id": "4b04bb46-8080-4db3-b631-a24bf4dda78a",
+      "name": "Get row(s)1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "content": "## Auth / Zenoti Token",
+        "height": 288,
+        "width": 432
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "d4a4cc41-704d-418e-95f1-d0a6503feb47",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Grab All Clinics",
+        "height": 288,
+        "width": 560,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        432,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "3cfc94c2-d041-437b-87e8-c4b25f552416",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Grab Client who's guest form we have not checked",
+        "height": 288,
+        "width": 432
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        16,
+        400
+      ],
+      "typeVersion": 1,
+      "id": "6abcef70-afbd-4099-9e97-6c65034a34d4",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Update Excel",
+        "height": 288,
+        "width": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1776,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "9bf648e5-7f95-4689-af57-24749566a18a",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        64,
+        80
+      ],
+      "id": "462c0a94-ffc3-4e2d-8c01-7d673bf25ecc",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a44b5738-4a5e-4f26-9482-0d224446c743",
+              "leftValue": "={{ $json.code }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "b128d7a0-b6a6-48e2-9553-d8b6afe3c8e6",
+              "leftValue": "={{ $json.code }}",
+              "rightValue": "=HO",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "9ea08198-2cb9-4865-844a-2ed220f44338",
+              "leftValue": "={{ $json.code }}",
+              "rightValue": "CO",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "27fe0ea3-72fa-476c-a673-ecc409f8ed39",
+              "leftValue": "={{ $json.code }}",
+              "rightValue": "TH",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "30d9abce-ae42-4261-a393-c3725ec75198",
+              "leftValue": "={{ $json.Abb }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        752,
+        80
+      ],
+      "id": "cbe03ad2-6971-4fa4-a2d8-feea3cc40c85",
+      "name": "Filter2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1104,
+        80
+      ],
+      "id": "827c813d-6e64-4d83-a681-468406132866",
+      "name": "ClinicLoop"
+    },
+    {
+      "parameters": {
+        "content": "## Loop Per Clinics",
+        "height": 288,
+        "width": 432
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        992,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "b12f27e5-b35e-487d-88a8-f2f8dbf1e09a",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "## If For Empty Queries",
+        "height": 288,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        448,
+        400
+      ],
+      "typeVersion": 1,
+      "id": "6beb7217-9fbc-4739-94ea-666127651e15",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ee86aa17-791e-4b76-9735-fffc8d9ecc94",
+              "leftValue": "={{ Object.keys($json).length }}",
+              "rightValue": "0",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        512,
+        496
+      ],
+      "id": "26c18ea4-f85c-49d8-8fc7-a1c66188c665",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "yqeBXeXVYyJMD9S6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/yqeBXeXVYyJMD9S6",
+          "cachedResultName": "Zenoti - Guest Form Data - Collector"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "table_id_firstItem": "={{ $('ClinicLoop').first().json.table_id }}"
+          },
+          "matchingColumns": [
+            "table_id_firstItem"
+          ],
+          "schema": [
+            {
+              "id": "table_id_firstItem",
+              "displayName": "table_id_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        848,
+        496
+      ],
+      "name": "Call Zenoti - Guest Form Data - Collector",
+      "id": "d1455a53-eaf3-4eec-ad28-67bfea5d4ae1"
+    },
+    {
+      "parameters": {
+        "content": "## Grab Client who's guest form we have not checked",
+        "height": 288,
+        "width": 432
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        688,
+        400
+      ],
+      "typeVersion": 1,
+      "id": "8a063574-9a24-4014-a417-e77f2587b544",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "YYDNByD72f7oe3LN",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/YYDNByD72f7oe3LN",
+          "cachedResultName": "Zenoti - Guest Data to Excel - Automation"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1856,
+        112
+      ],
+      "id": "eab50497-a66d-49b6-bf72-587f8c4e1d98",
+      "name": "Call 'Zenoti - Guest Data to Excel - Automation'",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "content": "## Re- Grab Clinics",
+        "height": 288,
+        "width": 352,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1424,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "4da115e6-4c08-4dab-8c32-17f0d81815a9",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "table_id",
+              "condition": "isNotEmpty"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1504,
+        112
+      ],
+      "id": "c5b94931-4088-4ba4-b05a-49c06fd38c3e",
+      "name": "Get row(s)2",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "query": "Zenoti-GuestFormData.xlsx"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        2176,
+        112
+      ],
+      "id": "34f9523c-6830-4c38-9beb-7e7ef3bdf163",
+      "name": "Search a file",
+      "executeOnce": true,
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "YQJEXWiBLg1Zt1YR",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        2576,
+        112
+      ],
+      "id": "6e065b34-1bc0-4040-a818-9c0fcafacd73",
+      "name": "Download a file",
+      "executeOnce": true,
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "YQJEXWiBLg1Zt1YR",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "site": {
+          "__rl": true,
+          "value": "ashleyandmartincomau.sharepoint.com,b36f54fe-6363-4f80-a917-80ea79163f8f,e253e1e6-f0a2-48df-99ae-a6211683cee6",
+          "mode": "list",
+          "cachedResultName": "HeadOffice"
+        },
+        "folder": {
+          "__rl": true,
+          "value": "01B6E6QFLOHI7RD75M3ZAZGOK2L55CWEYX",
+          "mode": "list",
+          "cachedResultName": "Zenoti Data"
+        },
+        "fileName": "=Zenoti-GuestFormData-{{ $today.toISODate() }}.xlsx",
+        "fileContents": "data",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.microsoftSharePoint",
+      "typeVersion": 1,
+      "position": [
+        2816,
+        112
+      ],
+      "id": "6920bab9-aef1-4e59-92a3-be8e1245b930",
+      "name": "Upload file",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "67b1511a-9744-4217-9189-25432989de5f",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "Zenoti-GuestFormData.xlsx",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        2368,
+        112
+      ],
+      "id": "266658e5-ef00-4b1e-916f-70fcd92c7a45",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "content": "## Replace Excel File in IT common",
+        "height": 288,
+        "width": 976
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2064,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "7129cb50-33f5-420b-bd29-8c707e32ec1d",
+      "name": "Sticky Note5"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "Client_ID": "D34E4CAB-8F5E-43A1-9994-A150CFFE95F8",
+          "Zenoti_ID": "b0ffaa9d-5ccc-4771-95ae-43e9d4819104",
+          "Clinic_name": "Adelaide",
+          "Client_DOB": null,
+          "Client_Code": "ADG5446",
+          "Client_Tags": null,
+          "Client_FirstName": "Jacques",
+          "Client_LastName": "De Villiers",
+          "GuestFormSubmitted": null,
+          "PostalCode": null,
+          "Gender": null,
+          "PreviousSteps": null,
+          "HearAboutus": null,
+          "HeartDisease": null,
+          "HighBlood": null,
+          "LivKidProstate": null,
+          "Diabetes": null,
+          "Thyriod": null,
+          "AnemiaIron": null,
+          "PyschiatricCon": null,
+          "Dermatitis": null,
+          "Psoriasis": null,
+          "Eczema": null,
+          "Dandruff": null,
+          "ItchyScalp": null,
+          "DryScalp": null,
+          "OilyScalp": null,
+          "HairLoss": null,
+          "OtherCondition": null,
+          "RecEmoIllSur": null,
+          "AttemptConceive": null,
+          "OtherMedical": null,
+          "MedicationIntake": null,
+          "SteriodTest": null,
+          "AllericMedic": null,
+          "SpecificDiet": null,
+          "ConditionPresent": null,
+          "AgeRange": null,
+          "Treatment": null,
+          "MedicalHistory": null,
+          "FamilyHistory": null,
+          "AddedtoExcel": null,
+          "id": 22729,
+          "createdAt": "2026-02-23T00:28:36.002Z",
+          "updatedAt": "2026-02-23T00:37:41.666Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "saveDataSuccessExecution": "all"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-02-19T05:22:31.832Z",
+      "createdAt": "2026-02-19T05:22:31.832Z",
+      "role": "workflow:owner",
+      "workflowId": "iBxNrn0gRuIrQ93a",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    },
+    {
+      "updatedAt": "2026-01-21T23:52:24.742Z",
+      "createdAt": "2026-01-21T23:52:24.742Z",
+      "id": "gBgZjsV5vc1ZGBw4",
+      "name": "AUS"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-02-23T01:31:18.801Z",
+  "versionId": "34062dee-7e59-42c8-8d81-84c7cffe2638"
+}
