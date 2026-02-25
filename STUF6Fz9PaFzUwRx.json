@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-02-18T02:34:41.000Z",
-    "createdAt": "2026-02-18T02:34:40.138Z",
-    "versionId": "715efd9c-95a9-4e4c-a9ec-4c2867b9b1e4",
+    "updatedAt": "2026-02-24T00:52:23.000Z",
+    "createdAt": "2026-02-24T00:52:22.634Z",
+    "versionId": "00a8b091-d3c4-45db-ad5d-99c666f7cafb",
     "workflowId": "STUF6Fz9PaFzUwRx",
     "nodes": [
       {
@@ -275,7 +275,7 @@
         "parameters": {
           "toRecipients": "={{ $('Get row(s)').item.json.email }}",
           "subject": "=Automation - Med Order - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
-          "bodyContent": "=Hi Team,\n\nAutomation has failed to Order Meds for the below.\n\nTHIS ORDER HAS BEEN ADDED TO THE MED ORDER SPREAD SHEET\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\nRemainingBalance = {{ $('When Executed by Another Workflow').item.json.RemainingBalance }}\nScript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.invoice_number_prefix }}{{ $('Check Invoice Exists').item.json.invoice.invoice_number }}\nInvoiceID = {{ $('Check Invoice Exists').item.json.invoice.id }}\n\nCustomer is being charged for meds, please resolve manually.\n\nSum Total = ${{ $json.invoice.total_price.sum_total }}\n\nRegards,\nAutomation.",
+          "bodyContent": "=Hi Team,\n\nAutomation is unable to close out the invoice. Customer package may not match up with prescribed Dr Meds.\n\nTHIS ORDER HAS BEEN ADDED TO THE MED ORDER SPREAD SHEET.\n\nPlease manually resolve invoice issues or remove customer from spreadsheet before order is completed.\n\nName = {{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\n\nRemainingBalance = {{ $('When Executed by Another Workflow').item.json.RemainingBalance }}\n\nScript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\nProfile URL = https://ashleymartinnz.zenoti.com/Guests/GuestProfileV2/GuestProfileV2Wrapper.aspx?Display=True&UserId={{ $('When Executed by Another Workflow').item.json.CustomerID }}\n\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.invoice_number_prefix }}{{ $('Check Invoice Exists').item.json.invoice.invoice_number }}\n\nInvoiceID = {{ $('Check Invoice Exists').item.json.invoice.id }}\n\nSum Total = ${{ $json.invoice.total_price.sum_total }}\n\nRegards,\nAutomation.",
           "additionalFields": {}
         },
         "type": "n8n-nodes-base.microsoftOutlook",
@@ -539,7 +539,7 @@
         "parameters": {
           "toRecipients": "={{ $('Get row(s)').item.json.email }}",
           "subject": "=Automation - Med Order - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
-          "bodyContent": "=Hi Team,\n\nAutomation has Ordered meds for following Patient.\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\nRemainingBalance = {{ $('When Executed by Another Workflow').item.json.RemainingBalance }}\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.invoice_number_prefix }}{{ $('Check Invoice Exists').item.json.invoice.invoice_number }}\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.id }}\n\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\nPlease note the Appoitment is now closed!\n\nRegards,\nAutomation.",
+          "bodyContent": "=Hi Team,\n\nAutomation has Ordered meds for following Patient.\n\nName = {{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\n\nRemainingBalance = {{ $('When Executed by Another Workflow').item.json.RemainingBalance }}\n\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.invoice_number_prefix }}{{ $('Check Invoice Exists').item.json.invoice.invoice_number }}\n\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.id }}\n\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\nProfile URL = https://ashleymartinnz.zenoti.com/Guests/GuestProfileV2/GuestProfileV2Wrapper.aspx?Display=True&UserId={{ $('When Executed by Another Workflow').item.json.CustomerID }}\n\nPlease note the Appointment is now closed!\n\nRegards,\nAutomation.",
           "additionalFields": {}
         },
         "type": "n8n-nodes-base.microsoftOutlook",
@@ -925,11 +925,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 715efd9c",
+    "name": "Version 00a8b091",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "715efd9c-95a9-4e4c-a9ec-4c2867b9b1e4",
+  "activeVersionId": "00a8b091-d3c4-45db-ad5d-99c666f7cafb",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -1443,7 +1443,7 @@
       "parameters": {
         "toRecipients": "={{ $('Get row(s)').item.json.email }}",
         "subject": "=Automation - Med Order - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
-        "bodyContent": "=Hi Team,\n\nAutomation has failed to Order Meds for the below.\n\nTHIS ORDER HAS BEEN ADDED TO THE MED ORDER SPREAD SHEET\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\nRemainingBalance = {{ $('When Executed by Another Workflow').item.json.RemainingBalance }}\nScript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.invoice_number_prefix }}{{ $('Check Invoice Exists').item.json.invoice.invoice_number }}\nInvoiceID = {{ $('Check Invoice Exists').item.json.invoice.id }}\n\nCustomer is being charged for meds, please resolve manually.\n\nSum Total = ${{ $json.invoice.total_price.sum_total }}\n\nRegards,\nAutomation.",
+        "bodyContent": "=Hi Team,\n\nAutomation is unable to close out the invoice. Customer package may not match up with prescribed Dr Meds.\n\nTHIS ORDER HAS BEEN ADDED TO THE MED ORDER SPREAD SHEET.\n\nPlease manually resolve invoice issues or remove customer from spreadsheet before order is completed.\n\nName = {{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\n\nRemainingBalance = {{ $('When Executed by Another Workflow').item.json.RemainingBalance }}\n\nScript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\nProfile URL = https://ashleymartinnz.zenoti.com/Guests/GuestProfileV2/GuestProfileV2Wrapper.aspx?Display=True&UserId={{ $('When Executed by Another Workflow').item.json.CustomerID }}\n\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.invoice_number_prefix }}{{ $('Check Invoice Exists').item.json.invoice.invoice_number }}\n\nInvoiceID = {{ $('Check Invoice Exists').item.json.invoice.id }}\n\nSum Total = ${{ $json.invoice.total_price.sum_total }}\n\nRegards,\nAutomation.",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.microsoftOutlook",
@@ -1707,7 +1707,7 @@
       "parameters": {
         "toRecipients": "={{ $('Get row(s)').item.json.email }}",
         "subject": "=Automation - Med Order - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
-        "bodyContent": "=Hi Team,\n\nAutomation has Ordered meds for following Patient.\n\nName ={{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\nRemainingBalance = {{ $('When Executed by Another Workflow').item.json.RemainingBalance }}\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.invoice_number_prefix }}{{ $('Check Invoice Exists').item.json.invoice.invoice_number }}\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.id }}\n\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\nPlease note the Appoitment is now closed!\n\nRegards,\nAutomation.",
+        "bodyContent": "=Hi Team,\n\nAutomation has Ordered meds for following Patient.\n\nName = {{ $('When Executed by Another Workflow').item.json.CustomerFirstName }} {{ $('When Executed by Another Workflow').item.json.CustomerLastName }}\nCode = {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\nMeds = {{ $('When Executed by Another Workflow').item.json.quantity }} x {{ $('When Executed by Another Workflow').item.json.ProductNameCleaned }}\n\nRemainingBalance = {{ $('When Executed by Another Workflow').item.json.RemainingBalance }}\n\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.invoice_number_prefix }}{{ $('Check Invoice Exists').item.json.invoice.invoice_number }}\n\nInvoice = {{ $('Check Invoice Exists').item.json.invoice.id }}\n\nSript URL = {{ $('When Executed by Another Workflow').item.json.scriptURL }}\n\nProfile URL = https://ashleymartinnz.zenoti.com/Guests/GuestProfileV2/GuestProfileV2Wrapper.aspx?Display=True&UserId={{ $('When Executed by Another Workflow').item.json.CustomerID }}\n\nPlease note the Appointment is now closed!\n\nRegards,\nAutomation.",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.microsoftOutlook",
@@ -1937,6 +1937,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-02-18T02:34:40.137Z",
-  "versionId": "715efd9c-95a9-4e4c-a9ec-4c2867b9b1e4"
+  "updatedAt": "2026-02-24T00:52:22.633Z",
+  "versionId": "00a8b091-d3c4-45db-ad5d-99c666f7cafb"
 }
