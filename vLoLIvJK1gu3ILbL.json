@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-02-18T01:57:27.000Z",
-    "createdAt": "2026-02-18T01:57:26.327Z",
-    "versionId": "8d28ca79-178d-4a6f-8983-e278fcd0c590",
+    "updatedAt": "2026-02-20T04:30:12.000Z",
+    "createdAt": "2026-02-20T04:30:10.984Z",
+    "versionId": "d861dbfe-fa46-4911-98cc-be2c46896cca",
     "workflowId": "vLoLIvJK1gu3ILbL",
     "nodes": [
       {
@@ -149,7 +149,7 @@
         "typeVersion": 4.3,
         "position": [
           1408,
-          -64
+          -32
         ],
         "id": "d943c9d3-d1bd-42ca-800d-21b71fc55e15",
         "name": "Create Folder In Progress",
@@ -183,7 +183,7 @@
         "typeVersion": 1,
         "position": [
           1632,
-          -64
+          -32
         ],
         "id": "f029f9fb-429d-4a37-ae02-dc516dba52b6",
         "name": "Download file",
@@ -215,7 +215,7 @@
         "typeVersion": 1,
         "position": [
           1856,
-          -64
+          -32
         ],
         "id": "4bca491b-4198-4364-95f1-2b5e491f78e3",
         "name": "Upload file",
@@ -240,53 +240,6 @@
         "id": "e85c8b8f-160a-4c72-bbd5-ed16a573e5db",
         "name": "Split Out",
         "alwaysOutputData": true
-      },
-      {
-        "parameters": {
-          "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
-        },
-        "type": "n8n-nodes-base.code",
-        "typeVersion": 2,
-        "position": [
-          0,
-          -560
-        ],
-        "id": "00437dbe-58c1-4849-ace3-84a7113db7e6",
-        "name": "Clean for IF"
-      },
-      {
-        "parameters": {
-          "conditions": {
-            "options": {
-              "caseSensitive": true,
-              "leftValue": "",
-              "typeValidation": "strict",
-              "version": 2
-            },
-            "conditions": [
-              {
-                "id": "b10b2be5-bf59-4cc5-9a6f-882cb99725eb",
-                "leftValue": "={{ $json.empty }}",
-                "rightValue": "",
-                "operator": {
-                  "type": "boolean",
-                  "operation": "false",
-                  "singleValue": true
-                }
-              }
-            ],
-            "combinator": "and"
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.if",
-        "typeVersion": 2.2,
-        "position": [
-          224,
-          -560
-        ],
-        "id": "98194343-f195-4d24-a87f-dba1bb2203c2",
-        "name": "If1"
       },
       {
         "parameters": {
@@ -423,19 +376,6 @@
       },
       {
         "parameters": {
-          "jsCode": "// ---- GET TABLE COLUMNS ----\nconst first = $input.first().json;\n\nconst colsArray =\n  first.value ??\n  first.columns?.value ??\n  first.tableColumns?.value;\n\nif (!Array.isArray(colsArray)) {\n  throw new Error(\"Columns array not found. Ensure Get Table Columns is merged in.\");\n}\n\nconst tableColumns = colsArray\n  .slice()\n  .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))\n  .map(c => c.name);\n\nconst colSet = new Set(tableColumns);\n\n// Client + product data (per your workflow)\nconst client = $('When Executed by Another Workflow').first().json;\n\n// ---- HELPERS ----\nconst toNullIfEmpty = (v) => (v === undefined || v === \"\" ? null : v);\n\nconst toNumberOrNull = (v) => {\n  if (v === undefined || v === \"\" || v === null) return null;\n  const n = Number(v);\n  return Number.isFinite(n) ? n : v;\n};\n\nconst normalise = (s) => String(s ?? \"\")\n  .toLowerCase()\n  .trim()\n  .replace(/\\+/g, \" \")\n  .replace(/[%]/g, \" percent \")\n  .replace(/[^a-z0-9]+/g, \"\");\n\nconst normalisedColLookup = new Map();\nfor (const col of tableColumns) {\n  const k = normalise(col);\n  if (k && !normalisedColLookup.has(k)) normalisedColLookup.set(k, col);\n}\n\nconst resolveProductColumn = (productNameCleaned) => {\n  if (!productNameCleaned) return null;\n  if (colSet.has(productNameCleaned)) return productNameCleaned;\n  return normalisedColLookup.get(normalise(productNameCleaned)) ?? null;\n};\n\n// DOB parsing (DD/MM/YYYY, YYYY-MM-DD, ISO)\nconst parseDob = (dobValue) => {\n  if (!dobValue) return null;\n\n  const s = String(dobValue).trim();\n\n  const dmy = s.match(/^(\\d{1,2})\\/(\\d{1,2})\\/(\\d{4})$/);\n  if (dmy) return new Date(Number(dmy[3]), Number(dmy[2]) - 1, Number(dmy[1]));\n\n  const ymd = s.match(/^(\\d{4})-(\\d{2})-(\\d{2})$/);\n  if (ymd) return new Date(Number(ymd[1]), Number(ymd[2]) - 1, Number(ymd[3]));\n\n  const d = new Date(s);\n  return Number.isNaN(d.getTime()) ? null : d;\n};\n\nconst calcAge = (dobValue) => {\n  const d = parseDob(dobValue);\n  if (!d) return null;\n\n  const now = new Date();\n  let age = now.getFullYear() - d.getFullYear();\n\n  const hadBirthday =\n    now.getMonth() > d.getMonth() ||\n    (now.getMonth() === d.getMonth() && now.getDate() >= d.getDate());\n\n  if (!hadBirthday) age -= 1;\n\n  return age;\n};\n\n// ---- BASE FIELD MAP (client object) ----\nconst baseMap = {\n  \"Guest Code\": \"CustomerCode\",\n  \"D.O.B\": \"CustomerDOB\",\n  \"Email\": \"CustomerEmail\",\n  \"Center\": \"CLinicABB\",\n  \"Delivery Address\": \"DeliveryAddressFull\",\n};\n\n// ---- BUILD ROW ----\nconst row = Object.fromEntries(tableColumns.map(c => [c, null]));\n\n// Guest Name\nconst fullName = [client.CustomerFirstName, client.CustomerLastName]\n  .filter(Boolean)\n  .join(\" \")\n  .trim();\n\nif (colSet.has(\"Guest Name\")) row[\"Guest Name\"] = toNullIfEmpty(fullName);\n\n// Base mapped fields\nfor (const [excelCol, clientKey] of Object.entries(baseMap)) {\n  if (colSet.has(excelCol)) {\n    row[excelCol] = toNullIfEmpty(client[clientKey]);\n  }\n}\n\n// Gender (header has trailing space)\nif (colSet.has(\"Gender \")) row[\"Gender \"] = toNullIfEmpty(client.CustomerGender);\n\n// Age (derived)\nif (colSet.has(\"Age\")) row[\"Age\"] = calcAge(client.CustomerDOB);\n\n// Product → quantity\nconst productCol = resolveProductColumn(client.ProductNameCleaned);\nif (productCol) {\n  row[productCol] = toNumberOrNull(client.quantity);\n}\n\n// ---- OUTPUT FOR GRAPH ----\nconst rowArray = tableColumns.map(c => row[c]);\nconst hasAnyValue = rowArray.some(v => v !== null && v !== undefined && v !== \"\");\n\nif (!hasAnyValue) {\n  throw new Error(\"Row is blank (all null). Not inserting into Excel. Check source fields/mapping.\");\n}\n\nreturn [{ json: { values: [rowArray] } }];"
-        },
-        "type": "n8n-nodes-base.code",
-        "typeVersion": 2,
-        "position": [
-          3424,
-          -656
-        ],
-        "id": "c4aa56bd-3710-4dec-8e77-ce23eb694ca1",
-        "name": "Code in JavaScript"
-      },
-      {
-        "parameters": {
           "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelDriveID }}/workbook/tables('{{ $('When Executed by Another Workflow').item.json.CLinicABB }}Table')/columns",
           "authentication": "genericCredentialType",
           "genericAuthType": "oAuth2Api",
@@ -453,8 +393,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          4160,
-          -272
+          4080,
+          -240
         ],
         "id": "f2fcfd25-4a24-48e7-9140-e1c9c639230f",
         "name": "Get Excel Headings",
@@ -476,7 +416,7 @@
         "typeVersion": 4.3,
         "position": [
           2080,
-          -64
+          -32
         ],
         "id": "250b9568-12a6-4470-84f6-8e6bd5b54bb4",
         "name": "Check for Excel1",
@@ -528,7 +468,7 @@
         "typeVersion": 2.3,
         "position": [
           2304,
-          -64
+          -32
         ],
         "id": "461ea9e9-6e1c-4cd6-bb57-c5780cfbe66d",
         "name": "If for File1"
@@ -603,87 +543,6 @@
       },
       {
         "parameters": {
-          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.MasterFolderID }}/children?$top=200&$select=id,name,folder,file,createdDateTime,lastModifiedDateTime",
-          "authentication": "genericCredentialType",
-          "genericAuthType": "oAuth2Api",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.3,
-        "position": [
-          576,
-          80
-        ],
-        "id": "b9a08d8c-239c-4859-9115-5249783d001b",
-        "name": "Search Inprogress Orders1",
-        "credentials": {
-          "microsoftSharePointOAuth2Api": {
-            "id": "8eWNjQciijocacKo",
-            "name": "Microsoft SharePoint account"
-          },
-          "microsoftGraphSecurityOAuth2Api": {
-            "id": "7IYTPqhMSd9yOy8S",
-            "name": "Microsoft Graph Security account"
-          },
-          "microsoftOAuth2Api": {
-            "id": "yjHQESADfULqo4lZ",
-            "name": "Microsoft account"
-          },
-          "oAuth2Api": {
-            "id": "j30zGPdAyzTUMgGs",
-            "name": "MS graph"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "assignments": {
-            "assignments": [
-              {
-                "id": "b26619fc-3777-49fc-90f6-d44350185646",
-                "name": "DriveID",
-                "value": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
-                "type": "string"
-              },
-              {
-                "id": "e3938eed-c906-42f2-91e5-ccc27073e519",
-                "name": "ItemsID",
-                "value": "01Y4DA4OOUVPWHSA2BN5G2YBSB6DOVI6HR",
-                "type": "string"
-              },
-              {
-                "id": "787846a3-bd50-4c4c-b787-46ec357f2836",
-                "name": "SiteID",
-                "value": "ashleyandmartincomau.sharepoint.com,d072e691-4945-4cb7-9d46-8ce09a647579,25bd0103-07ad-4698-92dc-5a919b01719b",
-                "type": "string"
-              },
-              {
-                "id": "62eb8164-be21-46b8-8ea9-e94fad593259",
-                "name": "MasterFolderID",
-                "value": "01Y4DA4OK2PDWUJLMKBZGKGZQITNHHJNPC",
-                "type": "string"
-              },
-              {
-                "id": "df326af1-0521-4c0b-95f9-02144322ce2a",
-                "name": "MasterExcelID",
-                "value": "01Y4DA4OOV3PS73DAJRRFZAKZZAQOF4563",
-                "type": "string"
-              }
-            ]
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.set",
-        "typeVersion": 3.4,
-        "position": [
-          288,
-          80
-        ],
-        "id": "7e1c30be-2663-4056-8d8b-cec6b3a04b39",
-        "name": "SetDriveID1"
-      },
-      {
-        "parameters": {
           "conditions": {
             "options": {
               "caseSensitive": true,
@@ -723,48 +582,11 @@
         "type": "n8n-nodes-base.aggregate",
         "typeVersion": 1,
         "position": [
-          3056,
-          -272
+          2848,
+          -240
         ],
         "id": "092e96a6-610b-4c8d-8972-685525fb07b2",
         "name": "Aggregate"
-      },
-      {
-        "parameters": {
-          "assignments": {
-            "assignments": [
-              {
-                "id": "9021e372-3edf-4f13-97dc-1ef601fcbfdf",
-                "name": "CurrentExcelDriveID",
-                "value": "={{ $json.value[0].id }}",
-                "type": "string"
-              }
-            ]
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.set",
-        "typeVersion": 3.4,
-        "position": [
-          1936,
-          -448
-        ],
-        "id": "1b9c069b-b1a4-4d9c-ac5d-735b03b59608",
-        "name": "Edit Fields"
-      },
-      {
-        "parameters": {
-          "mode": "raw",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.set",
-        "typeVersion": 3.4,
-        "position": [
-          3632,
-          -656
-        ],
-        "id": "6a912309-21f6-4130-ae3c-0af42b7d370c",
-        "name": "Edit Fields1"
       },
       {
         "parameters": {
@@ -783,8 +605,8 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          2672,
-          -96
+          2576,
+          -32
         ],
         "id": "cf2759db-00ba-40c9-9c80-1f3ccd84e49b",
         "name": "Edit Fields2"
@@ -819,8 +641,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          4608,
-          -272
+          4528,
+          -240
         ],
         "id": "7cbfcb3c-2181-4df1-96be-032e0770b07a",
         "name": "Code in JavaScript2"
@@ -835,8 +657,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          3712,
-          -272
+          3648,
+          -240
         ],
         "id": "83118901-e5f5-475f-b418-30b2e744e9b8",
         "name": "RowCountCheck",
@@ -854,8 +676,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          4384,
-          -272
+          4304,
+          -240
         ],
         "id": "ebd6a89b-7547-4c4c-b12b-1545985acfec",
         "name": "RipOutHeaders"
@@ -880,8 +702,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          4832,
-          -272
+          4752,
+          -240
         ],
         "id": "3a290bf0-603c-44f2-8d10-9bc3f6732f6e",
         "name": "UpdateCurrnentSpreadSheet",
@@ -914,8 +736,8 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
-          3264,
-          -272
+          3168,
+          -240
         ],
         "id": "0025650b-5d62-4510-b7b1-a8816d1b2bb8",
         "name": "Get row(s)"
@@ -927,8 +749,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          3472,
-          -272
+          3376,
+          -240
         ],
         "id": "df173d65-b7a0-46b4-ad05-0ecf4fa774e4",
         "name": "DrDetailCleanUp"
@@ -940,8 +762,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          3936,
-          -272
+          3840,
+          -240
         ],
         "id": "5d95de1d-e538-45fa-80ff-f4511554b231",
         "name": "PaintentNumberCheck"
@@ -953,11 +775,190 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          5040,
-          -272
+          4992,
+          -240
         ],
         "id": "29499f04-5c8d-491d-8dd3-5bd007c898b8",
         "name": "Code in JavaScript1"
+      },
+      {
+        "parameters": {
+          "content": "## Set Folder and File IDS",
+          "height": 368,
+          "width": 416
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -48,
+          -352
+        ],
+        "typeVersion": 1,
+        "id": "0ad745ec-5dc7-4743-891b-33376ee041ef",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "## Pre-check to see if there is already a folder / file existing",
+          "height": 368,
+          "width": 928,
+          "color": 2
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          368,
+          -352
+        ],
+        "typeVersion": 1,
+        "id": "e23c0795-0e21-4dff-832e-b184e5abae59",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "content": "## Find Excel File and Sets the Variable",
+          "height": 192,
+          "width": 1456
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1296,
+          -496
+        ],
+        "typeVersion": 1,
+        "id": "e9694efa-79af-43b7-8e00-9f96187e3afe",
+        "name": "Sticky Note2"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "9021e372-3edf-4f13-97dc-1ef601fcbfdf",
+                "name": "CurrentExcelDriveID",
+                "value": "={{ $json.value[0].id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2576,
+          -448
+        ],
+        "id": "1b9c069b-b1a4-4d9c-ac5d-735b03b59608",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "content": "## No File Found so Created",
+          "height": 224,
+          "width": 1456,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1296,
+          -304
+        ],
+        "typeVersion": 1,
+        "id": "5f82494e-0517-4e44-a534-7a68e4b01b26",
+        "name": "Sticky Note3"
+      },
+      {
+        "parameters": {
+          "content": "## No Folder and File so Created",
+          "height": 224,
+          "width": 1456,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1296,
+          -80
+        ],
+        "typeVersion": 1,
+        "id": "cdd85094-116a-4388-81e4-98f85f01895b",
+        "name": "Sticky Note4"
+      },
+      {
+        "parameters": {
+          "content": "## Join Flows Together",
+          "height": 640,
+          "width": 304,
+          "color": 2
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          2752,
+          -496
+        ],
+        "typeVersion": 1,
+        "id": "6c78ebf3-71ed-499d-a026-ffacb13cdc0a",
+        "name": "Sticky Note5"
+      },
+      {
+        "parameters": {
+          "content": "## Drug Look up and Doctor Name Clean up",
+          "height": 288,
+          "width": 496
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          3056,
+          -336
+        ],
+        "typeVersion": 1,
+        "id": "20f3d747-885e-4ab9-bd22-9e713b9409a0",
+        "name": "Sticky Note6"
+      },
+      {
+        "parameters": {
+          "content": "## Checks Excel and Sets the Client Number",
+          "height": 288,
+          "width": 448,
+          "color": 2
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          3552,
+          -336
+        ],
+        "typeVersion": 1,
+        "id": "5f192550-8933-4230-9978-5d012a41c3d0",
+        "name": "Sticky Note7"
+      },
+      {
+        "parameters": {
+          "content": "## Grabs Excel heads / Clean Data and throws data back to the Excel",
+          "height": 288,
+          "width": 912
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          4000,
+          -336
+        ],
+        "typeVersion": 1,
+        "id": "0c0f6f7e-62c9-4a20-bc65-c9109c8a7ad3",
+        "name": "Sticky Note8"
+      },
+      {
+        "parameters": {
+          "content": "## Data Back to previous Flow",
+          "height": 288,
+          "width": 336,
+          "color": 2
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          4912,
+          -336
+        ],
+        "typeVersion": 1,
+        "id": "723c1ab7-7124-4888-9a65-0050956d7fbc",
+        "name": "Sticky Note9"
       }
     ],
     "connections": {
@@ -1038,23 +1039,6 @@
           ]
         ]
       },
-      "Clean for IF": {
-        "main": [
-          [
-            {
-              "node": "If1",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "If1": {
-        "main": [
-          [],
-          []
-        ]
-      },
       "Check for Excel": {
         "main": [
           [
@@ -1089,17 +1073,6 @@
           [
             {
               "node": "Download file1",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Code in JavaScript": {
-        "main": [
-          [
-            {
-              "node": "Edit Fields1",
               "type": "main",
               "index": 0
             }
@@ -1190,17 +1163,6 @@
           ]
         ]
       },
-      "SetDriveID1": {
-        "main": [
-          [
-            {
-              "node": "Search Inprogress Orders1",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
       "If-NoFolder": {
         "main": [
           [
@@ -1228,22 +1190,6 @@
               "index": 0
             }
           ]
-        ]
-      },
-      "Edit Fields": {
-        "main": [
-          [
-            {
-              "node": "Aggregate",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Edit Fields1": {
-        "main": [
-          []
         ]
       },
       "Edit Fields2": {
@@ -1344,14 +1290,25 @@
             }
           ]
         ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 8d28ca79",
+    "name": "Version d861dbfe",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "8d28ca79-178d-4a6f-8983-e278fcd0c590",
+  "activeVersionId": "d861dbfe-fa46-4911-98cc-be2c46896cca",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -1430,23 +1387,6 @@
         ]
       ]
     },
-    "Clean for IF": {
-      "main": [
-        [
-          {
-            "node": "If1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If1": {
-      "main": [
-        [],
-        []
-      ]
-    },
     "Check for Excel": {
       "main": [
         [
@@ -1481,17 +1421,6 @@
         [
           {
             "node": "Download file1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Code in JavaScript": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields1",
             "type": "main",
             "index": 0
           }
@@ -1582,17 +1511,6 @@
         ]
       ]
     },
-    "SetDriveID1": {
-      "main": [
-        [
-          {
-            "node": "Search Inprogress Orders1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "If-NoFolder": {
       "main": [
         [
@@ -1620,22 +1538,6 @@
             "index": 0
           }
         ]
-      ]
-    },
-    "Edit Fields": {
-      "main": [
-        [
-          {
-            "node": "Aggregate",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Edit Fields1": {
-      "main": [
-        []
       ]
     },
     "Edit Fields2": {
@@ -1731,6 +1633,17 @@
         [
           {
             "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
             "type": "main",
             "index": 0
           }
@@ -1889,7 +1802,7 @@
       "typeVersion": 4.3,
       "position": [
         1408,
-        -64
+        -32
       ],
       "id": "d943c9d3-d1bd-42ca-800d-21b71fc55e15",
       "name": "Create Folder In Progress",
@@ -1923,7 +1836,7 @@
       "typeVersion": 1,
       "position": [
         1632,
-        -64
+        -32
       ],
       "id": "f029f9fb-429d-4a37-ae02-dc516dba52b6",
       "name": "Download file",
@@ -1955,7 +1868,7 @@
       "typeVersion": 1,
       "position": [
         1856,
-        -64
+        -32
       ],
       "id": "4bca491b-4198-4364-95f1-2b5e491f78e3",
       "name": "Upload file",
@@ -1980,53 +1893,6 @@
       "id": "e85c8b8f-160a-4c72-bbd5-ed16a573e5db",
       "name": "Split Out",
       "alwaysOutputData": true
-    },
-    {
-      "parameters": {
-        "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        0,
-        -560
-      ],
-      "id": "00437dbe-58c1-4849-ace3-84a7113db7e6",
-      "name": "Clean for IF"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "b10b2be5-bf59-4cc5-9a6f-882cb99725eb",
-              "leftValue": "={{ $json.empty }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "false",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        224,
-        -560
-      ],
-      "id": "98194343-f195-4d24-a87f-dba1bb2203c2",
-      "name": "If1"
     },
     {
       "parameters": {
@@ -2163,19 +2029,6 @@
     },
     {
       "parameters": {
-        "jsCode": "// ---- GET TABLE COLUMNS ----\nconst first = $input.first().json;\n\nconst colsArray =\n  first.value ??\n  first.columns?.value ??\n  first.tableColumns?.value;\n\nif (!Array.isArray(colsArray)) {\n  throw new Error(\"Columns array not found. Ensure Get Table Columns is merged in.\");\n}\n\nconst tableColumns = colsArray\n  .slice()\n  .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))\n  .map(c => c.name);\n\nconst colSet = new Set(tableColumns);\n\n// Client + product data (per your workflow)\nconst client = $('When Executed by Another Workflow').first().json;\n\n// ---- HELPERS ----\nconst toNullIfEmpty = (v) => (v === undefined || v === \"\" ? null : v);\n\nconst toNumberOrNull = (v) => {\n  if (v === undefined || v === \"\" || v === null) return null;\n  const n = Number(v);\n  return Number.isFinite(n) ? n : v;\n};\n\nconst normalise = (s) => String(s ?? \"\")\n  .toLowerCase()\n  .trim()\n  .replace(/\\+/g, \" \")\n  .replace(/[%]/g, \" percent \")\n  .replace(/[^a-z0-9]+/g, \"\");\n\nconst normalisedColLookup = new Map();\nfor (const col of tableColumns) {\n  const k = normalise(col);\n  if (k && !normalisedColLookup.has(k)) normalisedColLookup.set(k, col);\n}\n\nconst resolveProductColumn = (productNameCleaned) => {\n  if (!productNameCleaned) return null;\n  if (colSet.has(productNameCleaned)) return productNameCleaned;\n  return normalisedColLookup.get(normalise(productNameCleaned)) ?? null;\n};\n\n// DOB parsing (DD/MM/YYYY, YYYY-MM-DD, ISO)\nconst parseDob = (dobValue) => {\n  if (!dobValue) return null;\n\n  const s = String(dobValue).trim();\n\n  const dmy = s.match(/^(\\d{1,2})\\/(\\d{1,2})\\/(\\d{4})$/);\n  if (dmy) return new Date(Number(dmy[3]), Number(dmy[2]) - 1, Number(dmy[1]));\n\n  const ymd = s.match(/^(\\d{4})-(\\d{2})-(\\d{2})$/);\n  if (ymd) return new Date(Number(ymd[1]), Number(ymd[2]) - 1, Number(ymd[3]));\n\n  const d = new Date(s);\n  return Number.isNaN(d.getTime()) ? null : d;\n};\n\nconst calcAge = (dobValue) => {\n  const d = parseDob(dobValue);\n  if (!d) return null;\n\n  const now = new Date();\n  let age = now.getFullYear() - d.getFullYear();\n\n  const hadBirthday =\n    now.getMonth() > d.getMonth() ||\n    (now.getMonth() === d.getMonth() && now.getDate() >= d.getDate());\n\n  if (!hadBirthday) age -= 1;\n\n  return age;\n};\n\n// ---- BASE FIELD MAP (client object) ----\nconst baseMap = {\n  \"Guest Code\": \"CustomerCode\",\n  \"D.O.B\": \"CustomerDOB\",\n  \"Email\": \"CustomerEmail\",\n  \"Center\": \"CLinicABB\",\n  \"Delivery Address\": \"DeliveryAddressFull\",\n};\n\n// ---- BUILD ROW ----\nconst row = Object.fromEntries(tableColumns.map(c => [c, null]));\n\n// Guest Name\nconst fullName = [client.CustomerFirstName, client.CustomerLastName]\n  .filter(Boolean)\n  .join(\" \")\n  .trim();\n\nif (colSet.has(\"Guest Name\")) row[\"Guest Name\"] = toNullIfEmpty(fullName);\n\n// Base mapped fields\nfor (const [excelCol, clientKey] of Object.entries(baseMap)) {\n  if (colSet.has(excelCol)) {\n    row[excelCol] = toNullIfEmpty(client[clientKey]);\n  }\n}\n\n// Gender (header has trailing space)\nif (colSet.has(\"Gender \")) row[\"Gender \"] = toNullIfEmpty(client.CustomerGender);\n\n// Age (derived)\nif (colSet.has(\"Age\")) row[\"Age\"] = calcAge(client.CustomerDOB);\n\n// Product → quantity\nconst productCol = resolveProductColumn(client.ProductNameCleaned);\nif (productCol) {\n  row[productCol] = toNumberOrNull(client.quantity);\n}\n\n// ---- OUTPUT FOR GRAPH ----\nconst rowArray = tableColumns.map(c => row[c]);\nconst hasAnyValue = rowArray.some(v => v !== null && v !== undefined && v !== \"\");\n\nif (!hasAnyValue) {\n  throw new Error(\"Row is blank (all null). Not inserting into Excel. Check source fields/mapping.\");\n}\n\nreturn [{ json: { values: [rowArray] } }];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        3424,
-        -656
-      ],
-      "id": "c4aa56bd-3710-4dec-8e77-ce23eb694ca1",
-      "name": "Code in JavaScript"
-    },
-    {
-      "parameters": {
         "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelDriveID }}/workbook/tables('{{ $('When Executed by Another Workflow').item.json.CLinicABB }}Table')/columns",
         "authentication": "genericCredentialType",
         "genericAuthType": "oAuth2Api",
@@ -2193,8 +2046,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        4160,
-        -272
+        4080,
+        -240
       ],
       "id": "f2fcfd25-4a24-48e7-9140-e1c9c639230f",
       "name": "Get Excel Headings",
@@ -2216,7 +2069,7 @@
       "typeVersion": 4.3,
       "position": [
         2080,
-        -64
+        -32
       ],
       "id": "250b9568-12a6-4470-84f6-8e6bd5b54bb4",
       "name": "Check for Excel1",
@@ -2268,7 +2121,7 @@
       "typeVersion": 2.3,
       "position": [
         2304,
-        -64
+        -32
       ],
       "id": "461ea9e9-6e1c-4cd6-bb57-c5780cfbe66d",
       "name": "If for File1"
@@ -2343,87 +2196,6 @@
     },
     {
       "parameters": {
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.MasterFolderID }}/children?$top=200&$select=id,name,folder,file,createdDateTime,lastModifiedDateTime",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "oAuth2Api",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        576,
-        80
-      ],
-      "id": "b9a08d8c-239c-4859-9115-5249783d001b",
-      "name": "Search Inprogress Orders1",
-      "credentials": {
-        "microsoftSharePointOAuth2Api": {
-          "id": "8eWNjQciijocacKo",
-          "name": "Microsoft SharePoint account"
-        },
-        "microsoftGraphSecurityOAuth2Api": {
-          "id": "7IYTPqhMSd9yOy8S",
-          "name": "Microsoft Graph Security account"
-        },
-        "microsoftOAuth2Api": {
-          "id": "yjHQESADfULqo4lZ",
-          "name": "Microsoft account"
-        },
-        "oAuth2Api": {
-          "id": "j30zGPdAyzTUMgGs",
-          "name": "MS graph"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "b26619fc-3777-49fc-90f6-d44350185646",
-              "name": "DriveID",
-              "value": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
-              "type": "string"
-            },
-            {
-              "id": "e3938eed-c906-42f2-91e5-ccc27073e519",
-              "name": "ItemsID",
-              "value": "01Y4DA4OOUVPWHSA2BN5G2YBSB6DOVI6HR",
-              "type": "string"
-            },
-            {
-              "id": "787846a3-bd50-4c4c-b787-46ec357f2836",
-              "name": "SiteID",
-              "value": "ashleyandmartincomau.sharepoint.com,d072e691-4945-4cb7-9d46-8ce09a647579,25bd0103-07ad-4698-92dc-5a919b01719b",
-              "type": "string"
-            },
-            {
-              "id": "62eb8164-be21-46b8-8ea9-e94fad593259",
-              "name": "MasterFolderID",
-              "value": "01Y4DA4OK2PDWUJLMKBZGKGZQITNHHJNPC",
-              "type": "string"
-            },
-            {
-              "id": "df326af1-0521-4c0b-95f9-02144322ce2a",
-              "name": "MasterExcelID",
-              "value": "01Y4DA4OOV3PS73DAJRRFZAKZZAQOF4563",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        288,
-        80
-      ],
-      "id": "7e1c30be-2663-4056-8d8b-cec6b3a04b39",
-      "name": "SetDriveID1"
-    },
-    {
-      "parameters": {
         "conditions": {
           "options": {
             "caseSensitive": true,
@@ -2463,48 +2235,11 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        3056,
-        -272
+        2848,
+        -240
       ],
       "id": "092e96a6-610b-4c8d-8972-685525fb07b2",
       "name": "Aggregate"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "9021e372-3edf-4f13-97dc-1ef601fcbfdf",
-              "name": "CurrentExcelDriveID",
-              "value": "={{ $json.value[0].id }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        1936,
-        -448
-      ],
-      "id": "1b9c069b-b1a4-4d9c-ac5d-735b03b59608",
-      "name": "Edit Fields"
-    },
-    {
-      "parameters": {
-        "mode": "raw",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        3632,
-        -656
-      ],
-      "id": "6a912309-21f6-4130-ae3c-0af42b7d370c",
-      "name": "Edit Fields1"
     },
     {
       "parameters": {
@@ -2523,8 +2258,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2672,
-        -96
+        2576,
+        -32
       ],
       "id": "cf2759db-00ba-40c9-9c80-1f3ccd84e49b",
       "name": "Edit Fields2"
@@ -2559,8 +2294,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4608,
-        -272
+        4528,
+        -240
       ],
       "id": "7cbfcb3c-2181-4df1-96be-032e0770b07a",
       "name": "Code in JavaScript2"
@@ -2575,8 +2310,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        3712,
-        -272
+        3648,
+        -240
       ],
       "id": "83118901-e5f5-475f-b418-30b2e744e9b8",
       "name": "RowCountCheck",
@@ -2594,8 +2329,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4384,
-        -272
+        4304,
+        -240
       ],
       "id": "ebd6a89b-7547-4c4c-b12b-1545985acfec",
       "name": "RipOutHeaders"
@@ -2620,8 +2355,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        4832,
-        -272
+        4752,
+        -240
       ],
       "id": "3a290bf0-603c-44f2-8d10-9bc3f6732f6e",
       "name": "UpdateCurrnentSpreadSheet",
@@ -2654,8 +2389,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        3264,
-        -272
+        3168,
+        -240
       ],
       "id": "0025650b-5d62-4510-b7b1-a8816d1b2bb8",
       "name": "Get row(s)"
@@ -2667,8 +2402,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3472,
-        -272
+        3376,
+        -240
       ],
       "id": "df173d65-b7a0-46b4-ad05-0ecf4fa774e4",
       "name": "DrDetailCleanUp"
@@ -2680,8 +2415,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3936,
-        -272
+        3840,
+        -240
       ],
       "id": "5d95de1d-e538-45fa-80ff-f4511554b231",
       "name": "PaintentNumberCheck"
@@ -2693,11 +2428,190 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5040,
-        -272
+        4992,
+        -240
       ],
       "id": "29499f04-5c8d-491d-8dd3-5bd007c898b8",
       "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "content": "## Set Folder and File IDS",
+        "height": 368,
+        "width": 416
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -48,
+        -352
+      ],
+      "typeVersion": 1,
+      "id": "0ad745ec-5dc7-4743-891b-33376ee041ef",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Pre-check to see if there is already a folder / file existing",
+        "height": 368,
+        "width": 928,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        368,
+        -352
+      ],
+      "typeVersion": 1,
+      "id": "e23c0795-0e21-4dff-832e-b184e5abae59",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Find Excel File and Sets the Variable",
+        "height": 192,
+        "width": 1456
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1296,
+        -496
+      ],
+      "typeVersion": 1,
+      "id": "e9694efa-79af-43b7-8e00-9f96187e3afe",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9021e372-3edf-4f13-97dc-1ef601fcbfdf",
+              "name": "CurrentExcelDriveID",
+              "value": "={{ $json.value[0].id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2576,
+        -448
+      ],
+      "id": "1b9c069b-b1a4-4d9c-ac5d-735b03b59608",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "content": "## No File Found so Created",
+        "height": 224,
+        "width": 1456,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1296,
+        -304
+      ],
+      "typeVersion": 1,
+      "id": "5f82494e-0517-4e44-a534-7a68e4b01b26",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## No Folder and File so Created",
+        "height": 224,
+        "width": 1456,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1296,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "cdd85094-116a-4388-81e4-98f85f01895b",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Join Flows Together",
+        "height": 640,
+        "width": 304,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2752,
+        -496
+      ],
+      "typeVersion": 1,
+      "id": "6c78ebf3-71ed-499d-a026-ffacb13cdc0a",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## Drug Look up and Doctor Name Clean up",
+        "height": 288,
+        "width": 496
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3056,
+        -336
+      ],
+      "typeVersion": 1,
+      "id": "20f3d747-885e-4ab9-bd22-9e713b9409a0",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## Checks Excel and Sets the Client Number",
+        "height": 288,
+        "width": 448,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3552,
+        -336
+      ],
+      "typeVersion": 1,
+      "id": "5f192550-8933-4230-9978-5d012a41c3d0",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## Grabs Excel heads / Clean Data and throws data back to the Excel",
+        "height": 288,
+        "width": 912
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4000,
+        -336
+      ],
+      "typeVersion": 1,
+      "id": "0c0f6f7e-62c9-4a20-bc65-c9109c8a7ad3",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## Data Back to previous Flow",
+        "height": 288,
+        "width": 336,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4912,
+        -336
+      ],
+      "typeVersion": 1,
+      "id": "723c1ab7-7124-4888-9a65-0050956d7fbc",
+      "name": "Sticky Note9"
     }
   ],
   "origin": "n8n",
@@ -2705,17 +2619,17 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "AppointmentID": "f5e4e008-2336-4c20-afe8-943a9eb8d729",
-          "CustomerFirstName": "Jm",
-          "CustomerLastName": "Maribong",
-          "CustomerCode": "AK8897",
-          "CustomerID": "4463bbe8-d72e-47fd-b2f0-c2c3b6506d8a",
-          "CustomerDOB": "08/06/2001",
-          "CustomerEmail": "maribong.jm2.1@gmail.com",
+          "AppointmentID": "04f03dca-4008-4065-b55f-b4f857bf191d",
+          "CustomerFirstName": "Rick",
+          "CustomerLastName": "Millen",
+          "CustomerCode": "6994-GAK",
+          "CustomerID": "3b6247e5-5651-4527-b526-24c9c7998311",
+          "CustomerDOB": "13/07/1970",
+          "CustomerEmail": "rickmillen1970@gmail.com",
           "CustomerGender": "Male",
           "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
           "is_form_submitted": true,
-          "textField5": "Jm Maribong",
+          "textField5": "Rick Millen",
           "select6": "no",
           "textField2": "Dr Annemarie Hern 15150",
           "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
@@ -2725,26 +2639,25 @@
           "DeliveryLocation": "guest",
           "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
           "quantity": "2",
-          "DeliveryAddress1": "2b/21 Saint Jude Street",
-          "DeliveryCity": "Avondale",
-          "DeliveryAddressFull": "2b/21 Saint Jude Street, Avondale",
+          "DeliveryAddress1": "2/4 Tavistock St Papatoetoe 2025",
+          "DeliveryCity": "",
+          "DeliveryAddressFull": "2/4 Tavistock St Papatoetoe 2025",
           "doctorsDirections": "ApplyToScalp",
-          "addresscompared": true,
+          "addresscompared": false,
           "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
           "ZenotiProductName": "Minoxidil + Finasteride Solution",
           "ZenotiProductNameShort": "Minox",
           "ZenotiProductNameEnd": "tion",
-          "CanSubtract": true,
-          "RemainingBalance": 5,
-          "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
-          "packagesavailable": true,
-          "perfectrun": true,
+          "packagesavailable": false,
+          "paidinfull": true,
           "CLinicABB": "AUC",
-          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=75c3214f-4ead-4302-8829-3d9666545344&ServiceId=c881a110-4440-40fc-9e81-918d918bc7a3&Service=Telehealth%20First&GuestId=4463bbe8-d72e-47fd-b2f0-c2c3b6506d8a&AppointmentId=f5e4e008-2336-4c20-afe8-943a9eb8d729",
-          "StartDate": "2026-02-17",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=ca4306a4-c0b2-41b8-bd21-8539a4b62246&ServiceId=dc772ef3-da0e-435a-9bb2-ac0ebfd9b891&Service=Telehealth%20Doctor&GuestId=3b6247e5-5651-4527-b526-24c9c7998311&AppointmentId=04f03dca-4008-4065-b55f-b4f857bf191d",
+          "StartDate": "2026-02-19",
+          "ManuallyApproved": true,
           "InvoiceNumber": true,
-          "Invoicedate": "2026-02-18"
+          "Invoicedate": "2026-02-20"
         },
+        "binary": {},
         "pairedItem": {
           "item": 0
         }
@@ -2794,6 +2707,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-02-18T02:34:33.475Z",
-  "versionId": "8d28ca79-178d-4a6f-8983-e278fcd0c590"
+  "updatedAt": "2026-02-20T04:30:10.983Z",
+  "versionId": "d861dbfe-fa46-4911-98cc-be2c46896cca"
 }
