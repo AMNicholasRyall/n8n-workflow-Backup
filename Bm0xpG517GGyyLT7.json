@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-02-05T05:02:02.000Z",
-    "createdAt": "2026-02-05T05:01:59.768Z",
-    "versionId": "99c072ee-8d2b-4244-be0b-ac7bd845961a",
+    "updatedAt": "2026-02-22T23:36:42.000Z",
+    "createdAt": "2026-02-22T23:36:41.140Z",
+    "versionId": "abb342b6-b949-4a5a-a27b-56fdb323dae1",
     "workflowId": "Bm0xpG517GGyyLT7",
     "nodes": [
       {
@@ -338,7 +338,7 @@
       },
       {
         "parameters": {
-          "jsCode": "// Items we want to OUTPUT (all fields kept)\nconst drugItems = $('When Executed by Another Workflow').all();\n\n// Pull shared values once\nconst first = $input.first().json;\nconst balance = Number(first.products.balance) || 0;\nconst productId = first.products.product_type_info.id;\n\nconst output = [];\n\nfor (let i = 0; i < drugItems.length; i++) {\n  const drugItem = drugItems[i];\n\n  const quantity = Number(drugItem.json.quantity) || 0;\n  const remaining = balance - quantity;\n\n  output.push({\n    json: {\n      ...drugItem.json,\n      CanSubtract: remaining >= 0,\n      RemainingBalance: remaining,\n      ProductID: productId,\n    },\n  });\n}\n\nreturn output;"
+          "jsCode": "const drugItems = $('When Executed by Another Workflow').all();\n\nconst parentFirst = $('When Executed by Another Workflow').first().json;\n\nconst balance = Number(parentFirst?.products?.balance) || 0;\nconst productId = parentFirst?.products?.product_type_info?.id ?? null;\n\nconst startDate =\n  parentFirst?.StartDate ??\n  parentFirst?.startDate ??\n  parentFirst?.start_date ??\n  null;\n\nconst output = [];\n\nfor (const drugItem of drugItems) {\n  const quantity = Number(drugItem.json.quantity) || 0;\n  const remaining = balance - quantity;\n\n  output.push({\n    json: {\n      ...drugItem.json,\n      StartDate: startDate,          // ensure it’s AFTER the spread\n      CanSubtract: remaining >= 0,\n      RemainingBalance: remaining,\n      ProductID: productId,\n    },\n  });\n}\n\nreturn output;"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -367,7 +367,7 @@
       {
         "parameters": {
           "mode": "raw",
-          "jsonOutput": "=  {\n    \"AppointmentID\": \"{{ $json.AppointmentID }}\",\n    \"CustomerFirstName\": \"{{ $json.CustomerFirstName }}\",\n    \"CustomerLastName\": \"{{ $json.CustomerLastName }}\",\n    \"CustomerCode\": \"{{ $json.CustomerCode }}\",\n    \"CustomerID\": \"{{ $json.CustomerID }}\",\n    \"CustomerDOB\": \"{{ $json.CustomerDOB }}\",\n    \"CustomerEmail\": \"{{ $json.CustomerEmail }}\",\n    \"CustomerGender\": \"{{ $json.CustomerGender }}\",\n    \"CustomerCenterID\": \"{{ $json.CustomerCenterID }}\",\n    \"is_form_submitted\": {{ $json.is_form_submitted }},\n    \"textField5\": \"{{ $json.textField5 }}\",\n    \"select6\": \"{{ $json.select6 }}\",\n    \"textField2\": \"{{ $json.textField2 }}\",\n    \"textField4\": \"{{ $json.textField4 }}\",\n    \"btnFormioSubmit\": {{ $json.btnFormioSubmit }},\n    \"textField\": \"{{ $json.textField ?? null }}\",\n    \"ConsentFormFilled\": {{ $json.ConsentFormFilled }},\n    \"ConsentFormSubmitted\": {{ $json.ConsentFormSubmitted }},\n    \"DeliveryLocation\": \"{{ $json.DeliveryLocation }}\",\n    \"product\": \"{{ $json.product }}\",\n    \"quantity\": \"{{ $json.quantity }}\",\n    \"DeliveryAddressFull\": \"{{ $json.DeliveryAddressFull }}\",\n    \"doctorsDirections\": \"{{ $json.doctorsDirections }}\",\n    \"DeliveryAddress1\": \"{{ $json.DeliveryAddress1 }}\",\n    \"DeliveryCity\": \"{{ $json.DeliveryCity }}\",\n    \"addresscompared\": {{ $json.addresscompared }},\n    \"ProductNameCleaned\": \"{{ $json.ProductNameCleaned }}\",\n    \"ZenotiProductName\": \"{{ $json.ZenotiProductName }}\",\n    \"ZenotiProductNameShort\": \"{{ $json.ZenotiProductNameShort }}\",\n    \"ZenotiProductNameEnd\": \"{{ $json.ZenotiProductNameEnd }}\",\n    \"CanSubtract\": {{ $json.CanSubtract }},\n    \"RemainingBalance\": {{ $json.RemainingBalance }},\n    \"ProductID\": \"{{ $json.ProductID }}\",\n    \"packagesavailable\": true,\n    \"perfectrun\": true,\n    \"CLinicABB\": \"{{ $json.CLinicABB }}\",\n    \"scriptURL\": \"{{ $json.scriptURL }}\"\n  }",
+          "jsonOutput": "=  {\n    \"AppointmentID\": \"{{ $json.AppointmentID }}\",\n    \"CustomerFirstName\": \"{{ $json.CustomerFirstName }}\",\n    \"CustomerLastName\": \"{{ $json.CustomerLastName }}\",\n    \"CustomerCode\": \"{{ $json.CustomerCode }}\",\n    \"CustomerID\": \"{{ $json.CustomerID }}\",\n    \"CustomerDOB\": \"{{ $json.CustomerDOB }}\",\n    \"CustomerEmail\": \"{{ $json.CustomerEmail }}\",\n    \"CustomerGender\": \"{{ $json.CustomerGender }}\",\n    \"CustomerCenterID\": \"{{ $json.CustomerCenterID }}\",\n    \"is_form_submitted\": {{ $json.is_form_submitted }},\n    \"textField5\": \"{{ $json.textField5 }}\",\n    \"select6\": \"{{ $json.select6 }}\",\n    \"textField2\": \"{{ $json.textField2 }}\",\n    \"textField4\": \"{{ $json.textField4 }}\",\n    \"btnFormioSubmit\": {{ $json.btnFormioSubmit }},\n    \"textField\": \"{{ $json.textField ?? null }}\",\n    \"ConsentFormFilled\": {{ $json.ConsentFormFilled }},\n    \"ConsentFormSubmitted\": {{ $json.ConsentFormSubmitted }},\n    \"DeliveryLocation\": \"{{ $json.DeliveryLocation }}\",\n    \"product\": \"{{ $json.product }}\",\n    \"quantity\": \"{{ $json.quantity }}\",\n    \"DeliveryAddressFull\": \"{{ $json.DeliveryAddressFull }}\",\n    \"doctorsDirections\": \"{{ $json.doctorsDirections }}\",\n    \"DeliveryAddress1\": \"{{ $json.DeliveryAddress1 }}\",\n    \"DeliveryCity\": \"{{ $json.DeliveryCity }}\",\n    \"addresscompared\": {{ $json.addresscompared }},\n    \"ProductNameCleaned\": \"{{ $json.ProductNameCleaned }}\",\n    \"ZenotiProductName\": \"{{ $json.ZenotiProductName }}\",\n    \"ZenotiProductNameShort\": \"{{ $json.ZenotiProductNameShort }}\",\n    \"ZenotiProductNameEnd\": \"{{ $json.ZenotiProductNameEnd }}\",\n    \"CanSubtract\": {{ $json.CanSubtract }},\n    \"RemainingBalance\": {{ $json.RemainingBalance }},\n    \"ProductID\": \"{{ $json.ProductID }}\",\n    \"packagesavailable\": true,\n    \"perfectrun\": true,\n    \"CLinicABB\": \"{{ $json.CLinicABB }}\",\n    \"scriptURL\": \"{{ $json.scriptURL }}\",\n    \"StartDate\": \"{{ $json.StartDate }}\"\n  }",
           "options": {}
         },
         "type": "n8n-nodes-base.set",
@@ -480,7 +480,7 @@
       {
         "parameters": {
           "mode": "raw",
-          "jsonOutput": "=  {\n    \"AppointmentID\": \"{{ $json.AppointmentID }}\",\n    \"CustomerFirstName\": \"{{ $json.CustomerFirstName }}\",\n    \"CustomerLastName\": \"{{ $json.CustomerLastName }}\",\n    \"CustomerCode\": \"{{ $json.CustomerCode }}\",\n    \"CustomerID\": \"{{ $json.CustomerID }}\",\n    \"CustomerDOB\": \"{{ $json.CustomerDOB }}\",\n    \"CustomerEmail\": \"{{ $json.CustomerEmail }}\",\n    \"CustomerGender\": \"{{ $json.CustomerGender }}\",\n    \"CustomerCenterID\": \"{{ $json.CustomerCenterID }}\",\n    \"is_form_submitted\": {{ $json.is_form_submitted }},\n    \"textField5\": \"{{ $json.textField5 }}\",\n    \"select6\": \"{{ $json.select6 }}\",\n    \"textField2\": \"{{ $json.textField2 }}\",\n    \"textField4\": \"{{ $json.textField4 }}\",\n    \"btnFormioSubmit\": {{ $json.btnFormioSubmit }},\n    \"textField\": \"{{ $json.textField ?? null }}\",\n    \"ConsentFormFilled\": {{ $json.ConsentFormFilled }},\n    \"ConsentFormSubmitted\": {{ $json.ConsentFormSubmitted }},\n    \"DeliveryLocation\": \"{{ $json.DeliveryLocation }}\",\n    \"product\": \"{{ $json.product }}\",\n    \"quantity\": \"{{ $json.quantity }}\",\n    \"DeliveryAddressFull\": \"{{ $json.DeliveryAddressFull }}\",\n    \"doctorsDirections\": \"{{ $json.doctorsDirections }}\",\n    \"DeliveryAddress1\": \"{{ $json.DeliveryAddress1 }}\",\n    \"DeliveryCity\": \"{{ $json.DeliveryCity }}\",\n    \"addresscompared\": {{ $json.addresscompared }},\n    \"ProductNameCleaned\": \"{{ $json.ProductNameCleaned }}\",\n    \"ZenotiProductName\": \"{{ $json.ZenotiProductName }}\",\n    \"ZenotiProductNameShort\": \"{{ $json.ZenotiProductNameShort }}\",\n    \"ZenotiProductNameEnd\": \"{{ $json.ZenotiProductNameEnd }}\",\n    \"CanSubtract\": {{ $json.CanSubtract }},\n    \"RemainingBalance\": {{ $json.RemainingBalance }},\n    \"ProductID\": \"{{ $json.ProductID }}\",\n    \"packagesavailable\": false,\n    \"perfectrun\": false,\n    \"CLinicABB\": \"{{ $json.CLinicABB }}\",\n    \"scriptURL\": \"{{ $json.scriptURL }}\"\n  }",
+          "jsonOutput": "=  {\n    \"AppointmentID\": \"{{ $json.AppointmentID }}\",\n    \"CustomerFirstName\": \"{{ $json.CustomerFirstName }}\",\n    \"CustomerLastName\": \"{{ $json.CustomerLastName }}\",\n    \"CustomerCode\": \"{{ $json.CustomerCode }}\",\n    \"CustomerID\": \"{{ $json.CustomerID }}\",\n    \"CustomerDOB\": \"{{ $json.CustomerDOB }}\",\n    \"CustomerEmail\": \"{{ $json.CustomerEmail }}\",\n    \"CustomerGender\": \"{{ $json.CustomerGender }}\",\n    \"CustomerCenterID\": \"{{ $json.CustomerCenterID }}\",\n    \"is_form_submitted\": {{ $json.is_form_submitted }},\n    \"textField5\": \"{{ $json.textField5 }}\",\n    \"select6\": \"{{ $json.select6 }}\",\n    \"textField2\": \"{{ $json.textField2 }}\",\n    \"textField4\": \"{{ $json.textField4 }}\",\n    \"btnFormioSubmit\": {{ $json.btnFormioSubmit }},\n    \"textField\": \"{{ $json.textField ?? null }}\",\n    \"ConsentFormFilled\": {{ $json.ConsentFormFilled }},\n    \"ConsentFormSubmitted\": {{ $json.ConsentFormSubmitted }},\n    \"DeliveryLocation\": \"{{ $json.DeliveryLocation }}\",\n    \"product\": \"{{ $json.product }}\",\n    \"quantity\": \"{{ $json.quantity }}\",\n    \"DeliveryAddressFull\": \"{{ $json.DeliveryAddressFull }}\",\n    \"doctorsDirections\": \"{{ $json.doctorsDirections }}\",\n    \"DeliveryAddress1\": \"{{ $json.DeliveryAddress1 }}\",\n    \"DeliveryCity\": \"{{ $json.DeliveryCity }}\",\n    \"addresscompared\": {{ $json.addresscompared }},\n    \"ProductNameCleaned\": \"{{ $json.ProductNameCleaned }}\",\n    \"ZenotiProductName\": \"{{ $json.ZenotiProductName }}\",\n    \"ZenotiProductNameShort\": \"{{ $json.ZenotiProductNameShort }}\",\n    \"ZenotiProductNameEnd\": \"{{ $json.ZenotiProductNameEnd }}\",\n    \"CanSubtract\": {{ $json.CanSubtract }},\n    \"RemainingBalance\": {{ $json.RemainingBalance }},\n    \"ProductID\": \"{{ $json.ProductID }}\",\n    \"packagesavailable\": false,\n    \"perfectrun\": false,\n    \"CLinicABB\": \"{{ $json.CLinicABB }}\",\n    \"scriptURL\": \"{{ $json.scriptURL }}\",\n    \"StartDate\": \"{{ $('When Executed by Another Workflow').item.json.StartDate }}\"\n  }",
           "options": {}
         },
         "type": "n8n-nodes-base.set",
@@ -673,11 +673,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 99c072ee",
+    "name": "Version abb342b6",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "99c072ee-8d2b-4244-be0b-ac7bd845961a",
+  "activeVersionId": "abb342b6-b949-4a5a-a27b-56fdb323dae1",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -1179,7 +1179,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Items we want to OUTPUT (all fields kept)\nconst drugItems = $('When Executed by Another Workflow').all();\n\n// Pull shared values once\nconst first = $input.first().json;\nconst balance = Number(first.products.balance) || 0;\nconst productId = first.products.product_type_info.id;\n\nconst output = [];\n\nfor (let i = 0; i < drugItems.length; i++) {\n  const drugItem = drugItems[i];\n\n  const quantity = Number(drugItem.json.quantity) || 0;\n  const remaining = balance - quantity;\n\n  output.push({\n    json: {\n      ...drugItem.json,\n      CanSubtract: remaining >= 0,\n      RemainingBalance: remaining,\n      ProductID: productId,\n    },\n  });\n}\n\nreturn output;"
+        "jsCode": "const drugItems = $('When Executed by Another Workflow').all();\n\nconst parentFirst = $('When Executed by Another Workflow').first().json;\n\nconst balance = Number(parentFirst?.products?.balance) || 0;\nconst productId = parentFirst?.products?.product_type_info?.id ?? null;\n\nconst startDate =\n  parentFirst?.StartDate ??\n  parentFirst?.startDate ??\n  parentFirst?.start_date ??\n  null;\n\nconst output = [];\n\nfor (const drugItem of drugItems) {\n  const quantity = Number(drugItem.json.quantity) || 0;\n  const remaining = balance - quantity;\n\n  output.push({\n    json: {\n      ...drugItem.json,\n      StartDate: startDate,          // ensure it’s AFTER the spread\n      CanSubtract: remaining >= 0,\n      RemainingBalance: remaining,\n      ProductID: productId,\n    },\n  });\n}\n\nreturn output;"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1208,7 +1208,7 @@
     {
       "parameters": {
         "mode": "raw",
-        "jsonOutput": "=  {\n    \"AppointmentID\": \"{{ $json.AppointmentID }}\",\n    \"CustomerFirstName\": \"{{ $json.CustomerFirstName }}\",\n    \"CustomerLastName\": \"{{ $json.CustomerLastName }}\",\n    \"CustomerCode\": \"{{ $json.CustomerCode }}\",\n    \"CustomerID\": \"{{ $json.CustomerID }}\",\n    \"CustomerDOB\": \"{{ $json.CustomerDOB }}\",\n    \"CustomerEmail\": \"{{ $json.CustomerEmail }}\",\n    \"CustomerGender\": \"{{ $json.CustomerGender }}\",\n    \"CustomerCenterID\": \"{{ $json.CustomerCenterID }}\",\n    \"is_form_submitted\": {{ $json.is_form_submitted }},\n    \"textField5\": \"{{ $json.textField5 }}\",\n    \"select6\": \"{{ $json.select6 }}\",\n    \"textField2\": \"{{ $json.textField2 }}\",\n    \"textField4\": \"{{ $json.textField4 }}\",\n    \"btnFormioSubmit\": {{ $json.btnFormioSubmit }},\n    \"textField\": \"{{ $json.textField ?? null }}\",\n    \"ConsentFormFilled\": {{ $json.ConsentFormFilled }},\n    \"ConsentFormSubmitted\": {{ $json.ConsentFormSubmitted }},\n    \"DeliveryLocation\": \"{{ $json.DeliveryLocation }}\",\n    \"product\": \"{{ $json.product }}\",\n    \"quantity\": \"{{ $json.quantity }}\",\n    \"DeliveryAddressFull\": \"{{ $json.DeliveryAddressFull }}\",\n    \"doctorsDirections\": \"{{ $json.doctorsDirections }}\",\n    \"DeliveryAddress1\": \"{{ $json.DeliveryAddress1 }}\",\n    \"DeliveryCity\": \"{{ $json.DeliveryCity }}\",\n    \"addresscompared\": {{ $json.addresscompared }},\n    \"ProductNameCleaned\": \"{{ $json.ProductNameCleaned }}\",\n    \"ZenotiProductName\": \"{{ $json.ZenotiProductName }}\",\n    \"ZenotiProductNameShort\": \"{{ $json.ZenotiProductNameShort }}\",\n    \"ZenotiProductNameEnd\": \"{{ $json.ZenotiProductNameEnd }}\",\n    \"CanSubtract\": {{ $json.CanSubtract }},\n    \"RemainingBalance\": {{ $json.RemainingBalance }},\n    \"ProductID\": \"{{ $json.ProductID }}\",\n    \"packagesavailable\": true,\n    \"perfectrun\": true,\n    \"CLinicABB\": \"{{ $json.CLinicABB }}\",\n    \"scriptURL\": \"{{ $json.scriptURL }}\"\n  }",
+        "jsonOutput": "=  {\n    \"AppointmentID\": \"{{ $json.AppointmentID }}\",\n    \"CustomerFirstName\": \"{{ $json.CustomerFirstName }}\",\n    \"CustomerLastName\": \"{{ $json.CustomerLastName }}\",\n    \"CustomerCode\": \"{{ $json.CustomerCode }}\",\n    \"CustomerID\": \"{{ $json.CustomerID }}\",\n    \"CustomerDOB\": \"{{ $json.CustomerDOB }}\",\n    \"CustomerEmail\": \"{{ $json.CustomerEmail }}\",\n    \"CustomerGender\": \"{{ $json.CustomerGender }}\",\n    \"CustomerCenterID\": \"{{ $json.CustomerCenterID }}\",\n    \"is_form_submitted\": {{ $json.is_form_submitted }},\n    \"textField5\": \"{{ $json.textField5 }}\",\n    \"select6\": \"{{ $json.select6 }}\",\n    \"textField2\": \"{{ $json.textField2 }}\",\n    \"textField4\": \"{{ $json.textField4 }}\",\n    \"btnFormioSubmit\": {{ $json.btnFormioSubmit }},\n    \"textField\": \"{{ $json.textField ?? null }}\",\n    \"ConsentFormFilled\": {{ $json.ConsentFormFilled }},\n    \"ConsentFormSubmitted\": {{ $json.ConsentFormSubmitted }},\n    \"DeliveryLocation\": \"{{ $json.DeliveryLocation }}\",\n    \"product\": \"{{ $json.product }}\",\n    \"quantity\": \"{{ $json.quantity }}\",\n    \"DeliveryAddressFull\": \"{{ $json.DeliveryAddressFull }}\",\n    \"doctorsDirections\": \"{{ $json.doctorsDirections }}\",\n    \"DeliveryAddress1\": \"{{ $json.DeliveryAddress1 }}\",\n    \"DeliveryCity\": \"{{ $json.DeliveryCity }}\",\n    \"addresscompared\": {{ $json.addresscompared }},\n    \"ProductNameCleaned\": \"{{ $json.ProductNameCleaned }}\",\n    \"ZenotiProductName\": \"{{ $json.ZenotiProductName }}\",\n    \"ZenotiProductNameShort\": \"{{ $json.ZenotiProductNameShort }}\",\n    \"ZenotiProductNameEnd\": \"{{ $json.ZenotiProductNameEnd }}\",\n    \"CanSubtract\": {{ $json.CanSubtract }},\n    \"RemainingBalance\": {{ $json.RemainingBalance }},\n    \"ProductID\": \"{{ $json.ProductID }}\",\n    \"packagesavailable\": true,\n    \"perfectrun\": true,\n    \"CLinicABB\": \"{{ $json.CLinicABB }}\",\n    \"scriptURL\": \"{{ $json.scriptURL }}\",\n    \"StartDate\": \"{{ $json.StartDate }}\"\n  }",
         "options": {}
       },
       "type": "n8n-nodes-base.set",
@@ -1321,7 +1321,7 @@
     {
       "parameters": {
         "mode": "raw",
-        "jsonOutput": "=  {\n    \"AppointmentID\": \"{{ $json.AppointmentID }}\",\n    \"CustomerFirstName\": \"{{ $json.CustomerFirstName }}\",\n    \"CustomerLastName\": \"{{ $json.CustomerLastName }}\",\n    \"CustomerCode\": \"{{ $json.CustomerCode }}\",\n    \"CustomerID\": \"{{ $json.CustomerID }}\",\n    \"CustomerDOB\": \"{{ $json.CustomerDOB }}\",\n    \"CustomerEmail\": \"{{ $json.CustomerEmail }}\",\n    \"CustomerGender\": \"{{ $json.CustomerGender }}\",\n    \"CustomerCenterID\": \"{{ $json.CustomerCenterID }}\",\n    \"is_form_submitted\": {{ $json.is_form_submitted }},\n    \"textField5\": \"{{ $json.textField5 }}\",\n    \"select6\": \"{{ $json.select6 }}\",\n    \"textField2\": \"{{ $json.textField2 }}\",\n    \"textField4\": \"{{ $json.textField4 }}\",\n    \"btnFormioSubmit\": {{ $json.btnFormioSubmit }},\n    \"textField\": \"{{ $json.textField ?? null }}\",\n    \"ConsentFormFilled\": {{ $json.ConsentFormFilled }},\n    \"ConsentFormSubmitted\": {{ $json.ConsentFormSubmitted }},\n    \"DeliveryLocation\": \"{{ $json.DeliveryLocation }}\",\n    \"product\": \"{{ $json.product }}\",\n    \"quantity\": \"{{ $json.quantity }}\",\n    \"DeliveryAddressFull\": \"{{ $json.DeliveryAddressFull }}\",\n    \"doctorsDirections\": \"{{ $json.doctorsDirections }}\",\n    \"DeliveryAddress1\": \"{{ $json.DeliveryAddress1 }}\",\n    \"DeliveryCity\": \"{{ $json.DeliveryCity }}\",\n    \"addresscompared\": {{ $json.addresscompared }},\n    \"ProductNameCleaned\": \"{{ $json.ProductNameCleaned }}\",\n    \"ZenotiProductName\": \"{{ $json.ZenotiProductName }}\",\n    \"ZenotiProductNameShort\": \"{{ $json.ZenotiProductNameShort }}\",\n    \"ZenotiProductNameEnd\": \"{{ $json.ZenotiProductNameEnd }}\",\n    \"CanSubtract\": {{ $json.CanSubtract }},\n    \"RemainingBalance\": {{ $json.RemainingBalance }},\n    \"ProductID\": \"{{ $json.ProductID }}\",\n    \"packagesavailable\": false,\n    \"perfectrun\": false,\n    \"CLinicABB\": \"{{ $json.CLinicABB }}\",\n    \"scriptURL\": \"{{ $json.scriptURL }}\"\n  }",
+        "jsonOutput": "=  {\n    \"AppointmentID\": \"{{ $json.AppointmentID }}\",\n    \"CustomerFirstName\": \"{{ $json.CustomerFirstName }}\",\n    \"CustomerLastName\": \"{{ $json.CustomerLastName }}\",\n    \"CustomerCode\": \"{{ $json.CustomerCode }}\",\n    \"CustomerID\": \"{{ $json.CustomerID }}\",\n    \"CustomerDOB\": \"{{ $json.CustomerDOB }}\",\n    \"CustomerEmail\": \"{{ $json.CustomerEmail }}\",\n    \"CustomerGender\": \"{{ $json.CustomerGender }}\",\n    \"CustomerCenterID\": \"{{ $json.CustomerCenterID }}\",\n    \"is_form_submitted\": {{ $json.is_form_submitted }},\n    \"textField5\": \"{{ $json.textField5 }}\",\n    \"select6\": \"{{ $json.select6 }}\",\n    \"textField2\": \"{{ $json.textField2 }}\",\n    \"textField4\": \"{{ $json.textField4 }}\",\n    \"btnFormioSubmit\": {{ $json.btnFormioSubmit }},\n    \"textField\": \"{{ $json.textField ?? null }}\",\n    \"ConsentFormFilled\": {{ $json.ConsentFormFilled }},\n    \"ConsentFormSubmitted\": {{ $json.ConsentFormSubmitted }},\n    \"DeliveryLocation\": \"{{ $json.DeliveryLocation }}\",\n    \"product\": \"{{ $json.product }}\",\n    \"quantity\": \"{{ $json.quantity }}\",\n    \"DeliveryAddressFull\": \"{{ $json.DeliveryAddressFull }}\",\n    \"doctorsDirections\": \"{{ $json.doctorsDirections }}\",\n    \"DeliveryAddress1\": \"{{ $json.DeliveryAddress1 }}\",\n    \"DeliveryCity\": \"{{ $json.DeliveryCity }}\",\n    \"addresscompared\": {{ $json.addresscompared }},\n    \"ProductNameCleaned\": \"{{ $json.ProductNameCleaned }}\",\n    \"ZenotiProductName\": \"{{ $json.ZenotiProductName }}\",\n    \"ZenotiProductNameShort\": \"{{ $json.ZenotiProductNameShort }}\",\n    \"ZenotiProductNameEnd\": \"{{ $json.ZenotiProductNameEnd }}\",\n    \"CanSubtract\": {{ $json.CanSubtract }},\n    \"RemainingBalance\": {{ $json.RemainingBalance }},\n    \"ProductID\": \"{{ $json.ProductID }}\",\n    \"packagesavailable\": false,\n    \"perfectrun\": false,\n    \"CLinicABB\": \"{{ $json.CLinicABB }}\",\n    \"scriptURL\": \"{{ $json.scriptURL }}\",\n    \"StartDate\": \"{{ $('When Executed by Another Workflow').item.json.StartDate }}\"\n  }",
         "options": {}
       },
       "type": "n8n-nodes-base.set",
@@ -1351,7 +1351,54 @@
     }
   ],
   "origin": "n8n",
-  "pinData": {},
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "AppointmentID": "42ee4e85-9f78-4560-9203-2d8a2ead7854",
+          "CustomerFirstName": "Benjamin",
+          "CustomerLastName": "Harvey",
+          "CustomerCode": "AK1939",
+          "CustomerID": "d84757c6-b629-4279-a4c3-49bd0f994b47",
+          "CustomerDOB": "20/03/2000",
+          "CustomerEmail": "benjamin.harvey77@gmail.com",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": true,
+          "textField5": "Benjamin Harvey",
+          "select6": "no",
+          "textField2": " Dr. Annemarie Hern NZMC 15150 ",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "clinic",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "2",
+          "DeliveryAddress1": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "DeliverySuburb": "Newmarket",
+          "DeliveryCity": "Auckland",
+          "DeliveryPostcode": "1023",
+          "DeliveryAddressFull": "L6/5 Short Street, Newmarket, Auckland 1010, Newmarket, Auckland, 1023",
+          "doctorsDirections": "ApplyToScalp",
+          "addresscompared": true,
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
+          "ZenotiProductName": "Minoxidil + Finasteride Solution",
+          "ZenotiProductNameShort": "Minox",
+          "ZenotiProductNameEnd": "tion",
+          "packagesavailable": false,
+          "paidinfull": true,
+          "CLinicABB": "AUC",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=f1f7f7f6-07b0-4b7d-b0ab-d440948da9f5&ServiceId=cf690070-2b50-484d-9ec9-67c786576eb6&Service=Doctor%20Scripts%208mth&GuestId=d84757c6-b629-4279-a4c3-49bd0f994b47&AppointmentId=42ee4e85-9f78-4560-9203-2d8a2ead7854",
+          "clinicemail": "Auckland@ashleyandmartin.co.nz",
+          "StartDate": "2026-02-11"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -1382,6 +1429,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-02-12T06:07:05.721Z",
-  "versionId": "99c072ee-8d2b-4244-be0b-ac7bd845961a"
+  "updatedAt": "2026-02-22T23:36:41.139Z",
+  "versionId": "abb342b6-b949-4a5a-a27b-56fdb323dae1"
 }
