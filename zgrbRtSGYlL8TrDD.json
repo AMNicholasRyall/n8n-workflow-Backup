@@ -7,7 +7,7 @@
       "main": [
         [
           {
-            "node": "Split Out",
+            "node": "Create Previous Date",
             "type": "main",
             "index": 0
           }
@@ -89,6 +89,134 @@
           }
         ]
       ]
+    },
+    "Search Inprogress Orders": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Inprogress Orders1": {
+      "main": [
+        [
+          {
+            "node": "Split Out2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Previous Date": {
+      "main": [
+        [
+          {
+            "node": "SetDriveID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out2": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Completed Folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SetDriveID": {
+      "main": [
+        [
+          {
+            "node": "Search Inprogress Orders1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Completed Folder": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-12-17T04:40:43.466Z",
@@ -102,8 +230,8 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -480,
-        176
+        -896,
+        592
       ],
       "id": "696f4dd9-6688-4050-917c-d07e7ca97e23",
       "name": "When clicking ‘Execute workflow’"
@@ -257,6 +385,357 @@
       "typeVersion": 1,
       "id": "7e28d6b8-4e66-4403-964e-98980efc6070",
       "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/root/search(q='Completed Orders')",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        288,
+        160
+      ],
+      "id": "0bd43781-a839-4606-839b-0aaade510e2f",
+      "name": "Search Inprogress Orders",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        },
+        "microsoftGraphSecurityOAuth2Api": {
+          "id": "7IYTPqhMSd9yOy8S",
+          "name": "Microsoft Graph Security account"
+        },
+        "microsoftOAuth2Api": {
+          "id": "yjHQESADfULqo4lZ",
+          "name": "Microsoft account"
+        },
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        480,
+        160
+      ],
+      "id": "a89e43fc-51a4-4858-a14c-32b85277a66d",
+      "name": "Split Out1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c1029a23-42d2-4492-9605-ea6736dac541",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "Completed Orders",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        704,
+        176
+      ],
+      "id": "cfb709f9-bb20-436a-af3b-17733fbc1e58",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.CompletedOrders }}/children?$top=200&$select=id,name,folder,file,createdDateTime,lastModifiedDateTime",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -224,
+        592
+      ],
+      "id": "1bc7f5b3-3255-4e1a-9379-339326cfd8e7",
+      "name": "Search Inprogress Orders1",
+      "credentials": {
+        "microsoftSharePointOAuth2Api": {
+          "id": "8eWNjQciijocacKo",
+          "name": "Microsoft SharePoint account"
+        },
+        "microsoftGraphSecurityOAuth2Api": {
+          "id": "7IYTPqhMSd9yOy8S",
+          "name": "Microsoft Graph Security account"
+        },
+        "microsoftOAuth2Api": {
+          "id": "yjHQESADfULqo4lZ",
+          "name": "Microsoft account"
+        },
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "1f2b61c6-10a5-4e36-a388-fb253fcfe020",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('Create Previous Date').item.json.start_date }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        224,
+        592
+      ],
+      "id": "c1d212ab-6ab9-46f9-85a2-9d5298bf239f",
+      "name": "Filter1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Select your timezone offset here\nconst TZ_OFFSET_HOURS = 8; // Perth = 8, Brisbane = 10, Sydney = 11 (DST), NZ = 13\n\n// Helper to shift UTC time to target timezone\nconst shiftToTz = (date, offsetHours) => {\n  const shifted = new Date(date.getTime() + offsetHours * 3600 * 1000);\n  return shifted;\n};\n\n// Helper to format YYYY-MM-DD using shifted date\nconst formatLocal = (d) => {\n  const year = d.getUTCFullYear();\n  const month = String(d.getUTCMonth() + 1).padStart(2, '0');\n  const day = String(d.getUTCDate()).padStart(2, '0');\n  return `${year}-${month}-${day}`;\n};\n\n// Current UTC time\nconst nowUtc = new Date();\n\n// Convert to local timezone\nconst todayLocal = shiftToTz(nowUtc, TZ_OFFSET_HOURS);\n\n// Yesterday in local timezone\nconst yesterdayLocal = new Date(todayLocal.getTime() - 24 * 3600 * 1000);\n\n// Output\nreturn [\n  {\n    json: {\n      start_date: formatLocal(yesterdayLocal),\n      end_date: formatLocal(todayLocal),\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -672,
+        592
+      ],
+      "id": "29b53a3e-a217-40e8-a2e1-2b17beac41ce",
+      "name": "Create Previous Date"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ee86aa17-791e-4b76-9735-fffc8d9ecc94",
+              "leftValue": "={{ Object.keys($json).length }}",
+              "rightValue": "0",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        448,
+        592
+      ],
+      "id": "3e5a4268-bd53-464e-9775-e323459d4212",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        0,
+        592
+      ],
+      "id": "c3d9a121-2641-4483-acd3-befc252e8556",
+      "name": "Split Out2",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/sites/{{ $('SetDriveID').item.json.SiteID }}/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('SetDriveID').item.json.CompletedOrders }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $('Create Previous Date').item.json.start_date }}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"rename\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        752,
+        704
+      ],
+      "id": "1d84fd42-98e1-4651-ae0f-1118d029ed76",
+      "name": "Create Completed Folder",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b26619fc-3777-49fc-90f6-d44350185646",
+              "name": "DriveID",
+              "value": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
+              "type": "string"
+            },
+            {
+              "id": "e3938eed-c906-42f2-91e5-ccc27073e519",
+              "name": "ItemsID",
+              "value": "01Y4DA4OOUVPWHSA2BN5G2YBSB6DOVI6HR",
+              "type": "string"
+            },
+            {
+              "id": "787846a3-bd50-4c4c-b787-46ec357f2836",
+              "name": "SiteID",
+              "value": "ashleyandmartincomau.sharepoint.com,d072e691-4945-4cb7-9d46-8ce09a647579,25bd0103-07ad-4698-92dc-5a919b01719b",
+              "type": "string"
+            },
+            {
+              "id": "62eb8164-be21-46b8-8ea9-e94fad593259",
+              "name": "MasterFolderID",
+              "value": "01Y4DA4OK2PDWUJLMKBZGKGZQITNHHJNPC",
+              "type": "string"
+            },
+            {
+              "id": "df326af1-0521-4c0b-95f9-02144322ce2a",
+              "name": "MasterExcelID",
+              "value": "01Y4DA4OJUQBWRKASOR5D3SJ532MAO4JPK",
+              "type": "string"
+            },
+            {
+              "id": "2837cb90-686c-4896-97ce-8d60eec37297",
+              "name": "CompletedOrders",
+              "value": "01Y4DA4OOBREWUF67Q2JFKQRVSUNIKHBJZ",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -448,
+        592
+      ],
+      "id": "1b67b2dd-2624-41a0-bd69-898b856bc84f",
+      "name": "SetDriveID"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        576
+      ],
+      "id": "b71b9bd2-f11b-4081-8f95-19e5131048ca",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e10c22aa-ad42-4e3b-bb68-270ad48ad852",
+              "name": "CurrentOrderFolderID",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        752,
+        496
+      ],
+      "id": "86281ee6-284b-4081-b0e9-952e1bcc6382",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cb4bcd61-86fc-48a6-b737-a12f089308ca",
+              "name": "CurrentOrderFolderID",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        960,
+        704
+      ],
+      "id": "7cda029f-4727-4bea-b133-b609bbe1c224",
+      "name": "Edit Fields1"
     }
   ],
   "origin": "n8n",
@@ -298,6 +777,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-12-23T01:49:41.000Z",
-  "versionId": "9c028090-b2ee-4bd2-b00b-8800cf18721c"
+  "updatedAt": "2026-02-24T23:21:36.156Z",
+  "versionId": "260edc42-9b7d-4573-9d78-dc40c6add0a8"
 }
