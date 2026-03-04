@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-02-25T07:08:36.000Z",
-    "createdAt": "2026-02-25T07:08:34.616Z",
-    "versionId": "0b3401ed-694f-4c9a-96cb-606a8072078b",
+    "updatedAt": "2026-02-26T06:55:55.000Z",
+    "createdAt": "2026-02-26T06:55:53.676Z",
+    "versionId": "adc1057e-e134-4c03-aad3-37aa517b40e3",
     "workflowId": "yqeBXeXVYyJMD9S6",
     "nodes": [
       {
@@ -865,7 +865,7 @@
       },
       {
         "parameters": {
-          "amount": 1
+          "amount": 1.1
         },
         "type": "n8n-nodes-base.wait",
         "typeVersion": 1.1,
@@ -1037,11 +1037,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 0b3401ed",
+    "name": "Version adc1057e",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "0b3401ed-694f-4c9a-96cb-606a8072078b",
+  "activeVersionId": "adc1057e-e134-4c03-aad3-37aa517b40e3",
   "connections": {
     "Wait1": {
       "main": [
@@ -2043,7 +2043,7 @@
     },
     {
       "parameters": {
-        "amount": 1
+        "amount": 1.1
       },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
@@ -2089,8 +2089,7 @@
     "availableInMCP": false,
     "timeSavedMode": "fixed",
     "callerPolicy": "workflowsFromSameOwner",
-    "errorWorkflow": "J83Enw8ArDSqhMCL",
-    "saveExecutionProgress": true
+    "errorWorkflow": "J83Enw8ArDSqhMCL"
   },
   "shared": [
     {
@@ -2104,6 +2103,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-02-25T07:21:07.871Z",
-  "versionId": "0b3401ed-694f-4c9a-96cb-606a8072078b"
+  "updatedAt": "2026-02-26T06:55:53.675Z",
+  "versionId": "adc1057e-e134-4c03-aad3-37aa517b40e3"
 }
