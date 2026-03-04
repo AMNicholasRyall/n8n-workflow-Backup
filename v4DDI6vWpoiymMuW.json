@@ -498,7 +498,7 @@
       "typeVersion": 1.1,
       "position": [
         -144,
-        -312
+        -320
       ],
       "id": "a55077b5-bd05-4e77-9f43-79ccea8a0f31",
       "name": "When Executed by Another Workflow"
@@ -578,7 +578,7 @@
       "typeVersion": 3.4,
       "position": [
         528,
-        -312
+        -320
       ],
       "id": "c9ad3cf4-da27-41b9-b864-18090d927776",
       "name": "Set Address"
@@ -602,7 +602,7 @@
       "typeVersion": 4.3,
       "position": [
         752,
-        -312
+        -320
       ],
       "id": "99dbf60b-48f0-460f-9063-b897f2a48a48",
       "name": "Check Region"
@@ -636,7 +636,7 @@
       "typeVersion": 2.3,
       "position": [
         976,
-        -312
+        -320
       ],
       "id": "b01cfcf0-213a-4ca1-96f5-7037e156ffed",
       "name": "If1"
@@ -688,7 +688,7 @@
       "typeVersion": 3.4,
       "position": [
         1200,
-        -360
+        -368
       ],
       "id": "dd52d921-d7ac-4af9-b354-f13293a928e8",
       "name": "Add Region"
@@ -699,7 +699,7 @@
       "typeVersion": 1.1,
       "position": [
         1648,
-        -312
+        -320
       ],
       "id": "bb1ff91f-c4c7-4743-859e-7d279fbad46c",
       "name": "Wait",
@@ -727,17 +727,17 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "AppointmentID": "53b63a2f-e3c5-4096-8006-180e014fc7f5",
-          "CustomerFirstName": "Bibek",
-          "CustomerLastName": "Acharya Chhetri",
-          "CustomerCode": "AK8741",
-          "CustomerID": "49973cf7-4e7f-439b-9f21-9765e2cafc0b",
-          "CustomerDOB": "21/07/2000",
-          "CustomerEmail": "bibek.chhetri842@gmail.com",
+          "AppointmentID": "04f03dca-4008-4065-b55f-b4f857bf191d",
+          "CustomerFirstName": "Rick",
+          "CustomerLastName": "Millen",
+          "CustomerCode": "6994-GAK",
+          "CustomerID": "3b6247e5-5651-4527-b526-24c9c7998311",
+          "CustomerDOB": "13/07/1970",
+          "CustomerEmail": "rickmillen1970@gmail.com",
           "CustomerGender": "Male",
           "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
           "is_form_submitted": true,
-          "textField5": "Bibek Acharya Chhetri",
+          "textField5": "Rick Millen",
           "select6": "no",
           "textField2": "Dr Annemarie Hern 15150",
           "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
@@ -747,14 +747,23 @@
           "DeliveryLocation": "guest",
           "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
           "quantity": "2",
-          "DeliveryAddress1": "43 Girrahween Drive, Totara Vale, Auckland, 0629",
+          "DeliveryAddress1": "2/4 Tavistock Street, Papatoetoe, Auckland 2104",
           "DeliveryCity": "",
-          "DeliveryAddressFull": "43 Girrahween Drive, Totara Vale, Auckland, 0629",
+          "DeliveryAddressFull": "2/4 Tavistock St Papatoetoe 2025",
           "doctorsDirections": "ApplyToScalp",
-          "addresscompared": true
-        },
-        "pairedItem": {
-          "item": 0
+          "addresscompared": false,
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
+          "ZenotiProductName": "Minoxidil + Finasteride Solution",
+          "ZenotiProductNameShort": "Minox",
+          "ZenotiProductNameEnd": "tion",
+          "packagesavailable": false,
+          "paidinfull": true,
+          "CLinicABB": "AUC",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=ca4306a4-c0b2-41b8-bd21-8539a4b62246&ServiceId=dc772ef3-da0e-435a-9bb2-ac0ebfd9b891&Service=Telehealth%20Doctor&GuestId=3b6247e5-5651-4527-b526-24c9c7998311&AppointmentId=04f03dca-4008-4065-b55f-b4f857bf191d",
+          "StartDate": "2026-02-19",
+          "ManuallyApproved": true,
+          "InvoiceNumber": true,
+          "Invoicedate": "2026-02-20"
         }
       }
     ]
@@ -803,6 +812,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-02-13T04:47:24.801Z",
-  "versionId": "eed0a16b-82f6-4d5d-b010-5f0c6e5820f2"
+  "updatedAt": "2026-03-03T05:13:14.796Z",
+  "versionId": "094d6ccb-b90b-4ad9-a851-698c25c8f026"
 }
