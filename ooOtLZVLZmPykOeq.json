@@ -1673,7 +1673,7 @@
     "saveDataSuccessExecution": "all",
     "callerPolicy": "workflowsFromSameOwner",
     "availableInMCP": false,
-    "timeSavedPerExecution": 15
+    "timeSavedPerExecution": 60
   },
   "shared": [
     {
@@ -1710,6 +1710,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-02-12T23:11:09.832Z",
+  "updatedAt": "2026-02-26T00:37:13.154Z",
   "versionId": "e4918b19-acea-49cc-82f9-70ab287f95f3"
 }
