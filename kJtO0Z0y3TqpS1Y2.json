@@ -1,0 +1,756 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-03-04T06:16:27.000Z",
+    "createdAt": "2026-03-04T06:16:23.763Z",
+    "versionId": "11cb5c13-e3e2-47ae-be87-47535ac84512",
+    "workflowId": "kJtO0Z0y3TqpS1Y2",
+    "nodes": [
+      {
+        "parameters": {
+          "amount": 0
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          2912,
+          944
+        ],
+        "id": "007539e8-ffce-4eb5-9a29-e54e4810d111",
+        "name": "Wait1",
+        "webhookId": "211d3edb-5d24-4c8f-8dc0-2dc052ffe242",
+        "alwaysOutputData": true,
+        "executeOnce": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "76808df0-58df-4a14-b84d-5e0bf20c7405",
+                "name": "name",
+                "value": "={{ $('Start').item.json.name }}",
+                "type": "string"
+              },
+              {
+                "id": "44787aca-f854-4f37-8531-1bdc8db0d6ea",
+                "name": "ExcelUpdate",
+                "value": "Completed",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          3104,
+          944
+        ],
+        "id": "8ba2fd85-9e56-4797-8ee7-a5672ed71a9e",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "resource": "table",
+          "workbook": {
+            "__rl": true,
+            "value": "012CMKCCEIUS5SMQO3TJHLPAEWDF2Y2LYB",
+            "mode": "list",
+            "cachedResultName": "Zenoti-GuestFormData",
+            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
+          },
+          "worksheet": {
+            "__rl": true,
+            "value": "{00000000-0001-0000-0000-000000000000}",
+            "mode": "list",
+            "cachedResultName": "Sheet1",
+            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1"
+          },
+          "table": {
+            "__rl": true,
+            "value": "{574F5FEF-D38D-4DD1-97B6-E3BD9F13CC9A}",
+            "mode": "list",
+            "cachedResultName": "GuestFormData",
+            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1:AN2"
+          },
+          "dataMode": "autoMap",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.microsoftExcel",
+        "typeVersion": 2.2,
+        "position": [
+          3104,
+          624
+        ],
+        "id": "1d2f420b-a5af-4d1f-99ca-9667f3363b25",
+        "name": "Append rows to table",
+        "executeOnce": false,
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "microsoftExcelOAuth2Api": {
+            "id": "snb39Kzd4tl5cSJU",
+            "name": "Microsoft Excel account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          2880,
+          624
+        ],
+        "id": "188dcaab-cdf5-4bac-bf8f-d517780f74eb",
+        "name": "Wait",
+        "webhookId": "8595834c-7ca4-4ddf-8859-4685f9e3d1e3"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "={{ $json.table_id }}",
+            "mode": "id"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "dobGF",
+                "condition": "isNotEmpty"
+              }
+            ]
+          },
+          "returnAll": true
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          2224,
+          496
+        ],
+        "id": "d8a366e5-3a1d-403f-aa87-319564115138",
+        "name": "Get row(s)3",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "ee86aa17-791e-4b76-9735-fffc8d9ecc94",
+                "leftValue": "={{ Object.keys($json).length }}",
+                "rightValue": "0",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          2400,
+          496
+        ],
+        "id": "d24ba193-b747-4ab1-8cf7-b13ed32921df",
+        "name": "If",
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "batchSize": 20,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          2656,
+          480
+        ],
+        "id": "d7fd1da3-0aa5-43de-ae77-9211fd1a6b05",
+        "name": "Loop Over Items1"
+      },
+      {
+        "parameters": {
+          "content": "## Grab Clinic Clients",
+          "height": 336,
+          "width": 368,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          2176,
+          368
+        ],
+        "typeVersion": 1,
+        "id": "c933a908-5cda-462d-961b-9e0ed0fad847",
+        "name": "Sticky Note6"
+      },
+      {
+        "parameters": {
+          "content": "## Batch loop of uploading Clients to Excel",
+          "height": 512,
+          "width": 704,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          2544,
+          368
+        ],
+        "typeVersion": 1,
+        "id": "b44f214f-f563-4971-b8f3-553ad7c64219",
+        "name": "Sticky Note7"
+      },
+      {
+        "parameters": {
+          "workflowInputs": {
+            "values": [
+              {
+                "name": "table_id",
+                "type": "any"
+              },
+              {
+                "name": "name",
+                "type": "any"
+              }
+            ]
+          }
+        },
+        "id": "1d9357a2-776f-4778-bf2f-23d82c5dc0de",
+        "typeVersion": 1.1,
+        "name": "Start",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "position": [
+          2016,
+          496
+        ]
+      },
+      {
+        "parameters": {
+          "content": "## Send Back data",
+          "height": 288,
+          "width": 368,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          2880,
+          880
+        ],
+        "typeVersion": 1,
+        "id": "7ae55394-5b7a-436e-bf9b-87a107f4579d",
+        "name": "Sticky Note12"
+      }
+    ],
+    "connections": {
+      "Append rows to table": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items1": {
+        "main": [
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Append rows to table",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait1": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)3": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Start": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 11cb5c13",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "11cb5c13-e3e2-47ae-be87-47535ac84512",
+  "connections": {
+    "Append rows to table": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Append rows to table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)3": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-03-04T06:11:24.361Z",
+  "id": "kJtO0Z0y3TqpS1Y2",
+  "isArchived": false,
+  "meta": null,
+  "name": "Temp Guest Form Uploader",
+  "nodes": [
+    {
+      "parameters": {
+        "amount": 0
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2912,
+        944
+      ],
+      "id": "007539e8-ffce-4eb5-9a29-e54e4810d111",
+      "name": "Wait1",
+      "webhookId": "211d3edb-5d24-4c8f-8dc0-2dc052ffe242",
+      "alwaysOutputData": true,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "76808df0-58df-4a14-b84d-5e0bf20c7405",
+              "name": "name",
+              "value": "={{ $('Start').item.json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "44787aca-f854-4f37-8531-1bdc8db0d6ea",
+              "name": "ExcelUpdate",
+              "value": "Completed",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3104,
+        944
+      ],
+      "id": "8ba2fd85-9e56-4797-8ee7-a5672ed71a9e",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "resource": "table",
+        "workbook": {
+          "__rl": true,
+          "value": "012CMKCCEIUS5SMQO3TJHLPAEWDF2Y2LYB",
+          "mode": "list",
+          "cachedResultName": "Zenoti-GuestFormData",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
+        },
+        "worksheet": {
+          "__rl": true,
+          "value": "{00000000-0001-0000-0000-000000000000}",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "{574F5FEF-D38D-4DD1-97B6-E3BD9F13CC9A}",
+          "mode": "list",
+          "cachedResultName": "GuestFormData",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1:AN2"
+        },
+        "dataMode": "autoMap",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftExcel",
+      "typeVersion": 2.2,
+      "position": [
+        3104,
+        624
+      ],
+      "id": "1d2f420b-a5af-4d1f-99ca-9667f3363b25",
+      "name": "Append rows to table",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "microsoftExcelOAuth2Api": {
+          "id": "snb39Kzd4tl5cSJU",
+          "name": "Microsoft Excel account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2880,
+        624
+      ],
+      "id": "188dcaab-cdf5-4bac-bf8f-d517780f74eb",
+      "name": "Wait",
+      "webhookId": "8595834c-7ca4-4ddf-8859-4685f9e3d1e3"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "={{ $json.table_id }}",
+          "mode": "id"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "dobGF",
+              "condition": "isNotEmpty"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2224,
+        496
+      ],
+      "id": "d8a366e5-3a1d-403f-aa87-319564115138",
+      "name": "Get row(s)3",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ee86aa17-791e-4b76-9735-fffc8d9ecc94",
+              "leftValue": "={{ Object.keys($json).length }}",
+              "rightValue": "0",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2400,
+        496
+      ],
+      "id": "d24ba193-b747-4ab1-8cf7-b13ed32921df",
+      "name": "If",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "batchSize": 20,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2656,
+        480
+      ],
+      "id": "d7fd1da3-0aa5-43de-ae77-9211fd1a6b05",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "content": "## Grab Clinic Clients",
+        "height": 336,
+        "width": 368,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2176,
+        368
+      ],
+      "typeVersion": 1,
+      "id": "c933a908-5cda-462d-961b-9e0ed0fad847",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## Batch loop of uploading Clients to Excel",
+        "height": 512,
+        "width": 704,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2544,
+        368
+      ],
+      "typeVersion": 1,
+      "id": "b44f214f-f563-4971-b8f3-553ad7c64219",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "table_id",
+              "type": "any"
+            },
+            {
+              "name": "name",
+              "type": "any"
+            }
+          ]
+        }
+      },
+      "id": "1d9357a2-776f-4778-bf2f-23d82c5dc0de",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        2016,
+        496
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Send Back data",
+        "height": 288,
+        "width": 368,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2880,
+        880
+      ],
+      "typeVersion": 1,
+      "id": "7ae55394-5b7a-436e-bf9b-87a107f4579d",
+      "name": "Sticky Note12"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "Start": [
+      {
+        "json": {
+          "table_id": "iaTsV9px13OrTCWt"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate",
+    "errorWorkflow": "J83Enw8ArDSqhMCL"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-03-04T06:11:24.364Z",
+      "createdAt": "2026-03-04T06:11:24.364Z",
+      "role": "workflow:owner",
+      "workflowId": "kJtO0Z0y3TqpS1Y2",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-03-04T06:16:37.573Z",
+  "versionId": "11cb5c13-e3e2-47ae-be87-47535ac84512"
+}
