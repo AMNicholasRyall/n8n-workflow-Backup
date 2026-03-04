@@ -18,7 +18,7 @@
       "main": [
         [
           {
-            "node": "If1",
+            "node": "Filter3",
             "type": "main",
             "index": 0
           }
@@ -49,7 +49,13 @@
     },
     "ClinicLoop": {
       "main": [
-        [],
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
         [
           {
             "node": "Get row(s)1",
@@ -160,6 +166,17 @@
         [
           {
             "node": "Append or update a sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter3": {
+      "main": [
+        [
+          {
+            "node": "If1",
             "type": "main",
             "index": 0
           }
@@ -376,7 +393,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        976,
+        1024,
         -64
       ],
       "id": "264c8c56-c855-4628-9b48-6471cab31cef",
@@ -482,8 +499,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        752,
-        352
+        720,
+        368
       ],
       "name": "Call Zenoti - Guest Form Data - Collector",
       "id": "2e8a7e9b-18d0-4542-9123-1253091227d0"
@@ -701,7 +718,7 @@
             {
               "id": "bf3dd0b8-5d30-4dce-88f3-4ce124b8d762",
               "leftValue": "={{ $json.code }}",
-              "rightValue": "BB",
+              "rightValue": "SY",
               "operator": {
                 "type": "string",
                 "operation": "equals"
@@ -783,6 +800,63 @@
           "name": "Microsoft Excel account"
         }
       }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b1467cb6-151d-4946-a8ef-173710c21951",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": 20771,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        144,
+        384
+      ],
+      "id": "f4b20fba-a141-41dc-8818-fca90ffd28d7",
+      "name": "Filter3",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "toRecipients": "nicholas.ryall@ashleyandmartin.com.au",
+        "subject": "={{ $workflow.name }} - Completed",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1232,
+        368
+      ],
+      "id": "a186cb2f-a6fa-4817-8a4b-4d2192f48d40",
+      "name": "Send a message",
+      "webhookId": "b750f2e8-58d0-4444-a690-393f947008a1",
+      "executeOnce": true,
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
     }
   ],
   "origin": "n8n",
@@ -862,6 +936,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-02-25T22:55:31.197Z",
-  "versionId": "0e8748a6-d8d7-412f-831f-23d3c9a8c14c"
+  "updatedAt": "2026-03-04T04:06:59.593Z",
+  "versionId": "43b8cab8-62a1-4c17-9a71-97ed78305fda"
 }
