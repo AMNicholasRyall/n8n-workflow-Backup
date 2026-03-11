@@ -1,0 +1,1100 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-03-09T05:16:29.000Z",
+    "createdAt": "2026-03-09T05:16:24.976Z",
+    "versionId": "0adfa63a-7032-49bc-a934-aac8a9e0baa3",
+    "workflowId": "jodn6QGaZRkDNvIn",
+    "nodes": [
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "14d0a721-3b3b-4caf-849d-d20b887bfeca",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "46a4d344-6343-4cdd-861c-420b8df2c7f9",
+                "leftValue": "={{ $json.perfectrun }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.2,
+        "position": [
+          464,
+          16
+        ],
+        "id": "4d7d2d21-822d-4f98-b2da-3ba3d203d263",
+        "name": "Filter",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          640,
+          16
+        ],
+        "id": "bbc9557c-e136-414a-b499-7e27c1996ea1",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "STUF6Fz9PaFzUwRx",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/STUF6Fz9PaFzUwRx",
+            "cachedResultName": "Zenoti - Order Meds"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          1232,
+          144
+        ],
+        "id": "029e7e4e-eb8a-4914-81be-a1e9b50cd92c",
+        "name": "Call 'Zenoti - Order Meds'",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          912,
+          80
+        ],
+        "id": "a5f04c73-848f-466e-ad97-86e06e355bd9",
+        "name": "Wait",
+        "webhookId": "9ad9ec32-bb7e-4dc8-9b16-6bbe81cd24d5"
+      },
+      {
+        "parameters": {
+          "content": "## Collects Orders Prior to Order",
+          "height": 464,
+          "width": 256
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -48,
+          -80
+        ],
+        "typeVersion": 1,
+        "id": "fe74b92e-a2b7-4b8e-85a1-6bbb36cf7e0f",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "## Filter used if needed remove un required Med orders",
+          "height": 464,
+          "color": 2
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          208,
+          -80
+        ],
+        "typeVersion": 1,
+        "id": "aafeb1f9-324d-4822-bcb8-8a3a4c142010",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "content": "## Loop used to kick orders back onto the path. Filter in here removes orders that would of potentially already run",
+          "height": 464,
+          "width": 960
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          448,
+          -80
+        ],
+        "typeVersion": 1,
+        "id": "2b1b7659-1000-4807-a7cf-6eeb97d245fb",
+        "name": "Sticky Note2"
+      },
+      {
+        "parameters": {
+          "content": "## This flow is a back up to grab and store all info. If the previous flow fails we start there but this allows a cleaner re-start",
+          "width": 1456,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -48,
+          -240
+        ],
+        "typeVersion": 1,
+        "id": "d92c57cc-eb8c-4af4-bc9f-e039ab167292",
+        "name": "Sticky Note3"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "46a4d344-6343-4cdd-861c-420b8df2c7f9",
+                "leftValue": "={{ $json.perfectrun }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.2,
+        "position": [
+          256,
+          112
+        ],
+        "id": "7a9a248b-ddb6-4dd7-8875-086b2f29e82a",
+        "name": "Filter1",
+        "alwaysOutputData": true
+      }
+    ],
+    "connections": {
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Call 'Zenoti - Order Meds'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'Zenoti - Order Meds'": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter1": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 0adfa63a",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "0adfa63a-7032-49bc-a934-aac8a9e0baa3",
+  "connections": {
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti - Order Meds'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Zenoti - Order Meds'": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-03-09T05:11:24.024Z",
+  "id": "jodn6QGaZRkDNvIn",
+  "isArchived": false,
+  "meta": null,
+  "name": "ZenotiNZ-MedOrderBackUp",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "14d0a721-3b3b-4caf-849d-d20b887bfeca",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "46a4d344-6343-4cdd-861c-420b8df2c7f9",
+              "leftValue": "={{ $json.perfectrun }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        464,
+        16
+      ],
+      "id": "4d7d2d21-822d-4f98-b2da-3ba3d203d263",
+      "name": "Filter",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        640,
+        16
+      ],
+      "id": "bbc9557c-e136-414a-b499-7e27c1996ea1",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "STUF6Fz9PaFzUwRx",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/STUF6Fz9PaFzUwRx",
+          "cachedResultName": "Zenoti - Order Meds"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1232,
+        144
+      ],
+      "id": "029e7e4e-eb8a-4914-81be-a1e9b50cd92c",
+      "name": "Call 'Zenoti - Order Meds'",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        912,
+        80
+      ],
+      "id": "a5f04c73-848f-466e-ad97-86e06e355bd9",
+      "name": "Wait",
+      "webhookId": "9ad9ec32-bb7e-4dc8-9b16-6bbe81cd24d5"
+    },
+    {
+      "parameters": {
+        "content": "## Collects Orders Prior to Order",
+        "height": 464,
+        "width": 256
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -48,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "fe74b92e-a2b7-4b8e-85a1-6bbb36cf7e0f",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Filter used if needed remove un required Med orders",
+        "height": 464,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        208,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "aafeb1f9-324d-4822-bcb8-8a3a4c142010",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Loop used to kick orders back onto the path. Filter in here removes orders that would of potentially already run",
+        "height": 464,
+        "width": 960
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        448,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "2b1b7659-1000-4807-a7cf-6eeb97d245fb",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## This flow is a back up to grab and store all info. If the previous flow fails we start there but this allows a cleaner re-start",
+        "width": 1456,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -48,
+        -240
+      ],
+      "typeVersion": 1,
+      "id": "d92c57cc-eb8c-4af4-bc9f-e039ab167292",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "46a4d344-6343-4cdd-861c-420b8df2c7f9",
+              "leftValue": "={{ $json.perfectrun }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        112
+      ],
+      "id": "7a9a248b-ddb6-4dd7-8875-086b2f29e82a",
+      "name": "Filter1",
+      "alwaysOutputData": true
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "AppointmentID": "edc81b8e-0702-4372-ad27-0901e6bb26dc",
+          "CustomerFirstName": "Doug",
+          "CustomerLastName": "Howlett",
+          "CustomerCode": "1089056-GAK",
+          "CustomerID": "91e6ae82-b105-4e4e-9717-fda4cda84c9c",
+          "CustomerDOB": "21/09/1978",
+          "CustomerEmail": "doughowlett@xtra.co.nz",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": true,
+          "textField5": "Doug Howlett",
+          "select6": "no",
+          "textField2": "Dr Annemarie Hern 15150",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "2",
+          "DeliveryAddress1": "3 Dexter Avenue, Mount Eden, Auckland 1024",
+          "DeliveryCity": "",
+          "DeliveryAddressFull": "3 Dexter Avenue, Mount Eden, Auckland 1024",
+          "doctorsDirections": "ApplyToScalp",
+          "addresscompared": true,
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
+          "ZenotiProductName": "Minoxidil + Finasteride Solution",
+          "ZenotiProductNameShort": "Minox",
+          "ZenotiProductNameEnd": "tion",
+          "CanSubtract": true,
+          "RemainingBalance": 5,
+          "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
+          "packagesavailable": true,
+          "perfectrun": true,
+          "CLinicABB": "AUC",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=d4966ac9-c684-4db8-9302-9178d95593d5&ServiceId=dc772ef3-da0e-435a-9bb2-ac0ebfd9b891&Service=Telehealth%20Doctor&GuestId=91e6ae82-b105-4e4e-9717-fda4cda84c9c&AppointmentId=edc81b8e-0702-4372-ad27-0901e6bb26dc",
+          "StartDate": "2026-03-09"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "AppointmentID": "e2c7666e-04ac-43b6-a9ed-26d3fd64ad97",
+          "CustomerFirstName": "Krishneel",
+          "CustomerLastName": "Kumar",
+          "CustomerCode": "AK1913",
+          "CustomerID": "0cb01a88-1188-456a-99e7-4f3c20020c3d",
+          "CustomerDOB": "02/11/1994",
+          "CustomerEmail": "krishneelkumar_48@hotmail.com",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": false,
+          "textField5": "Krishneel Kumar",
+          "select6": "no",
+          "textField2": "Dr Annemarie Hern 15150",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "1",
+          "DeliveryAddress1": "42A Donegal Park Drive, Flat Bush, Auckland 2019",
+          "DeliveryCity": "Standard delivery",
+          "DeliveryAddressFull": "42A Donegal Park Drive, Flat Bush, Auckland 2019, Standard delivery",
+          "doctorsDirections": "ApplyToScalp",
+          "addresscompared": true,
+          "packagesavailable": false,
+          "paidinfull": true,
+          "CLinicABB": "AUC"
+        },
+        "pairedItem": {
+          "item": 1
+        }
+      },
+      {
+        "json": {
+          "AppointmentID": "be611937-f3bc-4e7b-9bc6-280e78c5d6df",
+          "CustomerFirstName": "Ryan",
+          "CustomerLastName": "Jordan",
+          "CustomerCode": "14635-GAK",
+          "CustomerID": "73c45a5c-142e-4a7b-b1c5-7acbdad89836",
+          "CustomerDOB": "11/10/1985",
+          "CustomerEmail": "ryanairjordan45@gmail.com",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": true,
+          "textField5": "Ryan Jordan",
+          "select6": "no",
+          "textField2": "Dr Annemarie Hern 15150",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "2",
+          "DeliveryAddress1": "32 Kitchener Road, Sandringham, Auckland 1025",
+          "DeliveryCity": "Auckland",
+          "DeliveryAddressFull": "32 Kitchener Road, Sandringham, Auckland 1025, Auckland",
+          "doctorsDirections": "ApplyToScalp",
+          "addresscompared": true,
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
+          "ZenotiProductName": "Minoxidil + Finasteride Solution",
+          "ZenotiProductNameShort": "Minox",
+          "ZenotiProductNameEnd": "tion",
+          "CanSubtract": true,
+          "RemainingBalance": 5,
+          "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
+          "packagesavailable": true,
+          "perfectrun": true,
+          "CLinicABB": "AUC",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=d4966ac9-c684-4db8-9302-9178d95593d5&ServiceId=ea2fab22-be5f-4342-838d-1a4bcebe9618&Service=Telehealth%20Check-up&GuestId=73c45a5c-142e-4a7b-b1c5-7acbdad89836&AppointmentId=be611937-f3bc-4e7b-9bc6-280e78c5d6df",
+          "StartDate": "2026-03-09"
+        },
+        "pairedItem": {
+          "item": 2
+        }
+      },
+      {
+        "json": {
+          "AppointmentID": "4c24068b-6a9e-4265-958d-2c77d04d7819",
+          "CustomerFirstName": "James",
+          "CustomerLastName": "Hill",
+          "CustomerCode": "AK6260",
+          "CustomerID": "aa0a6559-c3af-4ee8-9574-35af4d68a643",
+          "CustomerDOB": "07/03/1977",
+          "CustomerEmail": "jameslnhill7@gmail.com",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": true,
+          "textField5": "James Hill",
+          "select6": "no",
+          "textField2": "Dr Annemarie Hern 15150",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "2",
+          "DeliveryAddress1": "93 Robinson Road, Whitianga 3510",
+          "DeliveryCity": "Whitianga",
+          "DeliveryAddressFull": "93 Robinson Road, Whitianga 3510, Whitianga",
+          "doctorsDirections": "ApplyToScalp",
+          "addresscompared": true,
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
+          "ZenotiProductName": "Minoxidil + Finasteride Solution",
+          "ZenotiProductNameShort": "Minox",
+          "ZenotiProductNameEnd": "tion",
+          "CanSubtract": true,
+          "RemainingBalance": 2,
+          "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
+          "packagesavailable": true,
+          "perfectrun": true,
+          "CLinicABB": "AUC",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=d4966ac9-c684-4db8-9302-9178d95593d5&ServiceId=ea2fab22-be5f-4342-838d-1a4bcebe9618&Service=Telehealth%20Check-up&GuestId=aa0a6559-c3af-4ee8-9574-35af4d68a643&AppointmentId=4c24068b-6a9e-4265-958d-2c77d04d7819",
+          "StartDate": "2026-03-09"
+        },
+        "pairedItem": {
+          "item": 3
+        }
+      },
+      {
+        "json": {
+          "AppointmentID": "60adff76-821d-4c91-abaf-2e8e2d779185",
+          "CustomerFirstName": "Douglas",
+          "CustomerLastName": "Warren",
+          "CustomerCode": "18178-GAK",
+          "CustomerID": "2899b9c6-8846-4253-ba3d-51d824c228ca",
+          "CustomerDOB": "04/01/1981",
+          "CustomerEmail": "douglaswarren89@hotmail.com",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": true,
+          "textField5": "Douglas Warren",
+          "select6": "no",
+          "textField2": "Dr Annemarie Hern 15150",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "2",
+          "DeliveryAddress1": "14 Avon Street",
+          "DeliveryCity": "Parnell",
+          "DeliveryAddressFull": "14 Avon Street, Parnell",
+          "doctorsDirections": "ApplyToScalp",
+          "addresscompared": true,
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
+          "ZenotiProductName": "Minoxidil + Finasteride Solution",
+          "ZenotiProductNameShort": "Minox",
+          "ZenotiProductNameEnd": "tion",
+          "CanSubtract": true,
+          "RemainingBalance": 0,
+          "ProductID": "3d3c7e51-785f-4297-8ec8-71661a58bc1d",
+          "packagesavailable": true,
+          "perfectrun": true,
+          "CLinicABB": "AUC",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=d4966ac9-c684-4db8-9302-9178d95593d5&ServiceId=ea2fab22-be5f-4342-838d-1a4bcebe9618&Service=Telehealth%20Check-up&GuestId=2899b9c6-8846-4253-ba3d-51d824c228ca&AppointmentId=60adff76-821d-4c91-abaf-2e8e2d779185",
+          "StartDate": "2026-03-09"
+        },
+        "pairedItem": {
+          "item": 4
+        }
+      },
+      {
+        "json": {
+          "AppointmentID": "59e30f4b-f250-4ab8-aa78-39433d8fbae1",
+          "CustomerFirstName": "Lucas",
+          "CustomerLastName": "Earls",
+          "CustomerCode": "AK5265",
+          "CustomerID": "655d6299-c93b-4537-b767-20b0c87917fe",
+          "CustomerDOB": "26/09/2007",
+          "CustomerEmail": "lucasearls2007@gmail.com",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": true,
+          "textField5": "Lucas Earls",
+          "select6": "no",
+          "textField2": "Dr Annemarie Hern 15150",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcidLotion",
+          "quantity": "2",
+          "DeliveryAddress1": "169A Te Atatu Road, Te Atatu South, Auckland 0610",
+          "DeliveryCity": "Auckland",
+          "DeliveryAddressFull": "169A Te Atatu Road, Te Atatu South, Auckland 0610, Auckland",
+          "doctorsDirections": "ApplyToScalp",
+          "addresscompared": true,
+          "packagesavailable": false,
+          "paidinfull": true,
+          "CLinicABB": "AUC"
+        },
+        "pairedItem": {
+          "item": 5
+        }
+      },
+      {
+        "json": {
+          "AppointmentID": "26828f1c-20c4-48f3-9788-63b1155a5abc",
+          "CustomerFirstName": "Chevez",
+          "CustomerLastName": "Tafunai",
+          "CustomerCode": "1083328-GAK",
+          "CustomerID": "9b83a34b-e87d-4a1d-9d2f-2db54b6f88ae",
+          "CustomerDOB": "28/07/1994",
+          "CustomerEmail": "ctafunai@gmail.com",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": true,
+          "textField5": "Chevez Tafunai",
+          "select6": "no",
+          "textField2": "Dr Annemarie Hern 15150",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "2",
+          "DeliveryAddress1": "89 Kupe Street, Orakei, Auckland 1071",
+          "DeliveryCity": "",
+          "DeliveryAddressFull": "89 Kupe Street, Orakei, Auckland 1071",
+          "doctorsDirections": "ApplyToScalp",
+          "addresscompared": true,
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
+          "ZenotiProductName": "Minoxidil + Finasteride Solution",
+          "ZenotiProductNameShort": "Minox",
+          "ZenotiProductNameEnd": "tion",
+          "CanSubtract": true,
+          "RemainingBalance": 5,
+          "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
+          "packagesavailable": true,
+          "perfectrun": true,
+          "CLinicABB": "AUC",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=d4966ac9-c684-4db8-9302-9178d95593d5&ServiceId=ea2fab22-be5f-4342-838d-1a4bcebe9618&Service=Telehealth%20Check-up&GuestId=9b83a34b-e87d-4a1d-9d2f-2db54b6f88ae&AppointmentId=26828f1c-20c4-48f3-9788-63b1155a5abc",
+          "StartDate": "2026-03-09"
+        },
+        "pairedItem": {
+          "item": 6
+        }
+      },
+      {
+        "json": {
+          "AppointmentID": "eb764340-0249-45b4-bc5f-6b61887dc5dc",
+          "CustomerFirstName": "Chris",
+          "CustomerLastName": "Reid",
+          "CustomerCode": "7469-GAK",
+          "CustomerID": "3d80c331-0687-4525-8660-d9fa95ecbd11",
+          "CustomerDOB": "02/12/1981",
+          "CustomerEmail": "creid92@hotmail.com",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": true,
+          "textField5": "Chris Reid",
+          "select6": "no",
+          "textField2": "Dr Annemarie Hern 15150",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "textField": "null",
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "2",
+          "DeliveryAddressFull": "5B Kawarau Court, Cromwell 9310, Cromwell",
+          "doctorsDirections": "ApplyToScalp",
+          "DeliveryAddress1": "5B Kawarau Court, Cromwell 9310",
+          "DeliveryCity": "Cromwell",
+          "addresscompared": true,
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
+          "ZenotiProductName": "Minoxidil + Finasteride Solution",
+          "ZenotiProductNameShort": "Minox",
+          "ZenotiProductNameEnd": "tion",
+          "CanSubtract": false,
+          "RemainingBalance": -2,
+          "ProductID": "null",
+          "packagesavailable": true,
+          "perfectrun": true,
+          "CLinicABB": "AUC",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=d4966ac9-c684-4db8-9302-9178d95593d5&ServiceId=ea2fab22-be5f-4342-838d-1a4bcebe9618&Service=Telehealth%20Check-up&GuestId=3d80c331-0687-4525-8660-d9fa95ecbd11&AppointmentId=eb764340-0249-45b4-bc5f-6b61887dc5dc",
+          "StartDate": "2026-03-09"
+        },
+        "pairedItem": {
+          "item": 7
+        }
+      },
+      {
+        "json": {
+          "AppointmentID": "30d4d7a3-e246-4ce1-a691-999b5737a55d",
+          "CustomerFirstName": "Riccardo",
+          "CustomerLastName": "Pintabona",
+          "CustomerCode": "1081912-GAK",
+          "CustomerID": "e074e912-7f02-42af-9f6b-21b0994cfa96",
+          "CustomerDOB": "03/04/1981",
+          "CustomerEmail": "riccardo@magenta.co.nz",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": true,
+          "textField5": "Riccardo Pintabona",
+          "select6": "no",
+          "textField2": "Dr Annemarie Hern 15150",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "2",
+          "DeliveryAddress1": "11 The Crest",
+          "DeliveryCity": "",
+          "DeliveryAddressFull": "11 The Crest",
+          "doctorsDirections": "ApplyToScalp",
+          "addresscompared": true,
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
+          "ZenotiProductName": "Minoxidil + Finasteride Solution",
+          "ZenotiProductNameShort": "Minox",
+          "ZenotiProductNameEnd": "tion",
+          "CanSubtract": true,
+          "RemainingBalance": 5,
+          "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
+          "packagesavailable": true,
+          "perfectrun": true,
+          "CLinicABB": "AUC",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=d4966ac9-c684-4db8-9302-9178d95593d5&ServiceId=ea2fab22-be5f-4342-838d-1a4bcebe9618&Service=Telehealth%20Check-up&GuestId=e074e912-7f02-42af-9f6b-21b0994cfa96&AppointmentId=30d4d7a3-e246-4ce1-a691-999b5737a55d",
+          "StartDate": "2026-03-09"
+        },
+        "pairedItem": {
+          "item": 8
+        }
+      },
+      {
+        "json": {
+          "AppointmentID": "7ee05699-3514-4f65-9c71-c4b64a7af16f",
+          "CustomerFirstName": "Nikeil",
+          "CustomerLastName": "Deo",
+          "CustomerCode": "AK9011",
+          "CustomerID": "86d22350-72b6-491f-8f78-06caafe708d7",
+          "CustomerDOB": "04/05/1992",
+          "CustomerEmail": "nikeildeo92@gmail.com",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": true,
+          "textField5": "Nikeil Deo",
+          "select6": "no",
+          "textField2": "Dr Annemarie Hern 15150",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "2",
+          "DeliveryAddress1": "45 Milson Drive, Papakura 2110",
+          "DeliveryCity": "Papakura",
+          "DeliveryAddressFull": "45 Milson Drive, Papakura 2110, Papakura",
+          "doctorsDirections": "ApplyToScalp",
+          "addresscompared": true,
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
+          "ZenotiProductName": "Minoxidil + Finasteride Solution",
+          "ZenotiProductNameShort": "Minox",
+          "ZenotiProductNameEnd": "tion",
+          "CanSubtract": true,
+          "RemainingBalance": 5,
+          "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
+          "packagesavailable": true,
+          "perfectrun": true,
+          "CLinicABB": "AUC",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=d4966ac9-c684-4db8-9302-9178d95593d5&ServiceId=64418d09-d7dd-45b5-a985-70ff46deb4df&Service=Doctor-First&GuestId=86d22350-72b6-491f-8f78-06caafe708d7&AppointmentId=7ee05699-3514-4f65-9c71-c4b64a7af16f",
+          "StartDate": "2026-03-09"
+        },
+        "pairedItem": {
+          "item": 9
+        }
+      },
+      {
+        "json": {
+          "AppointmentID": "be799080-68d8-432b-9e73-d7ada7cd700c",
+          "CustomerFirstName": "Tim",
+          "CustomerLastName": "Bell",
+          "CustomerCode": "AK1395",
+          "CustomerID": "afb7f50a-14ac-47f2-b30d-514c0cdbf284",
+          "CustomerDOB": "10/02/1988",
+          "CustomerEmail": "Tim@belltech.co.nz",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": true,
+          "textField5": "Tim Bell",
+          "select6": "no",
+          "textField2": "Dr Annemarie Hern 15150",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "2",
+          "DeliveryAddress1": "63 Valley Road, Hikurangi 0114",
+          "DeliveryCity": "residential",
+          "DeliveryAddressFull": "63 Valley Road, Hikurangi 0114, residential",
+          "doctorsDirections": "ApplyToScalp",
+          "addresscompared": true,
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
+          "ZenotiProductName": "Minoxidil + Finasteride Solution",
+          "ZenotiProductNameShort": "Minox",
+          "ZenotiProductNameEnd": "tion",
+          "CanSubtract": true,
+          "RemainingBalance": 5,
+          "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
+          "packagesavailable": true,
+          "perfectrun": true,
+          "CLinicABB": "AUC",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=d4966ac9-c684-4db8-9302-9178d95593d5&ServiceId=ea2fab22-be5f-4342-838d-1a4bcebe9618&Service=Telehealth%20Check-up&GuestId=afb7f50a-14ac-47f2-b30d-514c0cdbf284&AppointmentId=be799080-68d8-432b-9e73-d7ada7cd700c",
+          "StartDate": "2026-03-09"
+        },
+        "pairedItem": {
+          "item": 10
+        }
+      },
+      {
+        "json": {
+          "AppointmentID": "a3e642d9-ad34-478a-8bd2-f37bb1745f27",
+          "CustomerFirstName": "Jacques",
+          "CustomerLastName": "Lemmer",
+          "CustomerCode": "AK8400",
+          "CustomerID": "1b79adf9-323a-411f-bdaf-af1c3883ef70",
+          "CustomerDOB": "12/10/2005",
+          "CustomerEmail": "jacquesplemmer@gmail.com",
+          "CustomerGender": "Male",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "is_form_submitted": true,
+          "textField5": "Jacques Lemmer",
+          "select6": "no",
+          "textField2": "Dr Annemarie Hern 15150",
+          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "btnFormioSubmit": false,
+          "textField": "62C Diana Drive, Wairau Valley, Auckland 0627",
+          "ConsentFormFilled": true,
+          "ConsentFormSubmitted": true,
+          "DeliveryLocation": "custom",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "2",
+          "DeliveryAddressFull": "6 Lucas Way",
+          "doctorsDirections": "ApplyToScalp",
+          "DeliveryAddress1": "6 Lucas Way",
+          "DeliveryCity": "Auckland",
+          "addresscompared": true,
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
+          "ZenotiProductName": "Minoxidil + Finasteride Solution",
+          "ZenotiProductNameShort": "Minox",
+          "ZenotiProductNameEnd": "tion",
+          "CanSubtract": true,
+          "RemainingBalance": 5,
+          "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
+          "packagesavailable": true,
+          "perfectrun": true,
+          "CLinicABB": "AUC",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=d4966ac9-c684-4db8-9302-9178d95593d5&ServiceId=ea2fab22-be5f-4342-838d-1a4bcebe9618&Service=Telehealth%20Check-up&GuestId=1b79adf9-323a-411f-bdaf-af1c3883ef70&AppointmentId=a3e642d9-ad34-478a-8bd2-f37bb1745f27",
+          "StartDate": "2026-03-09"
+        },
+        "pairedItem": {
+          "item": 11
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-03-09T05:11:24.028Z",
+      "createdAt": "2026-03-09T05:11:24.028Z",
+      "role": "workflow:owner",
+      "workflowId": "jodn6QGaZRkDNvIn",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2026-01-21T23:52:55.489Z",
+      "createdAt": "2026-01-21T23:52:55.489Z",
+      "id": "OXsRoYm7kDVlpgY1",
+      "name": "NZ"
+    },
+    {
+      "updatedAt": "2026-01-21T23:52:51.063Z",
+      "createdAt": "2026-01-21T23:52:51.063Z",
+      "id": "OuUcDlUQOF4Dgotd",
+      "name": "MedOrder"
+    },
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-03-10T04:04:51.808Z",
+  "versionId": "0adfa63a-7032-49bc-a934-aac8a9e0baa3"
+}
