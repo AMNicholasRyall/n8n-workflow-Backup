@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-03-04T06:16:27.000Z",
-    "createdAt": "2026-03-04T06:16:23.763Z",
-    "versionId": "11cb5c13-e3e2-47ae-be87-47535ac84512",
+    "updatedAt": "2026-03-10T22:55:49.000Z",
+    "createdAt": "2026-03-10T22:55:47.646Z",
+    "versionId": "de0c0a2b-e5de-43da-8adf-54e12bf1e712",
     "workflowId": "kJtO0Z0y3TqpS1Y2",
     "nodes": [
       {
@@ -56,24 +56,24 @@
           "resource": "table",
           "workbook": {
             "__rl": true,
-            "value": "012CMKCCEIUS5SMQO3TJHLPAEWDF2Y2LYB",
+            "value": "012CMKCCEP3S6IWKO6XRGIFOGSFHDROMC6",
             "mode": "list",
-            "cachedResultName": "Zenoti-GuestFormData",
-            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
+            "cachedResultName": "Zenoti_GuestFormData_V2",
+            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B8BBCDC8F-DE29-4CBC-82B8-D229C717305E%7D&file=Zenoti_GuestFormData_V2.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
           },
           "worksheet": {
             "__rl": true,
-            "value": "{00000000-0001-0000-0000-000000000000}",
+            "value": "{4ECA0E1B-CF1D-49D2-B21B-0E6D84D89821}",
             "mode": "list",
             "cachedResultName": "Sheet1",
-            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1"
+            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B8BBCDC8F-DE29-4CBC-82B8-D229C717305E%7D&file=Zenoti_GuestFormData_V2.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1"
           },
           "table": {
             "__rl": true,
-            "value": "{574F5FEF-D38D-4DD1-97B6-E3BD9F13CC9A}",
+            "value": "{8C46212F-02CB-49C9-9A83-610FC24F112A}",
             "mode": "list",
             "cachedResultName": "GuestFormData",
-            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1:AN2"
+            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B8BBCDC8F-DE29-4CBC-82B8-D229C717305E%7D&file=Zenoti_GuestFormData_V2.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1:AO2"
           },
           "dataMode": "autoMap",
           "options": {}
@@ -118,22 +118,13 @@
             "value": "={{ $json.table_id }}",
             "mode": "id"
           },
-          "matchType": "allConditions",
-          "filters": {
-            "conditions": [
-              {
-                "keyName": "dobGF",
-                "condition": "isNotEmpty"
-              }
-            ]
-          },
           "returnAll": true
         },
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
-          2224,
-          496
+          1984,
+          512
         ],
         "id": "d8a366e5-3a1d-403f-aa87-319564115138",
         "name": "Get row(s)3",
@@ -167,8 +158,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          2400,
-          496
+          2256,
+          512
         ],
         "id": "d24ba193-b747-4ab1-8cf7-b13ed32921df",
         "name": "If",
@@ -240,8 +231,8 @@
         "name": "Start",
         "type": "n8n-nodes-base.executeWorkflowTrigger",
         "position": [
-          2016,
-          496
+          1744,
+          512
         ]
       },
       {
@@ -355,11 +346,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 11cb5c13",
+    "name": "Version de0c0a2b",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "11cb5c13-e3e2-47ae-be87-47535ac84512",
+  "activeVersionId": "de0c0a2b-e5de-43da-8adf-54e12bf1e712",
   "connections": {
     "Append rows to table": {
       "main": [
@@ -427,7 +418,7 @@
       "main": [
         [
           {
-            "node": "Loop Over Items1",
+            "node": "Filter",
             "type": "main",
             "index": 0
           }
@@ -446,6 +437,17 @@
         [
           {
             "node": "Get row(s)3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
             "type": "main",
             "index": 0
           }
@@ -509,24 +511,24 @@
         "resource": "table",
         "workbook": {
           "__rl": true,
-          "value": "012CMKCCEIUS5SMQO3TJHLPAEWDF2Y2LYB",
+          "value": "012CMKCCEP3S6IWKO6XRGIFOGSFHDROMC6",
           "mode": "list",
-          "cachedResultName": "Zenoti-GuestFormData",
-          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
+          "cachedResultName": "Zenoti_GuestFormData_V2",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B8BBCDC8F-DE29-4CBC-82B8-D229C717305E%7D&file=Zenoti_GuestFormData_V2.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
         },
         "worksheet": {
           "__rl": true,
-          "value": "{00000000-0001-0000-0000-000000000000}",
+          "value": "{4ECA0E1B-CF1D-49D2-B21B-0E6D84D89821}",
           "mode": "list",
           "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1"
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B8BBCDC8F-DE29-4CBC-82B8-D229C717305E%7D&file=Zenoti_GuestFormData_V2.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1"
         },
         "table": {
           "__rl": true,
-          "value": "{574F5FEF-D38D-4DD1-97B6-E3BD9F13CC9A}",
+          "value": "{8C46212F-02CB-49C9-9A83-610FC24F112A}",
           "mode": "list",
           "cachedResultName": "GuestFormData",
-          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1:AN2"
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B8BBCDC8F-DE29-4CBC-82B8-D229C717305E%7D&file=Zenoti_GuestFormData_V2.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1:AO2"
         },
         "dataMode": "autoMap",
         "options": {}
@@ -571,22 +573,13 @@
           "value": "={{ $json.table_id }}",
           "mode": "id"
         },
-        "matchType": "allConditions",
-        "filters": {
-          "conditions": [
-            {
-              "keyName": "dobGF",
-              "condition": "isNotEmpty"
-            }
-          ]
-        },
         "returnAll": true
       },
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        2224,
-        496
+        1984,
+        512
       ],
       "id": "d8a366e5-3a1d-403f-aa87-319564115138",
       "name": "Get row(s)3",
@@ -620,8 +613,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        2400,
-        496
+        2208,
+        512
       ],
       "id": "d24ba193-b747-4ab1-8cf7-b13ed32921df",
       "name": "If",
@@ -693,8 +686,8 @@
       "name": "Start",
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "position": [
-        2016,
-        496
+        1744,
+        512
       ]
     },
     {
@@ -712,6 +705,39 @@
       "typeVersion": 1,
       "id": "7ae55394-5b7a-436e-bf9b-87a107f4579d",
       "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b1e9964e-f8ed-4214-aa57-ace221fcc045",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": 16161,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        2464,
+        496
+      ],
+      "id": "72ab1769-2874-4228-a330-c4396abcd95b",
+      "name": "Filter"
     }
   ],
   "origin": "n8n",
@@ -719,7 +745,7 @@
     "Start": [
       {
         "json": {
-          "table_id": "iaTsV9px13OrTCWt"
+          "table_id": "f3b930DR8I6ef9Nk"
         },
         "pairedItem": {
           "item": 0
@@ -751,6 +777,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-03-04T06:16:37.573Z",
-  "versionId": "11cb5c13-e3e2-47ae-be87-47535ac84512"
+  "updatedAt": "2026-03-11T06:25:35.326Z",
+  "versionId": "9ca5d821-cf34-4d75-bb1e-febd4fa34a61"
 }
