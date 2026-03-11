@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-02-24T00:52:23.000Z",
-    "createdAt": "2026-02-24T00:52:22.634Z",
-    "versionId": "00a8b091-d3c4-45db-ad5d-99c666f7cafb",
+    "updatedAt": "2026-03-06T01:22:29.000Z",
+    "createdAt": "2026-03-06T01:20:19.530Z",
+    "versionId": "912e4e6a-9174-4ec0-afc2-6575419a7ac8",
     "workflowId": "STUF6Fz9PaFzUwRx",
     "nodes": [
       {
@@ -631,7 +631,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const items = $('When Executed by Another Workflow').all();\n\n// Pull once, not inside the loop\nconst invoiceDateRaw = $('Check Invoice Exists').first().json.invoice.invoice_date;\n\n// Format YYYY-MM-DD\nconst invoiceDate = new Date(invoiceDateRaw).toISOString().split('T')[0];\n\nfor (const item of items) {\n  item.json.InvoiceNumber = true;\n  item.json.Invoicedate = invoiceDate;\n}\n\nreturn items;\n"
+          "jsCode": "const items = $('When Executed by Another Workflow').all();\n\n// Pull once, not inside the loop\nconst invoiceDateRaw = $('Check Invoice Exists').first().json.invoice.invoice_date;\n\n// Format YYYY-MM-DD\nconst invoiceDate = new Date(invoiceDateRaw).toISOString().split('T')[0];\n\nfor (const item of items) {\n  item.json.InvoiceNumber = true;\n  item.json.Invoicedate = invoiceDate;\n  item.json.TrueCLinicAbb = $('Get row(s)').first().json.Abb;\n}\n\nreturn items;"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -925,11 +925,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 00a8b091",
+    "name": "Version 912e4e6a",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
-  "activeVersionId": "00a8b091-d3c4-45db-ad5d-99c666f7cafb",
+  "activeVersionId": "912e4e6a-9174-4ec0-afc2-6575419a7ac8",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -1799,7 +1799,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const items = $('When Executed by Another Workflow').all();\n\n// Pull once, not inside the loop\nconst invoiceDateRaw = $('Check Invoice Exists').first().json.invoice.invoice_date;\n\n// Format YYYY-MM-DD\nconst invoiceDate = new Date(invoiceDateRaw).toISOString().split('T')[0];\n\nfor (const item of items) {\n  item.json.InvoiceNumber = true;\n  item.json.Invoicedate = invoiceDate;\n}\n\nreturn items;\n"
+        "jsCode": "const items = $('When Executed by Another Workflow').all();\n\n// Pull once, not inside the loop\nconst invoiceDateRaw = $('Check Invoice Exists').first().json.invoice.invoice_date;\n\n// Format YYYY-MM-DD\nconst invoiceDate = new Date(invoiceDateRaw).toISOString().split('T')[0];\n\nfor (const item of items) {\n  item.json.InvoiceNumber = true;\n  item.json.Invoicedate = invoiceDate;\n  item.json.TrueCLinicAbb = $('Get row(s)').first().json.Abb;\n}\n\nreturn items;"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1861,17 +1861,17 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "AppointmentID": "f5e4e008-2336-4c20-afe8-943a9eb8d729",
-          "CustomerFirstName": "Jm",
-          "CustomerLastName": "Maribong",
-          "CustomerCode": "AK8897",
-          "CustomerID": "4463bbe8-d72e-47fd-b2f0-c2c3b6506d8a",
-          "CustomerDOB": "08/06/2001",
-          "CustomerEmail": "maribong.jm2.1@gmail.com",
+          "AppointmentID": "0d2e9e91-53e9-49cc-9d9e-d37a832e559a",
+          "CustomerFirstName": "Steve",
+          "CustomerLastName": "Marshall",
+          "CustomerCode": "273-GHM",
+          "CustomerID": "b3e7717f-f23e-4cea-99b9-a45101ae1e29",
+          "CustomerDOB": "11/05/1981",
+          "CustomerEmail": "steve.marshall@beca.com",
           "CustomerGender": "Male",
-          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "CustomerCenterID": "690a5763-4215-4df2-93d5-aa0395f69bd5",
           "is_form_submitted": true,
-          "textField5": "Jm Maribong",
+          "textField5": "Steve Marshall",
           "select6": "no",
           "textField2": "Dr Annemarie Hern 15150",
           "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
@@ -1881,9 +1881,9 @@
           "DeliveryLocation": "guest",
           "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
           "quantity": "2",
-          "DeliveryAddress1": "2b/21 Saint Jude Street",
-          "DeliveryCity": "Avondale",
-          "DeliveryAddressFull": "2b/21 Saint Jude Street, Avondale",
+          "DeliveryAddress1": "36 Rewarewa Place, Matua, Tauranga 3110",
+          "DeliveryCity": "Tauranga",
+          "DeliveryAddressFull": "36 Rewarewa Place, Matua, Tauranga 3110, Tauranga",
           "doctorsDirections": "ApplyToScalp",
           "addresscompared": true,
           "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
@@ -1896,8 +1896,8 @@
           "packagesavailable": true,
           "perfectrun": true,
           "CLinicABB": "AUC",
-          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=75c3214f-4ead-4302-8829-3d9666545344&ServiceId=c881a110-4440-40fc-9e81-918d918bc7a3&Service=Telehealth%20First&GuestId=4463bbe8-d72e-47fd-b2f0-c2c3b6506d8a&AppointmentId=f5e4e008-2336-4c20-afe8-943a9eb8d729",
-          "StartDate": "2026-02-17"
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=8329a433-6be6-49e3-b73f-dca7ca8ae21d&ServiceId=ea2fab22-be5f-4342-838d-1a4bcebe9618&Service=Telehealth%20Check-up&GuestId=b3e7717f-f23e-4cea-99b9-a45101ae1e29&AppointmentId=0d2e9e91-53e9-49cc-9d9e-d37a832e559a",
+          "StartDate": "2026-03-04"
         },
         "pairedItem": {
           "item": 0
@@ -1915,8 +1915,9 @@
     "timeSavedMode": "fixed",
     "callerPolicy": "workflowsFromSameOwner",
     "errorWorkflow": "J83Enw8ArDSqhMCL",
-    "timeSavedPerExecution": 1,
-    "saveDataSuccessExecution": "all"
+    "timeSavedPerExecution": 0,
+    "saveDataSuccessExecution": "all",
+    "binaryMode": "separate"
   },
   "shared": [
     {
@@ -1937,6 +1938,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-02-24T00:52:22.633Z",
-  "versionId": "00a8b091-d3c4-45db-ad5d-99c666f7cafb"
+  "updatedAt": "2026-03-06T01:20:19.530Z",
+  "versionId": "912e4e6a-9174-4ec0-afc2-6575419a7ac8"
 }
