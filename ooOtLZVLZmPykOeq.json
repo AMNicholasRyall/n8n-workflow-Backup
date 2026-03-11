@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-02-12T23:45:46.000Z",
-    "createdAt": "2026-02-12T23:11:09.833Z",
-    "versionId": "e4918b19-acea-49cc-82f9-70ab287f95f3",
+    "updatedAt": "2026-03-11T02:54:29.000Z",
+    "createdAt": "2026-03-11T02:53:56.597Z",
+    "versionId": "828fae67-24a9-44b7-a718-fbf9261cf8a9",
     "workflowId": "ooOtLZVLZmPykOeq",
     "nodes": [
       {
@@ -468,9 +468,19 @@
                   "type": "string",
                   "operation": "equals"
                 }
+              },
+              {
+                "id": "58902df2-c14a-4dd3-81d4-37f824398aeb",
+                "leftValue": "={{ $json.code }}",
+                "rightValue": "WG",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
               }
             ],
-            "combinator": "and"
+            "combinator": "or"
           },
           "options": {}
         },
@@ -817,11 +827,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version e4918b19",
+    "name": "Version 828fae67",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
-  "activeVersionId": "e4918b19-acea-49cc-82f9-70ab287f95f3",
+  "activeVersionId": "828fae67-24a9-44b7-a718-fbf9261cf8a9",
   "connections": {
     "When clicking ‘Execute workflow’": {
       "main": [
@@ -1523,9 +1533,19 @@
                 "type": "string",
                 "operation": "equals"
               }
+            },
+            {
+              "id": "58902df2-c14a-4dd3-81d4-37f824398aeb",
+              "leftValue": "={{ $json.code }}",
+              "rightValue": "WG",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
             }
           ],
-          "combinator": "and"
+          "combinator": "or"
         },
         "options": {}
       },
@@ -1645,16 +1665,16 @@
     "Schedule Trigger": [
       {
         "json": {
-          "timestamp": "2026-02-13T01:00:24.005+08:00",
-          "Readable date": "February 13th 2026, 1:00:24 am",
-          "Readable time": "1:00:24 am",
-          "Day of week": "Friday",
+          "timestamp": "2026-03-11T01:00:57.004+08:00",
+          "Readable date": "March 11th 2026, 1:00:57 am",
+          "Readable time": "1:00:57 am",
+          "Day of week": "Wednesday",
           "Year": "2026",
-          "Month": "February",
-          "Day of month": "13",
+          "Month": "March",
+          "Day of month": "11",
           "Hour": "01",
           "Minute": "00",
-          "Second": "24",
+          "Second": "57",
           "Timezone": "Australia/Perth (UTC+08:00)"
         },
         "pairedItem": {
@@ -1673,7 +1693,8 @@
     "saveDataSuccessExecution": "all",
     "callerPolicy": "workflowsFromSameOwner",
     "availableInMCP": false,
-    "timeSavedPerExecution": 60
+    "timeSavedPerExecution": 0,
+    "binaryMode": "separate"
   },
   "shared": [
     {
@@ -1710,6 +1731,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-02-26T00:37:13.154Z",
-  "versionId": "e4918b19-acea-49cc-82f9-70ab287f95f3"
+  "updatedAt": "2026-03-11T02:53:56.597Z",
+  "versionId": "828fae67-24a9-44b7-a718-fbf9261cf8a9"
 }
