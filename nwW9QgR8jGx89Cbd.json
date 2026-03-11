@@ -1,0 +1,1424 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-03-10T05:37:37.000Z",
+    "createdAt": "2026-03-10T05:36:07.173Z",
+    "versionId": "554a73cc-fdf6-4488-bd49-391a70aea441",
+    "workflowId": "nwW9QgR8jGx89Cbd",
+    "nodes": [
+      {
+        "parameters": {
+          "formTitle": "AU - Collect Patient Notes",
+          "formDescription": "Collect Patient Notes",
+          "formFields": {
+            "values": [
+              {
+                "fieldName": "CustomerClientClinic",
+                "fieldLabel": "Clients Clinic",
+                "fieldType": "dropdown",
+                "defaultValue": "Perth",
+                "fieldOptions": {
+                  "values": [
+                    {
+                      "option": "Adelaide"
+                    },
+                    {
+                      "option": "Brisbane"
+                    },
+                    {
+                      "option": "Canberra"
+                    },
+                    {
+                      "option": "Chatswood"
+                    },
+                    {
+                      "option": "Dandenong"
+                    },
+                    {
+                      "option": "Gladstone"
+                    },
+                    {
+                      "option": "Gold Coast"
+                    },
+                    {
+                      "option": "Hurstville"
+                    },
+                    {
+                      "option": "Joondalup"
+                    },
+                    {
+                      "option": "Newcastle"
+                    },
+                    {
+                      "option": "Parramatta"
+                    },
+                    {
+                      "option": "Perth"
+                    },
+                    {
+                      "option": "Southbank"
+                    },
+                    {
+                      "option": "Sydney"
+                    }
+                  ]
+                },
+                "requiredField": true
+              },
+              {
+                "fieldName": "CustomerCode",
+                "fieldLabel": "Clients Exact Code",
+                "placeholder": "00000-ABC",
+                "requiredField": true
+              },
+              {
+                "fieldName": "Email Address",
+                "fieldLabel": "Whats your Email address",
+                "requiredField": true
+              }
+            ]
+          },
+          "options": {
+            "path": "AU-NoteCollector"
+          }
+        },
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.4,
+        "position": [
+          144,
+          0
+        ],
+        "id": "2cd3b6f8-a9f3-4e9d-ab78-3c9b86800814",
+        "name": "On form submission",
+        "webhookId": "d7135d81-755a-4484-beb2-9cce5e6d0494"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lsINP70DmcZtIj4M",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinics",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "name",
+                "condition": "ilike",
+                "keyValue": "={{ $json.CustomerClientClinic }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          368,
+          0
+        ],
+        "id": "d026ac05-bb31-443c-9225-92c56c1806ab",
+        "name": "Get row(s)"
+      },
+      {
+        "parameters": {
+          "url": "https://api.zenoti.com/v1/guests/search",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "center_id",
+                "value": "={{ $('Get row(s)').item.json.Zenoti_ID }}"
+              },
+              {
+                "name": "page",
+                "value": "1"
+              },
+              {
+                "name": "size",
+                "value": "10"
+              },
+              {
+                "name": "user_code",
+                "value": "={{ $('On form submission').item.json.CustomerCode }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1040,
+          0
+        ],
+        "id": "67b620e8-5f14-403d-b066-5cdee62f0bc8",
+        "name": "HTTP Request - Search Guest"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "guests",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1264,
+          0
+        ],
+        "id": "c46237b0-7e0f-4fbd-a2c0-9a76fab9a82c",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "975ed39c-514f-4b68-a565-8fba13a67d7c",
+                "leftValue": "={{ $json.code }}",
+                "rightValue": "={{ $('On form submission').item.json.CustomerCode }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          1488,
+          0
+        ],
+        "id": "0ff8b792-6dff-4858-8004-5fc6a73635c4",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/guests/{{ $json.id }}/notes/",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "view_private",
+                "value": "true"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {
+            "pagination": {
+              "pagination": {
+                "parameters": {
+                  "parameters": [
+                    {
+                      "name": "page",
+                      "value": "={{ $pageCount + 1 }}"
+                    }
+                  ]
+                },
+                "limitPagesFetched": true,
+                "maxRequests": "={{ Math.ceil($response.body.page_details.total / $response.body.page_details.size) }}"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1712,
+          0
+        ],
+        "id": "ad5d0dac-37ff-42aa-852f-010bcb47bec0",
+        "name": "HTTP Request -Guest Notes"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "notes",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1936,
+          0
+        ],
+        "id": "df151e41-247c-4414-af26-bea9c5460e25",
+        "name": "Split Out1"
+      },
+      {
+        "parameters": {
+          "sortFieldsUi": {
+            "sortField": [
+              {
+                "fieldName": "created_date"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.sort",
+        "typeVersion": 1,
+        "position": [
+          2160,
+          0
+        ],
+        "id": "2f2a34e7-4282-4400-b029-6fbe0fe97275",
+        "name": "Sort"
+      },
+      {
+        "parameters": {
+          "operation": "xlsx",
+          "options": {
+            "fileName": "={{ $('Filter').item.json.code }}.xlsx"
+          }
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          2592,
+          0
+        ],
+        "id": "a86ea8a8-bab5-4eee-8e37-8a6db0e48155",
+        "name": "Convert to File"
+      },
+      {
+        "parameters": {
+          "operation": "binaryToPropery",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1.1,
+        "position": [
+          2816,
+          0
+        ],
+        "id": "916e5ee4-8f08-4bab-87fa-3561c0e73709",
+        "name": "Extract from File1"
+      },
+      {
+        "parameters": {
+          "resource": "draft",
+          "subject": "=AMAU - GuestData - {{ $('On form submission').item.json.CustomerCode }}",
+          "bodyContent": "=Hi Team,\n\nPlease see attached notes for client code {{ $('On form submission').item.json.CustomerCode }}.\n\nRegards,\nAutomation",
+          "additionalFields": {
+            "from": "noreply@ashleyandmartin.com.au"
+          }
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          592,
+          0
+        ],
+        "id": "a35994d2-69ec-4142-9cda-a46d6d0a774e",
+        "name": "Create a draft",
+        "webhookId": "88c7993a-dbd3-4ba5-9ce7-97d0923c3ee8",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://graph.microsoft.com/v1.0/users/noreply@ashleyandmartin.com.au/messages/{{ $('Create a draft').first().json.id }}/attachments",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"@odata.type\": \"#microsoft.graph.fileAttachment\",\n  \"name\": \"GuestNotes-{{ $('Filter').item.json.code }}.xlsx\",\n  \"contentType\": \"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\n  \"contentBytes\": \"{{$json.data}}\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          3040,
+          0
+        ],
+        "id": "c4653876-ac99-475c-87fd-1643f8bc03a6",
+        "name": "UploadAttachment",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "draft",
+          "operation": "send",
+          "draftId": {
+            "__rl": true,
+            "value": "={{ $('Create a draft').item.json.id }}",
+            "mode": "id"
+          },
+          "to": "={{ $('On form submission').item.json['Email Address'] }}"
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          3600,
+          -16
+        ],
+        "id": "fab3c3d2-a05d-4bf7-b6ba-485c7348b421",
+        "name": "Send a draft",
+        "webhookId": "33f1014d-2df2-469d-850c-5ed114fdef80",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\n\nreturn items.map(item => {\n  const j = item.json;\n\n  return {\n    json: {\n      notes: j.notes ?? null,\n      \"center.name\": j.center?.name ?? null,\n      \"added_by.name\": j.added_by?.name ?? null,\n      created_date: j.created_date ?? null,\n      privacy_type: j.privacy_type ?? null\n    }\n  };\n});"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2368,
+          0
+        ],
+        "id": "d6aa5f65-0d2e-4f2a-8fbd-c3f4dd3664d6",
+        "name": "Code in JavaScript2"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "QA7Qdseg7ehAOWP6",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+            "cachedResultName": "Zenoti-GetAuthToken"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          816,
+          0
+        ],
+        "id": "8aecdb39-e853-40dd-8666-96c21c808da5",
+        "name": "Call 'Zenoti-GetAuthToken'"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a6f7fcea-b394-4d10-a7b0-e4651c49898b",
+                "leftValue": "={{ $('On form submission').item.json[\"Email Address\"] }}",
+                "rightValue": "@ashleyandmartin.com.au",
+                "operator": {
+                  "type": "string",
+                  "operation": "endsWith"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          3248,
+          0
+        ],
+        "id": "9d963325-f724-4a2b-b83d-cccc16138859",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "resource": "draft",
+          "operation": "send",
+          "draftId": {
+            "__rl": true,
+            "value": "={{ $('Create a draft').item.json.id }}",
+            "mode": "id"
+          },
+          "to": "={{ $('Get row(s)').item.json.email }}"
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          3600,
+          176
+        ],
+        "id": "7388ad38-6db1-4526-9f89-82693da3e929",
+        "name": "Send a draft1",
+        "webhookId": "33f1014d-2df2-469d-850c-5ed114fdef80",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "On form submission": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "Create a draft",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request - Search Guest": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request -Guest Notes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request -Guest Notes": {
+        "main": [
+          [
+            {
+              "node": "Split Out1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out1": {
+        "main": [
+          [
+            {
+              "node": "Sort",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Sort": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Convert to File": {
+        "main": [
+          [
+            {
+              "node": "Extract from File1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract from File1": {
+        "main": [
+          [
+            {
+              "node": "UploadAttachment",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create a draft": {
+        "main": [
+          [
+            {
+              "node": "Call 'Zenoti-GetAuthToken'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "UploadAttachment": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript2": {
+        "main": [
+          [
+            {
+              "node": "Convert to File",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'Zenoti-GetAuthToken'": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request - Search Guest",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Send a draft",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Send a draft1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 554a73cc",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "554a73cc-fdf6-4488-bd49-391a70aea441",
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Create a draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request - Search Guest": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request -Guest Notes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request -Guest Notes": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Extract from File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        [
+          {
+            "node": "UploadAttachment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a draft": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti-GetAuthToken'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UploadAttachment": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Zenoti-GetAuthToken'": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request - Search Guest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a draft",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a draft1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-03-10T05:19:31.518Z",
+  "id": "nwW9QgR8jGx89Cbd",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "ZenotiAU - Note Export",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "AU - Collect Patient Notes",
+        "formDescription": "Collect Patient Notes",
+        "formFields": {
+          "values": [
+            {
+              "fieldName": "CustomerClientClinic",
+              "fieldLabel": "Clients Clinic",
+              "fieldType": "dropdown",
+              "defaultValue": "Perth",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Adelaide"
+                  },
+                  {
+                    "option": "Brisbane"
+                  },
+                  {
+                    "option": "Canberra"
+                  },
+                  {
+                    "option": "Chatswood"
+                  },
+                  {
+                    "option": "Dandenong"
+                  },
+                  {
+                    "option": "Gladstone"
+                  },
+                  {
+                    "option": "Gold Coast"
+                  },
+                  {
+                    "option": "Hurstville"
+                  },
+                  {
+                    "option": "Joondalup"
+                  },
+                  {
+                    "option": "Newcastle"
+                  },
+                  {
+                    "option": "Parramatta"
+                  },
+                  {
+                    "option": "Perth"
+                  },
+                  {
+                    "option": "Southbank"
+                  },
+                  {
+                    "option": "Sydney"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldName": "CustomerCode",
+              "fieldLabel": "Clients Exact Code",
+              "placeholder": "00000-ABC",
+              "requiredField": true
+            },
+            {
+              "fieldName": "Email Address",
+              "fieldLabel": "Whats your Email address",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "path": "AU-NoteCollector"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.4,
+      "position": [
+        144,
+        0
+      ],
+      "id": "2cd3b6f8-a9f3-4e9d-ab78-3c9b86800814",
+      "name": "On form submission",
+      "webhookId": "d7135d81-755a-4484-beb2-9cce5e6d0494"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "name",
+              "condition": "ilike",
+              "keyValue": "={{ $json.CustomerClientClinic }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        368,
+        0
+      ],
+      "id": "d026ac05-bb31-443c-9225-92c56c1806ab",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "url": "https://api.zenoti.com/v1/guests/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "center_id",
+              "value": "={{ $('Get row(s)').item.json.Zenoti_ID }}"
+            },
+            {
+              "name": "page",
+              "value": "1"
+            },
+            {
+              "name": "size",
+              "value": "10"
+            },
+            {
+              "name": "user_code",
+              "value": "={{ $('On form submission').item.json.CustomerCode }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1040,
+        0
+      ],
+      "id": "67b620e8-5f14-403d-b066-5cdee62f0bc8",
+      "name": "HTTP Request - Search Guest"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "guests",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1264,
+        0
+      ],
+      "id": "c46237b0-7e0f-4fbd-a2c0-9a76fab9a82c",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "975ed39c-514f-4b68-a565-8fba13a67d7c",
+              "leftValue": "={{ $json.code }}",
+              "rightValue": "={{ $('On form submission').item.json.CustomerCode }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1488,
+        0
+      ],
+      "id": "0ff8b792-6dff-4858-8004-5fc6a73635c4",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/guests/{{ $json.id }}/notes/",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "view_private",
+              "value": "true"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "page",
+                    "value": "={{ $pageCount + 1 }}"
+                  }
+                ]
+              },
+              "limitPagesFetched": true,
+              "maxRequests": "={{ Math.ceil($response.body.page_details.total / $response.body.page_details.size) }}"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1712,
+        0
+      ],
+      "id": "ad5d0dac-37ff-42aa-852f-010bcb47bec0",
+      "name": "HTTP Request -Guest Notes"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "notes",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1936,
+        0
+      ],
+      "id": "df151e41-247c-4414-af26-bea9c5460e25",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "created_date"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        2160,
+        0
+      ],
+      "id": "2f2a34e7-4282-4400-b029-6fbe0fe97275",
+      "name": "Sort"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "fileName": "={{ $('Filter').item.json.code }}.xlsx"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        2592,
+        0
+      ],
+      "id": "a86ea8a8-bab5-4eee-8e37-8a6db0e48155",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        2816,
+        0
+      ],
+      "id": "916e5ee4-8f08-4bab-87fa-3561c0e73709",
+      "name": "Extract from File1"
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "=AMAU - GuestData - {{ $('On form submission').item.json.CustomerCode }}",
+        "bodyContent": "=Hi Team,\n\nPlease see attached notes for client code {{ $('On form submission').item.json.CustomerCode }}.\n\nRegards,\nAutomation",
+        "additionalFields": {
+          "from": "noreply@ashleyandmartin.com.au"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        592,
+        0
+      ],
+      "id": "a35994d2-69ec-4142-9cda-a46d6d0a774e",
+      "name": "Create a draft",
+      "webhookId": "88c7993a-dbd3-4ba5-9ce7-97d0923c3ee8",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/users/noreply@ashleyandmartin.com.au/messages/{{ $('Create a draft').first().json.id }}/attachments",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"@odata.type\": \"#microsoft.graph.fileAttachment\",\n  \"name\": \"GuestNotes-{{ $('Filter').item.json.code }}.xlsx\",\n  \"contentType\": \"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\n  \"contentBytes\": \"{{$json.data}}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        3040,
+        0
+      ],
+      "id": "c4653876-ac99-475c-87fd-1643f8bc03a6",
+      "name": "UploadAttachment",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "operation": "send",
+        "draftId": {
+          "__rl": true,
+          "value": "={{ $('Create a draft').item.json.id }}",
+          "mode": "id"
+        },
+        "to": "={{ $('On form submission').item.json['Email Address'] }}"
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        3600,
+        -16
+      ],
+      "id": "fab3c3d2-a05d-4bf7-b6ba-485c7348b421",
+      "name": "Send a draft",
+      "webhookId": "33f1014d-2df2-469d-850c-5ed114fdef80",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nreturn items.map(item => {\n  const j = item.json;\n\n  return {\n    json: {\n      notes: j.notes ?? null,\n      \"center.name\": j.center?.name ?? null,\n      \"added_by.name\": j.added_by?.name ?? null,\n      created_date: j.created_date ?? null,\n      privacy_type: j.privacy_type ?? null\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2368,
+        0
+      ],
+      "id": "d6aa5f65-0d2e-4f2a-8fbd-c3f4dd3664d6",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "QA7Qdseg7ehAOWP6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+          "cachedResultName": "Zenoti-GetAuthToken"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        816,
+        0
+      ],
+      "id": "8aecdb39-e853-40dd-8666-96c21c808da5",
+      "name": "Call 'Zenoti-GetAuthToken'"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a6f7fcea-b394-4d10-a7b0-e4651c49898b",
+              "leftValue": "={{ $('On form submission').item.json[\"Email Address\"] }}",
+              "rightValue": "@ashleyandmartin.com.au",
+              "operator": {
+                "type": "string",
+                "operation": "endsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3248,
+        0
+      ],
+      "id": "9d963325-f724-4a2b-b83d-cccc16138859",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "operation": "send",
+        "draftId": {
+          "__rl": true,
+          "value": "={{ $('Create a draft').item.json.id }}",
+          "mode": "id"
+        },
+        "to": "={{ $('Get row(s)').item.json.email }}"
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        3600,
+        176
+      ],
+      "id": "7388ad38-6db1-4526-9f89-82693da3e929",
+      "name": "Send a draft1",
+      "webhookId": "33f1014d-2df2-469d-850c-5ed114fdef80",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "timeSavedPerExecution": 15,
+    "errorWorkflow": "J83Enw8ArDSqhMCL"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-03-10T05:19:31.521Z",
+      "createdAt": "2026-03-10T05:19:31.521Z",
+      "role": "workflow:owner",
+      "workflowId": "nwW9QgR8jGx89Cbd",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    },
+    {
+      "updatedAt": "2026-01-21T23:52:24.742Z",
+      "createdAt": "2026-01-21T23:52:24.742Z",
+      "id": "gBgZjsV5vc1ZGBw4",
+      "name": "AUS"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-10T05:36:07.172Z",
+  "versionId": "554a73cc-fdf6-4488-bd49-391a70aea441"
+}
