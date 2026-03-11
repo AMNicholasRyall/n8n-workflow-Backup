@@ -10,11 +10,6 @@
             "node": "Zenoti-AuthToken",
             "type": "main",
             "index": 0
-          },
-          {
-            "node": "Zenoti-AuthToken1",
-            "type": "main",
-            "index": 0
           }
         ]
       ]
@@ -45,7 +40,7 @@
       "main": [
         [
           {
-            "node": "Upsert row(s)",
+            "node": "Filter",
             "type": "main",
             "index": 0
           }
@@ -84,6 +79,17 @@
           }
         ]
       ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Upsert row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2025-11-07T01:51:25.863Z",
@@ -114,7 +120,11 @@
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
-          "value": {}
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
         },
         "options": {}
       },
@@ -354,7 +364,7 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1,
       "position": [
-        832,
+        1040,
         0
       ],
       "id": "c736e50f-3049-4f2f-828a-d162966d1359",
@@ -620,6 +630,39 @@
       ],
       "id": "f1c225f6-589a-4ca7-9a06-6a2f08bd79a3",
       "name": "Upsert row(s)1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "478e75c0-b5d5-4511-b5d6-ec42c1c40f83",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "Sun",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        832,
+        0
+      ],
+      "id": "9d188879-da5a-4782-8665-56dc15a2d712",
+      "name": "Filter"
     }
   ],
   "origin": "n8n",
@@ -650,6 +693,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-12-09T00:54:13.000Z",
-  "versionId": "f3c8d764-2bc5-4292-b7e5-8f5edd64b23c"
+  "updatedAt": "2026-03-09T04:59:24.785Z",
+  "versionId": "ccc339db-3833-4556-a084-8a7fff0a5f54"
 }
