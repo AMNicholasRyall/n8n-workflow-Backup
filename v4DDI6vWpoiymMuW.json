@@ -727,17 +727,17 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "AppointmentID": "04f03dca-4008-4065-b55f-b4f857bf191d",
-          "CustomerFirstName": "Rick",
-          "CustomerLastName": "Millen",
-          "CustomerCode": "6994-GAK",
-          "CustomerID": "3b6247e5-5651-4527-b526-24c9c7998311",
-          "CustomerDOB": "13/07/1970",
-          "CustomerEmail": "rickmillen1970@gmail.com",
+          "AppointmentID": "26828f1c-20c4-48f3-9788-63b1155a5abc",
+          "CustomerFirstName": "Chevez",
+          "CustomerLastName": "Tafunai",
+          "CustomerCode": "1083328-GAK",
+          "CustomerID": "9b83a34b-e87d-4a1d-9d2f-2db54b6f88ae",
+          "CustomerDOB": "28/07/1994",
+          "CustomerEmail": "ctafunai@gmail.com",
           "CustomerGender": "Male",
           "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
           "is_form_submitted": true,
-          "textField5": "Rick Millen",
+          "textField5": "Chevez Tafunai",
           "select6": "no",
           "textField2": "Dr Annemarie Hern 15150",
           "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
@@ -747,23 +747,29 @@
           "DeliveryLocation": "guest",
           "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
           "quantity": "2",
-          "DeliveryAddress1": "2/4 Tavistock Street, Papatoetoe, Auckland 2104",
+          "DeliveryAddress1": "89 Kupe Street, Orakei, Auckland 1071",
           "DeliveryCity": "",
-          "DeliveryAddressFull": "2/4 Tavistock St Papatoetoe 2025",
+          "DeliveryAddressFull": "89 Kupe Street, Orakei, Auckland 1071",
           "doctorsDirections": "ApplyToScalp",
-          "addresscompared": false,
+          "addresscompared": true,
           "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
           "ZenotiProductName": "Minoxidil + Finasteride Solution",
           "ZenotiProductNameShort": "Minox",
           "ZenotiProductNameEnd": "tion",
-          "packagesavailable": false,
-          "paidinfull": true,
+          "CanSubtract": true,
+          "RemainingBalance": 5,
+          "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
+          "packagesavailable": true,
+          "perfectrun": true,
           "CLinicABB": "AUC",
-          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=ca4306a4-c0b2-41b8-bd21-8539a4b62246&ServiceId=dc772ef3-da0e-435a-9bb2-ac0ebfd9b891&Service=Telehealth%20Doctor&GuestId=3b6247e5-5651-4527-b526-24c9c7998311&AppointmentId=04f03dca-4008-4065-b55f-b4f857bf191d",
-          "StartDate": "2026-02-19",
-          "ManuallyApproved": true,
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=d4966ac9-c684-4db8-9302-9178d95593d5&ServiceId=ea2fab22-be5f-4342-838d-1a4bcebe9618&Service=Telehealth%20Check-up&GuestId=9b83a34b-e87d-4a1d-9d2f-2db54b6f88ae&AppointmentId=26828f1c-20c4-48f3-9788-63b1155a5abc",
+          "StartDate": "2026-03-09",
           "InvoiceNumber": true,
-          "Invoicedate": "2026-02-20"
+          "Invoicedate": "2026-03-10",
+          "TrueCLinicAbb": "AUC"
+        },
+        "pairedItem": {
+          "item": 0
         }
       }
     ]
@@ -812,6 +818,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-03-03T05:13:14.796Z",
+  "updatedAt": "2026-03-09T23:01:16.011Z",
   "versionId": "094d6ccb-b90b-4ad9-a851-698c25c8f026"
 }
