@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-03-03T05:44:12.000Z",
-    "createdAt": "2026-03-03T05:44:08.582Z",
-    "versionId": "a7b1cad3-2a15-475e-9d6a-679504ba6b05",
+    "updatedAt": "2026-03-09T02:07:06.000Z",
+    "createdAt": "2026-03-09T02:06:47.527Z",
+    "versionId": "88bf3923-8f49-49da-9499-2136da88892d",
     "workflowId": "vLoLIvJK1gu3ILbL",
     "nodes": [
       {
@@ -219,6 +219,7 @@
         ],
         "id": "4bca491b-4198-4364-95f1-2b5e491f78e3",
         "name": "Upload file",
+        "retryOnFail": true,
         "credentials": {
           "microsoftSharePointOAuth2Api": {
             "id": "8eWNjQciijocacKo",
@@ -376,7 +377,7 @@
       },
       {
         "parameters": {
-          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelDriveID }}/workbook/tables('{{ $('When Executed by Another Workflow').item.json.CLinicABB }}Table')/columns",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelDriveID }}/workbook/tables('{{ $('When Executed by Another Workflow').item.json.TrueCLinicAbb }}Table')/columns",
           "authentication": "genericCredentialType",
           "genericAuthType": "oAuth2Api",
           "sendQuery": true,
@@ -649,7 +650,7 @@
       },
       {
         "parameters": {
-          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelDriveID }}/workbook/tables/{{ encodeURIComponent($('When Executed by Another Workflow').item.json.CLinicABB + 'Table') }}/range",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelDriveID }}/workbook/tables/{{ encodeURIComponent($('When Executed by Another Workflow').item.json.TrueCLinicAbb + 'Table') }}/range",
           "authentication": "genericCredentialType",
           "genericAuthType": "oAuth2Api",
           "options": {}
@@ -685,7 +686,7 @@
       {
         "parameters": {
           "method": "POST",
-          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelDriveID }}/workbook/tables('{{ $('When Executed by Another Workflow').item.json.CLinicABB }}Table')/rows/add",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelDriveID }}/workbook/tables('{{ $('When Executed by Another Workflow').item.json.TrueCLinicAbb }}Table')/rows/add",
           "authentication": "genericCredentialType",
           "genericAuthType": "oAuth2Api",
           "sendBody": true,
@@ -1355,11 +1356,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version a7b1cad3",
+    "name": "Version 88bf3923",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "a7b1cad3-2a15-475e-9d6a-679504ba6b05",
+  "activeVersionId": "88bf3923-8f49-49da-9499-2136da88892d",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -1928,6 +1929,7 @@
       ],
       "id": "4bca491b-4198-4364-95f1-2b5e491f78e3",
       "name": "Upload file",
+      "retryOnFail": true,
       "credentials": {
         "microsoftSharePointOAuth2Api": {
           "id": "8eWNjQciijocacKo",
@@ -2085,7 +2087,7 @@
     },
     {
       "parameters": {
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelDriveID }}/workbook/tables('{{ $('When Executed by Another Workflow').item.json.CLinicABB }}Table')/columns",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelDriveID }}/workbook/tables('{{ $('When Executed by Another Workflow').item.json.TrueCLinicAbb }}Table')/columns",
         "authentication": "genericCredentialType",
         "genericAuthType": "oAuth2Api",
         "sendQuery": true,
@@ -2358,7 +2360,7 @@
     },
     {
       "parameters": {
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelDriveID }}/workbook/tables/{{ encodeURIComponent($('When Executed by Another Workflow').item.json.CLinicABB + 'Table') }}/range",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelDriveID }}/workbook/tables/{{ encodeURIComponent($('When Executed by Another Workflow').item.json.TrueCLinicAbb + 'Table') }}/range",
         "authentication": "genericCredentialType",
         "genericAuthType": "oAuth2Api",
         "options": {}
@@ -2394,7 +2396,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelDriveID }}/workbook/tables('{{ $('When Executed by Another Workflow').item.json.CLinicABB }}Table')/rows/add",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelDriveID }}/workbook/tables('{{ $('When Executed by Another Workflow').item.json.TrueCLinicAbb }}Table')/rows/add",
         "authentication": "genericCredentialType",
         "genericAuthType": "oAuth2Api",
         "sendBody": true,
@@ -2721,19 +2723,19 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "AppointmentID": "3f4c9d6d-edfe-4ea1-ab15-bebcc18eea3f",
-          "CustomerFirstName": "Ahmed",
-          "CustomerLastName": "Faraj",
-          "CustomerCode": "28696-GAK",
-          "CustomerID": "9886bea5-5b5c-41f0-bfa2-b8838d7a412b",
-          "CustomerDOB": "03/11/1989",
-          "CustomerEmail": "enixide@hotmail.com",
+          "AppointmentID": "840f0c7b-504c-497e-8da6-5ed30821e7a8",
+          "CustomerFirstName": "Derrell",
+          "CustomerLastName": "Meyer",
+          "CustomerCode": "HM2781",
+          "CustomerID": "825ab5db-9ff8-40f3-8e2b-d757ff584035",
+          "CustomerDOB": "26/10/1970",
+          "CustomerEmail": "derrellmeyer@mac.com",
           "CustomerGender": "Male",
-          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "CustomerCenterID": "690a5763-4215-4df2-93d5-aa0395f69bd5",
           "is_form_submitted": true,
-          "textField5": "Ahmed Faraj",
+          "textField5": "Derrell Meyer",
           "select6": "no",
-          "textField2": "Dr Annemarie Hern 15150",
+          "textField2": "Annemarie Hern 15150",
           "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
           "btnFormioSubmit": false,
           "ConsentFormFilled": true,
@@ -2741,9 +2743,9 @@
           "DeliveryLocation": "guest",
           "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
           "quantity": "2",
-          "DeliveryAddress1": "4 Drumquin Rise",
-          "DeliveryCity": "Auckland",
-          "DeliveryAddressFull": "4 Drumquin Rise, Auckland",
+          "DeliveryAddress1": "21 Tauranga Direct Road",
+          "DeliveryCity": "Rotorua",
+          "DeliveryAddressFull": "21 Tauranga Direct Road, Rotorua",
           "doctorsDirections": "ApplyToScalp",
           "addresscompared": true,
           "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
@@ -2753,11 +2755,12 @@
           "packagesavailable": false,
           "paidinfull": true,
           "CLinicABB": "AUC",
-          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=4e78a7d0-83bd-4335-8dce-2fce14394c00&ServiceId=ea2fab22-be5f-4342-838d-1a4bcebe9618&Service=Telehealth%20Check-up&GuestId=9886bea5-5b5c-41f0-bfa2-b8838d7a412b&AppointmentId=3f4c9d6d-edfe-4ea1-ab15-bebcc18eea3f",
-          "StartDate": "2026-03-03",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=eef55ea2-fe32-4ac5-b2e0-e4c0f230e597&ServiceId=cf690070-2b50-484d-9ec9-67c786576eb6&Service=Doctor%20Scripts%208mth&GuestId=825ab5db-9ff8-40f3-8e2b-d757ff584035&AppointmentId=840f0c7b-504c-497e-8da6-5ed30821e7a8",
+          "StartDate": "2026-03-07",
           "ManuallyApproved": true,
           "InvoiceNumber": true,
-          "Invoicedate": "2026-03-04"
+          "Invoicedate": "2026-03-09",
+          "TrueCLinicAbb": "HAM"
         },
         "pairedItem": {
           "item": 0
@@ -2808,6 +2811,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-03-03T23:53:02.533Z",
-  "versionId": "a7b1cad3-2a15-475e-9d6a-679504ba6b05"
+  "updatedAt": "2026-03-09T02:06:47.526Z",
+  "versionId": "88bf3923-8f49-49da-9499-2136da88892d"
 }
