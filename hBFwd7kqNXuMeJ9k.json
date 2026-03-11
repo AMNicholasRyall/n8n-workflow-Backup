@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-03-03T23:28:16.000Z",
-    "createdAt": "2026-03-03T23:24:17.082Z",
-    "versionId": "48912b99-7d82-4f2e-bfac-b84bd3e99736",
+    "updatedAt": "2026-03-11T04:51:33.000Z",
+    "createdAt": "2026-03-11T04:49:14.030Z",
+    "versionId": "d7d5aa06-4846-42e4-ad23-aa908e91f17c",
     "workflowId": "hBFwd7kqNXuMeJ9k",
     "nodes": [
       {
@@ -13,7 +13,7 @@
         "type": "n8n-nodes-base.executeWorkflowTrigger",
         "typeVersion": 1.1,
         "position": [
-          -1904,
+          -2832,
           272
         ],
         "id": "5f0f2a17-806a-4dcc-9775-01f7eb7c810e",
@@ -85,7 +85,7 @@
               {
                 "id": "e5ab17b7-e65c-49b4-b82b-724bf46809f5",
                 "leftValue": "={{ $json.name }}",
-                "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}",
+                "rightValue": "={{ $('When Executed by Another Workflow').first().json.StartDate }}",
                 "operator": {
                   "type": "string",
                   "operation": "equals"
@@ -335,7 +335,7 @@
         "type": "n8n-nodes-base.microsoftSharePoint",
         "typeVersion": 1,
         "position": [
-          752,
+          336,
           272
         ],
         "id": "05fbbb88-5a4e-44a8-962f-70d70684f884",
@@ -360,7 +360,7 @@
               {
                 "id": "6e1a84b7-6dfd-4ea5-b9e2-755eecf496e0",
                 "leftValue": "={{ $json.name }}",
-                "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}-Finance.xlsx",
+                "rightValue": "={{ $('When Executed by Another Workflow').first().json.StartDate }}-Finance.xlsx",
                 "operator": {
                   "type": "string",
                   "operation": "equals"
@@ -382,7 +382,7 @@
       },
       {
         "parameters": {
-          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelFinanceID }}/workbook/tables('{{ $('When Executed by Another Workflow').item.json.CLinicABB }}Table')/columns",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelFinanceID }}/workbook/tables('{{ $('When Executed by Another Workflow').first().json.CLinicABB }}Table')/columns",
           "authentication": "genericCredentialType",
           "genericAuthType": "oAuth2Api",
           "sendQuery": true,
@@ -399,7 +399,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          2992,
+          2784,
           256
         ],
         "id": "de5d8082-accc-4fa1-b941-e6d48c20ba49",
@@ -489,7 +489,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          976,
+          560,
           272
         ],
         "id": "43decc42-fa4a-4010-8016-65c8252d2bf4",
@@ -541,7 +541,7 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          1200,
+          784,
           272
         ],
         "id": "bfa21be8-8fd7-4e7f-9cc4-f1ac6ff7eda2",
@@ -560,7 +560,7 @@
               {
                 "id": "b85de6a0-dac9-4047-b482-dbb591813cf8",
                 "leftValue": "={{ $json.name }}",
-                "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}",
+                "rightValue": "={{ $('When Executed by Another Workflow').first().json.StartDate }}",
                 "operator": {
                   "type": "string",
                   "operation": "equals"
@@ -588,7 +588,7 @@
         "type": "n8n-nodes-base.aggregate",
         "typeVersion": 1,
         "position": [
-          1760,
+          1568,
           256
         ],
         "id": "46966d8c-f0a0-4c0e-8e8c-75c8f4be818f",
@@ -634,7 +634,7 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          1488,
+          1280,
           256
         ],
         "id": "ef1f866e-8981-4ddc-b099-3df63e73da80",
@@ -642,7 +642,7 @@
       },
       {
         "parameters": {
-          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelFinanceID }}/workbook/tables/{{ encodeURIComponent($('When Executed by Another Workflow').item.json.CLinicABB + 'Table') }}/range",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelFinanceID }}/workbook/tables/{{ encodeURIComponent($('When Executed by Another Workflow').first().json.TrueCLinicAbb + 'Table') }}/range",
           "authentication": "genericCredentialType",
           "genericAuthType": "oAuth2Api",
           "options": {}
@@ -650,7 +650,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          2560,
+          2352,
           256
         ],
         "id": "5fbcb3b6-b162-45a3-ad93-6135b0f7e770",
@@ -664,12 +664,12 @@
       },
       {
         "parameters": {
-          "jsCode": "let tableName = $json.tableName;\n\nif (!tableName) {\n  const workflowData = $('When Executed by Another Workflow').first().json;\n  tableName = workflowData.CLinicABBTable;\n}\n\nconst cols = $input.first().json.value;\n\nconst headers = cols\n  .slice()\n  .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))\n  .map(c => c.name);\n\nreturn [{\n  json: {\n    tableName,\n    headers,\n    headerCount: headers.length\n  }\n}];\n"
+          "jsCode": "let tableName = $json.tableName;\n\nif (!tableName) {\n  const workflowData = $('When Executed by Another Workflow').first().json;\n  tableName = workflowData.CLinicABBTable;\n}\n\nconst cols = $input.first().json.value;\n\nconst headers = cols\n  .slice()\n  .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))\n  .map(c => c.name);\n\nreturn [{\n  json: {\n    tableName,\n    headers,\n    headerCount: headers.length\n  }\n}];"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          3216,
+          3008,
           256
         ],
         "id": "47af075b-ac8a-4a9c-9142-f6d9ae1ef8bf",
@@ -678,7 +678,7 @@
       {
         "parameters": {
           "method": "POST",
-          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelFinanceID }}/workbook/tables('{{ $('When Executed by Another Workflow').item.json.CLinicABB }}Table')/rows/add",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelFinanceID }}/workbook/tables('{{ $('When Executed by Another Workflow').first().json.TrueCLinicAbb }}Table')/rows/add",
           "authentication": "genericCredentialType",
           "genericAuthType": "oAuth2Api",
           "sendBody": true,
@@ -695,7 +695,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          3664,
+          3456,
           256
         ],
         "id": "bd677127-2446-4b9a-a6a5-229e54dc7585",
@@ -721,7 +721,7 @@
             "conditions": [
               {
                 "keyName": "LookupReference",
-                "keyValue": "={{ $('When Executed by Another Workflow').item.json.product }}"
+                "keyValue": "={{ $('When Executed by Another Workflow').first().json.product }}"
               }
             ]
           }
@@ -729,7 +729,7 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
-          2080,
+          1872,
           256
         ],
         "id": "f16baca3-f1fd-4fb5-95d0-57a35b09b832",
@@ -742,7 +742,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          2288,
+          2080,
           256
         ],
         "id": "ed1f9f06-e12c-41ae-8b4b-13c19bdd8f71",
@@ -755,7 +755,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          2752,
+          2544,
           256
         ],
         "id": "0b15ee4c-1eb6-48df-9fa7-51298313f009",
@@ -763,26 +763,13 @@
       },
       {
         "parameters": {
-          "jsCode": "const items = $('When Executed by Another Workflow').all();\n\n// Set once\nconst AddedtoOrderSpreadSheet = true;\n\nfor (const item of items) {\n  item.json.AddedtoOrderSpreadSheet = AddedtoOrderSpreadSheet;\n}\n\nreturn items;\n"
-        },
-        "type": "n8n-nodes-base.code",
-        "typeVersion": 2,
-        "position": [
-          3904,
-          256
-        ],
-        "id": "28d035e9-1de5-461d-b834-3da6215e0e48",
-        "name": "Code in JavaScript1"
-      },
-      {
-        "parameters": {
           "content": "## Set Folder and File IDS",
           "height": 368,
-          "width": 1040
+          "width": 2000
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          -1968,
+          -2928,
           144
         ],
         "typeVersion": 1,
@@ -809,7 +796,7 @@
         "parameters": {
           "content": "## Find Excel File and Sets the Variable",
           "height": 192,
-          "width": 1604
+          "width": 1460
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
@@ -827,7 +814,7 @@
               {
                 "id": "9021e372-3edf-4f13-97dc-1ef601fcbfdf",
                 "name": "CurrentExcelFinanceID",
-                "value": "={{ $json.value[0].id }}",
+                "value": "={{ $json.id }}",
                 "type": "string"
               }
             ]
@@ -837,7 +824,7 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          1488,
+          1280,
           48
         ],
         "id": "eda09924-ddb4-4415-b610-cb9c9e4b5262",
@@ -852,7 +839,7 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          208,
+          0,
           192
         ],
         "typeVersion": 1,
@@ -884,7 +871,7 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          1664,
+          1456,
           0
         ],
         "typeVersion": 1,
@@ -899,7 +886,7 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          1968,
+          1760,
           160
         ],
         "typeVersion": 1,
@@ -915,7 +902,7 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          2464,
+          2256,
           160
         ],
         "typeVersion": 1,
@@ -930,7 +917,7 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          2912,
+          2704,
           160
         ],
         "typeVersion": 1,
@@ -946,7 +933,7 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          3824,
+          3616,
           160
         ],
         "typeVersion": 1,
@@ -1006,7 +993,7 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          -1488,
+          -2368,
           272
         ],
         "id": "4103edb4-4a7a-478d-b7c2-7bdd3ed3a6a9",
@@ -1014,12 +1001,12 @@
       },
       {
         "parameters": {
-          "jsCode": "// Headers/tableName from the previous node\nconst { headers, tableName } = $input.first().json;\n\n// Parent workflow payload\nconst parent = $('When Executed by Another Workflow').first().json;\n\n// Next patient number\nconst nextPatientNoRaw = $('PaintentNumberCheck').first().json.nextPatientNo;\nconst nextPatientNo = Number(nextPatientNoRaw);\n\nif (Number.isNaN(nextPatientNo)) {\n  throw new Error(`nextPatientNo is not a number. Got: ${nextPatientNoRaw}`);\n}\n\n// Prescriber values\nconst dr = $('DrDetailCleanUp')?.first?.().json ?? {};\nconst PRESCRIBER_FIRST = dr.PrescriberFirstName ?? null;\nconst PRESCRIBER_LAST  = dr.PrescriberLastName ?? null;\nconst PRESCRIBER_NO    = dr.PrescriberNumber ?? null;\n\n// Product values (Get row(s))\nconst productRow = $('Get row(s)')?.first?.().json ?? {};\nconst PRODUCT_NAME     = productRow.DrugName ?? null;\nconst PRODUCT_CODE     = productRow.ZenotiProductCode ?? null;\nconst CL_PRODUCT_CODE  = productRow.DrugReferenceCode ?? null;\nconst UNIT_COST        = Number(productRow.Cost ?? 0);\n\n// RegionCheck values\nconst region = $('Call \\'ZenotiNZ - RegionCheck\\'')?.first?.().json ?? {};\n\nconst ITEM_COUNT       = Number(region.quantity ?? parent.quantity ?? 0);\nconst REGION_TEXT      = region.Region ?? null;\nconst DELIVERY_LOCATION = region.DeliveryLocation ?? null;\nconst CUSTOMER_CODE    = region.CustomerCode ?? null;\n\n// Shipping cost\nconst SHIPPING_COST_RAW = $('MedsShippingCost')?.first?.().json?.ShippingCost;\nconst SHIPPING_COST = Number(SHIPPING_COST_RAW ?? 0);\n\n// ProductCost = unit cost × number of bottles\nconst PRODUCT_COST =\n  (Number.isFinite(UNIT_COST) ? UNIT_COST : 0) *\n  (Number.isFinite(ITEM_COUNT) ? ITEM_COUNT : 0);\n\n// Build one output row aligned to the Excel headers\nconst row = headers.map(h => {\n  switch (h) {\n\n    case 'Patient No':\n      return nextPatientNo;\n\n    case 'Customer First Name':\n      return parent.CustomerFirstName ?? null;\n\n    case 'Customer Last Name':\n      return parent.CustomerLastName ?? null;\n\n    case 'Email Address':\n      return parent.CustomerEmail ?? null;\n\n    case 'Gender':\n      return parent.CustomerGender ?? null;\n\n    case 'DOB':\n      return parent.CustomerDOB ?? null;\n\n    case 'Product Name':\n      return PRODUCT_NAME;\n\n    case 'Quantity':\n      return 100; // Hardcoded supplier requirement\n\n    case 'Item Count':\n      return ITEM_COUNT || null;\n\n    case 'Delivery Address':\n      return parent.DeliveryAddressFull ?? null;\n\n    case 'Prescriber First Name':\n      return PRESCRIBER_FIRST;\n\n    case 'Prescriber Last Name':\n      return PRESCRIBER_LAST;\n\n    case 'Prescriber No':\n      return PRESCRIBER_NO;\n\n    case 'Regional':\n      return REGION_TEXT;\n\n    case 'ProductCode':\n      return PRODUCT_CODE;\n\n    case 'ProductCost':\n      return PRODUCT_COST;\n\n    case 'CustomerCode':\n      return CUSTOMER_CODE;\n\n    case 'Shipping Cost':\n      return SHIPPING_COST;\n\n    case 'DeliveryLocation':\n      return DELIVERY_LOCATION;\n\n    case 'CLProductCode':\n      return CL_PRODUCT_CODE;\n\n    default:\n      return null;\n  }\n});\n\n// Graph expects a 2D array (rows)\nreturn [{\n  json: {\n    tableName,\n    values: [row]\n  }\n}];"
+          "jsCode": "// Get input safely\nconst inputJson = $input.first()?.json ?? {};\n\n// Headers/tableName from the previous node\nconst headers = Array.isArray(inputJson.headers) ? inputJson.headers : [];\nconst tableName = inputJson.tableName ?? null;\n\nif (!headers.length) {\n  throw new Error(`Headers array is missing or empty. Input was: ${JSON.stringify(inputJson)}`);\n}\n\n// Parent workflow payload\nconst parent = $('When Executed by Another Workflow').first().json;\n\n// Next patient number\nconst nextPatientNoRaw = $('PaintentNumberCheck').first().json.nextPatientNo;\nconst nextPatientNo = Number(nextPatientNoRaw);\n\nif (Number.isNaN(nextPatientNo)) {\n  throw new Error(`nextPatientNo is not a number. Got: ${nextPatientNoRaw}`);\n}\n\n// Prescriber values\nconst dr = $('DrDetailCleanUp')?.first?.().json ?? {};\nconst PRESCRIBER_FIRST = dr.PrescriberFirstName ?? null;\nconst PRESCRIBER_LAST = dr.PrescriberLastName ?? null;\nconst PRESCRIBER_NO = dr.PrescriberNumber ?? null;\n\n// Product values\nconst productRow = $('Get row(s)')?.first?.().json ?? {};\nconst PRODUCT_NAME = productRow.DrugName ?? null;\nconst PRODUCT_CODE = productRow.ZenotiProductCode ?? null;\nconst CL_PRODUCT_CODE = productRow.DrugReferenceCode ?? null;\nconst UNIT_COST = Number(productRow.Cost ?? 0);\n\n// RegionCheck values\nconst region = $(\"Call 'ZenotiNZ - RegionCheck'\")?.first?.().json ?? {};\nconst ITEM_COUNT = Number(region.quantity ?? parent.quantity ?? 0);\nconst DELIVERY_LOCATION = region.DeliveryLocation ?? null;\nconst CUSTOMER_CODE = region.CustomerCode ?? null;\n\n// New preferred region source\nconst joinSplit = $('JoinSplitRegions')?.first?.().json ?? {};\nconst JOIN_REGION_TEXT = joinSplit.Region ?? joinSplit['Address Shipping'] ?? null;\n\n// Fallback to original RegionCheck Region if JoinSplitRegions is empty\nconst REGION_TEXT = JOIN_REGION_TEXT ?? region.Region ?? null;\n\n// Shipping cost\nconst SHIPPING_COST_RAW = $('MedsShippingCost')?.first?.().json?.ShippingCost;\nconst SHIPPING_COST = Number(SHIPPING_COST_RAW ?? 0);\n\n// Start date mapped into OrderDate\nconst START_DATE = $('When Executed by Another Workflow').first().json.StartDate ?? null;\n\n// ProductCost = unit cost × item count\nconst PRODUCT_COST =\n  (Number.isFinite(UNIT_COST) ? UNIT_COST : 0) *\n  (Number.isFinite(ITEM_COUNT) ? ITEM_COUNT : 0);\n\n// Build one output row aligned to the Excel headers\nconst row = headers.map(h => {\n  switch (h) {\n    case 'Patient No':\n      return nextPatientNo;\n\n    case 'Customer First Name':\n      return parent.CustomerFirstName ?? null;\n\n    case 'Customer Last Name':\n      return parent.CustomerLastName ?? null;\n\n    case 'Email Address':\n      return parent.CustomerEmail ?? null;\n\n    case 'Gender':\n      return parent.CustomerGender ?? null;\n\n    case 'DOB':\n      return parent.CustomerDOB ?? null;\n\n    case 'Product Name':\n      return PRODUCT_NAME;\n\n    case 'Quantity':\n      return 100;\n\n    case 'Item Count':\n      return ITEM_COUNT || null;\n\n    case 'Delivery Address':\n      return parent.DeliveryAddressFull ?? null;\n\n    case 'Prescriber First Name':\n      return PRESCRIBER_FIRST;\n\n    case 'Prescriber Last Name':\n      return PRESCRIBER_LAST;\n\n    case 'Prescriber No':\n      return PRESCRIBER_NO;\n\n    case 'Regional':\n      return REGION_TEXT;\n\n    case 'ProductCode':\n      return PRODUCT_CODE;\n\n    case 'ProductCost':\n      return PRODUCT_COST;\n\n    case 'CustomerCode':\n      return CUSTOMER_CODE;\n\n    case 'Shipping Cost':\n      return SHIPPING_COST;\n\n    case 'DeliveryLocation':\n      return DELIVERY_LOCATION;\n\n    case 'CLProductCode':\n      return CL_PRODUCT_CODE;\n\n    case 'Unit Price':\n      return UNIT_COST;\n\n    case 'OrderDate':\n      return START_DATE;\n\n    default:\n      return null;\n  }\n});\n\n// Graph expects a 2D array\nreturn [{\n  json: {\n    tableName,\n    values: [row]\n  }\n}];"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          3424,
+          3216,
           256
         ],
         "id": "7cfd3964-9738-453c-9593-9fdcd3959324",
@@ -1030,7 +1017,7 @@
         "type": "n8n-nodes-base.wait",
         "typeVersion": 1.1,
         "position": [
-          -1680,
+          -2576,
           272
         ],
         "id": "87a2c025-205c-42c1-ba93-8a3e12043718",
@@ -1049,7 +1036,8 @@
           64
         ],
         "id": "0a66e835-9da2-4312-ac38-8f65abc2728c",
-        "name": "Split Out1"
+        "name": "Split Out1",
+        "alwaysOutputData": true
       },
       {
         "parameters": {
@@ -1082,7 +1070,238 @@
           64
         ],
         "id": "58dac8d8-ff20-4c60-a63a-ca25008ae9bf",
-        "name": "Filter1"
+        "name": "Filter1",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $('When Executed by Another Workflow').all();\n\n// Set once\nconst AddedtoFinanceSpreadSheet = true;\n\nfor (const item of items) {\n  item.json.AddedtoFinanceSpreadSheet = AddedtoFinanceSpreadSheet;\n}\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3696,
+          256
+        ],
+        "id": "28d035e9-1de5-461d-b834-3da6215e0e48",
+        "name": "Code Clean Up"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.Region }}",
+                      "rightValue": "Regional",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "7b63cde9-f090-42bb-984b-38e53ef3ef5d"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "7d6b60f5-98e4-411d-afb2-b9c78ffaf032",
+                      "leftValue": "={{ $json.Region }}",
+                      "rightValue": "Local",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "b348ebea-d10a-4b3f-8a6b-6dbac787a843",
+                      "leftValue": "={{ $json.Region }}",
+                      "rightValue": "NoMatch",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {
+            "fallbackOutput": 0
+          }
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          -2160,
+          256
+        ],
+        "id": "9543c1c6-7049-46e1-ad05-848005fc87fe",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "operation": "sendAndWait",
+          "toRecipients": "={{ $json.email }}",
+          "subject": "=Automation - Med Order - Address Issue - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
+          "message": "=Hi Team,\n\nAutomation requires you to confirm the address for client {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\n\nAddress: {{ $('When Executed by Another Workflow').item.json.DeliveryAddressFull }}\n\nPlease verify against https://www.nzpost.co.nz/tools/address-postcode-finder and select if its regional or local per the below.\n\nRegards,\nAutomation\n",
+          "responseType": "customForm",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "Address Shipping",
+                "fieldType": "dropdown",
+                "defaultValue": "Local",
+                "fieldOptions": {
+                  "values": [
+                    {
+                      "option": "Local"
+                    },
+                    {
+                      "option": "Regional"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          -1776,
+          608
+        ],
+        "id": "c882074c-8e4a-41a8-8ca6-f10a5edf9d53",
+        "name": "Send message and wait for response",
+        "webhookId": "28fd15e6-582c-4484-8900-622634ade477",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "pVbLONb8Gh393bg0",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinicsNZ",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/pVbLONb8Gh393bg0"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Abb",
+                "keyValue": "={{ $json.TrueCLinicAbb }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          -2000,
+          608
+        ],
+        "id": "3bf823c9-fdee-431a-9384-6e004d3b74be",
+        "name": "Get row(s)1"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          -1808,
+          272
+        ],
+        "id": "7964eff4-f0f6-4428-a757-0bbc8825e508",
+        "name": "Aggregate1"
+      },
+      {
+        "parameters": {
+          "content": "## Address Fix",
+          "height": 304,
+          "width": 976,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -2144,
+          512
+        ],
+        "typeVersion": 1,
+        "id": "45c03e7d-bdad-4d1a-a23d-4a8750ca7c97",
+        "name": "Sticky Note10"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Get all items from the RegionCheck node\nconst items = $(\"Call 'ZenotiNZ - RegionCheck'\").all();\n\n// Get the new value we want to use\nconst newRegion = $input.first().json.data['Address Shipping'];\n\nfor (const item of items) {\n  // Replace Region with the new value\n  item.json.Region = newRegion;\n}\n\nreturn items;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -1504,
+          608
+        ],
+        "id": "3938976d-cf31-4f37-9b1e-f0989e323ac7",
+        "name": "Address Fix"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "data",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          -1600,
+          272
+        ],
+        "id": "d76c729c-0418-40e5-8f62-7f219d490354",
+        "name": "JoinSplitRegions"
       }
     ],
     "connections": {
@@ -1364,7 +1583,7 @@
         "main": [
           [
             {
-              "node": "Code in JavaScript1",
+              "node": "Code Clean Up",
               "type": "main",
               "index": 0
             }
@@ -1419,7 +1638,7 @@
         "main": [
           [
             {
-              "node": "MedsShippingCost",
+              "node": "Switch",
               "type": "main",
               "index": 0
             }
@@ -1480,14 +1699,94 @@
             }
           ]
         ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Aggregate1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Aggregate1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Get row(s)1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)1": {
+        "main": [
+          [
+            {
+              "node": "Send message and wait for response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send message and wait for response": {
+        "main": [
+          [
+            {
+              "node": "Address Fix",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Address Fix": {
+        "main": [
+          [
+            {
+              "node": "Aggregate1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate1": {
+        "main": [
+          [
+            {
+              "node": "JoinSplitRegions",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "JoinSplitRegions": {
+        "main": [
+          [
+            {
+              "node": "MedsShippingCost",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 48912b99",
+    "name": "Version d7d5aa06",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "48912b99-7d82-4f2e-bfac-b84bd3e99736",
+  "activeVersionId": "d7d5aa06-4846-42e4-ad23-aa908e91f17c",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -1767,7 +2066,7 @@
       "main": [
         [
           {
-            "node": "Code in JavaScript1",
+            "node": "Code Clean Up",
             "type": "main",
             "index": 0
           }
@@ -1822,7 +2121,7 @@
       "main": [
         [
           {
-            "node": "MedsShippingCost",
+            "node": "Switch",
             "type": "main",
             "index": 0
           }
@@ -1883,12 +2182,94 @@
           }
         ]
       ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)1": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "Address Fix",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Address Fix": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "JoinSplitRegions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JoinSplitRegions": {
+      "main": [
+        [
+          {
+            "node": "MedsShippingCost",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2026-03-03T04:51:17.195Z",
   "id": "hBFwd7kqNXuMeJ9k",
   "isArchived": false,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "name": "ZenotiNZ - AddtoFinance",
   "nodes": [
     {
@@ -1898,7 +2279,7 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -1904,
+        -2832,
         272
       ],
       "id": "5f0f2a17-806a-4dcc-9775-01f7eb7c810e",
@@ -1970,7 +2351,7 @@
             {
               "id": "e5ab17b7-e65c-49b4-b82b-724bf46809f5",
               "leftValue": "={{ $json.name }}",
-              "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}",
+              "rightValue": "={{ $('When Executed by Another Workflow').first().json.StartDate }}",
               "operator": {
                 "type": "string",
                 "operation": "equals"
@@ -2245,7 +2626,7 @@
             {
               "id": "6e1a84b7-6dfd-4ea5-b9e2-755eecf496e0",
               "leftValue": "={{ $json.name }}",
-              "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}-Finance.xlsx",
+              "rightValue": "={{ $('When Executed by Another Workflow').first().json.StartDate }}-Finance.xlsx",
               "operator": {
                 "type": "string",
                 "operation": "equals"
@@ -2267,7 +2648,7 @@
     },
     {
       "parameters": {
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelFinanceID }}/workbook/tables('{{ $('When Executed by Another Workflow').item.json.CLinicABB }}Table')/columns",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelFinanceID }}/workbook/tables('{{ $('When Executed by Another Workflow').first().json.CLinicABB }}Table')/columns",
         "authentication": "genericCredentialType",
         "genericAuthType": "oAuth2Api",
         "sendQuery": true,
@@ -2445,7 +2826,7 @@
             {
               "id": "b85de6a0-dac9-4047-b482-dbb591813cf8",
               "leftValue": "={{ $json.name }}",
-              "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}",
+              "rightValue": "={{ $('When Executed by Another Workflow').first().json.StartDate }}",
               "operator": {
                 "type": "string",
                 "operation": "equals"
@@ -2527,7 +2908,7 @@
     },
     {
       "parameters": {
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelFinanceID }}/workbook/tables/{{ encodeURIComponent($('When Executed by Another Workflow').item.json.CLinicABB + 'Table') }}/range",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelFinanceID }}/workbook/tables/{{ encodeURIComponent($('When Executed by Another Workflow').first().json.TrueCLinicAbb + 'Table') }}/range",
         "authentication": "genericCredentialType",
         "genericAuthType": "oAuth2Api",
         "options": {}
@@ -2549,7 +2930,7 @@
     },
     {
       "parameters": {
-        "jsCode": "let tableName = $json.tableName;\n\nif (!tableName) {\n  const workflowData = $('When Executed by Another Workflow').first().json;\n  tableName = workflowData.CLinicABBTable;\n}\n\nconst cols = $input.first().json.value;\n\nconst headers = cols\n  .slice()\n  .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))\n  .map(c => c.name);\n\nreturn [{\n  json: {\n    tableName,\n    headers,\n    headerCount: headers.length\n  }\n}];\n"
+        "jsCode": "let tableName = $json.tableName;\n\nif (!tableName) {\n  const workflowData = $('When Executed by Another Workflow').first().json;\n  tableName = workflowData.CLinicABBTable;\n}\n\nconst cols = $input.first().json.value;\n\nconst headers = cols\n  .slice()\n  .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))\n  .map(c => c.name);\n\nreturn [{\n  json: {\n    tableName,\n    headers,\n    headerCount: headers.length\n  }\n}];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -2563,7 +2944,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelFinanceID }}/workbook/tables('{{ $('When Executed by Another Workflow').item.json.CLinicABB }}Table')/rows/add",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Aggregate').item.json.data[0].CurrentExcelFinanceID }}/workbook/tables('{{ $('When Executed by Another Workflow').first().json.TrueCLinicAbb }}Table')/rows/add",
         "authentication": "genericCredentialType",
         "genericAuthType": "oAuth2Api",
         "sendBody": true,
@@ -2606,7 +2987,7 @@
           "conditions": [
             {
               "keyName": "LookupReference",
-              "keyValue": "={{ $('When Executed by Another Workflow').item.json.product }}"
+              "keyValue": "={{ $('When Executed by Another Workflow').first().json.product }}"
             }
           ]
         }
@@ -2648,26 +3029,13 @@
     },
     {
       "parameters": {
-        "jsCode": "const items = $('When Executed by Another Workflow').all();\n\n// Set once\nconst AddedtoOrderSpreadSheet = true;\n\nfor (const item of items) {\n  item.json.AddedtoOrderSpreadSheet = AddedtoOrderSpreadSheet;\n}\n\nreturn items;\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        3696,
-        256
-      ],
-      "id": "28d035e9-1de5-461d-b834-3da6215e0e48",
-      "name": "Code in JavaScript1"
-    },
-    {
-      "parameters": {
         "content": "## Set Folder and File IDS",
         "height": 368,
-        "width": 1040
+        "width": 2000
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -1968,
+        -2928,
         144
       ],
       "typeVersion": 1,
@@ -2891,7 +3259,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        -1488,
+        -2368,
         272
       ],
       "id": "4103edb4-4a7a-478d-b7c2-7bdd3ed3a6a9",
@@ -2899,7 +3267,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Headers/tableName from the previous node\nconst { headers, tableName } = $input.first().json;\n\n// Parent workflow payload\nconst parent = $('When Executed by Another Workflow').first().json;\n\n// Next patient number\nconst nextPatientNoRaw = $('PaintentNumberCheck').first().json.nextPatientNo;\nconst nextPatientNo = Number(nextPatientNoRaw);\n\nif (Number.isNaN(nextPatientNo)) {\n  throw new Error(`nextPatientNo is not a number. Got: ${nextPatientNoRaw}`);\n}\n\n// Prescriber values\nconst dr = $('DrDetailCleanUp')?.first?.().json ?? {};\nconst PRESCRIBER_FIRST = dr.PrescriberFirstName ?? null;\nconst PRESCRIBER_LAST  = dr.PrescriberLastName ?? null;\nconst PRESCRIBER_NO    = dr.PrescriberNumber ?? null;\n\n// Product values (Get row(s))\nconst productRow = $('Get row(s)')?.first?.().json ?? {};\nconst PRODUCT_NAME     = productRow.DrugName ?? null;\nconst PRODUCT_CODE     = productRow.ZenotiProductCode ?? null;\nconst CL_PRODUCT_CODE  = productRow.DrugReferenceCode ?? null;\nconst UNIT_COST        = Number(productRow.Cost ?? 0);\n\n// RegionCheck values\nconst region = $('Call \\'ZenotiNZ - RegionCheck\\'')?.first?.().json ?? {};\n\nconst ITEM_COUNT       = Number(region.quantity ?? parent.quantity ?? 0);\nconst REGION_TEXT      = region.Region ?? null;\nconst DELIVERY_LOCATION = region.DeliveryLocation ?? null;\nconst CUSTOMER_CODE    = region.CustomerCode ?? null;\n\n// Shipping cost\nconst SHIPPING_COST_RAW = $('MedsShippingCost')?.first?.().json?.ShippingCost;\nconst SHIPPING_COST = Number(SHIPPING_COST_RAW ?? 0);\n\n// ProductCost = unit cost × number of bottles\nconst PRODUCT_COST =\n  (Number.isFinite(UNIT_COST) ? UNIT_COST : 0) *\n  (Number.isFinite(ITEM_COUNT) ? ITEM_COUNT : 0);\n\n// Build one output row aligned to the Excel headers\nconst row = headers.map(h => {\n  switch (h) {\n\n    case 'Patient No':\n      return nextPatientNo;\n\n    case 'Customer First Name':\n      return parent.CustomerFirstName ?? null;\n\n    case 'Customer Last Name':\n      return parent.CustomerLastName ?? null;\n\n    case 'Email Address':\n      return parent.CustomerEmail ?? null;\n\n    case 'Gender':\n      return parent.CustomerGender ?? null;\n\n    case 'DOB':\n      return parent.CustomerDOB ?? null;\n\n    case 'Product Name':\n      return PRODUCT_NAME;\n\n    case 'Quantity':\n      return 100; // Hardcoded supplier requirement\n\n    case 'Item Count':\n      return ITEM_COUNT || null;\n\n    case 'Delivery Address':\n      return parent.DeliveryAddressFull ?? null;\n\n    case 'Prescriber First Name':\n      return PRESCRIBER_FIRST;\n\n    case 'Prescriber Last Name':\n      return PRESCRIBER_LAST;\n\n    case 'Prescriber No':\n      return PRESCRIBER_NO;\n\n    case 'Regional':\n      return REGION_TEXT;\n\n    case 'ProductCode':\n      return PRODUCT_CODE;\n\n    case 'ProductCost':\n      return PRODUCT_COST;\n\n    case 'CustomerCode':\n      return CUSTOMER_CODE;\n\n    case 'Shipping Cost':\n      return SHIPPING_COST;\n\n    case 'DeliveryLocation':\n      return DELIVERY_LOCATION;\n\n    case 'CLProductCode':\n      return CL_PRODUCT_CODE;\n\n    default:\n      return null;\n  }\n});\n\n// Graph expects a 2D array (rows)\nreturn [{\n  json: {\n    tableName,\n    values: [row]\n  }\n}];"
+        "jsCode": "// Get input safely\nconst inputJson = $input.first()?.json ?? {};\n\n// Headers/tableName from the previous node\nconst headers = Array.isArray(inputJson.headers) ? inputJson.headers : [];\nconst tableName = inputJson.tableName ?? null;\n\nif (!headers.length) {\n  throw new Error(`Headers array is missing or empty. Input was: ${JSON.stringify(inputJson)}`);\n}\n\n// Parent workflow payload\nconst parent = $('When Executed by Another Workflow').first().json;\n\n// Next patient number\nconst nextPatientNoRaw = $('PaintentNumberCheck').first().json.nextPatientNo;\nconst nextPatientNo = Number(nextPatientNoRaw);\n\nif (Number.isNaN(nextPatientNo)) {\n  throw new Error(`nextPatientNo is not a number. Got: ${nextPatientNoRaw}`);\n}\n\n// Prescriber values\nconst dr = $('DrDetailCleanUp')?.first?.().json ?? {};\nconst PRESCRIBER_FIRST = dr.PrescriberFirstName ?? null;\nconst PRESCRIBER_LAST = dr.PrescriberLastName ?? null;\nconst PRESCRIBER_NO = dr.PrescriberNumber ?? null;\n\n// Product values\nconst productRow = $('Get row(s)')?.first?.().json ?? {};\nconst PRODUCT_NAME = productRow.DrugName ?? null;\nconst PRODUCT_CODE = productRow.ZenotiProductCode ?? null;\nconst CL_PRODUCT_CODE = productRow.DrugReferenceCode ?? null;\nconst UNIT_COST = Number(productRow.Cost ?? 0);\n\n// RegionCheck values\nconst region = $(\"Call 'ZenotiNZ - RegionCheck'\")?.first?.().json ?? {};\nconst ITEM_COUNT = Number(region.quantity ?? parent.quantity ?? 0);\nconst DELIVERY_LOCATION = region.DeliveryLocation ?? null;\nconst CUSTOMER_CODE = region.CustomerCode ?? null;\n\n// New preferred region source\nconst joinSplit = $('JoinSplitRegions')?.first?.().json ?? {};\nconst JOIN_REGION_TEXT = joinSplit.Region ?? joinSplit['Address Shipping'] ?? null;\n\n// Fallback to original RegionCheck Region if JoinSplitRegions is empty\nconst REGION_TEXT = JOIN_REGION_TEXT ?? region.Region ?? null;\n\n// Shipping cost\nconst SHIPPING_COST_RAW = $('MedsShippingCost')?.first?.().json?.ShippingCost;\nconst SHIPPING_COST = Number(SHIPPING_COST_RAW ?? 0);\n\n// Start date mapped into OrderDate\nconst START_DATE = $('When Executed by Another Workflow').first().json.StartDate ?? null;\n\n// ProductCost = unit cost × item count\nconst PRODUCT_COST =\n  (Number.isFinite(UNIT_COST) ? UNIT_COST : 0) *\n  (Number.isFinite(ITEM_COUNT) ? ITEM_COUNT : 0);\n\n// Build one output row aligned to the Excel headers\nconst row = headers.map(h => {\n  switch (h) {\n    case 'Patient No':\n      return nextPatientNo;\n\n    case 'Customer First Name':\n      return parent.CustomerFirstName ?? null;\n\n    case 'Customer Last Name':\n      return parent.CustomerLastName ?? null;\n\n    case 'Email Address':\n      return parent.CustomerEmail ?? null;\n\n    case 'Gender':\n      return parent.CustomerGender ?? null;\n\n    case 'DOB':\n      return parent.CustomerDOB ?? null;\n\n    case 'Product Name':\n      return PRODUCT_NAME;\n\n    case 'Quantity':\n      return 100;\n\n    case 'Item Count':\n      return ITEM_COUNT || null;\n\n    case 'Delivery Address':\n      return parent.DeliveryAddressFull ?? null;\n\n    case 'Prescriber First Name':\n      return PRESCRIBER_FIRST;\n\n    case 'Prescriber Last Name':\n      return PRESCRIBER_LAST;\n\n    case 'Prescriber No':\n      return PRESCRIBER_NO;\n\n    case 'Regional':\n      return REGION_TEXT;\n\n    case 'ProductCode':\n      return PRODUCT_CODE;\n\n    case 'ProductCost':\n      return PRODUCT_COST;\n\n    case 'CustomerCode':\n      return CUSTOMER_CODE;\n\n    case 'Shipping Cost':\n      return SHIPPING_COST;\n\n    case 'DeliveryLocation':\n      return DELIVERY_LOCATION;\n\n    case 'CLProductCode':\n      return CL_PRODUCT_CODE;\n\n    case 'Unit Price':\n      return UNIT_COST;\n\n    case 'OrderDate':\n      return START_DATE;\n\n    default:\n      return null;\n  }\n});\n\n// Graph expects a 2D array\nreturn [{\n  json: {\n    tableName,\n    values: [row]\n  }\n}];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -2915,7 +3283,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        -1680,
+        -2576,
         272
       ],
       "id": "87a2c025-205c-42c1-ba93-8a3e12043718",
@@ -2934,7 +3302,8 @@
         64
       ],
       "id": "0a66e835-9da2-4312-ac38-8f65abc2728c",
-      "name": "Split Out1"
+      "name": "Split Out1",
+      "alwaysOutputData": true
     },
     {
       "parameters": {
@@ -2967,7 +3336,238 @@
         64
       ],
       "id": "58dac8d8-ff20-4c60-a63a-ca25008ae9bf",
-      "name": "Filter1"
+      "name": "Filter1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $('When Executed by Another Workflow').all();\n\n// Set once\nconst AddedtoFinanceSpreadSheet = true;\n\nfor (const item of items) {\n  item.json.AddedtoFinanceSpreadSheet = AddedtoFinanceSpreadSheet;\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3696,
+        256
+      ],
+      "id": "28d035e9-1de5-461d-b834-3da6215e0e48",
+      "name": "Code Clean Up"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Region }}",
+                    "rightValue": "Regional",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "7b63cde9-f090-42bb-984b-38e53ef3ef5d"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "7d6b60f5-98e4-411d-afb2-b9c78ffaf032",
+                    "leftValue": "={{ $json.Region }}",
+                    "rightValue": "Local",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "b348ebea-d10a-4b3f-8a6b-6dbac787a843",
+                    "leftValue": "={{ $json.Region }}",
+                    "rightValue": "NoMatch",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": 0
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -2160,
+        256
+      ],
+      "id": "9543c1c6-7049-46e1-ad05-848005fc87fe",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "toRecipients": "={{ $json.email }}",
+        "subject": "=Automation - Med Order - Address Issue - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
+        "message": "=Hi Team,\n\nAutomation requires you to confirm the address for client {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\n\nAddress: {{ $('When Executed by Another Workflow').item.json.DeliveryAddressFull }}\n\nPlease verify against https://www.nzpost.co.nz/tools/address-postcode-finder and select if its regional or local per the below.\n\nRegards,\nAutomation\n",
+        "responseType": "customForm",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Address Shipping",
+              "fieldType": "dropdown",
+              "defaultValue": "Local",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Local"
+                  },
+                  {
+                    "option": "Regional"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        -1776,
+        608
+      ],
+      "id": "c882074c-8e4a-41a8-8ca6-f10a5edf9d53",
+      "name": "Send message and wait for response",
+      "webhookId": "28fd15e6-582c-4484-8900-622634ade477",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pVbLONb8Gh393bg0",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinicsNZ",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/pVbLONb8Gh393bg0"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Abb",
+              "keyValue": "={{ $json.TrueCLinicAbb }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -2000,
+        608
+      ],
+      "id": "3bf823c9-fdee-431a-9384-6e004d3b74be",
+      "name": "Get row(s)1"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -1808,
+        272
+      ],
+      "id": "7964eff4-f0f6-4428-a757-0bbc8825e508",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "content": "## Address Fix",
+        "height": 304,
+        "width": 976,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2144,
+        512
+      ],
+      "typeVersion": 1,
+      "id": "45c03e7d-bdad-4d1a-a23d-4a8750ca7c97",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all items from the RegionCheck node\nconst items = $(\"Call 'ZenotiNZ - RegionCheck'\").all();\n\n// Get the new value we want to use\nconst newRegion = $input.first().json.data['Address Shipping'];\n\nfor (const item of items) {\n  // Replace Region with the new value\n  item.json.Region = newRegion;\n}\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1504,
+        608
+      ],
+      "id": "3938976d-cf31-4f37-9b1e-f0989e323ac7",
+      "name": "Address Fix"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -1600,
+        272
+      ],
+      "id": "d76c729c-0418-40e5-8f62-7f219d490354",
+      "name": "JoinSplitRegions"
     }
   ],
   "origin": "n8n",
@@ -2975,47 +3575,46 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "AppointmentID": "591d8d8d-3d32-49a8-aa06-f53d5ab5c9bb",
-          "CustomerFirstName": "Joshua",
-          "CustomerLastName": "Movtchan",
-          "CustomerCode": "AK8958",
-          "CustomerID": "5ff72776-4d71-4a55-90ec-e5e49b23e57d",
-          "CustomerDOB": "08/02/2005",
-          "CustomerEmail": "subnautic175@gmail.com",
+          "AppointmentID": "ed6f26b8-e736-4eba-9573-a45905720d6f",
+          "CustomerFirstName": "Kin",
+          "CustomerLastName": "Wootten",
+          "CustomerCode": "AK8514",
+          "CustomerID": "50636189-9369-4172-a33e-10df5c353c52",
+          "CustomerDOB": "15/03/1990",
+          "CustomerEmail": "penguinsducks@hotmail.com",
           "CustomerGender": "Male",
           "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
           "is_form_submitted": true,
-          "textField5": "Joshua Movtchan",
+          "textField5": "Kin Wootten",
           "select6": "no",
-          "textField2": "Dr Annemarie Hern 15150",
+          "textField2": "Dr Annemarie Hern 15150 ",
           "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
           "btnFormioSubmit": false,
           "ConsentFormFilled": true,
           "ConsentFormSubmitted": true,
-          "DeliveryLocation": "clinic",
-          "product": "7Minoxidil001RetinoicAcidLotion",
-          "quantity": "2",
-          "DeliveryAddress1": "21 Kilkelly Avenue, Pinehill, Auckland 0632",
-          "DeliverySuburb": "Newmarket",
-          "DeliveryCity": "Pinehill",
-          "DeliveryPostcode": "1023",
-          "DeliveryAddressFull": "21 Kilkelly Avenue, Pinehill, Auckland 0632",
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "quantity": "1",
+          "DeliveryAddress1": "686 coatesville riverhead highway\nAlbany \nAucklad",
+          "DeliveryCity": "",
+          "DeliveryAddressFull": "686 coatesville riverhead highway\nAlbany \nAucklad",
           "doctorsDirections": "ApplyToScalp",
           "addresscompared": true,
-          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid Lotion",
-          "ZenotiProductName": "Minoxidil Solution",
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
+          "ZenotiProductName": "Minoxidil + Finasteride Solution",
           "ZenotiProductNameShort": "Minox",
           "ZenotiProductNameEnd": "tion",
           "CanSubtract": true,
-          "RemainingBalance": 5,
+          "RemainingBalance": 6,
           "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
           "packagesavailable": true,
           "perfectrun": true,
           "CLinicABB": "AUC",
-          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=4e78a7d0-83bd-4335-8dce-2fce14394c00&ServiceId=c881a110-4440-40fc-9e81-918d918bc7a3&Service=Telehealth%20First&GuestId=5ff72776-4d71-4a55-90ec-e5e49b23e57d&AppointmentId=591d8d8d-3d32-49a8-aa06-f53d5ab5c9bb",
-          "StartDate": "2026-03-03",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=a272adb4-1115-4af6-a4da-8972cbb5a05d&ServiceId=e18c697e-da48-4aee-a7a5-a0fd6c6fc0f6&Service=Doctor%20Scripts%201mth&GuestId=50636189-9369-4172-a33e-10df5c353c52&AppointmentId=ed6f26b8-e736-4eba-9573-a45905720d6f",
+          "StartDate": "2026-03-10",
           "InvoiceNumber": true,
-          "Invoicedate": "2026-03-04"
+          "Invoicedate": "2026-03-11",
+          "TrueCLinicAbb": "AUC"
         },
         "pairedItem": {
           "item": 0
@@ -3067,6 +3666,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-03-03T23:43:33.920Z",
-  "versionId": "9a91e108-ea31-4c75-bdcf-93071fe28b09"
+  "updatedAt": "2026-03-11T04:49:14.030Z",
+  "versionId": "d7d5aa06-4846-42e4-ad23-aa908e91f17c"
 }
