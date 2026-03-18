@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-02-23T01:08:22.000Z",
-    "createdAt": "2026-02-23T01:08:21.291Z",
-    "versionId": "9b367f2b-1c5e-45c2-9311-8227f92d51a9",
+    "updatedAt": "2026-03-18T04:58:36.000Z",
+    "createdAt": "2026-03-18T04:58:08.929Z",
+    "versionId": "abdd90ab-6a20-461b-a3b1-339b8448f3e0",
     "workflowId": "YYDNByD72f7oe3LN",
     "nodes": [
       {
@@ -40,24 +40,24 @@
           "resource": "table",
           "workbook": {
             "__rl": true,
-            "value": "012CMKCCEIUS5SMQO3TJHLPAEWDF2Y2LYB",
+            "value": "012CMKCCCMZK3HSCLFF5EINKB6UUEG6FUJ",
             "mode": "list",
-            "cachedResultName": "Zenoti-GuestFormData",
-            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
+            "cachedResultName": "GuestFormData_V3_ExtendedAddtion",
+            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B79B6CA4C-6509-482F-86A8-3EA5086F1689%7D&file=GuestFormData_V3_ExtendedAddtion.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
           },
           "worksheet": {
             "__rl": true,
             "value": "{00000000-0001-0000-0000-000000000000}",
             "mode": "list",
             "cachedResultName": "Sheet1",
-            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1"
+            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B79B6CA4C-6509-482F-86A8-3EA5086F1689%7D&file=GuestFormData_V3_ExtendedAddtion.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1"
           },
           "table": {
             "__rl": true,
-            "value": "{574F5FEF-D38D-4DD1-97B6-E3BD9F13CC9A}",
+            "value": "{1DDF9256-28D7-4D2F-9BAF-663406827738}",
             "mode": "list",
             "cachedResultName": "GuestFormData",
-            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1:AN2"
+            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B79B6CA4C-6509-482F-86A8-3EA5086F1689%7D&file=GuestFormData_V3_ExtendedAddtion.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1:AO2"
           },
           "dataMode": "autoMap",
           "options": {}
@@ -65,8 +65,8 @@
         "type": "n8n-nodes-base.microsoftExcel",
         "typeVersion": 2.2,
         "position": [
-          816,
-          288
+          784,
+          208
         ],
         "id": "07c8f6f1-e47d-4029-aa96-ee249eebf291",
         "name": "Append rows to table",
@@ -733,6 +733,46 @@
         ],
         "id": "9d1a116f-92c7-4294-af4f-af8b4cf9a5fb",
         "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "resource": "table",
+          "workbook": {
+            "__rl": true,
+            "value": "012CMKCCEP3S6IWKO6XRGIFOGSFHDROMC6",
+            "mode": "list",
+            "cachedResultName": "Zenoti_GuestFormData_V2",
+            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B8BBCDC8F-DE29-4CBC-82B8-D229C717305E%7D&file=Zenoti_GuestFormData_V2.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
+          },
+          "worksheet": {
+            "__rl": true,
+            "value": "{4ECA0E1B-CF1D-49D2-B21B-0E6D84D89821}",
+            "mode": "list",
+            "cachedResultName": "Sheet1",
+            "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B8BBCDC8F-DE29-4CBC-82B8-D229C717305E%7D&file=Zenoti_GuestFormData_V2.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1"
+          },
+          "table": {
+            "__rl": true,
+            "value": "=GuestFormData",
+            "mode": "id"
+          },
+          "dataMode": "autoMap",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.microsoftExcel",
+        "typeVersion": 2.2,
+        "position": [
+          -224,
+          576
+        ],
+        "id": "1c0bbe47-e20c-476e-bb9c-e14dbbfe74ef",
+        "name": "Append rows to table1",
+        "credentials": {
+          "microsoftExcelOAuth2Api": {
+            "id": "snb39Kzd4tl5cSJU",
+            "name": "Microsoft Excel account"
+          }
+        }
       }
     ],
     "connections": {
@@ -856,11 +896,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 9b367f2b",
+    "name": "Version abdd90ab",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
-  "activeVersionId": "9b367f2b-1c5e-45c2-9311-8227f92d51a9",
+  "activeVersionId": "abdd90ab-6a20-461b-a3b1-339b8448f3e0",
   "connections": {
     "Get row(s)1": {
       "main": [
@@ -984,7 +1024,9 @@
   "createdAt": "2026-02-19T07:11:10.046Z",
   "id": "YYDNByD72f7oe3LN",
   "isArchived": false,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "name": "Zenoti - Guest Data to Excel - Automation",
   "nodes": [
     {
@@ -1021,24 +1063,24 @@
         "resource": "table",
         "workbook": {
           "__rl": true,
-          "value": "012CMKCCEIUS5SMQO3TJHLPAEWDF2Y2LYB",
+          "value": "012CMKCCCMZK3HSCLFF5EINKB6UUEG6FUJ",
           "mode": "list",
-          "cachedResultName": "Zenoti-GuestFormData",
-          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
+          "cachedResultName": "GuestFormData_V3_ExtendedAddtion",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B79B6CA4C-6509-482F-86A8-3EA5086F1689%7D&file=GuestFormData_V3_ExtendedAddtion.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
         },
         "worksheet": {
           "__rl": true,
           "value": "{00000000-0001-0000-0000-000000000000}",
           "mode": "list",
           "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1"
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B79B6CA4C-6509-482F-86A8-3EA5086F1689%7D&file=GuestFormData_V3_ExtendedAddtion.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1"
         },
         "table": {
           "__rl": true,
-          "value": "{574F5FEF-D38D-4DD1-97B6-E3BD9F13CC9A}",
+          "value": "{1DDF9256-28D7-4D2F-9BAF-663406827738}",
           "mode": "list",
           "cachedResultName": "GuestFormData",
-          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B26BBA488-DB41-4E9A-B780-9619758D2F01%7D&file=Zenoti-GuestFormData.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1:AN2"
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B79B6CA4C-6509-482F-86A8-3EA5086F1689%7D&file=GuestFormData_V3_ExtendedAddtion.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1:AO2"
         },
         "dataMode": "autoMap",
         "options": {}
@@ -1046,8 +1088,8 @@
       "type": "n8n-nodes-base.microsoftExcel",
       "typeVersion": 2.2,
       "position": [
-        816,
-        288
+        784,
+        208
       ],
       "id": "07c8f6f1-e47d-4029-aa96-ee249eebf291",
       "name": "Append rows to table",
@@ -1714,6 +1756,46 @@
       ],
       "id": "9d1a116f-92c7-4294-af4f-af8b4cf9a5fb",
       "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "resource": "table",
+        "workbook": {
+          "__rl": true,
+          "value": "012CMKCCEP3S6IWKO6XRGIFOGSFHDROMC6",
+          "mode": "list",
+          "cachedResultName": "Zenoti_GuestFormData_V2",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B8BBCDC8F-DE29-4CBC-82B8-D229C717305E%7D&file=Zenoti_GuestFormData_V2.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
+        },
+        "worksheet": {
+          "__rl": true,
+          "value": "{4ECA0E1B-CF1D-49D2-B21B-0E6D84D89821}",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://ashleyandmartincomau-my.sharepoint.com/personal/nryall_ashleyandmartin_com_au/_layouts/15/Doc.aspx?sourcedoc=%7B8BBCDC8F-DE29-4CBC-82B8-D229C717305E%7D&file=Zenoti_GuestFormData_V2.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1&activeCell=Sheet1!A1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "=GuestFormData",
+          "mode": "id"
+        },
+        "dataMode": "autoMap",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftExcel",
+      "typeVersion": 2.2,
+      "position": [
+        -224,
+        576
+      ],
+      "id": "1c0bbe47-e20c-476e-bb9c-e14dbbfe74ef",
+      "name": "Append rows to table1",
+      "credentials": {
+        "microsoftExcelOAuth2Api": {
+          "id": "snb39Kzd4tl5cSJU",
+          "name": "Microsoft Excel account"
+        }
+      }
     }
   ],
   "origin": "n8n",
@@ -1785,6 +1867,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-02-23T01:08:21.290Z",
-  "versionId": "9b367f2b-1c5e-45c2-9311-8227f92d51a9"
+  "updatedAt": "2026-03-18T04:58:08.929Z",
+  "versionId": "abdd90ab-6a20-461b-a3b1-339b8448f3e0"
 }
