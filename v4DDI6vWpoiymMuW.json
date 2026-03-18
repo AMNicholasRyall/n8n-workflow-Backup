@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-02-13T04:47:26.000Z",
-    "createdAt": "2026-02-13T04:47:24.802Z",
-    "versionId": "eed0a16b-82f6-4d5d-b010-5f0c6e5820f2",
+    "updatedAt": "2026-03-18T04:56:38.000Z",
+    "createdAt": "2026-03-18T04:56:35.024Z",
+    "versionId": "38d1838d-e19d-42a3-af5e-f70143e02cd9",
     "workflowId": "v4DDI6vWpoiymMuW",
     "nodes": [
       {
@@ -14,7 +14,7 @@
         "typeVersion": 1.1,
         "position": [
           -144,
-          -312
+          -320
         ],
         "id": "a55077b5-bd05-4e77-9f43-79ccea8a0f31",
         "name": "When Executed by Another Workflow"
@@ -94,7 +94,7 @@
         "typeVersion": 3.4,
         "position": [
           528,
-          -312
+          -320
         ],
         "id": "c9ad3cf4-da27-41b9-b864-18090d927776",
         "name": "Set Address"
@@ -118,10 +118,12 @@
         "typeVersion": 4.3,
         "position": [
           752,
-          -312
+          -320
         ],
         "id": "99dbf60b-48f0-460f-9063-b897f2a48a48",
-        "name": "Check Region"
+        "name": "Check Region",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
       },
       {
         "parameters": {
@@ -152,7 +154,7 @@
         "typeVersion": 2.3,
         "position": [
           976,
-          -312
+          -320
         ],
         "id": "b01cfcf0-213a-4ca1-96f5-7037e156ffed",
         "name": "If1"
@@ -204,7 +206,7 @@
         "typeVersion": 3.4,
         "position": [
           1200,
-          -360
+          -368
         ],
         "id": "dd52d921-d7ac-4af9-b354-f13293a928e8",
         "name": "Add Region"
@@ -215,7 +217,7 @@
         "typeVersion": 1.1,
         "position": [
           1648,
-          -312
+          -320
         ],
         "id": "bb1ff91f-c4c7-4743-859e-7d279fbad46c",
         "name": "Wait",
@@ -359,11 +361,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version eed0a16b",
+    "name": "Version 38d1838d",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
-  "activeVersionId": "eed0a16b-82f6-4d5d-b010-5f0c6e5820f2",
+  "activeVersionId": "38d1838d-e19d-42a3-af5e-f70143e02cd9",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -605,7 +607,9 @@
         -320
       ],
       "id": "99dbf60b-48f0-460f-9063-b897f2a48a48",
-      "name": "Check Region"
+      "name": "Check Region",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -727,29 +731,31 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "AppointmentID": "26828f1c-20c4-48f3-9788-63b1155a5abc",
-          "CustomerFirstName": "Chevez",
-          "CustomerLastName": "Tafunai",
-          "CustomerCode": "1083328-GAK",
-          "CustomerID": "9b83a34b-e87d-4a1d-9d2f-2db54b6f88ae",
-          "CustomerDOB": "28/07/1994",
-          "CustomerEmail": "ctafunai@gmail.com",
+          "AppointmentID": "1b4a2d6c-c4bd-48bd-a065-90b6e3564cd5",
+          "CustomerFirstName": "Ray",
+          "CustomerLastName": "Santiago",
+          "CustomerCode": "AK8803",
+          "CustomerID": "acc5f2a7-8a79-445d-9120-21ee2e9aa940",
+          "CustomerDOB": "16/07/1999",
+          "CustomerEmail": "r.santiago1607@gmail.com",
           "CustomerGender": "Male",
           "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
           "is_form_submitted": true,
-          "textField5": "Chevez Tafunai",
+          "textField5": "Ray Santiago",
           "select6": "no",
-          "textField2": "Dr Annemarie Hern 15150",
+          "textField2": "Dr Annemarie Hern 15150 ",
           "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
           "btnFormioSubmit": false,
           "ConsentFormFilled": true,
           "ConsentFormSubmitted": true,
-          "DeliveryLocation": "guest",
+          "DeliveryLocation": "clinic",
           "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
-          "quantity": "2",
-          "DeliveryAddress1": "89 Kupe Street, Orakei, Auckland 1071",
-          "DeliveryCity": "",
-          "DeliveryAddressFull": "89 Kupe Street, Orakei, Auckland 1071",
+          "quantity": "1",
+          "DeliveryAddress1": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "DeliverySuburb": "Newmarket",
+          "DeliveryCity": "Auckland",
+          "DeliveryPostcode": "1023",
+          "DeliveryAddressFull": "L6/5 Short Street, Newmarket, Auckland 1010, Newmarket, Auckland, 1023",
           "doctorsDirections": "ApplyToScalp",
           "addresscompared": true,
           "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
@@ -757,15 +763,15 @@
           "ZenotiProductNameShort": "Minox",
           "ZenotiProductNameEnd": "tion",
           "CanSubtract": true,
-          "RemainingBalance": 5,
+          "RemainingBalance": 4,
           "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
           "packagesavailable": true,
           "perfectrun": true,
           "CLinicABB": "AUC",
-          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=d4966ac9-c684-4db8-9302-9178d95593d5&ServiceId=ea2fab22-be5f-4342-838d-1a4bcebe9618&Service=Telehealth%20Check-up&GuestId=9b83a34b-e87d-4a1d-9d2f-2db54b6f88ae&AppointmentId=26828f1c-20c4-48f3-9788-63b1155a5abc",
-          "StartDate": "2026-03-09",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=cd59257e-1912-4318-821c-78cb6b36de5b&ServiceId=e18c697e-da48-4aee-a7a5-a0fd6c6fc0f6&Service=Doctor%20Scripts%201mth&GuestId=acc5f2a7-8a79-445d-9120-21ee2e9aa940&AppointmentId=1b4a2d6c-c4bd-48bd-a065-90b6e3564cd5",
+          "StartDate": "2026-03-14",
           "InvoiceNumber": true,
-          "Invoicedate": "2026-03-10",
+          "Invoicedate": "2026-03-15",
           "TrueCLinicAbb": "AUC"
         },
         "pairedItem": {
@@ -818,6 +824,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-03-09T23:01:16.011Z",
-  "versionId": "094d6ccb-b90b-4ad9-a851-698c25c8f026"
+  "updatedAt": "2026-03-18T04:56:35.023Z",
+  "versionId": "38d1838d-e19d-42a3-af5e-f70143e02cd9"
 }
