@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-03-09T02:07:06.000Z",
-    "createdAt": "2026-03-09T02:06:47.527Z",
-    "versionId": "88bf3923-8f49-49da-9499-2136da88892d",
+    "updatedAt": "2026-03-18T04:51:03.000Z",
+    "createdAt": "2026-03-18T04:51:01.492Z",
+    "versionId": "9758ca05-48de-44bf-940e-dce6cd2d0891",
     "workflowId": "vLoLIvJK1gu3ILbL",
     "nodes": [
       {
@@ -257,6 +257,8 @@
         ],
         "id": "cb8a2bd7-298b-487a-a40d-0decd34be5d1",
         "name": "Check for Excel",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
         "credentials": {
           "microsoftSharePointOAuth2Api": {
             "id": "8eWNjQciijocacKo",
@@ -421,6 +423,8 @@
         ],
         "id": "250b9568-12a6-4470-84f6-8e6bd5b54bb4",
         "name": "Check for Excel1",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
         "credentials": {
           "microsoftSharePointOAuth2Api": {
             "id": "8eWNjQciijocacKo",
@@ -489,6 +493,8 @@
         ],
         "id": "c27423b4-984a-4db2-8af7-b13a225acc51",
         "name": "Check for Excel2",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
         "credentials": {
           "microsoftSharePointOAuth2Api": {
             "id": "8eWNjQciijocacKo",
@@ -1356,11 +1362,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 88bf3923",
+    "name": "Version 9758ca05",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "88bf3923-8f49-49da-9499-2136da88892d",
+  "activeVersionId": "9758ca05-48de-44bf-940e-dce6cd2d0891",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -1967,6 +1973,8 @@
       ],
       "id": "cb8a2bd7-298b-487a-a40d-0decd34be5d1",
       "name": "Check for Excel",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "credentials": {
         "microsoftSharePointOAuth2Api": {
           "id": "8eWNjQciijocacKo",
@@ -2131,6 +2139,8 @@
       ],
       "id": "250b9568-12a6-4470-84f6-8e6bd5b54bb4",
       "name": "Check for Excel1",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "credentials": {
         "microsoftSharePointOAuth2Api": {
           "id": "8eWNjQciijocacKo",
@@ -2199,6 +2209,8 @@
       ],
       "id": "c27423b4-984a-4db2-8af7-b13a225acc51",
       "name": "Check for Excel2",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "credentials": {
         "microsoftSharePointOAuth2Api": {
           "id": "8eWNjQciijocacKo",
@@ -2723,44 +2735,48 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "AppointmentID": "840f0c7b-504c-497e-8da6-5ed30821e7a8",
-          "CustomerFirstName": "Derrell",
-          "CustomerLastName": "Meyer",
-          "CustomerCode": "HM2781",
-          "CustomerID": "825ab5db-9ff8-40f3-8e2b-d757ff584035",
-          "CustomerDOB": "26/10/1970",
-          "CustomerEmail": "derrellmeyer@mac.com",
+          "AppointmentID": "8df97f1b-7c0c-45bd-aca7-4ded888b3ec7",
+          "CustomerFirstName": "Aden",
+          "CustomerLastName": "Goel",
+          "CustomerCode": "AK6626",
+          "CustomerID": "3b16374d-8618-4797-8639-37d4dea46b4c",
+          "CustomerDOB": "18/04/2003",
+          "CustomerEmail": "aden.goel10@gmail.com",
           "CustomerGender": "Male",
-          "CustomerCenterID": "690a5763-4215-4df2-93d5-aa0395f69bd5",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
           "is_form_submitted": true,
-          "textField5": "Derrell Meyer",
+          "textField5": "Aden Goel",
           "select6": "no",
           "textField2": "Annemarie Hern 15150",
           "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
           "btnFormioSubmit": false,
           "ConsentFormFilled": true,
           "ConsentFormSubmitted": true,
-          "DeliveryLocation": "guest",
-          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
+          "DeliveryLocation": "clinic",
+          "product": "7Minoxidil001RetinoicAcidLotion",
           "quantity": "2",
-          "DeliveryAddress1": "21 Tauranga Direct Road",
-          "DeliveryCity": "Rotorua",
-          "DeliveryAddressFull": "21 Tauranga Direct Road, Rotorua",
+          "DeliveryAddress1": "L6/5 Short Street, Newmarket, Auckland 1010",
+          "DeliverySuburb": "Newmarket",
+          "DeliveryCity": "Auckland",
+          "DeliveryPostcode": "1023",
+          "DeliveryAddressFull": "L6/5 Short Street, Newmarket, Auckland 1010, Newmarket, Auckland, 1023",
           "doctorsDirections": "ApplyToScalp",
           "addresscompared": true,
-          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
-          "ZenotiProductName": "Minoxidil + Finasteride Solution",
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid Lotion",
+          "ZenotiProductName": "Minoxidil Solution",
           "ZenotiProductNameShort": "Minox",
           "ZenotiProductNameEnd": "tion",
-          "packagesavailable": false,
-          "paidinfull": true,
+          "CanSubtract": true,
+          "RemainingBalance": 5,
+          "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
+          "packagesavailable": true,
+          "perfectrun": true,
           "CLinicABB": "AUC",
-          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=eef55ea2-fe32-4ac5-b2e0-e4c0f230e597&ServiceId=cf690070-2b50-484d-9ec9-67c786576eb6&Service=Doctor%20Scripts%208mth&GuestId=825ab5db-9ff8-40f3-8e2b-d757ff584035&AppointmentId=840f0c7b-504c-497e-8da6-5ed30821e7a8",
-          "StartDate": "2026-03-07",
-          "ManuallyApproved": true,
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=0ca9746d-4658-41a5-a6bc-c5d67b06d19d&ServiceId=2c75ccbc-e2e5-4dcf-b3a7-19e9cd195eb3&Service=Doctor%20Scripts%204mth&GuestId=3b16374d-8618-4797-8639-37d4dea46b4c&AppointmentId=8df97f1b-7c0c-45bd-aca7-4ded888b3ec7",
+          "StartDate": "2026-03-18",
           "InvoiceNumber": true,
-          "Invoicedate": "2026-03-09",
-          "TrueCLinicAbb": "HAM"
+          "Invoicedate": "2026-03-19",
+          "TrueCLinicAbb": "AUC"
         },
         "pairedItem": {
           "item": 0
@@ -2811,6 +2827,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-03-09T02:06:47.526Z",
-  "versionId": "88bf3923-8f49-49da-9499-2136da88892d"
+  "updatedAt": "2026-03-18T22:49:38.685Z",
+  "versionId": "9758ca05-48de-44bf-940e-dce6cd2d0891"
 }
