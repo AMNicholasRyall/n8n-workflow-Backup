@@ -573,6 +573,14 @@
           "value": "={{ $json.table_id }}",
           "mode": "id"
         },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "gte",
+              "keyValue": "23821"
+            }
+          ]
+        },
         "returnAll": true
       },
       "type": "n8n-nodes-base.dataTable",
@@ -777,6 +785,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-03-11T06:25:35.326Z",
-  "versionId": "9ca5d821-cf34-4d75-bb1e-febd4fa34a61"
+  "updatedAt": "2026-03-12T00:15:40.180Z",
+  "versionId": "2b72374c-10f3-4163-ae6a-a1ada1e9d584"
 }
