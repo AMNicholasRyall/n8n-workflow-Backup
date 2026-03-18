@@ -1242,7 +1242,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"guest_id\": \"{{ $('When Executed by Another Workflow').item.json.CustomerID }}\",\n  \"center_id\": \"{{ $('When Executed by Another Workflow').item.json.CustomerCenterID }}\",\n  \"created_by_id\": \"83de2399-ca55-455b-a812-0336d956188d\",\n  \"notes\": \"AutomationGenerated\",\n  \"products\": [\n    {\n      \"id\": \"{{ $json.id }}\",\n      \"quantity\": {{ $('When Executed by Another Workflow').item.json.quantity }},\n      \"sale_by_id\": \"83de2399-ca55-455b-a812-0336d956188d\"\n    }\n  ]\n}\n\n",
+        "jsonBody": "={\n  \"guest_id\": \"{{ $('When Executed by Another Workflow').item.json.CustomerID }}\",\n  \"center_id\": \"{{ $('When Executed by Another Workflow').item.json.CustomerCenterID }}\",\n  \"created_by_id\": \"83de2399-ca55-455b-a812-0336d956188d\",\n  \"notes\": \"AutomationGenerated\",\n  \"products\": [\n    {\n      \"id\": \"{{ $json.id }}\",\n      \"quantity\": {{ $('When Executed by Another Workflow').item.json.quantity }},\n      \"sale_by_id\": \"83de2399-ca55-455b-a812-0336d956188d\"\n    }\n  ]\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -1861,17 +1861,17 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "AppointmentID": "0d2e9e91-53e9-49cc-9d9e-d37a832e559a",
-          "CustomerFirstName": "Steve",
-          "CustomerLastName": "Marshall",
-          "CustomerCode": "273-GHM",
-          "CustomerID": "b3e7717f-f23e-4cea-99b9-a45101ae1e29",
-          "CustomerDOB": "11/05/1981",
-          "CustomerEmail": "steve.marshall@beca.com",
+          "AppointmentID": "5756d867-fa84-432e-972d-e6dddae9c63e",
+          "CustomerFirstName": "Lucas",
+          "CustomerLastName": "You",
+          "CustomerCode": "AK9075",
+          "CustomerID": "5b39c950-434d-4af2-bc49-a977fb612ca8",
+          "CustomerDOB": "10/02/2002",
+          "CustomerEmail": "lucasyou2002@gmail.com",
           "CustomerGender": "Male",
-          "CustomerCenterID": "690a5763-4215-4df2-93d5-aa0395f69bd5",
+          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
           "is_form_submitted": true,
-          "textField5": "Steve Marshall",
+          "textField5": "Lucas You",
           "select6": "no",
           "textField2": "Dr Annemarie Hern 15150",
           "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
@@ -1880,10 +1880,10 @@
           "ConsentFormSubmitted": true,
           "DeliveryLocation": "guest",
           "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
-          "quantity": "2",
-          "DeliveryAddress1": "36 Rewarewa Place, Matua, Tauranga 3110",
-          "DeliveryCity": "Tauranga",
-          "DeliveryAddressFull": "36 Rewarewa Place, Matua, Tauranga 3110, Tauranga",
+          "quantity": "",
+          "DeliveryAddress1": "9 Octans Road",
+          "DeliveryCity": "",
+          "DeliveryAddressFull": "9 Octans Road",
           "doctorsDirections": "ApplyToScalp",
           "addresscompared": true,
           "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
@@ -1891,13 +1891,13 @@
           "ZenotiProductNameShort": "Minox",
           "ZenotiProductNameEnd": "tion",
           "CanSubtract": true,
-          "RemainingBalance": 5,
+          "RemainingBalance": 7,
           "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
           "packagesavailable": true,
           "perfectrun": true,
           "CLinicABB": "AUC",
-          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=8329a433-6be6-49e3-b73f-dca7ca8ae21d&ServiceId=ea2fab22-be5f-4342-838d-1a4bcebe9618&Service=Telehealth%20Check-up&GuestId=b3e7717f-f23e-4cea-99b9-a45101ae1e29&AppointmentId=0d2e9e91-53e9-49cc-9d9e-d37a832e559a",
-          "StartDate": "2026-03-04"
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=398aa908-7154-45ab-b5bc-bfa0b24c094c&ServiceId=c881a110-4440-40fc-9e81-918d918bc7a3&Service=Telehealth%20First&GuestId=5b39c950-434d-4af2-bc49-a977fb612ca8&AppointmentId=5756d867-fa84-432e-972d-e6dddae9c63e",
+          "StartDate": "2026-03-12"
         },
         "pairedItem": {
           "item": 0
@@ -1938,6 +1938,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-03-06T01:20:19.530Z",
-  "versionId": "912e4e6a-9174-4ec0-afc2-6575419a7ac8"
+  "updatedAt": "2026-03-12T23:01:34.529Z",
+  "versionId": "846ffd7d-98c8-457d-96df-9dcea5f4e573"
 }
