@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-03-18T04:51:03.000Z",
-    "createdAt": "2026-03-18T04:51:01.492Z",
-    "versionId": "9758ca05-48de-44bf-940e-dce6cd2d0891",
+    "updatedAt": "2026-03-22T23:00:54.000Z",
+    "createdAt": "2026-03-22T22:58:37.183Z",
+    "versionId": "542a3230-95ad-4705-be25-558c7e42b84b",
     "workflowId": "vLoLIvJK1gu3ILbL",
     "nodes": [
       {
@@ -401,6 +401,8 @@
         ],
         "id": "f2fcfd25-4a24-48e7-9140-e1c9c639230f",
         "name": "Get Excel Headings",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
         "credentials": {
           "oAuth2Api": {
             "id": "j30zGPdAyzTUMgGs",
@@ -410,7 +412,7 @@
       },
       {
         "parameters": {
-          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/children",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/",
           "authentication": "genericCredentialType",
           "genericAuthType": "oAuth2Api",
           "options": {}
@@ -456,12 +458,11 @@
             "conditions": [
               {
                 "id": "6e1a84b7-6dfd-4ea5-b9e2-755eecf496e0",
-                "leftValue": "={{ $json['@odata.null'] }}",
+                "leftValue": "={{ $json.name }}",
                 "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
                 "operator": {
-                  "type": "boolean",
-                  "operation": "true",
-                  "singleValue": true
+                  "type": "string",
+                  "operation": "equals"
                 }
               }
             ],
@@ -669,6 +670,9 @@
         ],
         "id": "83118901-e5f5-475f-b418-30b2e744e9b8",
         "name": "RowCountCheck",
+        "executeOnce": false,
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
         "credentials": {
           "oAuth2Api": {
             "id": "j30zGPdAyzTUMgGs",
@@ -714,6 +718,8 @@
         ],
         "id": "3a290bf0-603c-44f2-8d10-9bc3f6732f6e",
         "name": "UpdateCurrnentSpreadSheet",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
         "credentials": {
           "oAuth2Api": {
             "id": "j30zGPdAyzTUMgGs",
@@ -1362,11 +1368,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 9758ca05",
+    "name": "Version 542a3230",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "9758ca05-48de-44bf-940e-dce6cd2d0891",
+  "activeVersionId": "542a3230-95ad-4705-be25-558c7e42b84b",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -2117,6 +2123,8 @@
       ],
       "id": "f2fcfd25-4a24-48e7-9140-e1c9c639230f",
       "name": "Get Excel Headings",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "credentials": {
         "oAuth2Api": {
           "id": "j30zGPdAyzTUMgGs",
@@ -2126,7 +2134,7 @@
     },
     {
       "parameters": {
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/children",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/",
         "authentication": "genericCredentialType",
         "genericAuthType": "oAuth2Api",
         "options": {}
@@ -2172,12 +2180,11 @@
           "conditions": [
             {
               "id": "6e1a84b7-6dfd-4ea5-b9e2-755eecf496e0",
-              "leftValue": "={{ $json['@odata.null'] }}",
+              "leftValue": "={{ $json.name }}",
               "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
               "operator": {
-                "type": "boolean",
-                "operation": "true",
-                "singleValue": true
+                "type": "string",
+                "operation": "equals"
               }
             }
           ],
@@ -2385,6 +2392,9 @@
       ],
       "id": "83118901-e5f5-475f-b418-30b2e744e9b8",
       "name": "RowCountCheck",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "credentials": {
         "oAuth2Api": {
           "id": "j30zGPdAyzTUMgGs",
@@ -2430,6 +2440,8 @@
       ],
       "id": "3a290bf0-603c-44f2-8d10-9bc3f6732f6e",
       "name": "UpdateCurrnentSpreadSheet",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "credentials": {
         "oAuth2Api": {
           "id": "j30zGPdAyzTUMgGs",
@@ -2735,47 +2747,45 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "AppointmentID": "8df97f1b-7c0c-45bd-aca7-4ded888b3ec7",
-          "CustomerFirstName": "Aden",
-          "CustomerLastName": "Goel",
-          "CustomerCode": "AK6626",
-          "CustomerID": "3b16374d-8618-4797-8639-37d4dea46b4c",
-          "CustomerDOB": "18/04/2003",
-          "CustomerEmail": "aden.goel10@gmail.com",
+          "AppointmentID": "c92dc99f-1cdd-4e8b-a91a-099e77373140",
+          "CustomerFirstName": "Craig",
+          "CustomerLastName": "Cooper",
+          "CustomerCode": "29948-GAK",
+          "CustomerID": "773274de-4f4b-4870-a6d2-00a9c82bc14e",
+          "CustomerDOB": "12/06/1981",
+          "CustomerEmail": "coopertwin@gmail.com",
           "CustomerGender": "Male",
           "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
           "is_form_submitted": true,
-          "textField5": "Aden Goel",
+          "textField5": "Craig Cooper",
           "select6": "no",
-          "textField2": "Annemarie Hern 15150",
+          "textField2": "Dr Annemarie Hern 15150 ",
           "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
           "btnFormioSubmit": false,
           "ConsentFormFilled": true,
           "ConsentFormSubmitted": true,
-          "DeliveryLocation": "clinic",
-          "product": "7Minoxidil001RetinoicAcidLotion",
+          "DeliveryLocation": "guest",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
           "quantity": "2",
-          "DeliveryAddress1": "L6/5 Short Street, Newmarket, Auckland 1010",
-          "DeliverySuburb": "Newmarket",
-          "DeliveryCity": "Auckland",
-          "DeliveryPostcode": "1023",
-          "DeliveryAddressFull": "L6/5 Short Street, Newmarket, Auckland 1010, Newmarket, Auckland, 1023",
+          "DeliveryAddress1": "8 Lyford Crescent, Sunnynook, Auckland 0620",
+          "DeliveryCity": "leave by side door",
+          "DeliveryAddressFull": "8 Lyford Crescent, Sunnynook, Auckland 0620, leave by side door",
           "doctorsDirections": "ApplyToScalp",
           "addresscompared": true,
-          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid Lotion",
-          "ZenotiProductName": "Minoxidil Solution",
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
+          "ZenotiProductName": "Minoxidil + Finasteride Solution",
           "ZenotiProductNameShort": "Minox",
           "ZenotiProductNameEnd": "tion",
           "CanSubtract": true,
-          "RemainingBalance": 5,
+          "RemainingBalance": 0,
           "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
           "packagesavailable": true,
           "perfectrun": true,
           "CLinicABB": "AUC",
-          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=0ca9746d-4658-41a5-a6bc-c5d67b06d19d&ServiceId=2c75ccbc-e2e5-4dcf-b3a7-19e9cd195eb3&Service=Doctor%20Scripts%204mth&GuestId=3b16374d-8618-4797-8639-37d4dea46b4c&AppointmentId=8df97f1b-7c0c-45bd-aca7-4ded888b3ec7",
-          "StartDate": "2026-03-18",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=05851fd4-7390-4612-b7cc-33717c97884d&ServiceId=cf690070-2b50-484d-9ec9-67c786576eb6&Service=Doctor%20Scripts%208mth&GuestId=773274de-4f4b-4870-a6d2-00a9c82bc14e&AppointmentId=c92dc99f-1cdd-4e8b-a91a-099e77373140",
+          "StartDate": "2026-03-21",
           "InvoiceNumber": true,
-          "Invoicedate": "2026-03-19",
+          "Invoicedate": "2026-03-22",
           "TrueCLinicAbb": "AUC"
         },
         "pairedItem": {
@@ -2827,6 +2837,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-03-18T22:49:38.685Z",
-  "versionId": "9758ca05-48de-44bf-940e-dce6cd2d0891"
+  "updatedAt": "2026-03-22T22:58:37.182Z",
+  "versionId": "542a3230-95ad-4705-be25-558c7e42b84b"
 }
