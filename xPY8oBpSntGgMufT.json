@@ -1,13 +1,111 @@
 {
-  "active": false,
-  "activeVersion": null,
-  "activeVersionId": null,
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-03-25T04:50:34.000Z",
+    "createdAt": "2026-03-25T04:46:01.297Z",
+    "versionId": "388df884-f7c8-49f7-9e23-caaeb39a2c8d",
+    "workflowId": "xPY8oBpSntGgMufT",
+    "nodes": [
+      {
+        "parameters": {
+          "queue": "nz.zenoti.webhooks.appointments",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rabbitmqTrigger",
+        "typeVersion": 1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "1725fb81-5ba6-430e-8c8b-9e7b7df2918a",
+        "name": "RabbitMQ Trigger",
+        "credentials": {
+          "rabbitmq": {
+            "id": "yV61RlUAH8DmNI5J",
+            "name": "RabbitMQ account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const raw = $json.content;\nconst parsed = JSON.parse(raw);\n\nreturn [{ json: parsed }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          240,
+          0
+        ],
+        "id": "577af94b-6ab2-4148-91fc-18781e69d9b2",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "operation": "deleteMessage"
+        },
+        "type": "n8n-nodes-base.rabbitmq",
+        "typeVersion": 1.1,
+        "position": [
+          448,
+          0
+        ],
+        "id": "1dd42262-34e7-40ab-88b3-e2bb503d3c88",
+        "name": "RabbitMQ",
+        "credentials": {
+          "rabbitmq": {
+            "id": "yV61RlUAH8DmNI5J",
+            "name": "RabbitMQ account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "RabbitMQ Trigger": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "RabbitMQ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 388df884",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "388df884-f7c8-49f7-9e23-caaeb39a2c8d",
   "connections": {
-    "When clicking ‘Execute workflow’": {
+    "RabbitMQ Trigger": {
       "main": [
         [
           {
-            "node": "HTTP Request",
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "RabbitMQ",
             "type": "main",
             "index": 0
           }
@@ -18,45 +116,62 @@
   "createdAt": "2026-03-12T07:37:58.165Z",
   "id": "xPY8oBpSntGgMufT",
   "isArchived": false,
-  "meta": null,
-  "name": "My workflow 6",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "NZ-RabbitMQCollector-Appointments",
   "nodes": [
     {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
+      "parameters": {
+        "queue": "nz.zenoti.webhooks.appointments",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rabbitmqTrigger",
       "typeVersion": 1,
       "position": [
         0,
         0
       ],
-      "id": "af388f9d-82a1-40de-a2ea-dbb68349ba34",
-      "name": "When clicking ‘Execute workflow’"
+      "id": "1725fb81-5ba6-430e-8c8b-9e7b7df2918a",
+      "name": "RabbitMQ Trigger",
+      "credentials": {
+        "rabbitmq": {
+          "id": "yV61RlUAH8DmNI5J",
+          "name": "RabbitMQ account"
+        }
+      }
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://webhook.ashleyandmartin.local/webhook-test/test-webhook",
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "hello",
-              "value": "world"
-            }
-          ]
-        },
-        "options": {
-          "allowUnauthorizedCerts": true
-        }
+        "jsCode": "const raw = $json.content;\nconst parsed = JSON.parse(raw);\n\nreturn [{ json: parsed }];"
       },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.4,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
-        208,
+        240,
         0
       ],
-      "id": "50b8ef3b-1568-47cd-ba0e-f9fe53fa08d1",
-      "name": "HTTP Request"
+      "id": "577af94b-6ab2-4148-91fc-18781e69d9b2",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "deleteMessage"
+      },
+      "type": "n8n-nodes-base.rabbitmq",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        0
+      ],
+      "id": "1dd42262-34e7-40ab-88b3-e2bb503d3c88",
+      "name": "RabbitMQ",
+      "credentials": {
+        "rabbitmq": {
+          "id": "yV61RlUAH8DmNI5J",
+          "name": "RabbitMQ account"
+        }
+      }
     }
   ],
   "origin": "n8n",
@@ -68,7 +183,10 @@
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner"
   },
   "shared": [
     {
@@ -80,8 +198,21 @@
     }
   ],
   "staticData": null,
-  "tags": [],
-  "triggerCount": 0,
-  "updatedAt": "2026-03-13T01:17:33.417Z",
-  "versionId": "5928209d-d131-44df-92cb-4be30d195dab"
+  "tags": [
+    {
+      "updatedAt": "2026-01-21T23:52:55.489Z",
+      "createdAt": "2026-01-21T23:52:55.489Z",
+      "id": "OXsRoYm7kDVlpgY1",
+      "name": "NZ"
+    },
+    {
+      "updatedAt": "2026-01-21T23:52:51.063Z",
+      "createdAt": "2026-01-21T23:52:51.063Z",
+      "id": "OuUcDlUQOF4Dgotd",
+      "name": "MedOrder"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-25T05:23:54.826Z",
+  "versionId": "388df884-f7c8-49f7-9e23-caaeb39a2c8d"
 }
