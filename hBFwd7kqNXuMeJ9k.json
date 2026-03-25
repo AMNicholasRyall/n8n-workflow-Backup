@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-03-18T04:51:39.000Z",
-    "createdAt": "2026-03-18T04:51:37.786Z",
-    "versionId": "deae38e4-f6d0-47af-8f30-c9712d6e7dd7",
+    "updatedAt": "2026-03-23T23:06:59.000Z",
+    "createdAt": "2026-03-23T23:06:58.980Z",
+    "versionId": "58c61377-c8c4-4337-abb1-fec624e64efd",
     "workflowId": "hBFwd7kqNXuMeJ9k",
     "nodes": [
       {
@@ -416,7 +416,7 @@
       },
       {
         "parameters": {
-          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/children",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/",
           "authentication": "genericCredentialType",
           "genericAuthType": "oAuth2Api",
           "options": {}
@@ -486,7 +486,7 @@
       },
       {
         "parameters": {
-          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/children",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/",
           "authentication": "genericCredentialType",
           "genericAuthType": "oAuth2Api",
           "options": {}
@@ -533,12 +533,11 @@
             "conditions": [
               {
                 "id": "6e1a84b7-6dfd-4ea5-b9e2-755eecf496e0",
-                "leftValue": "={{ $json['@odata.null'] }}",
-                "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}-Finance.xlsx",
                 "operator": {
-                  "type": "boolean",
-                  "operation": "true",
-                  "singleValue": true
+                  "type": "string",
+                  "operation": "equals"
                 }
               }
             ],
@@ -1021,7 +1020,9 @@
         "name": "InputUpdatedFeilds"
       },
       {
-        "parameters": {},
+        "parameters": {
+          "unit": "minutes"
+        },
         "type": "n8n-nodes-base.wait",
         "typeVersion": 1.1,
         "position": [
@@ -1790,11 +1791,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version deae38e4",
+    "name": "Version 58c61377",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "deae38e4-f6d0-47af-8f30-c9712d6e7dd7",
+  "activeVersionId": "58c61377-c8c4-4337-abb1-fec624e64efd",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -2690,7 +2691,7 @@
     },
     {
       "parameters": {
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/children",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/",
         "authentication": "genericCredentialType",
         "genericAuthType": "oAuth2Api",
         "options": {}
@@ -2760,7 +2761,7 @@
     },
     {
       "parameters": {
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/children",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/",
         "authentication": "genericCredentialType",
         "genericAuthType": "oAuth2Api",
         "options": {}
@@ -2807,12 +2808,11 @@
           "conditions": [
             {
               "id": "6e1a84b7-6dfd-4ea5-b9e2-755eecf496e0",
-              "leftValue": "={{ $json['@odata.null'] }}",
-              "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}-Finance.xlsx",
               "operator": {
-                "type": "boolean",
-                "operation": "true",
-                "singleValue": true
+                "type": "string",
+                "operation": "equals"
               }
             }
           ],
@@ -2982,6 +2982,8 @@
       ],
       "id": "bd677127-2446-4b9a-a6a5-229e54dc7585",
       "name": "UpdateCurrnentSpreadSheet",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
       "credentials": {
         "oAuth2Api": {
           "id": "j30zGPdAyzTUMgGs",
@@ -3295,7 +3297,9 @@
       "name": "InputUpdatedFeilds"
     },
     {
-      "parameters": {},
+      "parameters": {
+        "unit": "minutes"
+      },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
@@ -3591,46 +3595,46 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "AppointmentID": "04419ff1-2cf2-4d19-bec2-696cf0f1dd85",
-          "CustomerFirstName": "Jaydon",
-          "CustomerLastName": "Crooks",
-          "CustomerCode": "AK1647",
-          "CustomerID": "c6984fae-8658-45fe-b9d7-b8d9ee0ad7be",
-          "CustomerDOB": "17/05/2005",
-          "CustomerEmail": "jaydoncrooks50@gmail.com",
+          "AppointmentID": "155f3571-d075-427b-a2d5-2b458ca8d532",
+          "CustomerFirstName": "Prashant",
+          "CustomerLastName": "Patel",
+          "CustomerCode": "WG2455",
+          "CustomerID": "d663f50c-d346-4ec7-9dd4-b4196f433f10",
+          "CustomerDOB": "25/08/1998",
+          "CustomerEmail": "prashantpatel127@gmail.com",
           "CustomerGender": "Male",
-          "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "CustomerCenterID": "8a97ae57-5822-4438-b692-4913733872a1",
           "is_form_submitted": true,
-          "textField5": "Jaydon Crooks",
+          "textField5": "Prashant Patel",
           "select6": "no",
-          "textField2": "Dr Annemarie Hern 15150",
-          "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
-          "btnFormioSubmit": true,
+          "textField2": "Dr Jolyn Tay 64497",
+          "textField4": "Level 4/Lambton House, 160 Lambton Quay, Wellington Central, Wellington 6011",
+          "btnFormioSubmit": false,
           "ConsentFormFilled": true,
           "ConsentFormSubmitted": true,
           "DeliveryLocation": "guest",
-          "product": "7Minoxidil001RetinoicAcid025FinasterideLotionPgFree",
+          "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
           "quantity": "2",
-          "DeliveryAddress1": "2 Arrow Road, Forrest Hill, Auckland 0620",
-          "DeliveryCity": "",
-          "DeliveryAddressFull": "2 Arrow Road, Forrest Hill, Auckland 0620",
+          "DeliveryAddress1": "24 Joseph Banks Drive, Whitby, Porirua 5024",
+          "DeliveryCity": "Wellington",
+          "DeliveryAddressFull": "24 Joseph Banks Drive, Whitby, Porirua 5024, Wellington",
           "doctorsDirections": "ApplyToScalp",
-          "addresscompared": false,
-          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion Pg Free",
+          "addresscompared": true,
+          "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
           "ZenotiProductName": "Minoxidil + Finasteride Solution",
           "ZenotiProductNameShort": "Minox",
           "ZenotiProductNameEnd": "tion",
           "CanSubtract": true,
-          "RemainingBalance": 5,
-          "ProductID": "3d3c7e51-785f-4297-8ec8-71661a58bc1d",
+          "RemainingBalance": 0,
+          "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
           "packagesavailable": true,
           "perfectrun": true,
-          "CLinicABB": "AUC",
-          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=5e6b3e47-7a29-4405-ab2c-a3255babd31f&ServiceId=ea2fab22-be5f-4342-838d-1a4bcebe9618&Service=Telehealth%20Check-up&GuestId=c6984fae-8658-45fe-b9d7-b8d9ee0ad7be&AppointmentId=04419ff1-2cf2-4d19-bec2-696cf0f1dd85",
-          "StartDate": "2026-03-16",
+          "CLinicABB": "WEL",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=f27f92ff-5ba5-4314-a7cd-64f73e920694&ServiceId=cf690070-2b50-484d-9ec9-67c786576eb6&Service=Doctor%20Scripts%208mth&GuestId=d663f50c-d346-4ec7-9dd4-b4196f433f10&AppointmentId=155f3571-d075-427b-a2d5-2b458ca8d532",
+          "StartDate": "2026-03-25",
           "InvoiceNumber": true,
-          "Invoicedate": "2026-03-17",
-          "TrueCLinicAbb": "AUC"
+          "Invoicedate": "2026-03-26",
+          "TrueCLinicAbb": "WEL"
         },
         "pairedItem": {
           "item": 0
@@ -3682,6 +3686,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-03-18T04:51:37.785Z",
-  "versionId": "deae38e4-f6d0-47af-8f30-c9712d6e7dd7"
+  "updatedAt": "2026-03-25T22:51:12.443Z",
+  "versionId": "2f7189ac-5d72-4f42-89ac-a62548241388"
 }
