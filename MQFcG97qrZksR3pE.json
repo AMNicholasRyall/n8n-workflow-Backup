@@ -1,0 +1,376 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-03-25T07:25:05.000Z",
+    "createdAt": "2026-03-25T07:24:20.515Z",
+    "versionId": "b144d205-6a75-4560-8a44-8faafa63dfb9",
+    "workflowId": "MQFcG97qrZksR3pE",
+    "nodes": [
+      {
+        "parameters": {
+          "queue": "au.zenoti.webhooks.closedinvoice",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rabbitmqTrigger",
+        "typeVersion": 1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "7bf32dc6-2dee-4808-8767-0d7925497f3e",
+        "name": "RabbitMQ Trigger",
+        "credentials": {
+          "rabbitmq": {
+            "id": "bvkL7iLaXZK2TER1",
+            "name": "au-receiver"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const raw = $json.content;\nconst parsed = JSON.parse(raw);\n\nreturn [{ json: parsed }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          224,
+          0
+        ],
+        "id": "75d0071a-618b-41c5-abc1-144f5be0dd47",
+        "name": "CleanUpHeaders"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lsINP70DmcZtIj4M",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinics",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Zenoti_ID",
+                "keyValue": "={{ $('CleanUpHeaders').item.json.body.data.invoice.center_id }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          448,
+          0
+        ],
+        "id": "fd39d766-5252-4191-a479-923ad5d71db2",
+        "name": "Get row(s)"
+      },
+      {
+        "parameters": {
+          "toRecipients": "={{ $json.email }}",
+          "subject": "=Telehealth Appoint - {{ $('CleanUpHeaders').item.json.body.data.invoice.guest.code }}",
+          "bodyContent": "=<p>Hi {{ $json.name }},</p>\n\n<p>Appointment for the following client has been completed.</p>\n\n<p>\n  <strong>Name:</strong> {{ $('CleanUpHeaders').item.json.body.data.invoice.guest.first_name }} {{ $('CleanUpHeaders').item.json.body.data.invoice.guest.last_name }}<br>\n  <strong>Customer Code:</strong> {{ $('CleanUpHeaders').item.json.body.data.invoice.guest.code }}\n</p>\n\n<p>\n  <strong>Appointment Type:</strong> {{ $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].name }}<br>\n  <strong>Doctor:</strong> {{ $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].therapist_name }}\n</p>\n\n<p>\n  <strong>Profile URL:</strong>\n  <a href=\"https://ashleymartinau.zenoti.com/Guests/GuestProfile.aspx?UserId={{ $('CleanUpHeaders').item.json.body.data.invoice.guest.id }}\">\n    Client Profle\n  </a>\n</p>\n\n<p>Regards,<br>Automation.</p>",
+          "additionalFields": {
+            "bodyContentType": "html"
+          }
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          672,
+          0
+        ],
+        "id": "0da11b05-97fb-4a33-9396-c77bb59c6a0c",
+        "name": "Send a message",
+        "webhookId": "64430f59-31a9-4b9c-9ff5-4155146184a6",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "deleteMessage"
+        },
+        "type": "n8n-nodes-base.rabbitmq",
+        "typeVersion": 1.1,
+        "position": [
+          880,
+          0
+        ],
+        "id": "3a1cc882-d4db-4f46-b2ad-d06153902142",
+        "name": "RabbitMQ",
+        "credentials": {
+          "rabbitmq": {
+            "id": "yV61RlUAH8DmNI5J",
+            "name": "RabbitMQ account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "RabbitMQ Trigger": {
+        "main": [
+          [
+            {
+              "node": "CleanUpHeaders",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CleanUpHeaders": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send a message": {
+        "main": [
+          [
+            {
+              "node": "RabbitMQ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version b144d205",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "b144d205-6a75-4560-8a44-8faafa63dfb9",
+  "connections": {
+    "RabbitMQ Trigger": {
+      "main": [
+        [
+          {
+            "node": "CleanUpHeaders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CleanUpHeaders": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "RabbitMQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-03-25T06:52:15.915Z",
+  "id": "MQFcG97qrZksR3pE",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "AU-Zenoti-RemoteAppointment",
+  "nodes": [
+    {
+      "parameters": {
+        "queue": "au.zenoti.webhooks.closedinvoice",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rabbitmqTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "7bf32dc6-2dee-4808-8767-0d7925497f3e",
+      "name": "RabbitMQ Trigger",
+      "credentials": {
+        "rabbitmq": {
+          "id": "bvkL7iLaXZK2TER1",
+          "name": "au-receiver"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.content;\nconst parsed = JSON.parse(raw);\n\nreturn [{ json: parsed }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "75d0071a-618b-41c5-abc1-144f5be0dd47",
+      "name": "CleanUpHeaders"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Zenoti_ID",
+              "keyValue": "={{ $('CleanUpHeaders').item.json.body.data.invoice.center_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        0
+      ],
+      "id": "fd39d766-5252-4191-a479-923ad5d71db2",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "toRecipients": "={{ $json.email }}",
+        "subject": "=Telehealth Appoint - {{ $('CleanUpHeaders').item.json.body.data.invoice.guest.code }}",
+        "bodyContent": "=<p>Hi {{ $json.name }},</p>\n\n<p>Appointment for the following client has been completed.</p>\n\n<p>\n  <strong>Name:</strong> {{ $('CleanUpHeaders').item.json.body.data.invoice.guest.first_name }} {{ $('CleanUpHeaders').item.json.body.data.invoice.guest.last_name }}<br>\n  <strong>Customer Code:</strong> {{ $('CleanUpHeaders').item.json.body.data.invoice.guest.code }}\n</p>\n\n<p>\n  <strong>Appointment Type:</strong> {{ $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].name }}<br>\n  <strong>Doctor:</strong> {{ $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].therapist_name }}\n</p>\n\n<p>\n  <strong>Profile URL:</strong>\n  <a href=\"https://ashleymartinau.zenoti.com/Guests/GuestProfile.aspx?UserId={{ $('CleanUpHeaders').item.json.body.data.invoice.guest.id }}\">\n    Client Profle\n  </a>\n</p>\n\n<p>Regards,<br>Automation.</p>",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "id": "0da11b05-97fb-4a33-9396-c77bb59c6a0c",
+      "name": "Send a message",
+      "webhookId": "64430f59-31a9-4b9c-9ff5-4155146184a6",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "deleteMessage"
+      },
+      "type": "n8n-nodes-base.rabbitmq",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        0
+      ],
+      "id": "3a1cc882-d4db-4f46-b2ad-d06153902142",
+      "name": "RabbitMQ",
+      "credentials": {
+        "rabbitmq": {
+          "id": "yV61RlUAH8DmNI5J",
+          "name": "RabbitMQ account"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "RabbitMQ Trigger": [
+      {
+        "json": {
+          "fields": {
+            "deliveryTag": 1,
+            "redelivered": false,
+            "exchange": "",
+            "routingKey": "au.zenoti.webhooks.closedinvoice",
+            "messageCount": 0
+          },
+          "properties": {
+            "headers": {}
+          },
+          "content": "{\"headers\":{\"host\":\"webhook.ashleyandmartin.com.au\",\"x-forwarded-scheme\":\"https\",\"x-forwarded-proto\":\"https\",\"x-forwarded-for\":\"52.65.231.133\",\"x-real-ip\":\"52.65.231.133\",\"content-length\":\"2172\",\"au-zenoti-completedapp\":\"7hTFTg7hCM3i\",\"content-type\":\"application/json; charset=utf-8\"},\"params\":{},\"query\":{},\"body\":{\"id\":\"69c3893a610c886a1fc6b5b2\",\"event_id\":\"69c3893a610c886a1fc6b5b0\",\"event_schema\":\"v1\",\"event_resource\":null,\"event_type\":\"Invoice.Closed\",\"event_timestamp\":\"2026-03-25T07:05:30.97251Z\",\"data\":{\"invoice\":{\"id\":\"fcb0b867-6e34-462f-b086-e9f058f3129c\",\"invoice_number\":\"44191\",\"invoice_number_prefix\":\"HV\",\"receipt_number\":\"HVR22942\",\"appointment_group_id\":\"934f1f12-03d4-4979-b969-028ddb8148c1\",\"lock\":false,\"is_closed\":true,\"is_refund\":false,\"invoice_date\":\"2026-03-25T17:00:00\",\"center_id\":\"ec0773a0-d95d-4c9e-b8c2-729de5d26478\",\"total_price\":{\"currency_id\":0,\"net_price\":0,\"tax\":0,\"rounding_adjustment\":0,\"sum_total\":0},\"guest\":{\"id\":\"7a7d1cae-24c9-4cff-87d4-99f690e8c035\",\"first_name\":\"Aashutosh\",\"last_name\":\"Khatiwada\",\"gender\":1,\"code\":\"HVG3552\",\"mobile_phone\":\"+61 421298743\",\"email\":\"Aakhatiwada@gmail.com\"},\"invoice_items\":[{\"invoice_item_id\":\"ef0f1456-b29a-48e7-b659-f7a69338c727\",\"id\":\"fb0c5893-dba0-425c-8d20-dbe533baff1a\",\"name\":\"Telehealth Doctor\",\"type\":0,\"code\":\"S00012\",\"price\":{\"currency_id\":8,\"sales\":0,\"tax\":0,\"final\":0,\"discount\":0},\"quantity\":1,\"sale_by_id\":\"a8229400-b5b1-4f04-aa2b-c7ee15d50603\",\"therapist_name\":\"Dr Michael Tjoa\"},{\"invoice_item_id\":\"0a3be4a9-dc94-4cce-865a-2e9666f3354c\",\"id\":\"2aa63fbf-9497-4def-b934-ac573334cc47\",\"name\":\"7% Minoxidil +0.01% Retinoic Acid + 0.25% Finasteride Lotion\",\"type\":2,\"code\":\"P00008\",\"price\":{\"currency_id\":8,\"sales\":0,\"tax\":0,\"final\":0,\"discount\":0},\"quantity\":7,\"sale_by_id\":\"a8229400-b5b1-4f04-aa2b-c7ee15d50603\",\"therapist_name\":\"Dr Michael Tjoa\"}],\"appointments\":[{\"id\":\"a8668cd4-a205-4fc7-a370-7f3d9f1ca266\",\"invoice_item_id\":\"ef0f1456-b29a-48e7-b659-f7a69338c727\",\"service_name\":\"Telehealth Doctor\",\"service_id\":\"fb0c5893-dba0-425c-8d20-dbe533baff1a\",\"start_time\":\"2026-03-25T06:00:00\",\"end_time\":\"2026-03-25T06:15:00\",\"serviceduration_in_miutes\":15,\"has_add_ons\":false,\"is_add_on\":false,\"therapist_name\":\"Dr Michael Tjoa\",\"TherapistId\":\"a8229400-b5b1-4f04-aa2b-c7ee15d50603\",\"is_recurring\":false,\"appointment_type\":2,\"therapist_request_type\":0,\"room_name\":\"\",\"equipment_name\":\"\"}],\"transactions\":[],\"additional_fields\":[{\"key\":\"Additional invoice field\",\"value\":\"\"}]}}},\"webhookUrl\":\"https://webhook.ashleyandmartin.com.au/webhook/AppComplete\",\"executionMode\":\"production\"}"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-03-25T06:52:15.916Z",
+      "createdAt": "2026-03-25T06:52:15.916Z",
+      "role": "workflow:owner",
+      "workflowId": "MQFcG97qrZksR3pE",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-25T07:24:20.515Z",
+  "versionId": "b144d205-6a75-4560-8a44-8faafa63dfb9"
+}
