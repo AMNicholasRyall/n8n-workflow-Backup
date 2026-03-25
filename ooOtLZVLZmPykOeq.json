@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-03-18T02:38:14.000Z",
-    "createdAt": "2026-03-18T02:38:10.901Z",
-    "versionId": "00a35727-11f7-4e71-a7f2-e3a2244082d3",
+    "updatedAt": "2026-03-19T04:33:27.000Z",
+    "createdAt": "2026-03-19T04:33:10.462Z",
+    "versionId": "72c6d10e-bdc1-48f8-bc7b-a20caf184473",
     "workflowId": "ooOtLZVLZmPykOeq",
     "nodes": [
       {
@@ -153,8 +153,8 @@
       {
         "parameters": {
           "content": "## Loop Over Each Clinic",
-          "height": 480,
-          "width": 1776
+          "height": 512,
+          "width": 2032
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
@@ -228,18 +228,19 @@
             },
             "conditions": [
               {
-                "id": "2959efa9-f5f5-4310-a286-09e49b165b24",
-                "leftValue": "={{ $json.code }}",
-                "rightValue": "=AK",
-                "operator": {
-                  "type": "string",
-                  "operation": "equals"
-                }
-              },
-              {
                 "id": "d2fe128e-baa8-4fc7-be22-8ef388bd77bc",
                 "leftValue": "={{ $json.code }}",
                 "rightValue": "WG",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              },
+              {
+                "id": "a66a9f83-707c-4bc5-be69-c0b2de0c293b",
+                "leftValue": "={{ $json.code }}",
+                "rightValue": "AK",
                 "operator": {
                   "type": "string",
                   "operation": "equals",
@@ -366,7 +367,9 @@
           "workflowId": {
             "__rl": true,
             "value": "aLP8iKg4XVrp0KlB",
-            "mode": "list"
+            "mode": "list",
+            "cachedResultUrl": "/workflow/aLP8iKg4XVrp0KlB",
+            "cachedResultName": "ZenotiNZ-MasterMedOrderSplitClinc"
           },
           "workflowInputs": {
             "mappingMode": "defineBelow",
@@ -553,16 +556,17 @@
               "type": "main",
               "index": 0
             }
-          ]
+          ],
+          []
         ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 00a35727",
+    "name": "Version 72c6d10e",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "00a35727-11f7-4e71-a7f2-e3a2244082d3",
+  "activeVersionId": "72c6d10e-bdc1-48f8-bc7b-a20caf184473",
   "connections": {
     "Get row(s)": {
       "main": [
@@ -713,24 +717,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Wait",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Wait": {
-      "main": [
-        [
-          {
-            "node": "Call ZenotiNZ-MasterMedOrderSplitClinc",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     }
   },
@@ -972,6 +959,16 @@
                 "operation": "equals",
                 "name": "filter.operator.equals"
               }
+            },
+            {
+              "id": "a66a9f83-707c-4bc5-be69-c0b2de0c293b",
+              "leftValue": "={{ $json.code }}",
+              "rightValue": "AK",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
             }
           ],
           "combinator": "or"
@@ -1114,8 +1111,7 @@
         -80
       ],
       "name": "Call ZenotiNZ-MasterMedOrderSplitClinc",
-      "id": "7d59eda9-5e8a-4f4c-a4de-c43a753c09c7",
-      "onError": "continueErrorOutput"
+      "id": "7d59eda9-5e8a-4f4c-a4de-c43a753c09c7"
     },
     {
       "parameters": {
@@ -1132,21 +1128,6 @@
       "typeVersion": 1,
       "id": "9d45cc8e-d47b-4621-a539-e4f753282e9f",
       "name": "Sticky Note2"
-    },
-    {
-      "parameters": {
-        "amount": 10,
-        "unit": "minutes"
-      },
-      "type": "n8n-nodes-base.wait",
-      "typeVersion": 1.1,
-      "position": [
-        1360,
-        16
-      ],
-      "id": "6bbe368a-b925-40d3-8a7c-c4dece2f44e3",
-      "name": "Wait",
-      "webhookId": "e01d747d-c961-4d06-927e-6df0b4693498"
     }
   ],
   "origin": "n8n",
@@ -1221,6 +1202,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-03-18T23:00:29.868Z",
-  "versionId": "40c74295-99ea-4caa-ade4-5aaf12005e8e"
+  "updatedAt": "2026-03-19T04:33:10.461Z",
+  "versionId": "72c6d10e-bdc1-48f8-bc7b-a20caf184473"
 }
