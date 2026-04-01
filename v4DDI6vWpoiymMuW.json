@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-03-18T04:56:38.000Z",
-    "createdAt": "2026-03-18T04:56:35.024Z",
-    "versionId": "38d1838d-e19d-42a3-af5e-f70143e02cd9",
+    "updatedAt": "2026-03-31T23:07:14.000Z",
+    "createdAt": "2026-03-31T23:06:37.883Z",
+    "versionId": "47b62ca7-8ef0-479b-963a-0469d1480c51",
     "workflowId": "v4DDI6vWpoiymMuW",
     "nodes": [
       {
@@ -83,7 +83,7 @@
               {
                 "id": "ee04d079-16ba-4a57-b6aa-498aca009dfa",
                 "name": "address",
-                "value": "={{ $('When Executed by Another Workflow').item.json.DeliveryAddress1 }}",
+                "value": "={{ $('When Executed by Another Workflow').item.json.DeliveryAddressFull }}",
                 "type": "string"
               }
             ]
@@ -361,11 +361,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 38d1838d",
+    "name": "Version 47b62ca7",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "38d1838d-e19d-42a3-af5e-f70143e02cd9",
+  "activeVersionId": "47b62ca7-8ef0-479b-963a-0469d1480c51",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -569,7 +569,7 @@
             {
               "id": "ee04d079-16ba-4a57-b6aa-498aca009dfa",
               "name": "address",
-              "value": "={{ $('When Executed by Another Workflow').item.json.DeliveryAddress1 }}",
+              "value": "={{ $('When Executed by Another Workflow').item.json.DeliveryAddressFull }}",
               "type": "string"
             }
           ]
@@ -731,47 +731,44 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "AppointmentID": "1b4a2d6c-c4bd-48bd-a065-90b6e3564cd5",
-          "CustomerFirstName": "Ray",
-          "CustomerLastName": "Santiago",
-          "CustomerCode": "AK8803",
-          "CustomerID": "acc5f2a7-8a79-445d-9120-21ee2e9aa940",
-          "CustomerDOB": "16/07/1999",
-          "CustomerEmail": "r.santiago1607@gmail.com",
+          "AppointmentID": "4e785d83-be59-45ef-b22f-f1f70b4e5104",
+          "CustomerFirstName": "Jordie",
+          "CustomerLastName": "Smeets",
+          "CustomerCode": "AK6290",
+          "CustomerID": "7e9df674-1537-4c6b-a78b-73f345267b18",
+          "CustomerDOB": "25/08/1996",
+          "CustomerEmail": "jordiesmeets@gmail.com",
           "CustomerGender": "Male",
           "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
           "is_form_submitted": true,
-          "textField5": "Ray Santiago",
+          "textField5": "Jordie Smeets",
           "select6": "no",
-          "textField2": "Dr Annemarie Hern 15150 ",
+          "textField2": "Annemarie Hern 15150",
           "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
           "btnFormioSubmit": false,
+          "textField": "9/20 Kemp Street, Thornbury, Melbourne 3071",
           "ConsentFormFilled": true,
           "ConsentFormSubmitted": true,
-          "DeliveryLocation": "clinic",
+          "DeliveryLocation": "custom",
           "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
-          "quantity": "1",
-          "DeliveryAddress1": "L6/5 Short Street, Newmarket, Auckland 1010",
-          "DeliverySuburb": "Newmarket",
-          "DeliveryCity": "Auckland",
-          "DeliveryPostcode": "1023",
-          "DeliveryAddressFull": "L6/5 Short Street, Newmarket, Auckland 1010, Newmarket, Auckland, 1023",
+          "quantity": "2",
+          "DeliveryAddressFull": "9/20 Kemp Street, Thornbury, Melbourne 3071",
           "doctorsDirections": "ApplyToScalp",
-          "addresscompared": true,
+          "addresscompared": false,
           "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
           "ZenotiProductName": "Minoxidil + Finasteride Solution",
           "ZenotiProductNameShort": "Minox",
           "ZenotiProductNameEnd": "tion",
           "CanSubtract": true,
-          "RemainingBalance": 4,
+          "RemainingBalance": 5,
           "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
           "packagesavailable": true,
           "perfectrun": true,
           "CLinicABB": "AUC",
-          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=cd59257e-1912-4318-821c-78cb6b36de5b&ServiceId=e18c697e-da48-4aee-a7a5-a0fd6c6fc0f6&Service=Doctor%20Scripts%201mth&GuestId=acc5f2a7-8a79-445d-9120-21ee2e9aa940&AppointmentId=1b4a2d6c-c4bd-48bd-a065-90b6e3564cd5",
-          "StartDate": "2026-03-14",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=f20ab449-841f-4ec1-bfda-b010175b8a3f&ServiceId=2c75ccbc-e2e5-4dcf-b3a7-19e9cd195eb3&Service=Doctor%20Scripts%204mth&GuestId=7e9df674-1537-4c6b-a78b-73f345267b18&AppointmentId=4e785d83-be59-45ef-b22f-f1f70b4e5104",
+          "StartDate": "2026-03-31",
           "InvoiceNumber": true,
-          "Invoicedate": "2026-03-15",
+          "Invoicedate": "2026-04-01",
           "TrueCLinicAbb": "AUC"
         },
         "pairedItem": {
@@ -824,6 +821,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-03-18T04:56:35.023Z",
-  "versionId": "38d1838d-e19d-42a3-af5e-f70143e02cd9"
+  "updatedAt": "2026-03-31T23:06:37.882Z",
+  "versionId": "47b62ca7-8ef0-479b-963a-0469d1480c51"
 }
