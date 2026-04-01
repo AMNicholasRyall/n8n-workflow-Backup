@@ -1,0 +1,2308 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-03-31T05:36:26.000Z",
+    "createdAt": "2026-03-31T05:36:24.896Z",
+    "versionId": "857b4f6a-35e0-49fd-b05b-b318a4db06da",
+    "workflowId": "8NLNoWIQWQzqvhST",
+    "nodes": [
+      {
+        "parameters": {
+          "formTitle": "Kadddi User Extract",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "User Code"
+              }
+            ]
+          },
+          "responseMode": "lastNode",
+          "options": {
+            "path": "KadddiUserExtract"
+          }
+        },
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.5,
+        "position": [
+          -96,
+          0
+        ],
+        "id": "e23c9e4b-366e-49a6-a56d-e4f8d9a8635b",
+        "name": "On form submission",
+        "webhookId": "ba1bc6c9-8baa-4755-b8bd-92120942ca61"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "QA7Qdseg7ehAOWP6",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+            "cachedResultName": "Zenoti-GetAuthToken"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          128,
+          0
+        ],
+        "id": "70d943f8-b400-42b5-a9d2-8fcb523421fe",
+        "name": "Call 'Zenoti-GetAuthToken'"
+      },
+      {
+        "parameters": {
+          "url": "https://api.zenoti.com/v1/guests/search",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "page",
+                "value": "1"
+              },
+              {
+                "name": "size",
+                "value": "10"
+              },
+              {
+                "name": "user_code",
+                "value": "={{ $('On form submission').item.json['User Code'] }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          352,
+          0
+        ],
+        "id": "5ee0e1ec-0191-4217-9eaf-a15b67a7c840",
+        "name": "Search User"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/guests/{{ $json.guests[0].id }}",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "expand",
+                "value": "address_info"
+              },
+              {
+                "name": "expand",
+                "value": "preferences"
+              },
+              {
+                "name": "expand",
+                "value": "tags"
+              },
+              {
+                "name": "expand",
+                "value": "primary_employee"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {}
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          768,
+          0
+        ],
+        "id": "83f3ec90-9536-49d0-b771-4db09eae3261",
+        "name": "Grab User"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "notes",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1200,
+          -416
+        ],
+        "id": "04b4d92e-8336-4867-97a6-267c05f2dad8",
+        "name": "Split Out1"
+      },
+      {
+        "parameters": {
+          "sortFieldsUi": {
+            "sortField": [
+              {
+                "fieldName": "created_date"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.sort",
+        "typeVersion": 1,
+        "position": [
+          1440,
+          -416
+        ],
+        "id": "e31bb8e4-6799-43a8-bb0e-916045679c4b",
+        "name": "Sort"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\n\nconst customerId = $('Grab User').first().json.id;\nconst customerCode = $('On form submission').first().json[\"User Code\"];\n\nreturn items.map(item => {\n  const j = item.json;\n\n  return {\n    json: {\n      noteid: j.id ?? null,\n\n      customerId: customerId ?? null,\n      customerCode: customerCode ?? null,\n\n      notes: j.notes ?? null,\n      center_name: j.center?.name ?? null,\n      added_by_name: j.added_by?.name ?? null,\n      created_date: j.created_date ?? null,\n      privacy_type: j.privacy_type ?? null\n    }\n  };\n});"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1664,
+          -416
+        ],
+        "id": "d555ed0a-7ebe-4f24-8157-aeb9c96ab241",
+        "name": "Code in JavaScript2"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/guests/{{ $json.id }}/notes/",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "view_private",
+                "value": "true"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {
+            "pagination": {
+              "pagination": {
+                "parameters": {
+                  "parameters": [
+                    {
+                      "name": "page",
+                      "value": "={{ $pageCount + 1 }}"
+                    }
+                  ]
+                },
+                "limitPagesFetched": true,
+                "maxRequests": "={{ Math.ceil($response.body.page_details.total / $response.body.page_details.size) }}"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          992,
+          -416
+        ],
+        "id": "28e8e262-b43f-42f8-ac5a-7a537cf99aca",
+        "name": "Guest Notes"
+      },
+      {
+        "parameters": {
+          "operation": "completion",
+          "respondWith": "returnBinary",
+          "completionTitle": "={{ $('On form submission').item.json['User Code'] }} - Download Data",
+          "completionMessage": "=Please see downloaded data for {{ $('Search User').item.json.guests[0].personal_info.first_name }} {{ $('Search User').item.json.guests[0].personal_info.last_name }} - {{ $('On form submission').item.json['User Code'] }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.form",
+        "typeVersion": 2.5,
+        "position": [
+          2912,
+          16
+        ],
+        "id": "9bc0a7c1-9970-4904-bb41-1e97cb639ec8",
+        "name": "Form",
+        "webhookId": "9efc9a13-70e4-463b-8649-26259779285f"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/guests/{{ $json.id }}/appointments",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {}
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {
+            "pagination": {
+              "pagination": {
+                "parameters": {
+                  "parameters": [
+                    {
+                      "name": "page",
+                      "value": "={{ $pageCount + 1 }}"
+                    }
+                  ]
+                },
+                "limitPagesFetched": true,
+                "maxRequests": "={{ Math.ceil($response.body.page_info.total / $response.body.page_info.size) }}"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          992,
+          -64
+        ],
+        "id": "cfa8f55d-4f30-4c34-b2f9-2f6515a45258",
+        "name": "Guest Appointments"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "appointments",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1200,
+          -64
+        ],
+        "id": "b7a7e2b2-7619-4177-87e4-038c24f74213",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/appointments/{{ $json.appointment_services[0].appointment_id }}",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "expand",
+                "value": "notes"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {}
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1680,
+          -96
+        ],
+        "id": "74113734-bb94-4d8a-a17d-abb4d0053ac8",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "operation": "xlsx",
+          "options": {
+            "fileName": "={{ $('On form submission').item.json['User Code'] }}_Notes.xlsx"
+          }
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          1888,
+          -416
+        ],
+        "id": "caaf840b-ecd2-41c8-88c6-57f5035947c5",
+        "name": "Combine Notes"
+      },
+      {
+        "parameters": {
+          "operation": "xlsx",
+          "options": {
+            "fileName": "={{ $('On form submission').item.json['User Code'] }}_Appointment_Details.xlsx"
+          }
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          1888,
+          -96
+        ],
+        "id": "2a2b92ad-db20-49ac-a2b2-cdac5aa67e89",
+        "name": "Combine Appointment Details"
+      },
+      {
+        "parameters": {
+          "operation": "xlsx",
+          "options": {
+            "fileName": "={{ $('On form submission').item.json['User Code'] }}_Appointment.xlsx"
+          }
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          1888,
+          -240
+        ],
+        "id": "5c8b9708-1c7a-4cef-b32f-3b8b445dd2b8",
+        "name": "Combine Appointments"
+      },
+      {
+        "parameters": {
+          "numberInputs": 6
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          2256,
+          -48
+        ],
+        "id": "6bd69ac6-d442-4e20-9801-fa18e49111bb",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "jsCode": "const output = {\n  json: {\n    fileCount: items.length\n  },\n  binary: {}\n};\n\nitems.forEach((item, index) => {\n  if (!item.binary) return;\n\n  const keys = Object.keys(item.binary);\n  if (keys.length === 0) return;\n\n  const firstKey = keys[0];\n\n  output.binary[`file${index + 1}`] = {\n    ...item.binary[firstKey]\n  };\n});\n\nreturn [output];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2496,
+          16
+        ],
+        "id": "61c5df2c-413f-4f7b-9cc8-ea37c1e3a528",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "operation": "compress",
+          "binaryPropertyName": "={{ Object.keys($binary).join(',') }}",
+          "fileName": "={{ $('On form submission').item.json['User Code'] }}.zip"
+        },
+        "type": "n8n-nodes-base.compression",
+        "typeVersion": 1.1,
+        "position": [
+          2688,
+          16
+        ],
+        "id": "daf964fd-bc7f-43d3-8261-b337523f7e29",
+        "name": "Compression"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "products",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1200,
+          112
+        ],
+        "id": "eac7da8b-875a-4174-b0b0-172134c49357",
+        "name": "Split Out2"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/guests/{{ $json.id }}/products",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {
+            "pagination": {
+              "pagination": {
+                "parameters": {
+                  "parameters": [
+                    {
+                      "name": "page",
+                      "value": "={{ $pageCount + 1 }}"
+                    }
+                  ]
+                },
+                "limitPagesFetched": true,
+                "maxRequests": "={{ Math.ceil($response.body.page_info.total / $response.body.page_info.size) }}"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          992,
+          112
+        ],
+        "id": "582267d2-9b7e-4b75-835c-44a9532c33b8",
+        "name": "Guest Invoices"
+      },
+      {
+        "parameters": {
+          "operation": "xlsx",
+          "options": {
+            "fileName": "={{ $('On form submission').item.json['User Code'] }}_Invoices.xlsx"
+          }
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          1888,
+          112
+        ],
+        "id": "1533e195-0d08-48c9-9001-b5034d76eba3",
+        "name": "Combine Invoices"
+      },
+      {
+        "parameters": {
+          "operation": "xlsx",
+          "options": {
+            "fileName": "={{ $('On form submission').item.json['User Code'] }}_GuestDetails.xlsx"
+          }
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          1888,
+          288
+        ],
+        "id": "52b427a8-1f20-4a6f-9a8f-00ec58f8d81f",
+        "name": "Guest Details"
+      },
+      {
+        "parameters": {
+          "amount": 0
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          992,
+          288
+        ],
+        "id": "dd59cba7-adce-4788-ad77-2190404581f2",
+        "name": "Wait",
+        "webhookId": "958795f3-8053-4a89-b4a5-a8cc410dc828"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/guests/{{ $json.id }}/Packages",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "center_id",
+                "value": "center_id"
+              },
+              {
+                "name": "show_redeemable",
+                "value": "{true/false}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          992,
+          464
+        ],
+        "id": "7bcb09f1-2818-4940-8ce7-0c1389143919",
+        "name": "Guest Packages"
+      },
+      {
+        "parameters": {
+          "operation": "xlsx",
+          "options": {
+            "fileName": "={{ $('On form submission').item.json['User Code'] }}_GuestPackages.xlsx"
+          }
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          1888,
+          464
+        ],
+        "id": "1c824674-c8e7-48ec-9837-cec854e52029",
+        "name": "Guest Packages1"
+      },
+      {
+        "parameters": {
+          "content": "## Guest Notes",
+          "height": 176,
+          "width": 1040,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          976,
+          -464
+        ],
+        "typeVersion": 1,
+        "id": "f6b59073-2204-4ec8-82f0-e7d0d5ca8c6c",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "## Guest Appointments",
+          "height": 176,
+          "width": 1040,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          976,
+          -288
+        ],
+        "typeVersion": 1,
+        "id": "9a83d481-a545-4bbf-8bd2-9a7811d3a636",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "content": "## Guest Appointments Details",
+          "height": 176,
+          "width": 1040,
+          "color": 2
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          976,
+          -112
+        ],
+        "typeVersion": 1,
+        "id": "f93ae1f5-f4ac-4023-92b0-cc0cca93d8b6",
+        "name": "Sticky Note2"
+      },
+      {
+        "parameters": {
+          "content": "## Guest Invoices",
+          "height": 176,
+          "width": 1040,
+          "color": 5
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          976,
+          64
+        ],
+        "typeVersion": 1,
+        "id": "d0ec1fac-dc8f-4468-b961-2489a57d7387",
+        "name": "Sticky Note3"
+      },
+      {
+        "parameters": {
+          "content": "## Guest Details",
+          "height": 176,
+          "width": 1040
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          976,
+          240
+        ],
+        "typeVersion": 1,
+        "id": "0d025e34-5451-47fe-86d9-75ea3d7ed2f4",
+        "name": "Sticky Note4"
+      },
+      {
+        "parameters": {
+          "content": "## Guest Packages",
+          "height": 176,
+          "width": 1040,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          976,
+          416
+        ],
+        "typeVersion": 1,
+        "id": "b80b9a9c-cbc4-4874-8a56-79c36618e63b",
+        "name": "Sticky Note5"
+      },
+      {
+        "parameters": {
+          "content": "## Merge / Join / Compress / Provide Copy",
+          "height": 352,
+          "width": 1104
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          2016,
+          -112
+        ],
+        "typeVersion": 1,
+        "id": "fdc2af5b-d7af-4cdd-981c-5f8812d98f90",
+        "name": "Sticky Note6"
+      },
+      {
+        "parameters": {
+          "content": "## Submit Form / Grab Token / Search User / Collect User",
+          "height": 352,
+          "width": 1104
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -128,
+          -112
+        ],
+        "typeVersion": 1,
+        "id": "2a47e811-63c6-446e-9e73-4eb235f2b482",
+        "name": "Sticky Note7"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.page_Info.total }}",
+                      "rightValue": 0,
+                      "operator": {
+                        "type": "number",
+                        "operation": "notEquals"
+                      },
+                      "id": "77d492de-5b58-488a-ab32-0b94502a21ef"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {
+            "fallbackOutput": "extra"
+          }
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          560,
+          0
+        ],
+        "id": "e5610a5a-91ed-4ba9-8a74-fa6460234436",
+        "name": "No User"
+      },
+      {
+        "parameters": {
+          "operation": "completion",
+          "completionTitle": "Form Failed",
+          "completionMessage": "=Unable to find user please check {{ $('On form submission').item.json['User Code'] }} please check Zenoti for user guide and try again.\n\nhttps://n8n.ashleyandmartin.local/form/KadddiUserExtract",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.form",
+        "typeVersion": 2.5,
+        "position": [
+          576,
+          288
+        ],
+        "id": "e1612785-f3aa-4b96-a0da-cd2e9647bdc8",
+        "name": "Form1",
+        "webhookId": "6b92fc5b-fbfc-441d-bb72-92c7356fb0dd"
+      }
+    ],
+    "connections": {
+      "On form submission": {
+        "main": [
+          [
+            {
+              "node": "Call 'Zenoti-GetAuthToken'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'Zenoti-GetAuthToken'": {
+        "main": [
+          [
+            {
+              "node": "Search User",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search User": {
+        "main": [
+          [
+            {
+              "node": "No User",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Grab User": {
+        "main": [
+          [
+            {
+              "node": "Guest Appointments",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Guest Notes",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Guest Invoices",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Guest Packages",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out1": {
+        "main": [
+          [
+            {
+              "node": "Sort",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Sort": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript2": {
+        "main": [
+          [
+            {
+              "node": "Combine Notes",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Guest Notes": {
+        "main": [
+          [
+            {
+              "node": "Split Out1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Combine Appointments",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Guest Appointments": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "Combine Appointment Details",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Combine Notes": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Combine Appointments": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Combine Appointment Details": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 2
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Compression",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Compression": {
+        "main": [
+          [
+            {
+              "node": "Form",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Guest Invoices": {
+        "main": [
+          [
+            {
+              "node": "Split Out2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out2": {
+        "main": [
+          [
+            {
+              "node": "Combine Invoices",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Combine Invoices": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 3
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Guest Details",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Guest Details": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 4
+            }
+          ]
+        ]
+      },
+      "Guest Packages": {
+        "main": [
+          [
+            {
+              "node": "Guest Packages1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Guest Packages1": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 5
+            }
+          ]
+        ]
+      },
+      "Form": {
+        "main": [
+          []
+        ]
+      },
+      "No User": {
+        "main": [
+          [
+            {
+              "node": "Grab User",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Form1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 857b4f6a",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "857b4f6a-35e0-49fd-b05b-b318a4db06da",
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti-GetAuthToken'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Zenoti-GetAuthToken'": {
+      "main": [
+        [
+          {
+            "node": "Search User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search User": {
+      "main": [
+        [
+          {
+            "node": "No User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Grab User": {
+      "main": [
+        [
+          {
+            "node": "Guest Appointments",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Guest Notes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Guest Invoices",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Guest Packages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Combine Notes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guest Notes": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Combine Appointments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guest Appointments": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Combine Appointment Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine Notes": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine Appointments": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Combine Appointment Details": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Compression",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compression": {
+      "main": [
+        [
+          {
+            "node": "Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guest Invoices": {
+      "main": [
+        [
+          {
+            "node": "Split Out2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out2": {
+      "main": [
+        [
+          {
+            "node": "Combine Invoices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine Invoices": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Guest Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guest Details": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Guest Packages": {
+      "main": [
+        [
+          {
+            "node": "Guest Packages1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guest Packages1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "Form": {
+      "main": [
+        []
+      ]
+    },
+    "No User": {
+      "main": [
+        [
+          {
+            "node": "Grab User",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Form1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-03-29T23:50:16.204Z",
+  "id": "8NLNoWIQWQzqvhST",
+  "isArchived": false,
+  "meta": null,
+  "name": "AU - Kaddi Details Pull",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Kadddi User Extract",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "User Code"
+            }
+          ]
+        },
+        "responseMode": "lastNode",
+        "options": {
+          "path": "KadddiUserExtract"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -96,
+        0
+      ],
+      "id": "e23c9e4b-366e-49a6-a56d-e4f8d9a8635b",
+      "name": "On form submission",
+      "webhookId": "ba1bc6c9-8baa-4755-b8bd-92120942ca61"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "QA7Qdseg7ehAOWP6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+          "cachedResultName": "Zenoti-GetAuthToken"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        128,
+        0
+      ],
+      "id": "70d943f8-b400-42b5-a9d2-8fcb523421fe",
+      "name": "Call 'Zenoti-GetAuthToken'"
+    },
+    {
+      "parameters": {
+        "url": "https://api.zenoti.com/v1/guests/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "page",
+              "value": "1"
+            },
+            {
+              "name": "size",
+              "value": "10"
+            },
+            {
+              "name": "user_code",
+              "value": "={{ $('On form submission').item.json['User Code'] }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        352,
+        0
+      ],
+      "id": "5ee0e1ec-0191-4217-9eaf-a15b67a7c840",
+      "name": "Search User"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/guests/{{ $json.guests[0].id }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "expand",
+              "value": "address_info"
+            },
+            {
+              "name": "expand",
+              "value": "preferences"
+            },
+            {
+              "name": "expand",
+              "value": "tags"
+            },
+            {
+              "name": "expand",
+              "value": "primary_employee"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        768,
+        0
+      ],
+      "id": "83f3ec90-9536-49d0-b771-4db09eae3261",
+      "name": "Grab User"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "notes",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        -416
+      ],
+      "id": "04b4d92e-8336-4867-97a6-267c05f2dad8",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "created_date"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        -416
+      ],
+      "id": "e31bb8e4-6799-43a8-bb0e-916045679c4b",
+      "name": "Sort"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nconst customerId = $('Grab User').first().json.id;\nconst customerCode = $('On form submission').first().json[\"User Code\"];\n\nreturn items.map(item => {\n  const j = item.json;\n\n  return {\n    json: {\n      noteid: j.id ?? null,\n\n      customerId: customerId ?? null,\n      customerCode: customerCode ?? null,\n\n      notes: j.notes ?? null,\n      center_name: j.center?.name ?? null,\n      added_by_name: j.added_by?.name ?? null,\n      created_date: j.created_date ?? null,\n      privacy_type: j.privacy_type ?? null\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        -416
+      ],
+      "id": "d555ed0a-7ebe-4f24-8157-aeb9c96ab241",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/guests/{{ $json.id }}/notes/",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "view_private",
+              "value": "true"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "page",
+                    "value": "={{ $pageCount + 1 }}"
+                  }
+                ]
+              },
+              "limitPagesFetched": true,
+              "maxRequests": "={{ Math.ceil($response.body.page_details.total / $response.body.page_details.size) }}"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        992,
+        -416
+      ],
+      "id": "28e8e262-b43f-42f8-ac5a-7a537cf99aca",
+      "name": "Guest Notes"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "respondWith": "returnBinary",
+        "completionTitle": "={{ $('On form submission').item.json['User Code'] }} - Download Data",
+        "completionMessage": "=Please see downloaded data for {{ $('Search User').item.json.guests[0].personal_info.first_name }} {{ $('Search User').item.json.guests[0].personal_info.last_name }} - {{ $('On form submission').item.json['User Code'] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        2912,
+        16
+      ],
+      "id": "9bc0a7c1-9970-4904-bb41-1e97cb639ec8",
+      "name": "Form",
+      "webhookId": "9efc9a13-70e4-463b-8649-26259779285f"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/guests/{{ $json.id }}/appointments",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "page",
+                    "value": "={{ $pageCount + 1 }}"
+                  }
+                ]
+              },
+              "limitPagesFetched": true,
+              "maxRequests": "={{ Math.ceil($response.body.page_info.total / $response.body.page_info.size) }}"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        992,
+        -64
+      ],
+      "id": "cfa8f55d-4f30-4c34-b2f9-2f6515a45258",
+      "name": "Guest Appointments"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "appointments",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        -64
+      ],
+      "id": "b7a7e2b2-7619-4177-87e4-038c24f74213",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/appointments/{{ $json.appointment_services[0].appointment_id }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "expand",
+              "value": "notes"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1680,
+        -96
+      ],
+      "id": "74113734-bb94-4d8a-a17d-abb4d0053ac8",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "fileName": "={{ $('On form submission').item.json['User Code'] }}_Notes.xlsx"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1888,
+        -416
+      ],
+      "id": "caaf840b-ecd2-41c8-88c6-57f5035947c5",
+      "name": "Combine Notes"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "fileName": "={{ $('On form submission').item.json['User Code'] }}_Appointment_Details.xlsx"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1888,
+        -96
+      ],
+      "id": "2a2b92ad-db20-49ac-a2b2-cdac5aa67e89",
+      "name": "Combine Appointment Details"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "fileName": "={{ $('On form submission').item.json['User Code'] }}_Appointment.xlsx"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1888,
+        -240
+      ],
+      "id": "5c8b9708-1c7a-4cef-b32f-3b8b445dd2b8",
+      "name": "Combine Appointments"
+    },
+    {
+      "parameters": {
+        "numberInputs": 6
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2256,
+        -48
+      ],
+      "id": "6bd69ac6-d442-4e20-9801-fa18e49111bb",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const output = {\n  json: {\n    fileCount: items.length\n  },\n  binary: {}\n};\n\nitems.forEach((item, index) => {\n  if (!item.binary) return;\n\n  const keys = Object.keys(item.binary);\n  if (keys.length === 0) return;\n\n  const firstKey = keys[0];\n\n  output.binary[`file${index + 1}`] = {\n    ...item.binary[firstKey]\n  };\n});\n\nreturn [output];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2496,
+        16
+      ],
+      "id": "61c5df2c-413f-4f7b-9cc8-ea37c1e3a528",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "compress",
+        "binaryPropertyName": "={{ Object.keys($binary).join(',') }}",
+        "fileName": "={{ $('On form submission').item.json['User Code'] }}.zip"
+      },
+      "type": "n8n-nodes-base.compression",
+      "typeVersion": 1.1,
+      "position": [
+        2688,
+        16
+      ],
+      "id": "daf964fd-bc7f-43d3-8261-b337523f7e29",
+      "name": "Compression"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "products",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        112
+      ],
+      "id": "eac7da8b-875a-4174-b0b0-172134c49357",
+      "name": "Split Out2"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/guests/{{ $json.id }}/products",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "page",
+                    "value": "={{ $pageCount + 1 }}"
+                  }
+                ]
+              },
+              "limitPagesFetched": true,
+              "maxRequests": "={{ Math.ceil($response.body.page_info.total / $response.body.page_info.size) }}"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        992,
+        112
+      ],
+      "id": "582267d2-9b7e-4b75-835c-44a9532c33b8",
+      "name": "Guest Invoices"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "fileName": "={{ $('On form submission').item.json['User Code'] }}_Invoices.xlsx"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1888,
+        112
+      ],
+      "id": "1533e195-0d08-48c9-9001-b5034d76eba3",
+      "name": "Combine Invoices"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "fileName": "={{ $('On form submission').item.json['User Code'] }}_GuestDetails.xlsx"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1888,
+        288
+      ],
+      "id": "52b427a8-1f20-4a6f-9a8f-00ec58f8d81f",
+      "name": "Guest Details"
+    },
+    {
+      "parameters": {
+        "amount": 0
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        992,
+        288
+      ],
+      "id": "dd59cba7-adce-4788-ad77-2190404581f2",
+      "name": "Wait",
+      "webhookId": "958795f3-8053-4a89-b4a5-a8cc410dc828"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/guests/{{ $json.id }}/Packages",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "center_id",
+              "value": "center_id"
+            },
+            {
+              "name": "show_redeemable",
+              "value": "{true/false}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        992,
+        464
+      ],
+      "id": "7bcb09f1-2818-4940-8ce7-0c1389143919",
+      "name": "Guest Packages"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "fileName": "={{ $('On form submission').item.json['User Code'] }}_GuestPackages.xlsx"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1888,
+        464
+      ],
+      "id": "1c824674-c8e7-48ec-9837-cec854e52029",
+      "name": "Guest Packages1"
+    },
+    {
+      "parameters": {
+        "content": "## Guest Notes",
+        "height": 176,
+        "width": 1040,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        976,
+        -464
+      ],
+      "typeVersion": 1,
+      "id": "f6b59073-2204-4ec8-82f0-e7d0d5ca8c6c",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Guest Appointments",
+        "height": 176,
+        "width": 1040,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        976,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "9a83d481-a545-4bbf-8bd2-9a7811d3a636",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Guest Appointments Details",
+        "height": 176,
+        "width": 1040,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        976,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "f93ae1f5-f4ac-4023-92b0-cc0cca93d8b6",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Guest Invoices",
+        "height": 176,
+        "width": 1040,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        976,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "d0ec1fac-dc8f-4468-b961-2489a57d7387",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Guest Details",
+        "height": 176,
+        "width": 1040
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        976,
+        240
+      ],
+      "typeVersion": 1,
+      "id": "0d025e34-5451-47fe-86d9-75ea3d7ed2f4",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Guest Packages",
+        "height": 176,
+        "width": 1040,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        976,
+        416
+      ],
+      "typeVersion": 1,
+      "id": "b80b9a9c-cbc4-4874-8a56-79c36618e63b",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## Merge / Join / Compress / Provide Copy",
+        "height": 352,
+        "width": 1104
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2016,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "fdc2af5b-d7af-4cdd-981c-5f8812d98f90",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## Submit Form / Grab Token / Search User / Collect User",
+        "height": 352,
+        "width": 1104
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -128,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "2a47e811-63c6-446e-9e73-4eb235f2b482",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.page_Info.total }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "notEquals"
+                    },
+                    "id": "77d492de-5b58-488a-ab32-0b94502a21ef"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        0
+      ],
+      "id": "e5610a5a-91ed-4ba9-8a74-fa6460234436",
+      "name": "No User"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Form Failed",
+        "completionMessage": "=Unable to find user please check {{ $('On form submission').item.json['User Code'] }} please check Zenoti for user guide and try again.\n\nhttps://n8n.ashleyandmartin.local/form/KadddiUserExtract",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        576,
+        288
+      ],
+      "id": "e1612785-f3aa-4b96-a0da-cd2e9647bdc8",
+      "name": "Form1",
+      "webhookId": "6b92fc5b-fbfc-441d-bb72-92c7356fb0dd"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "User Code": "DNG4530",
+          "submittedAt": "2026-03-31T12:53:30.504+08:00",
+          "formMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "callerPolicy": "workflowsFromSameOwner",
+    "saveDataSuccessExecution": "all"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-03-29T23:50:16.206Z",
+      "createdAt": "2026-03-29T23:50:16.206Z",
+      "role": "workflow:owner",
+      "workflowId": "8NLNoWIQWQzqvhST",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    },
+    {
+      "updatedAt": "2026-01-21T23:52:24.742Z",
+      "createdAt": "2026-01-21T23:52:24.742Z",
+      "id": "gBgZjsV5vc1ZGBw4",
+      "name": "AUS"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-31T05:36:24.895Z",
+  "versionId": "857b4f6a-35e0-49fd-b05b-b318a4db06da"
+}
