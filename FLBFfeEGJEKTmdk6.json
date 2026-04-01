@@ -1,0 +1,299 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-03-30T02:33:38.000Z",
+    "createdAt": "2026-03-30T02:33:36.938Z",
+    "versionId": "f9ae8466-4a99-4394-9f2c-70d515bafb47",
+    "workflowId": "FLBFfeEGJEKTmdk6",
+    "nodes": [
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "1e6e82a6-7ea2-4be2-8ee9-a7878d61ab55",
+        "name": "When Executed by Another Workflow"
+      }
+    ],
+    "connections": {},
+    "authors": "Nicholas Ryall",
+    "name": "Version f9ae8466",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "f9ae8466-4a99-4394-9f2c-70d515bafb47",
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Compression",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compression": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Summarization Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Summarization Chain",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Summarization Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarization Chain": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2026-03-30T02:33:01.245Z",
+  "id": "FLBFfeEGJEKTmdk6",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "AU - Client Summary Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1e6e82a6-7ea2-4be2-8ee9-a7878d61ab55",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.compression",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "b917d61e-553e-41c3-979d-c054141bb461",
+      "name": "Compression"
+    },
+    {
+      "parameters": {
+        "operationMode": "documentLoader",
+        "options": {
+          "summarizationMethodAndPrompts": {
+            "values": {
+              "combineMapPrompt": "You are summarising one chunk of client-related data for later combination into a final staff-facing summary.\n\nYour job is to extract only the useful operational facts from the text below.\n\nRules:\n- Use only the information provided\n- Do not guess or infer facts that are not clearly stated\n- If the chunk contains little value, say so briefly\n- Keep names, dates, appointment details, notes, treatment details, invoice details, and engagement history if present\n- Ignore filler, repetition, raw formatting noise, IDs unless operationally useful, and empty fields\n- Use concise Australian English\n- Output short bullet points only\n- Focus on facts that would help staff understand the client before an appointment\n\nText:\n\"{text}\"\n\nReturn:\n- Key facts from this chunk\n- Important dates\n- Any risks, concerns, or follow-up indicators\n- If nothing meaningful is present, output: No useful operational data in this chunk.",
+              "prompt": "You are combining multiple partial summaries about one client into a single clear staff-facing summary.\n\nYour task is to produce a concise pre-appointment summary that staff can read quickly.\n\nRules:\n- Use only the information provided in the partial summaries\n- Do not invent missing facts\n- If something is unknown, say Unknown\n- Remove duplicates\n- Prefer the most specific and useful detail\n- Keep the tone practical, direct, and operational\n- Use concise Australian English\n- Make the output easy to scan\n\nPartial summaries:\n\"{text}\"\n\nCreate the final response using exactly these sections:\n\nClient Snapshot\n- Customer code / client identifier\n- Clinic\n- Status\n- Any key profile details\n\nLast Appointment\n- Date\n- Outcome\n- Key service or treatment details\n\nUpcoming Appointment\n- Date\n- Purpose if known\n\nEngagement History\n- Lead source\n- Contact behaviour\n- Attendance / follow-up patterns\n\nNotes Summary\n- Key notes relevant to staff\n- Preferences or concerns\n\nTreatment / Service History\n- Current or previous treatments/services\n- Progress indicators if known\n\nFinancial / Commercial Indicators\n- Packages\n- Invoice activity\n- Repeat business indicators\n\nRisks / Concerns\n- Gaps in attendance\n- Follow-up risk\n- Missing or conflicting information\n\nSuggested Next Action\n- 1 to 3 short practical actions staff should take\n\nRequirements:\n- Use bullet points under each section\n- Keep it concise\n- Show dates clearly\n- If a section has no data, write Unknown"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainSummarization",
+      "typeVersion": 2.1,
+      "position": [
+        1072,
+        0
+      ],
+      "id": "e015307f-55e8-4f45-a842-3de8b5867328",
+      "name": "Summarization Chain"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "binaryPropertyName": "={{ Object.keys($binary)[0] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "c28410ee-acd7-4eee-861c-5d5910fff226",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "$binary",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "cb0dba33-3d82-47d0-a705-6fbb99319700",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1024,
+        192
+      ],
+      "id": "84039955-dce3-4633-a4ca-57672985d023",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "tnMkJLIGHaN3sqHs",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        1184,
+        304
+      ],
+      "id": "d36f63c6-b057-434a-804c-9efddecd2480",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        832,
+        0
+      ],
+      "id": "6c9609db-30ea-4fa6-808a-4a1b6de56cf5",
+      "name": "Aggregate"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "fileCount": 6
+        },
+        "binary": {
+          "data": {
+            "mimeType": "application/zip",
+            "fileExtension": "zip",
+            "data": "filesystem-v2",
+            "fileName": "DNG2938.zip",
+            "id": "filesystem-v2:workflows/8NLNoWIQWQzqvhST/executions/20391/binary_data/1442623b-ae01-405f-9558-0d74e81b80f3",
+            "fileSize": "208 kB",
+            "bytes": 207808
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-03-30T02:33:01.247Z",
+      "createdAt": "2026-03-30T02:33:01.247Z",
+      "role": "workflow:owner",
+      "workflowId": "FLBFfeEGJEKTmdk6",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-03-30T06:02:01.906Z",
+  "versionId": "6df92558-5679-4fab-891a-247c7e9d48f3"
+}
