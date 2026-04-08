@@ -2236,7 +2236,7 @@
       "parameters": {
         "operation": "completion",
         "completionTitle": "Form Failed",
-        "completionMessage": "=Unable to find user please check {{ $('On form submission').item.json['User Code'] }} please check Zenoti for user guide and try again.\n\nhttps://n8n.ashleyandmartin.local/form/KadddiUserExtract",
+        "completionMessage": "=Unable to find user please check {{ $('On form submission').item.json['User Code'] }} please check Zenoti for user and try again.\n\nhttps://n8n.ashleyandmartin.local/form/KadddiUserExtract",
         "options": {}
       },
       "type": "n8n-nodes-base.form",
@@ -2303,6 +2303,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-03-31T05:36:24.895Z",
-  "versionId": "857b4f6a-35e0-49fd-b05b-b318a4db06da"
+  "updatedAt": "2026-04-02T00:45:32.461Z",
+  "versionId": "f1335393-176c-4807-b6e9-7acd312778cc"
 }
