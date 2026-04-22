@@ -1,0 +1,285 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-04-16T04:31:20.000Z",
+    "createdAt": "2026-04-16T04:31:17.469Z",
+    "versionId": "48bbef35-2dee-485a-bf05-ce27b37b1b80",
+    "workflowId": "0ezPbCgT8lbqoabg",
+    "nodes": [
+      {
+        "parameters": {
+          "queue": "nz.zenoti.webhooks.telehealthcheck",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rabbitmqTrigger",
+        "typeVersion": 1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "bd32edcb-cee3-4de7-8714-99abf526c486",
+        "name": "RabbitMQ Trigger",
+        "credentials": {
+          "rabbitmq": {
+            "id": "yV61RlUAH8DmNI5J",
+            "name": "RabbitMQ account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const raw = $json.content;\nconst parsed = JSON.parse(raw);\n\nreturn [{ json: parsed }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          240,
+          0
+        ],
+        "id": "24d17bfb-34d6-49f8-96f2-efed1abfa201",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "operation": "deleteMessage"
+        },
+        "type": "n8n-nodes-base.rabbitmq",
+        "typeVersion": 1.1,
+        "position": [
+          448,
+          0
+        ],
+        "id": "3dd4cfcf-80b9-4c30-9ece-bf295d6cd068",
+        "name": "RabbitMQ",
+        "credentials": {
+          "rabbitmq": {
+            "id": "yV61RlUAH8DmNI5J",
+            "name": "RabbitMQ account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "RabbitMQ Trigger": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "RabbitMQ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 48bbef35",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "48bbef35-2dee-485a-bf05-ce27b37b1b80",
+  "connections": {
+    "RabbitMQ Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Call 'ZenotiNZ - LiveMedOrder'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'ZenotiNZ - LiveMedOrder'": {
+      "main": [
+        [
+          {
+            "node": "RabbitMQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-16T04:31:06.310Z",
+  "id": "0ezPbCgT8lbqoabg",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "NZ-RabbitMQCollector-Telehealthcheck",
+  "nodes": [
+    {
+      "parameters": {
+        "queue": "nz.zenoti.webhooks.telehealthcheck",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rabbitmqTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "bd32edcb-cee3-4de7-8714-99abf526c486",
+      "name": "RabbitMQ Trigger",
+      "credentials": {
+        "rabbitmq": {
+          "id": "yV61RlUAH8DmNI5J",
+          "name": "RabbitMQ account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.content;\nconst parsed = JSON.parse(raw);\n\nreturn [{ json: parsed }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ],
+      "id": "24d17bfb-34d6-49f8-96f2-efed1abfa201",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "deleteMessage"
+      },
+      "type": "n8n-nodes-base.rabbitmq",
+      "typeVersion": 1.1,
+      "position": [
+        688,
+        0
+      ],
+      "id": "3dd4cfcf-80b9-4c30-9ece-bf295d6cd068",
+      "name": "RabbitMQ",
+      "credentials": {
+        "rabbitmq": {
+          "id": "yV61RlUAH8DmNI5J",
+          "name": "RabbitMQ account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "UU1PSuRl0ws6N72i",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/UU1PSuRl0ws6N72i",
+          "cachedResultName": "ZenotiNZ - LiveMedOrder"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        464,
+        0
+      ],
+      "id": "ec28c00c-9c12-4175-b1a4-bec22862209a",
+      "name": "Call 'ZenotiNZ - LiveMedOrder'"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "RabbitMQ Trigger": [
+      {
+        "json": {
+          "fields": {
+            "consumerTag": "amq.ctag-i49KHGckcdy5ei5sO7EDmg",
+            "deliveryTag": 1,
+            "redelivered": false,
+            "exchange": "",
+            "routingKey": "nz.zenoti.webhooks.telehealthcheck"
+          },
+          "properties": {
+            "headers": {}
+          },
+          "content": "{\"headers\":{\"host\":\"webhook.ashleyandmartin.com.au\",\"x-forwarded-scheme\":\"https\",\"x-forwarded-proto\":\"https\",\"x-forwarded-for\":\"20.11.81.234\",\"x-real-ip\":\"20.11.81.234\",\"content-length\":\"1346\",\"nz-zenoti\":\"pXZKc0W123Z\",\"content-type\":\"application/json; charset=utf-8\"},\"params\":{},\"query\":{},\"body\":{\"id\":\"69e8044c0058779421fd8fb6\",\"event_id\":\"69e8044c0058779421fd8fb5\",\"event_schema\":\"v1\",\"event_resource\":null,\"event_type\":\"Appointment.Started\",\"event_timestamp\":\"2026-04-21T23:12:12.7840194Z\",\"data\":{\"invoice_id\":\"46320fcd-19cc-4f62-ae53-e9206b6df284\",\"invoice_number\":\"24065\",\"appointment_group_id\":\"e790b273-9f70-4a36-83e7-f0e40efa68c8\",\"center_id\":\"8a97ae57-5822-4438-b692-4913733872a1\",\"organization_id\":\"89978da1-cd8a-45ac-bf69-f422cf961761\",\"guest\":{\"id\":\"3ea74ac5-cd9d-4f16-9146-5d7290b622b3\",\"first_name\":\"Cameron\",\"last_name\":\"Mace\",\"email\":\"cameronscottmace@gmail.com\"},\"appointments\":[{\"id\":\"b6d7094f-ede3-4ea6-a7b1-d755c464e639\",\"invoice_item_id\":\"dcb64642-0e2b-4d3f-83d1-ff4d9589bbf9\",\"service_name\":\"Telehealth Check-up\",\"service_id\":\"ea2fab22-be5f-4342-838d-1a4bcebe9618\",\"start_time\":\"2026-04-21T23:00:00\",\"end_time\":\"2026-04-21T23:15:00\",\"start_time_in_center\":\"2026-04-22T11:00:00\",\"end_time_in_center\":\"2026-04-22T11:15:00\",\"creation_date\":\"2026-04-15T04:39:32\",\"last_updated_on\":\"2026-04-21T23:12:12\",\"service_duration_in_minutes\":15,\"has_add_ons\":false,\"is_add_on\":false,\"therapist_name\":\"Dr Jolyn Tay 64497\",\"therapist_id\":\"99b1439b-7c65-41c4-b15f-7a681614105b\",\"is_recurring\":false,\"show_in_calendar\":false,\"appointment_type\":2,\"therapist_request_type\":0,\"room_name\":\"\",\"equipment_name\":\"\",\"appointment_progress\":1}]}},\"webhookUrl\":\"https://webhook.ashleyandmartin.com.au/webhook/NZ-Zenoti\",\"executionMode\":\"production\"}"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "J83Enw8ArDSqhMCL"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-04-16T04:31:06.311Z",
+      "createdAt": "2026-04-16T04:31:06.311Z",
+      "role": "workflow:owner",
+      "workflowId": "0ezPbCgT8lbqoabg",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2026-01-21T23:52:55.489Z",
+      "createdAt": "2026-01-21T23:52:55.489Z",
+      "id": "OXsRoYm7kDVlpgY1",
+      "name": "NZ"
+    },
+    {
+      "updatedAt": "2026-01-21T23:52:51.063Z",
+      "createdAt": "2026-01-21T23:52:51.063Z",
+      "id": "OuUcDlUQOF4Dgotd",
+      "name": "MedOrder"
+    },
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-04-21T23:29:23.988Z",
+  "versionId": "e887ee8e-7493-40de-9a84-f7cb8214c0df"
+}
