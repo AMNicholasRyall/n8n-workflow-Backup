@@ -1,0 +1,470 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-04-22T02:10:59.000Z",
+    "createdAt": "2026-04-22T02:10:39.967Z",
+    "versionId": "3492051c-0bcb-4f34-9b8a-a806cb693995",
+    "workflowId": "69qqsmSyNdqvlEpY",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "pVbLONb8Gh393bg0",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinicsNZ",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/pVbLONb8Gh393bg0"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Zenoti_ID",
+                "keyValue": "={{ $('Start').first().json.body_data_center_id_firstItem }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          2080,
+          -160
+        ],
+        "id": "e39a20a3-029c-4cc6-af12-fb9a6700a119",
+        "name": "Get row(s)"
+      },
+      {
+        "parameters": {
+          "operation": "sendAndWait",
+          "toRecipients": "={{ $('Get row(s)').item.json.email }}",
+          "subject": "=Automation - Med Order Live - {{ $('Start').item.json.code }}",
+          "message": "=<!DOCTYPE html>\n<html>\n<body style=\"font-family: Arial, sans-serif; font-size: 14px; color: #333333; line-height: 1.5;\">\n\n  <p>Hi Team,</p>\n\n  <p>\n    The following patient has just finished a\n    \"<strong>{{ $('Start').first().json.body_data_appointments_firstItem[0].service_name }}</strong>\".\n    However their script has not been signed.\n  </p>\n\n  <p>Please confirm if we are required to proceed.</p>\n\n  <p>\n    <strong>Name:</strong>\n    {{ $('Start').item.json.personal_info_first_name }}\n    {{ $('Start').item.json.personal_info_last_name }}\n  </p>\n\n  <p>\n    <strong>Code:</strong>\n    {{ $('Start').item.json.code }}\n  </p>\n\n  <p>\n    <strong>Center:</strong>\n    {{ $('Start').item.json.center_name }}\n  </p>\n\n  <p>\n    <strong>Profile URL:</strong><br>\n    <a href=\"https://ashleymartinnz.zenoti.com/Guests/GuestProfileV2/GuestProfileV2Wrapper.aspx?Display=True&amp;UserId={{ $('Start').first().json.body_data_guest_id_firstItem }}\">\n      Open Patient Profile\n    </a>\n  </p>\n\n  <p>\n    <strong>Script URL:</strong><br>\n    <a href=\"{{ $json.AppointmentCustomDataUrl }}\">\n      Open Script\n    </a>\n  </p>\n\n  <p>Regards, Automation</p>\n\n</body>\n</html>",
+          "approvalOptions": {
+            "values": {
+              "approvalType": "double"
+            }
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          2464,
+          -160
+        ],
+        "id": "e4affd2e-9243-45e1-be47-26d1ee26e43d",
+        "name": "Send message and wait for response",
+        "webhookId": "0b3434ec-d1d3-40cc-94a2-8e5caafd7fd5",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const baseUrl = 'https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx';\n\n// Pull values from previous nodes\nconst AppGroupId    = $('Start').first().json.body_data_appointment_group_id_firstItem;\nconst ServiceId     = $('Start').first().json.body_data_appointments_firstItem[0].service_id;\nconst ServiceName   = $('Start').first().json.body_data_appointments_firstItem[0].service_name;\nconst GuestId       = $('Start').first().json.body_data_guest_id_firstItem;\nconst AppointmentId = $('Start').first().json.body_data_appointments_firstItem[0].id;\n\n// Helper to build querystring with encoding\nfunction qs(params) {\n  return Object.keys(params)\n    .filter((k) => params[k] !== undefined && params[k] !== null && params[k] !== '')\n    .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(String(params[k]))}`)\n    .join('&');\n}\n\nconst query = qs({\n  AppGroupId,\n  ServiceId,\n  Service: ServiceName,\n  GuestId,\n  AppointmentId,\n});\n\nconst finalUrl = `${baseUrl}?${query}`;\n\nreturn [\n  {\n    json: {\n      AppointmentCustomDataUrl: finalUrl,\n    },\n  },\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2272,
+          -160
+        ],
+        "id": "4a179b7a-243a-432b-8ad5-ff8d016e1d18",
+        "name": "AppointmentScriptURL"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "14e5925a-aeb2-44f7-a8a2-8865a19ab48a",
+                "name": "data_approved",
+                "value": "={{ $json.data.approved }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2672,
+          -160
+        ],
+        "id": "68e22309-7a5c-45e8-9b96-41628cda5266",
+        "name": "Return"
+      },
+      {
+        "parameters": {
+          "workflowInputs": {
+            "values": [
+              {
+                "name": "body_data_center_id_firstItem",
+                "type": "any"
+              },
+              {
+                "name": "code",
+                "type": "any"
+              },
+              {
+                "name": "body_data_appointments_firstItem",
+                "type": "any"
+              },
+              {
+                "name": "body_data_guest_id_firstItem",
+                "type": "any"
+              },
+              {
+                "name": "personal_info_first_name",
+                "type": "any"
+              },
+              {
+                "name": "personal_info_last_name",
+                "type": "any"
+              },
+              {
+                "name": "center_name",
+                "type": "any"
+              },
+              {
+                "name": "body_data_appointment_group_id_firstItem",
+                "type": "any"
+              }
+            ]
+          }
+        },
+        "id": "73aae88e-50de-45c8-b30d-bc8772f9c918",
+        "typeVersion": 1.1,
+        "name": "Start",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "position": [
+          1872,
+          -160
+        ]
+      }
+    ],
+    "connections": {
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "AppointmentScriptURL",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AppointmentScriptURL": {
+        "main": [
+          [
+            {
+              "node": "Send message and wait for response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Start": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send message and wait for response": {
+        "main": [
+          [
+            {
+              "node": "Return",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 3492051c",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "3492051c-0bcb-4f34-9b8a-a806cb693995",
+  "connections": {
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "AppointmentScriptURL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AppointmentScriptURL": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "Return",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-22T01:57:34.717Z",
+  "id": "69qqsmSyNdqvlEpY",
+  "isArchived": false,
+  "meta": null,
+  "name": "ZenotiNZ-ConsultClinic-ValidateApp",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pVbLONb8Gh393bg0",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinicsNZ",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/pVbLONb8Gh393bg0"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Zenoti_ID",
+              "keyValue": "={{ $('Start').first().json.body_data_center_id_firstItem }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2080,
+        -160
+      ],
+      "id": "e39a20a3-029c-4cc6-af12-fb9a6700a119",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "toRecipients": "={{ $('Get row(s)').item.json.email }}",
+        "subject": "=Automation - Med Order Live - {{ $('Start').item.json.code }}",
+        "message": "=<!DOCTYPE html>\n<html>\n<body style=\"font-family: Arial, sans-serif; font-size: 14px; color: #333333; line-height: 1.5;\">\n\n  <p>Hi Team,</p>\n\n  <p>\n    The following patient has just finished a\n    \"<strong>{{ $('Start').first().json.body_data_appointments_firstItem[0].service_name }}</strong>\".\n    However their script has not been signed.\n  </p>\n\n  <p>Please confirm if we are required to proceed.</p>\n\n  <p>\n    <strong>Name:</strong>\n    {{ $('Start').item.json.personal_info_first_name }}\n    {{ $('Start').item.json.personal_info_last_name }}\n  </p>\n\n  <p>\n    <strong>Code:</strong>\n    {{ $('Start').item.json.code }}\n  </p>\n\n  <p>\n    <strong>Center:</strong>\n    {{ $('Start').item.json.center_name }}\n  </p>\n\n  <p>\n    <strong>Profile URL:</strong><br>\n    <a href=\"https://ashleymartinnz.zenoti.com/Guests/GuestProfileV2/GuestProfileV2Wrapper.aspx?Display=True&amp;UserId={{ $('Start').first().json.body_data_guest_id_firstItem }}\">\n      Open Patient Profile\n    </a>\n  </p>\n\n  <p>\n    <strong>Script URL:</strong><br>\n    <a href=\"{{ $json.AppointmentCustomDataUrl }}\">\n      Open Script\n    </a>\n  </p>\n\n  <p>Regards, Automation</p>\n\n</body>\n</html>",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        2464,
+        -160
+      ],
+      "id": "e4affd2e-9243-45e1-be47-26d1ee26e43d",
+      "name": "Send message and wait for response",
+      "webhookId": "0b3434ec-d1d3-40cc-94a2-8e5caafd7fd5",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const baseUrl = 'https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx';\n\n// Pull values from previous nodes\nconst AppGroupId    = $('Start').first().json.body_data_appointment_group_id_firstItem;\nconst ServiceId     = $('Start').first().json.body_data_appointments_firstItem[0].service_id;\nconst ServiceName   = $('Start').first().json.body_data_appointments_firstItem[0].service_name;\nconst GuestId       = $('Start').first().json.body_data_guest_id_firstItem;\nconst AppointmentId = $('Start').first().json.body_data_appointments_firstItem[0].id;\n\n// Helper to build querystring with encoding\nfunction qs(params) {\n  return Object.keys(params)\n    .filter((k) => params[k] !== undefined && params[k] !== null && params[k] !== '')\n    .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(String(params[k]))}`)\n    .join('&');\n}\n\nconst query = qs({\n  AppGroupId,\n  ServiceId,\n  Service: ServiceName,\n  GuestId,\n  AppointmentId,\n});\n\nconst finalUrl = `${baseUrl}?${query}`;\n\nreturn [\n  {\n    json: {\n      AppointmentCustomDataUrl: finalUrl,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2272,
+        -160
+      ],
+      "id": "4a179b7a-243a-432b-8ad5-ff8d016e1d18",
+      "name": "AppointmentScriptURL"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "14e5925a-aeb2-44f7-a8a2-8865a19ab48a",
+              "name": "data_approved",
+              "value": "={{ $json.data.approved }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2672,
+        -160
+      ],
+      "id": "68e22309-7a5c-45e8-9b96-41628cda5266",
+      "name": "Return"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "body_data_center_id_firstItem",
+              "type": "any"
+            },
+            {
+              "name": "code",
+              "type": "any"
+            },
+            {
+              "name": "body_data_appointments_firstItem",
+              "type": "any"
+            },
+            {
+              "name": "body_data_guest_id_firstItem",
+              "type": "any"
+            },
+            {
+              "name": "personal_info_first_name",
+              "type": "any"
+            },
+            {
+              "name": "personal_info_last_name",
+              "type": "any"
+            },
+            {
+              "name": "center_name",
+              "type": "any"
+            },
+            {
+              "name": "body_data_appointment_group_id_firstItem",
+              "type": "any"
+            }
+          ]
+        }
+      },
+      "id": "73aae88e-50de-45c8-b30d-bc8772f9c918",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        1872,
+        -160
+      ]
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "Start": [
+      {
+        "json": {
+          "body_data_center_id_firstItem": "8a97ae57-5822-4438-b692-4913733872a1",
+          "code": "WG2522",
+          "body_data_appointments_firstItem": [
+            {
+              "id": "b6d7094f-ede3-4ea6-a7b1-d755c464e639",
+              "invoice_item_id": "dcb64642-0e2b-4d3f-83d1-ff4d9589bbf9",
+              "service_name": "Telehealth Check-up",
+              "service_id": "ea2fab22-be5f-4342-838d-1a4bcebe9618",
+              "start_time": "2026-04-21T23:00:00",
+              "end_time": "2026-04-21T23:15:00",
+              "start_time_in_center": "2026-04-22T11:00:00",
+              "end_time_in_center": "2026-04-22T11:15:00",
+              "creation_date": "2026-04-15T04:39:32",
+              "last_updated_on": "2026-04-21T23:12:12",
+              "service_duration_in_minutes": 15,
+              "has_add_ons": false,
+              "is_add_on": false,
+              "therapist_name": "Dr Jolyn Tay 64497",
+              "therapist_id": "99b1439b-7c65-41c4-b15f-7a681614105b",
+              "is_recurring": false,
+              "show_in_calendar": false,
+              "appointment_type": 2,
+              "therapist_request_type": 0,
+              "room_name": "",
+              "equipment_name": "",
+              "appointment_progress": 1
+            }
+          ],
+          "body_data_guest_id_firstItem": "3ea74ac5-cd9d-4f16-9146-5d7290b622b3",
+          "personal_info_first_name": "Cameron",
+          "personal_info_last_name": "Mace",
+          "center_name": "Wellington",
+          "body_data_appointment_group_id_firstItem": "e790b273-9f70-4a36-83e7-f0e40efa68c8"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-04-22T01:57:34.719Z",
+      "createdAt": "2026-04-22T01:57:34.719Z",
+      "role": "workflow:owner",
+      "workflowId": "69qqsmSyNdqvlEpY",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-04-22T02:13:22.823Z",
+  "versionId": "3492051c-0bcb-4f34-9b8a-a806cb693995"
+}
