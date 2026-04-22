@@ -1,0 +1,2256 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-04-22T01:42:53.000Z",
+    "createdAt": "2026-04-22T01:42:51.916Z",
+    "versionId": "adf54d6c-bde1-4510-8904-ca38eec842c4",
+    "workflowId": "UU1PSuRl0ws6N72i",
+    "nodes": [
+      {
+        "parameters": {
+          "inputSource": "jsonExample",
+          "jsonExample": "{\n    \"headers\": {\n      \"host\": \"webhook.ashleyandmartin.com.au\",\n      \"x-forwarded-scheme\": \"https\",\n      \"x-forwarded-proto\": \"https\",\n      \"x-forwarded-for\": \"20.11.81.234\",\n      \"x-real-ip\": \"20.11.81.234\",\n      \"content-length\": \"1346\",\n      \"nz-zenoti\": \"pXZKc0W123Z\",\n      \"content-type\": \"application/json; charset=utf-8\"\n    },\n    \"params\": {},\n    \"query\": {},\n    \"body\": {\n      \"id\": \"69e8044c0058779421fd8fb6\",\n      \"event_id\": \"69e8044c0058779421fd8fb5\",\n      \"event_schema\": \"v1\",\n      \"event_resource\": null,\n      \"event_type\": \"Appointment.Started\",\n      \"event_timestamp\": \"2026-04-21T23:12:12.7840194Z\",\n      \"data\": {\n        \"invoice_id\": \"46320fcd-19cc-4f62-ae53-e9206b6df284\",\n        \"invoice_number\": \"24065\",\n        \"appointment_group_id\": \"e790b273-9f70-4a36-83e7-f0e40efa68c8\",\n        \"center_id\": \"8a97ae57-5822-4438-b692-4913733872a1\",\n        \"organization_id\": \"89978da1-cd8a-45ac-bf69-f422cf961761\",\n        \"guest\": {\n          \"id\": \"3ea74ac5-cd9d-4f16-9146-5d7290b622b3\",\n          \"first_name\": \"Cameron\",\n          \"last_name\": \"Mace\",\n          \"email\": \"cameronscottmace@gmail.com\"\n        },\n        \"appointments\": [\n          {\n            \"id\": \"b6d7094f-ede3-4ea6-a7b1-d755c464e639\",\n            \"invoice_item_id\": \"dcb64642-0e2b-4d3f-83d1-ff4d9589bbf9\",\n            \"service_name\": \"Telehealth Check-up\",\n            \"service_id\": \"ea2fab22-be5f-4342-838d-1a4bcebe9618\",\n            \"start_time\": \"2026-04-21T23:00:00\",\n            \"end_time\": \"2026-04-21T23:15:00\",\n            \"start_time_in_center\": \"2026-04-22T11:00:00\",\n            \"end_time_in_center\": \"2026-04-22T11:15:00\",\n            \"creation_date\": \"2026-04-15T04:39:32\",\n            \"last_updated_on\": \"2026-04-21T23:12:12\",\n            \"service_duration_in_minutes\": 15,\n            \"has_add_ons\": false,\n            \"is_add_on\": false,\n            \"therapist_name\": \"Dr Jolyn Tay 64497\",\n            \"therapist_id\": \"99b1439b-7c65-41c4-b15f-7a681614105b\",\n            \"is_recurring\": false,\n            \"show_in_calendar\": false,\n            \"appointment_type\": 2,\n            \"therapist_request_type\": 0,\n            \"room_name\": \"\",\n            \"equipment_name\": \"\",\n            \"appointment_progress\": 1\n          }\n        ]\n      }\n    },\n    \"webhookUrl\": \"https://webhook.ashleyandmartin.com.au/webhook/NZ-Zenoti\",\n    \"executionMode\": \"production\"\n  }"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          0,
+          -320
+        ],
+        "id": "f1f23eac-5461-4570-8db0-cbde1d93f147",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "5e79c735-283e-4592-8d5e-3378a62eeddb",
+                "leftValue": "={{ $json.executionMode }}",
+                "rightValue": "production",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          224,
+          -320
+        ],
+        "id": "00b258da-c3cf-4a6f-ae91-449f0e3c89d1",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "amount": "={{ $json.body.data.appointments[0].service_duration_in_minutes }}",
+          "unit": "minutes"
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          448,
+          -320
+        ],
+        "id": "2d3ca5ae-d204-4378-9c69-0ae2efb77c21",
+        "name": "Wait",
+        "webhookId": "debb90a2-9ec4-4e5c-993e-a465647428f8",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "PygQxZaLVrcaZiGx",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/PygQxZaLVrcaZiGx",
+            "cachedResultName": "ZenotiNZ-GetAuthToken"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          672,
+          -320
+        ],
+        "id": "986cf9d6-42ac-4ff1-b3e0-d87deef1b1b2",
+        "name": "Call 'ZenotiNZ-GetAuthToken'"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/appointments/{{ $('When Executed by Another Workflow').first().json.body.data.appointments[0].id }}/forms_data",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "tag_Id",
+                "value": "=0"
+              },
+              {
+                "name": "view_context",
+                "value": "0"
+              },
+              {
+                "name": "version_no",
+                "value": "0"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1056,
+          -320
+        ],
+        "id": "abc9d96c-b901-4fd4-8b8b-6bf4d115d7f2",
+        "name": "Appointment Form Data1"
+      },
+      {
+        "parameters": {
+          "jsCode": "const item = $input.first().json;\n\n// Get data and turn it into an object if it's a JSON string\nlet data = item.data;\n\nif (typeof data === 'string') {\n  try {\n    data = JSON.parse(data);\n  } catch (error) {\n    throw new Error('data is not valid JSON: ' + data);\n  }\n} else if (!data || typeof data !== 'object') {\n  data = {};\n}\n\n// Pull out first file for the signature\nconst file0 = (data.file && data.file[0]) || {};\n\nconst output = {\n  ...item,      // keep original fields (guest_data, is_form_submitted, etc.)\n  ...data,      // expand fields from parsed data\n  signatureUrl: file0.presignedUrl || null,\n};\n\n// Optional: remove nested data now that it's expanded\ndelete output.data;\n\nreturn [\n  {\n    json: output,\n  },\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1280,
+          -320
+        ],
+        "id": "b4e476fa-4256-41ce-beaf-5a64a0b5802a",
+        "name": "CleanUpAppointment"
+      },
+      {
+        "parameters": {
+          "content": "## Grab Form / Clean Form Data",
+          "height": 272,
+          "width": 432,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1008,
+          -416
+        ],
+        "typeVersion": 1,
+        "id": "17fa2aad-4a5c-4850-b27f-51895fbcd373",
+        "name": "Sticky Note8"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/appointments/{{ $('When Executed by Another Workflow').first().json.body.data.appointments[0].id }}/forms",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1600,
+          -736
+        ],
+        "id": "9f640129-2674-4073-9436-13a6f0ceb90d",
+        "name": "Get Appointment Forms"
+      },
+      {
+        "parameters": {
+          "content": "## Grab Forms from Appointment / Clean Data / Filter Out Non required forms",
+          "height": 272,
+          "width": 480,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1520,
+          -832
+        ],
+        "typeVersion": 1,
+        "id": "ea719e2e-02c1-4c40-93ad-c1f0d311612d",
+        "name": "Sticky Note9"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "5a7e1de6-98a0-4dcd-a2f8-0366e122e00f",
+                "leftValue": "={{ $('When Executed by Another Workflow').first().json.body.data.appointments[0].service_name }}",
+                "rightValue": "Telehealth First",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "9ab233f7-5d2b-4d08-8104-8e04ed233fca",
+                "leftValue": "={{ $('When Executed by Another Workflow').first().json.body.data.appointments[0].service_name }}",
+                "rightValue": "Doctor-First",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          2144,
+          -736
+        ],
+        "id": "9d1e1594-0a1e-4bfa-837d-4563ec5c0b66",
+        "name": "If4"
+      },
+      {
+        "parameters": {
+          "content": "## Start Flow and Filter Test Runs",
+          "height": 272,
+          "width": 416
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -48,
+          -416
+        ],
+        "typeVersion": 1,
+        "id": "19bdf53b-d02f-4976-aa31-75450cb18e29",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "## Wait Appointment Service Time",
+          "height": 272,
+          "width": 256,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          368,
+          -416
+        ],
+        "typeVersion": 1,
+        "id": "80d2e041-efe8-484b-ae0d-edba63cecf52",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "content": "## Get Auth Token",
+          "height": 272,
+          "width": 192
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          624,
+          -416
+        ],
+        "typeVersion": 1,
+        "id": "61e2493e-1f46-41ec-b9fd-751915d9c35a",
+        "name": "Sticky Note2"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "689c654f-e3b6-4cb0-aa0c-4470444057b3",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "NZ Medical Prescription Form.",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.2,
+        "position": [
+          1824,
+          -736
+        ],
+        "id": "3f198d47-0ac2-4ac3-8055-c585994f4349",
+        "name": "Filter NZ Medical Prescription Form.",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "content": "## Get Auth Token",
+          "height": 272,
+          "width": 192
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1440,
+          -416
+        ],
+        "typeVersion": 1,
+        "id": "44f534b7-a9d8-4850-afdd-46b3449b20a8",
+        "name": "Sticky Note3"
+      },
+      {
+        "parameters": {
+          "amount": "={{ $json.body.data.appointments[0].service_duration_in_minutes }}",
+          "unit": "minutes"
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          2976,
+          -416
+        ],
+        "id": "4b8beb4f-7928-4979-b12a-15c6fa3c64dc",
+        "name": "Continue Flow",
+        "webhookId": "debb90a2-9ec4-4e5c-993e-a465647428f8",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "pVbLONb8Gh393bg0",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinicsNZ",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/pVbLONb8Gh393bg0"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Zenoti_ID",
+                "keyValue": "={{ $('When Executed by Another Workflow').first().json.body.data.center_id }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          2080,
+          -160
+        ],
+        "id": "e39a20a3-029c-4cc6-af12-fb9a6700a119",
+        "name": "Get row(s)"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "391b5352-1b8e-4abb-b5b4-f9a5378880ae",
+                "leftValue": "={{ $('CleanUpAppointment').item.json.signatureUrl }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "empty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1488,
+          -320
+        ],
+        "id": "3cf13aeb-4381-4207-b476-2e9db9ef2872",
+        "name": "NoDoctorSignature"
+      },
+      {
+        "parameters": {
+          "operation": "sendAndWait",
+          "toRecipients": "={{ $('Get row(s)').item.json.email }}",
+          "subject": "=Automation - Med Order Live - {{ $('Guest Details').item.json.code }}",
+          "message": "=<!DOCTYPE html>\n<html>\n<body style=\"font-family: Arial, sans-serif; font-size: 14px; color: #333333; line-height: 1.5;\">\n  <p>Hi Team,</p>\n\n  <p>\n    The following patient has just finished a\n    \"<strong>{{ $('When Executed by Another Workflow').first().json.body.data.appointments[0].service_name }}</strong>\".\n    However their script has not been signed. Please confirm if we are required to proceed.\n  </p>\n\n  <p>\n    <strong>Name:</strong>\n    {{ $('Guest Details').item.json.personal_info.first_name }}\n    {{ $('Guest Details').item.json.personal_info.last_name }}\n    <br>\n    <strong>Code:</strong>\n    {{ $('Guest Details').item.json.code }}\n    <br>\n    <strong>Center:</strong>\n    {{ $('Guest Details').item.json.center_name }}\n  </p>\n\n  <p>\n    <strong>Profile URL:</strong>\n    <a href=\"https://ashleymartinnz.zenoti.com/Guests/GuestProfileV2/GuestProfileV2Wrapper.aspx?Display=True&amp;UserId={{ $('When Executed by Another Workflow').first().json.body.data.guest.id }}\">\n      Open Patient Profile\n    </a>\n    <br>\n    <strong>Script URL:</strong>\n    <a href=\"{{ $json.AppointmentCustomDataUrl }}\">\n      Open Script\n    </a>\n  </p>\n\n  <p>\n    Regards,<br>\n    Automation\n  </p>\n</body>\n</html>",
+          "approvalOptions": {
+            "values": {
+              "approvalType": "double"
+            }
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          2464,
+          -160
+        ],
+        "id": "e4affd2e-9243-45e1-be47-26d1ee26e43d",
+        "name": "Send message and wait for response",
+        "webhookId": "0b3434ec-d1d3-40cc-94a2-8e5caafd7fd5",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/guests/{{ $('When Executed by Another Workflow').first().json.body.data.guest.id }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          864,
+          -320
+        ],
+        "id": "eedc083b-83ef-4a00-9b32-62002ae9033a",
+        "name": "Guest Details"
+      },
+      {
+        "parameters": {
+          "content": "## Grab Guest Details ",
+          "height": 272,
+          "width": 192,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          816,
+          -416
+        ],
+        "typeVersion": 1,
+        "id": "d9545008-0117-4890-a22b-2d97a2f2241e",
+        "name": "Sticky Note10"
+      },
+      {
+        "parameters": {
+          "content": "## Get Auth Token",
+          "height": 272,
+          "width": 192
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          848,
+          -960
+        ],
+        "typeVersion": 1,
+        "id": "fc681730-bd4b-4d75-a405-44398cf727b1",
+        "name": "Sticky Note4"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1888,
+          -160
+        ],
+        "id": "25c6b0e3-ae76-43f8-bd37-a622b5502f2d",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "jsCode": "const baseUrl = 'https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx';\n\n// Pull values from previous nodes\nconst AppGroupId    = $('When Executed by Another Workflow').first().json.body.data.appointment_group_id;\nconst ServiceId     = $('When Executed by Another Workflow').first().json.body.data.appointments[0].service_id;\nconst ServiceName   = $('When Executed by Another Workflow').first().json.body.data.appointments[0].service_name;\nconst GuestId       = $('When Executed by Another Workflow').first().json.body.data.guest.id;\nconst AppointmentId = $('When Executed by Another Workflow').first().json.body.data.appointments[0].id;\n\n// Helper to build querystring with encoding\nfunction qs(params) {\n  return Object.keys(params)\n    .filter((k) => params[k] !== undefined && params[k] !== null && params[k] !== '')\n    .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(String(params[k]))}`)\n    .join('&');\n}\n\nconst query = qs({\n  AppGroupId,\n  ServiceId,\n  Service: ServiceName,\n  GuestId,\n  AppointmentId,\n});\n\nconst finalUrl = `${baseUrl}?${query}`;\n\nreturn [\n  {\n    json: {\n      AppointmentCustomDataUrl: finalUrl,\n    },\n  },\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2272,
+          -160
+        ],
+        "id": "4a179b7a-243a-432b-8ad5-ff8d016e1d18",
+        "name": "AppointmentScriptURL"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "44dc5743-787c-4332-97eb-86b309a8906c",
+                "leftValue": "={{ $json.data.approved }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          2672,
+          -160
+        ],
+        "id": "5efd4c17-96f3-4ed9-80ba-d436bf9c1e75",
+        "name": "Filter"
+      }
+    ],
+    "connections": {
+      "When Executed by Another Workflow": {
+        "main": [
+          []
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Call 'ZenotiNZ-GetAuthToken'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Appointment Form Data1": {
+        "main": [
+          [
+            {
+              "node": "CleanUpAppointment",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'ZenotiNZ-GetAuthToken'": {
+        "main": [
+          [
+            {
+              "node": "Guest Details",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Appointment Forms": {
+        "main": [
+          [
+            {
+              "node": "Filter NZ Medical Prescription Form.",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CleanUpAppointment": {
+        "main": [
+          [
+            {
+              "node": "NoDoctorSignature",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If4": {
+        "main": [
+          [],
+          []
+        ]
+      },
+      "Filter NZ Medical Prescription Form.": {
+        "main": [
+          []
+        ]
+      },
+      "NoDoctorSignature": {
+        "main": [
+          [
+            {
+              "node": "Continue Flow",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "AppointmentScriptURL",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Guest Details": {
+        "main": [
+          [
+            {
+              "node": "Appointment Form Data1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AppointmentScriptURL": {
+        "main": [
+          [
+            {
+              "node": "Send message and wait for response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send message and wait for response": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "Continue Flow",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version adf54d6c",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "adf54d6c-bde1-4510-8904-ca38eec842c4",
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Call 'ZenotiNZ-GetAuthToken'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Appointment Form Data1": {
+      "main": [
+        [
+          {
+            "node": "CleanUpAppointment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'ZenotiNZ-GetAuthToken'": {
+      "main": [
+        [
+          {
+            "node": "Guest Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CleanUpAppointment": {
+      "main": [
+        [
+          {
+            "node": "NoDoctorSignature",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NoDoctorSignature": {
+      "main": [
+        [
+          {
+            "node": "Delivery Location",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call ZenotiNZ-ConsultClinic-ValidateApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guest Details": {
+      "main": [
+        [
+          {
+            "node": "Appointment Form Data1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call ZenotiNZ-ConsultClinic-ValidateApp": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bring Data Forward": {
+      "main": [
+        [
+          {
+            "node": "Delivery Location",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Bring Data Forward",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Flow End",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetPackges": {
+      "main": [
+        [
+          {
+            "node": "FilterLiveProducts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FilterLiveProducts": {
+      "main": [
+        [
+          {
+            "node": "Stop Silly Uneeded batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean up Drug Name": {
+      "main": [
+        [
+          {
+            "node": "GetPackges",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "FilterDown Drugs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FilterDown Drugs": {
+      "main": [
+        [
+          {
+            "node": "Clean for IF1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean for IF1": {
+      "main": [
+        [
+          {
+            "node": "If No Matching Package",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If No Matching Package": {
+      "main": [
+        [
+          {
+            "node": "Drug Compare",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Drug Compare": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BringDataForward2": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "To Many Products": {
+      "main": [
+        [
+          {
+            "node": "No Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stop Silly Uneeded batches": {
+      "main": [
+        [
+          {
+            "node": "Multiple / Null Prodcuts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Multiple / Null Prodcuts": {
+      "main": [
+        [
+          {
+            "node": "To Many Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Products": {
+      "main": [
+        [
+          {
+            "node": "BringDataForward2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "PreScriptFormURL1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call ZenotiNZ-MedOrder-AddressValidation": {
+      "main": [
+        []
+      ]
+    },
+    "Delivery Location": {
+      "main": [
+        [
+          {
+            "node": "Call ZenotiNZ-MedOrder-AddressValidation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-21T23:28:31.170Z",
+  "id": "UU1PSuRl0ws6N72i",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "ZenotiNZ - LiveMedOrder",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "{\n    \"headers\": {\n      \"host\": \"webhook.ashleyandmartin.com.au\",\n      \"x-forwarded-scheme\": \"https\",\n      \"x-forwarded-proto\": \"https\",\n      \"x-forwarded-for\": \"20.11.81.234\",\n      \"x-real-ip\": \"20.11.81.234\",\n      \"content-length\": \"1346\",\n      \"nz-zenoti\": \"pXZKc0W123Z\",\n      \"content-type\": \"application/json; charset=utf-8\"\n    },\n    \"params\": {},\n    \"query\": {},\n    \"body\": {\n      \"id\": \"69e8044c0058779421fd8fb6\",\n      \"event_id\": \"69e8044c0058779421fd8fb5\",\n      \"event_schema\": \"v1\",\n      \"event_resource\": null,\n      \"event_type\": \"Appointment.Started\",\n      \"event_timestamp\": \"2026-04-21T23:12:12.7840194Z\",\n      \"data\": {\n        \"invoice_id\": \"46320fcd-19cc-4f62-ae53-e9206b6df284\",\n        \"invoice_number\": \"24065\",\n        \"appointment_group_id\": \"e790b273-9f70-4a36-83e7-f0e40efa68c8\",\n        \"center_id\": \"8a97ae57-5822-4438-b692-4913733872a1\",\n        \"organization_id\": \"89978da1-cd8a-45ac-bf69-f422cf961761\",\n        \"guest\": {\n          \"id\": \"3ea74ac5-cd9d-4f16-9146-5d7290b622b3\",\n          \"first_name\": \"Cameron\",\n          \"last_name\": \"Mace\",\n          \"email\": \"cameronscottmace@gmail.com\"\n        },\n        \"appointments\": [\n          {\n            \"id\": \"b6d7094f-ede3-4ea6-a7b1-d755c464e639\",\n            \"invoice_item_id\": \"dcb64642-0e2b-4d3f-83d1-ff4d9589bbf9\",\n            \"service_name\": \"Telehealth Check-up\",\n            \"service_id\": \"ea2fab22-be5f-4342-838d-1a4bcebe9618\",\n            \"start_time\": \"2026-04-21T23:00:00\",\n            \"end_time\": \"2026-04-21T23:15:00\",\n            \"start_time_in_center\": \"2026-04-22T11:00:00\",\n            \"end_time_in_center\": \"2026-04-22T11:15:00\",\n            \"creation_date\": \"2026-04-15T04:39:32\",\n            \"last_updated_on\": \"2026-04-21T23:12:12\",\n            \"service_duration_in_minutes\": 15,\n            \"has_add_ons\": false,\n            \"is_add_on\": false,\n            \"therapist_name\": \"Dr Jolyn Tay 64497\",\n            \"therapist_id\": \"99b1439b-7c65-41c4-b15f-7a681614105b\",\n            \"is_recurring\": false,\n            \"show_in_calendar\": false,\n            \"appointment_type\": 2,\n            \"therapist_request_type\": 0,\n            \"room_name\": \"\",\n            \"equipment_name\": \"\",\n            \"appointment_progress\": 1\n          }\n        ]\n      }\n    },\n    \"webhookUrl\": \"https://webhook.ashleyandmartin.com.au/webhook/NZ-Zenoti\",\n    \"executionMode\": \"production\"\n  }"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -256,
+        -320
+      ],
+      "id": "f1f23eac-5461-4570-8db0-cbde1d93f147",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5e79c735-283e-4592-8d5e-3378a62eeddb",
+              "leftValue": "={{ $json.executionMode }}",
+              "rightValue": "production",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -32,
+        -320
+      ],
+      "id": "00b258da-c3cf-4a6f-ae91-449f0e3c89d1",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "amount": "={{ $json.body.data.appointments[0].service_duration_in_minutes }}",
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        192,
+        -320
+      ],
+      "id": "2d3ca5ae-d204-4378-9c69-0ae2efb77c21",
+      "name": "Wait",
+      "webhookId": "debb90a2-9ec4-4e5c-993e-a465647428f8",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "PygQxZaLVrcaZiGx",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/PygQxZaLVrcaZiGx",
+          "cachedResultName": "ZenotiNZ-GetAuthToken"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        416,
+        -320
+      ],
+      "id": "986cf9d6-42ac-4ff1-b3e0-d87deef1b1b2",
+      "name": "Call 'ZenotiNZ-GetAuthToken'"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/appointments/{{ $('When Executed by Another Workflow').first().json.body.data.appointments[0].id }}/forms_data",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "tag_Id",
+              "value": "=0"
+            },
+            {
+              "name": "view_context",
+              "value": "0"
+            },
+            {
+              "name": "version_no",
+              "value": "0"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        800,
+        -320
+      ],
+      "id": "abc9d96c-b901-4fd4-8b8b-6bf4d115d7f2",
+      "name": "Appointment Form Data1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\n\n// Get data and turn it into an object if it's a JSON string\nlet data = item.data;\n\nif (typeof data === 'string') {\n  try {\n    data = JSON.parse(data);\n  } catch (error) {\n    throw new Error('data is not valid JSON: ' + data);\n  }\n} else if (!data || typeof data !== 'object') {\n  data = {};\n}\n\n// Pull out first file for the signature\nconst file0 = (data.file && data.file[0]) || {};\n\nconst output = {\n  ...item,      // keep original fields (guest_data, is_form_submitted, etc.)\n  ...data,      // expand fields from parsed data\n  signatureUrl: file0.presignedUrl || null,\n};\n\n// Optional: remove nested data now that it's expanded\ndelete output.data;\n\nreturn [\n  {\n    json: output,\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1024,
+        -320
+      ],
+      "id": "b4e476fa-4256-41ce-beaf-5a64a0b5802a",
+      "name": "CleanUpAppointment"
+    },
+    {
+      "parameters": {
+        "content": "## Grab Form / Clean Form Data",
+        "height": 272,
+        "width": 432,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        752,
+        -416
+      ],
+      "typeVersion": 1,
+      "id": "17fa2aad-4a5c-4850-b27f-51895fbcd373",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## Start Flow and Filter Test Runs",
+        "height": 272,
+        "width": 416
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -304,
+        -416
+      ],
+      "typeVersion": 1,
+      "id": "19bdf53b-d02f-4976-aa31-75450cb18e29",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Wait Appointment Service Time",
+        "height": 272,
+        "width": 256,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        112,
+        -416
+      ],
+      "typeVersion": 1,
+      "id": "80d2e041-efe8-484b-ae0d-edba63cecf52",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Get Auth Token",
+        "height": 272,
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        368,
+        -416
+      ],
+      "typeVersion": 1,
+      "id": "61e2493e-1f46-41ec-b9fd-751915d9c35a",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Get Auth Token",
+        "height": 272,
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1184,
+        -416
+      ],
+      "typeVersion": 1,
+      "id": "44f534b7-a9d8-4850-afdd-46b3449b20a8",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "391b5352-1b8e-4abb-b5b4-f9a5378880ae",
+              "leftValue": "={{ $('CleanUpAppointment').item.json.signatureUrl }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1232,
+        -320
+      ],
+      "id": "3cf13aeb-4381-4207-b476-2e9db9ef2872",
+      "name": "NoDoctorSignature"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/guests/{{ $('When Executed by Another Workflow').first().json.body.data.guest.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        608,
+        -320
+      ],
+      "id": "eedc083b-83ef-4a00-9b32-62002ae9033a",
+      "name": "Guest Details"
+    },
+    {
+      "parameters": {
+        "content": "## Grab Guest Details ",
+        "height": 272,
+        "width": 192,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        560,
+        -416
+      ],
+      "typeVersion": 1,
+      "id": "d9545008-0117-4890-a22b-2d97a2f2241e",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "69qqsmSyNdqvlEpY",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/69qqsmSyNdqvlEpY",
+          "cachedResultName": "ZenotiNZ-ConsultClinic-ValidateApp"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "body_data_center_id_firstItem": "={{ $('When Executed by Another Workflow').first().json.body.data.center_id }}",
+            "code": "={{ $('Guest Details').first().json.code }}",
+            "body_data_appointments_firstItem": "={{ $('When Executed by Another Workflow').first().json.body.data.appointments }}",
+            "body_data_guest_id_firstItem": "={{ $('When Executed by Another Workflow').first().json.body.data.guest.id }}",
+            "personal_info_first_name": "={{ $('Guest Details').first().json.personal_info.first_name }}",
+            "personal_info_last_name": "={{ $('Guest Details').first().json.personal_info.last_name }}",
+            "center_name": "={{ $('Guest Details').first().json.center_name }}",
+            "body_data_appointment_group_id_firstItem": "={{ $('When Executed by Another Workflow').first().json.body.data.appointment_group_id }}"
+          },
+          "matchingColumns": [
+            "body_data_center_id_firstItem",
+            "code",
+            "body_data_appointments_firstItem",
+            "body_data_guest_id_firstItem",
+            "personal_info_first_name",
+            "personal_info_last_name",
+            "center_name",
+            "body_data_appointment_group_id_firstItem"
+          ],
+          "schema": [
+            {
+              "id": "body_data_center_id_firstItem",
+              "displayName": "body_data_center_id_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "code",
+              "displayName": "code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "body_data_appointments_firstItem",
+              "displayName": "body_data_appointments_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "body_data_guest_id_firstItem",
+              "displayName": "body_data_guest_id_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "personal_info_first_name",
+              "displayName": "personal_info_first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "personal_info_last_name",
+              "displayName": "personal_info_last_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "center_name",
+              "displayName": "center_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "body_data_appointment_group_id_firstItem",
+              "displayName": "body_data_appointment_group_id_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1456,
+        -272
+      ],
+      "name": "Call ZenotiNZ-ConsultClinic-ValidateApp",
+      "id": "6d70a15e-9e42-4a21-bfe6-8edd64d82f9b"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        -32
+      ],
+      "id": "efcb5a0a-9443-41c3-be7d-613c23505bee",
+      "name": "Flow End"
+    },
+    {
+      "parameters": {
+        "content": "## Flow End",
+        "height": 272,
+        "width": 192,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1184,
+        -144
+      ],
+      "typeVersion": 1,
+      "id": "a9eefcaf-5112-43cf-ab5d-798a2fee41c8",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## Consult Clinic",
+        "height": 272,
+        "width": 960,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1376,
+        -416
+      ],
+      "typeVersion": 1,
+      "id": "7f096a94-5905-47fd-9e46-71b9b6941fdf",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "## Continue Flow",
+        "height": 272
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2336,
+        -416
+      ],
+      "typeVersion": 1,
+      "id": "446d24ad-e953-483d-a552-afc3c7f50e21",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $('CleanUpAppointment').all();\n\nreturn data;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1856,
+        -272
+      ],
+      "id": "7eae70f5-8f3f-423d-ba1b-7fc37a398faf",
+      "name": "Bring Data Forward"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a9a88d3a-5d3a-4925-8b25-e9383dc7fbfa",
+              "leftValue": "={{ $json.data_approved }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1648,
+        -272
+      ],
+      "id": "ae2fc745-c6ee-4645-b0fa-b938420ea884",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "q9l2wht86dwtjuXA",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/q9l2wht86dwtjuXA",
+          "cachedResultName": "ZenotiNZ-MedOrder-AddressValidation"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "body_data_guest_first_name_firstItem": "={{ $('When Executed by Another Workflow').first().json.body.data.guest.first_name }}",
+            "body_data_guest_last_name_firstItem": "={{ $('When Executed by Another Workflow').first().json.body.data.guest.last_name }}",
+            "body_data_appointments_firstItem": "={{ $('When Executed by Another Workflow').first().json.body.data.appointments }}",
+            "body_data_center_id_firstItem": "={{ $('When Executed by Another Workflow').first().json.body.data.center_id }}",
+            "body_data_guest_id_firstItem": "={{ $('When Executed by Another Workflow').first().json.body.data.guest.id }}",
+            "personal_info_date_of_birth_firstItem": "={{ $('Guest Details').first().json.personal_info.date_of_birth }}",
+            "personal_info_gender_name_firstItem": "={{ $('Guest Details').first().json.personal_info.gender_name }}",
+            "personal_info_email_firstItem": "={{ $('Guest Details').first().json.personal_info.email }}",
+            "code_firstItem": "={{ $('Guest Details').first().json.code }}",
+            "body_data_appointments": "={{ $('When Executed by Another Workflow').item.json.body.data.appointments }}",
+            "DeliveryLocation": "={{ $json.DeliveryLocation }}"
+          },
+          "matchingColumns": [
+            "body_data_guest_first_name_firstItem",
+            "body_data_guest_last_name_firstItem",
+            "body_data_appointments_firstItem",
+            "body_data_center_id_firstItem",
+            "body_data_guest_id_firstItem",
+            "personal_info_date_of_birth_firstItem",
+            "personal_info_gender_name_firstItem",
+            "personal_info_email_firstItem",
+            "code_firstItem",
+            "body_data_appointments"
+          ],
+          "schema": [
+            {
+              "id": "body_data_guest_first_name_firstItem",
+              "displayName": "body_data_guest_first_name_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "body_data_guest_last_name_firstItem",
+              "displayName": "body_data_guest_last_name_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "body_data_appointments_firstItem",
+              "displayName": "body_data_appointments_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "body_data_center_id_firstItem",
+              "displayName": "body_data_center_id_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "body_data_guest_id_firstItem",
+              "displayName": "body_data_guest_id_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "personal_info_date_of_birth_firstItem",
+              "displayName": "personal_info_date_of_birth_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "personal_info_gender_name_firstItem",
+              "displayName": "personal_info_gender_name_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "personal_info_email_firstItem",
+              "displayName": "personal_info_email_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "code_firstItem",
+              "displayName": "code_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "body_data_appointments",
+              "displayName": "body_data_appointments",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "DeliveryLocation",
+              "displayName": "DeliveryLocation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        2400,
+        -336
+      ],
+      "name": "Call ZenotiNZ-MedOrder-AddressValidation",
+      "id": "a83bf3e1-e633-46ff-95af-5eec6ca0de4b"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/guests/{{ $json.CustomerID }}/Packages",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "show_redeemable",
+              "value": "false"
+            },
+            {
+              "name": "center_id",
+              "value": "={{ $('When clicking ‘Execute workflow’').item.json.Zenoti_ID }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        4192,
+        -352
+      ],
+      "id": "09d359f3-0860-46e7-ac4b-cb1ca4bc3955",
+      "name": "GetPackges"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "42bc09ed-7e2a-4517-848f-e55011e3fdc9",
+              "leftValue": "={{ $json.invoice.status }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        4352,
+        -352
+      ],
+      "id": "418f398d-36ab-4d8c-8742-c32a1194f5cc",
+      "name": "FilterLiveProducts",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "content": "## Client Current Packages",
+        "height": 272,
+        "width": 2928,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4160,
+        -448
+      ],
+      "typeVersion": 1,
+      "id": "e87a66fb-38d1-44e2-a740-6813cc007e2d",
+      "name": "Sticky Note16"
+    },
+    {
+      "parameters": {
+        "content": "## Cleaned Drug Name",
+        "height": 272,
+        "width": 192,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3872,
+        -448
+      ],
+      "typeVersion": 1,
+      "id": "18806731-42ba-443b-a7e3-9dcbb9df2d2e",
+      "name": "Sticky Note17"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\n// Field we are reading from\nconst targetField = \"product\";\n\nfunction formatNumber(numStr) {\n  if (numStr.length < 3) {\n    return numStr + \"%\";\n  }\n  const first = numStr[0];\n  const rest = numStr.slice(1);\n  return `${first}.${rest}%`;\n}\n\nfor (const item of items) {\n  const raw = item.json[targetField];\n\n  if (typeof raw === \"string\" && raw.length > 0) {\n\n    const parts = raw.match(/[A-Z][a-z]*|[0-9]+/g) || [];\n\n    const transformed = parts.map(p => {\n      if (/^\\d+$/.test(p)) {\n        return formatNumber(p);\n      }\n      return p;\n    });\n\n    item.json[\"ProductNameCleaned\"] = transformed.join(\" \");\n\n    if (/finasteride/i.test(raw)) {\n      item.json[\"ZenotiProductName\"] = \"Minoxidil + Finasteride Solution\";\n    } else {\n      item.json[\"ZenotiProductName\"] = \"Minoxidil Solution\";\n    }\n\n    // NEW — first 5 chars\n    item.json[\"ZenotiProductNameShort\"] = item.json[\"ZenotiProductName\"].slice(0, 5);\n\n    // NEW — last 5 chars\n    const zName = item.json[\"ZenotiProductName\"];\n    item.json[\"ZenotiProductNameEnd\"] = zName.slice(-4);\n\n  } else {\n    item.json[\"ProductNameCleaned\"] = \"\";\n    item.json[\"ZenotiProductName\"] = \"\";\n    item.json[\"ZenotiProductNameShort\"] = \"\";\n    item.json[\"ZenotiProductNameEnd\"] = \"\";\n  }\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3920,
+        -336
+      ],
+      "id": "8b02b2ab-2bf3-4816-ae54-eb023b372629",
+      "name": "Clean up Drug Name"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "products",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        5616,
+        -352
+      ],
+      "id": "7e280fff-49ba-4c8e-a4c7-3f9030240551",
+      "name": "Split Out",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "310efdec-6d82-42ae-bb86-dbeb99f6a3a4",
+              "leftValue": "={{ $json.product_type_info.name }}",
+              "rightValue": "={{ $('Clean up Drug Name').item.json.ZenotiProductNameShort }}",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            },
+            {
+              "id": "c2d0b2fa-256e-4577-965f-c78201617654",
+              "leftValue": "={{ $json.product_type_info.name }}",
+              "rightValue": "={{ $('Clean up Drug Name').item.json.ZenotiProductNameEnd }}",
+              "operator": {
+                "type": "string",
+                "operation": "endsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        5792,
+        -352
+      ],
+      "id": "ade911e8-f382-4cb6-a955-d156ec9e6e7a",
+      "name": "FilterDown Drugs",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst empty = items.length === 1 && Object.keys(items[0].json).length === 0;\n\n// Add the flag to the first (or only) item\nif (items.length > 0) {\n  items[0].json.empty = empty;\n  return items;\n}\n\n// If nothing came in, emit one with just the flag\nreturn [{ json: { empty: true } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5968,
+        -352
+      ],
+      "id": "91babf74-a340-4140-bfe6-9591405cdcc4",
+      "name": "Clean for IF1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b10b2be5-bf59-4cc5-9a6f-882cb99725eb",
+              "leftValue": "={{ $json.empty }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        6144,
+        -352
+      ],
+      "id": "83f98606-8d2b-40c3-8335-b6a4ec7c7bad",
+      "name": "If No Matching Package"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Items we want to OUTPUT (all fields kept)\nconst drugItems = $('Clean up Drug Name').all();\n\n// Previous node items (where balance lives)\nconst balanceItems = $input.all();\n\nconst output = [];\n\nfor (let i = 0; i < drugItems.length; i++) {\n  const drugItem = drugItems[i];\n\n  // Clone so we don't accidentally mutate shared references\n  const item = {\n    json: { ...drugItem.json },\n  };\n\n  // Get balance from previous node (same index if possible, else first one)\n  const balanceRaw = balanceItems[i]\n    ? balanceItems[i].json.balance\n    : (balanceItems[0]?.json.balance ?? 0);\n\n  // Quantity comes from Clean up Drug Name\n  const qtyRaw = drugItem.json.quantity;\n\n  // Make sure they're numbers\n  const balance = Number(balanceRaw) || 0;\n  const quantity = Number(qtyRaw) || 0;\n\n  // Do the maths\n  const remaining = balance - quantity;\n\n  // Add new fields\n  item.json.CanSubtract = remaining >= 0;\n  item.json.RemainingBalance = remaining;\n  item.json.ProductID = $input.first().json.product_type_info.id;\n\n  output.push(item);\n}\n\n// Return ALL Clean up Drug Name fields + new maths fields\nreturn output;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6352,
+        -352
+      ],
+      "id": "eea7a013-e470-45c3-9814-f3a34bf75769",
+      "name": "Drug Compare"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $('FilterLiveProducts').all();\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5440,
+        -352
+      ],
+      "id": "a21b48a5-8222-4fb0-b05d-bf62439414c9",
+      "name": "BringDataForward2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8bf67e8d-e85b-49cb-bd39-1bd24cb4cb67",
+              "leftValue": "={{ $json.FilterReason }}",
+              "rightValue": "DuplicateProductGroups",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4912,
+        -352
+      ],
+      "id": "5fa71f4b-5bb0-4457-93d1-c5af6a59fbee",
+      "name": "To Many Products",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "products"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        4544,
+        -352
+      ],
+      "id": "9d392591-0893-4c56-bd94-e649559ccac6",
+      "name": "Stop Silly Uneeded batches"
+    },
+    {
+      "parameters": {
+        "jsCode": "const agg = $input.first()?.json ?? {};\nconst products = Array.isArray(agg.products) ? agg.products : [];\n\n// 1) No product groups\nif (products.length === 0) {\n  return [{\n    json: {\n      FilterMeOut: true,\n      FilterReason: \"NoProducts\",\n    }\n  }];\n}\n\n// 2) Multiple product groups = duplicate data\nif (products.length > 1) {\n  return [{\n    json: {\n      FilterMeOut: true,\n      FilterReason: \"DuplicateProductGroups\",\n      GroupCount: products.length,\n    }\n  }];\n}\n\n// 3) Exactly ONE product group → PASS\nreturn [{\n  json: {\n    FilterMeOut: false,\n    FilterReason: \"OK\",\n    products: products[0], // unwrap ONE level\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4720,
+        -352
+      ],
+      "id": "6e0350d6-b4fa-4cb9-82a4-c8f1f41874b0",
+      "name": "Multiple / Null Prodcuts"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d149344b-810e-42ab-9beb-8c9f5da883f7",
+              "leftValue": "={{ $json.FilterReason }}",
+              "rightValue": "NoProducts",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5120,
+        -352
+      ],
+      "id": "3d23cf17-6ca8-4092-a747-dab321cf0960",
+      "name": "No Products"
+    },
+    {
+      "parameters": {
+        "jsCode": "const baseUrl = 'https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx';\n\n// Pull values from previous nodes\nconst AppGroupId    = $('Clinic Previous Day Appointments').first().json.appointment_group_id;\nconst ServiceId     = $('Loop Over Items').first().json.service.id\nconst ServiceName   = $('Get Appointment Forms').first().json.service_name;\nconst GuestId       = $('Guest Details').first().json.id;\nconst AppointmentId = $('Format Data').first().json.AppointmentID;\n\n// Helper to build querystring with encoding\nfunction qs(params) {\n  return Object.keys(params)\n    .filter((k) => params[k] !== undefined && params[k] !== null && params[k] !== '')\n    .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(String(params[k]))}`)\n    .join('&');\n}\n\nconst query = qs({\n  AppGroupId,\n  ServiceId,\n  Service: ServiceName,\n  GuestId,\n  AppointmentId,\n});\n\nconst finalUrl = `${baseUrl}?${query}`;\n\nreturn [\n  {\n    json: {\n      AppointmentCustomDataUrl: finalUrl,\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6720,
+        -352
+      ],
+      "id": "dc1fbc61-02cd-4509-9228-4a0e03d40990",
+      "name": "PreScriptFormURL1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d149344b-810e-42ab-9beb-8c9f5da883f7",
+              "leftValue": "={{ $json.CanSubtract }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        6512,
+        -352
+      ],
+      "id": "f9d92a3f-873f-4967-9862-16d87d710434",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all incoming items\nconst items = $input.all();\n\nfor (const item of items) {\n  const boxes = item.json.selectBoxes || {};\n\n  // Work out which option is true\n  if (boxes.clinic) {\n    item.json.DeliveryLocation = 'clinic';\n  } else if (boxes.guest) {\n    item.json.DeliveryLocation = 'guest';\n  } else if (boxes.custom) {\n    item.json.DeliveryLocation = 'custom';\n  } else {\n    item.json.DeliveryLocation = 'unknown';\n  }\n}\n\n// Pass everything through with the new field added\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2128,
+        -336
+      ],
+      "id": "e5c03031-0932-4c2a-889d-83869d62d952",
+      "name": "Delivery Location"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.ashleyandmartin.com.au",
+            "x-forwarded-scheme": "https",
+            "x-forwarded-proto": "https",
+            "x-forwarded-for": "20.11.81.234",
+            "x-real-ip": "20.11.81.234",
+            "content-length": "1346",
+            "nz-zenoti": "pXZKc0W123Z",
+            "content-type": "application/json; charset=utf-8"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "id": "69e8044c0058779421fd8fb6",
+            "event_id": "69e8044c0058779421fd8fb5",
+            "event_schema": "v1",
+            "event_resource": null,
+            "event_type": "Appointment.Started",
+            "event_timestamp": "2026-04-21T23:12:12.7840194Z",
+            "data": {
+              "invoice_id": "46320fcd-19cc-4f62-ae53-e9206b6df284",
+              "invoice_number": "24065",
+              "appointment_group_id": "e790b273-9f70-4a36-83e7-f0e40efa68c8",
+              "center_id": "8a97ae57-5822-4438-b692-4913733872a1",
+              "organization_id": "89978da1-cd8a-45ac-bf69-f422cf961761",
+              "guest": {
+                "id": "3ea74ac5-cd9d-4f16-9146-5d7290b622b3",
+                "first_name": "Cameron",
+                "last_name": "Mace",
+                "email": "cameronscottmace@gmail.com"
+              },
+              "appointments": [
+                {
+                  "id": "b6d7094f-ede3-4ea6-a7b1-d755c464e639",
+                  "invoice_item_id": "dcb64642-0e2b-4d3f-83d1-ff4d9589bbf9",
+                  "service_name": "Telehealth Check-up",
+                  "service_id": "ea2fab22-be5f-4342-838d-1a4bcebe9618",
+                  "start_time": "2026-04-21T23:00:00",
+                  "end_time": "2026-04-21T23:15:00",
+                  "start_time_in_center": "2026-04-22T11:00:00",
+                  "end_time_in_center": "2026-04-22T11:15:00",
+                  "creation_date": "2026-04-15T04:39:32",
+                  "last_updated_on": "2026-04-21T23:12:12",
+                  "service_duration_in_minutes": 15,
+                  "has_add_ons": false,
+                  "is_add_on": false,
+                  "therapist_name": "Dr Jolyn Tay 64497",
+                  "therapist_id": "99b1439b-7c65-41c4-b15f-7a681614105b",
+                  "is_recurring": false,
+                  "show_in_calendar": false,
+                  "appointment_type": 2,
+                  "therapist_request_type": 0,
+                  "room_name": "",
+                  "equipment_name": "",
+                  "appointment_progress": 1
+                }
+              ]
+            }
+          },
+          "webhookUrl": "https://webhook.ashleyandmartin.com.au/webhook/NZ-Zenoti",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-04-21T23:28:31.172Z",
+      "createdAt": "2026-04-21T23:28:31.172Z",
+      "role": "workflow:owner",
+      "workflowId": "UU1PSuRl0ws6N72i",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-04-22T05:54:19.155Z",
+  "versionId": "f5ad4d0a-cbea-4ea5-a65b-476f17cdd0e0"
+}
