@@ -6749,27 +6749,27 @@
     "When clicking ‘Execute workflow’": [
       {
         "json": {
-          "Zenoti_ID": "8a97ae57-5822-4438-b692-4913733872a1",
-          "code": "WG",
-          "name": "Wellington",
-          "state": "Wellington",
+          "Zenoti_ID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
+          "code": "AK",
+          "name": "Auckland",
+          "state": "Auckland",
           "state_short_name": "",
           "time_zone": "(UTC+12:00) Auckland, Wellington",
-          "address_1": "Level 5, Lambton Centre",
-          "address_2": "117 Lambton Quay",
-          "postcode": 6145,
-          "display_number": "044735206",
-          "email": "wellington@ashleyandmartin.co.nz",
+          "address_1": "L6/5 Short St, Newmarket",
+          "address_2": "",
+          "postcode": 1010,
+          "display_number": "095207560",
+          "email": "Auckland@ashleyandmartin.co.nz",
           "No_clients": null,
-          "Abb": "WEL",
+          "Abb": "AUC",
           "table_id": null,
           "Country_Code": null,
-          "city": "Wellington",
-          "id": 3,
-          "createdAt": "2025-12-09T00:49:44.469Z",
-          "updatedAt": "2025-12-12T04:09:35.004Z",
-          "start_date": "2026-03-11",
-          "end_date": "2026-03-12"
+          "city": "Newmarket",
+          "id": 2,
+          "createdAt": "2025-12-09T00:49:44.432Z",
+          "updatedAt": "2025-12-12T04:09:32.201Z",
+          "start_date": "2026-04-21",
+          "end_date": "2026-04-22"
         },
         "pairedItem": {
           "item": 0
@@ -6810,6 +6810,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-03-12T00:41:01.052Z",
+  "updatedAt": "2026-04-22T00:35:06.461Z",
   "versionId": "914fc36e-62bf-457f-8533-326e33bd7932"
 }
