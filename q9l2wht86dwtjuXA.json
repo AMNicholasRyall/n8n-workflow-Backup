@@ -1,0 +1,1642 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-04-22T05:53:22.000Z",
+    "createdAt": "2026-04-22T05:53:19.428Z",
+    "versionId": "eed25484-c7f7-490a-bf56-f031d4d6a0a3",
+    "workflowId": "q9l2wht86dwtjuXA",
+    "nodes": [
+      {
+        "parameters": {
+          "jsCode": "// Get all items from the CleanUpAppointment node\nconst items = $('CleanUpAppointment1').all();\n\n// Add your custom variables to each item\nfor (const item of items) {\n    item.json.ConsentFormFilled = true;\n    item.json.ConsentFormSubmitted = true;\n    item.json.ClientAppointmentID = $('Start').first().json.body_data_appointments_firstItem[0].id;\n}\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2576,
+          -80
+        ],
+        "id": "0de287b7-e62f-474f-9ffd-a79104c589cf",
+        "name": "Consent Form Check"
+      },
+      {
+        "parameters": {
+          "content": "## Non First Concent Approved",
+          "height": 224,
+          "width": 272,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          2512,
+          -176
+        ],
+        "typeVersion": 1,
+        "id": "afc67eb6-e2c4-4d4e-8164-7cc742d8cb48",
+        "name": "Sticky Note9"
+      },
+      {
+        "parameters": {
+          "jsCode": "const item = $input.first().json;\n\n// Get data and turn it into an object if it's a JSON string\nlet data = item.data;\n\nif (typeof data === 'string') {\n  try {\n    data = JSON.parse(data);\n  } catch (error) {\n    throw new Error('data is not valid JSON: ' + data);\n  }\n} else if (!data || typeof data !== 'object') {\n  data = {};\n}\n\n// Pull out first file for the signature\nconst file0 = (data.file && data.file[0]) || {};\n\nconst output = {\n  ...item,      // keep original fields (guest_data, is_form_submitted, etc.)\n  ...data,      // expand fields from parsed data\n  signatureUrl: file0.presignedUrl || null,\n};\n\n// Optional: remove nested data now that it's expanded\ndelete output.data;\n\nreturn [\n  {\n    json: output,\n  },\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2336,
+          -224
+        ],
+        "id": "61c19751-1c5c-436a-bdc8-a5192261f0f9",
+        "name": "CleanUpAppointment1"
+      },
+      {
+        "parameters": {
+          "jsCode": "// CUSTOM DELIVERY NODE\n\nconst items = $input.all();\n\n// Get the custom address from the first input item\nconst customAddress = $input.first().json.textField || '';\n\nfor (const item of items) {\n\tconst json = item.json;\n\n\t// --- 1. Rename fields for product & quantity ---\n\tif (json.select16 !== undefined) {\n\t\tjson.product = json.select16;\n\t\tdelete json.select16;\n\t}\n\n\tif (json.textField16 !== undefined) {\n\t\tjson.quantity = json.textField16;\n\t\tdelete json.textField16;\n\t}\n\n\t// --- 2. Build delivery address for CUSTOM deliveries ---\n\tif (json.DeliveryLocation === 'custom') {\n\t\t// Full address typed by user (same value as $input.first().json.textField)\n\t\tjson.DeliveryAddressFull = customAddress;\n\t}\n}\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3840,
+          -240
+        ],
+        "id": "1238a340-8746-48fc-86ed-aee53f9ae405",
+        "name": "Custom Address"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "5a7e1de6-98a0-4dcd-a2f8-0366e122e00f",
+                "leftValue": "={{ $('Start').item.json.body_data_appointments[0].service_name }}",
+                "rightValue": "Telehealth First",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              },
+              {
+                "id": "9ab233f7-5d2b-4d08-8104-8e04ed233fca",
+                "leftValue": "={{ $('Start').item.json.body_data_appointments[0].service_name }}",
+                "rightValue": "Doctor-First",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          2576,
+          -320
+        ],
+        "id": "76e55d78-3032-403c-abb0-49c683e68893",
+        "name": "If4"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          2112,
+          -336
+        ],
+        "id": "bceef4c6-7a27-4f7e-a1b2-81774484996c",
+        "name": "Flow Contnue"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "advanced": true,
+          "mergeByFields": {
+            "values": [
+              {
+                "field1": "AppointmentID",
+                "field2": "ClientAppointmentID"
+              }
+            ]
+          },
+          "joinMode": "keepEverything",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          3376,
+          -336
+        ],
+        "id": "6d399a91-a895-433d-a061-4010c2e1d8cc",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\n\nfor (const item of items) {\n\tconst json = item.json;\n\n\t// --- Rename fields ---\n\tif (json.select13 !== undefined) {\n\t\tjson.doctorsDirections = json.select13;\n\t\tdelete json.select13;\n\t}\n\n\t// --- Remove unwanted top-level fields ---\n\tdelete json.guest_data;\n\tdelete json.selectBoxes;\n\tdelete json.file;\n\tdelete json.contentMacros;\n\tdelete json.signatureUrl;\n\tdelete json.dateTime1;\n\tdelete json.dateTime;\n\tdelete json.ClientAppointmentID;\n\n\t// Add more deletes here as needed\n}\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          4000,
+          -336
+        ],
+        "id": "fe3315db-1d5b-4da8-a950-3af946a39cc4",
+        "name": "Merge UpData"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/appointments/{{ $('GrabUserDetails').item.json.AppointmentID }}/forms",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          2784,
+          -336
+        ],
+        "id": "7ea1a492-20ae-43fc-b093-d1170fc12b1a",
+        "name": "Get Appointment Forms2"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "855f7d29-527d-4c75-b265-f25d3479e450",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "SIDE EFFECTS FORM",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.2,
+        "position": [
+          2960,
+          -336
+        ],
+        "id": "6a74757d-30d6-4aaf-b077-642eecafca7e",
+        "name": "Filter2"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Get all items from the CleanUpAppointment node\nconst items = $('CleanUpAppointment1').all();\n\n// Add your custom variables to each item\nfor (const item of items) {\n    item.json.ConsentFormFilled = $input.first().json.is_filled;\n    item.json.ConsentFormSubmitted = $input.first().json.is_submitted;\n    item.json.ClientAppointmentID = $('GrabUserDetails').first().json.AppointmentID;\n}\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3168,
+          -336
+        ],
+        "id": "cc5cf323-c07e-4f3d-8f31-55330cb7f6f8",
+        "name": "Consent Form Check1"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "nTEpzvUO2Mr96Y0V",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/nTEpzvUO2Mr96Y0V",
+            "cachedResultName": "ZenotiNZ - Medorder Address Check"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          4176,
+          -336
+        ],
+        "id": "e848e92c-da86-4898-885b-aeddc7fc0e83",
+        "name": "MedOrderCheck"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.DeliveryLocation }}",
+                      "rightValue": "clinic",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "8d4ab3ca-9811-461d-806b-1076dbe00812"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "a6e7582d-a121-4ebe-99f5-eb3c32773f4e",
+                      "leftValue": "={{ $json.DeliveryLocation }}",
+                      "rightValue": "guest",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "bc647ec7-6e18-4d7b-a214-6d59fc4e0e4e",
+                      "leftValue": "={{ $json.DeliveryLocation }}",
+                      "rightValue": "custom",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "c05e7570-8e45-4bd2-9416-94f621df9136",
+                      "leftValue": "={{ $json.DeliveryLocation }}",
+                      "rightValue": "unknown",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.3,
+        "position": [
+          3600,
+          -368
+        ],
+        "id": "6274a019-16d5-4dd7-8dd1-7c76a1c2c698",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "jsCode": "// GUEST DELIVERY NODE\n\nconst items = $input.all();\n\nfor (const item of items) {\n\tconst json = item.json;\n\n\t// --- 1. Rename fields for product & quantity ---\n\tif (json.select16 !== undefined) {\n\t\tjson.product = json.select16;\n\t\tdelete json.select16;\n\t}\n\n\tif (json.textField16 !== undefined) {\n\t\tjson.quantity = json.textField16;\n\t\tdelete json.textField16;\n\t}\n\n\t// --- 2. Build delivery address for GUEST deliveries ---\n\t// Using contentMacros.content14\n\tif (json.DeliveryLocation === 'guest'\n\t\t&& json.contentMacros\n\t\t&& json.contentMacros.content14) {\n\n\t\tconst c14 = json.contentMacros.content14;\n\n\t\tjson.DeliveryAddress1 = c14['[GuestAddress1]'] || '';\n\t\tjson.DeliveryCity     = c14['[GuestCity]'] || '';\n\n\t\tjson.DeliveryAddressFull = [\n\t\t\tjson.DeliveryAddress1,\n\t\t\tjson.DeliveryCity,\n\t\t].filter(Boolean).join(', ');\n\t}\n}\n\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3840,
+          -368
+        ],
+        "id": "e6e94075-7f21-4a55-8788-7eed30e423ed",
+        "name": "Guest Address"
+      },
+      {
+        "parameters": {
+          "content": "## Concent Form Re-check",
+          "height": 192,
+          "width": 832,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          2512,
+          -368
+        ],
+        "typeVersion": 1,
+        "id": "185f3b79-0b1b-49b7-be0a-82fe3de10636",
+        "name": "Sticky Note4"
+      },
+      {
+        "parameters": {
+          "content": "## Address Check",
+          "height": 272,
+          "width": 192,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          4128,
+          -432
+        ],
+        "typeVersion": 1,
+        "id": "673cb22a-8266-44d2-8e3a-0d6a9c440682",
+        "name": "Sticky Note32"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Get the raw DOB\nconst rawDob = $('Start').first().json.personal_info_date_of_birth_firstItem;\n\n// Convert to dd/MM/yyyy format\nlet formattedDob = null;\n\nif (rawDob) {\n  const dateOnly = rawDob.split(\"T\")[0]; // \"1979-03-25\"\n  const [year, month, day] = dateOnly.split(\"-\");\n  formattedDob = `${day}/${month}/${year}`;\n}\n\n// Build the output\nreturn [\n  {\n    json: {\n      AppointmentID: $('Start').first().json.body_data_appointments_firstItem[0].id,\n      CustomerFirstName: $('Start').first().json.body_data_guest_first_name_firstItem,\n      CustomerLastName: $('Start').first().json.body_data_guest_last_name_firstItem,\n      CustomerCode: $('Start').first().json.code_firstItem,\n      CustomerID: $('Start').first().json.body_data_guest_id_firstItem,\n      CustomerDOB: formattedDob,\n      CustomerEmail: $('Start').first().json.personal_info_email_firstItem,\n      CustomerGender: $('Start').first().json.personal_info_gender_name_firstItem,\n      CustomerCenterID: $('Start').first().json.body_data_center_id_firstItem,\n    }\n  }\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2336,
+          -496
+        ],
+        "id": "7fe1aeac-4d26-4a60-b3b5-2f2bf2ece866",
+        "name": "Format Data"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          3152,
+          -496
+        ],
+        "id": "c8f063dd-abd2-453a-8432-aac054d4e477",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Get all incoming items\nconst items = $input.all();\n\nfor (const item of items) {\n\tconst json = item.json;\n\n\t// --- 1. Rename fields for product & quantity ---\n\tif (json.select16 !== undefined) {\n\t\tjson.product = json.select16;\n\t\tdelete json.select16;\n\t}\n\n\tif (json.textField16 !== undefined) {\n\t\tjson.quantity = json.textField16;\n\t\tdelete json.textField16;\n\t}\n\n\t// --- 2. Build delivery address for CLINIC deliveries ---\n\t// We’re using contentMacros.content15 for clinic\n\tif (json.DeliveryLocation === 'clinic'\n\t\t&& json.contentMacros\n\t\t&& json.contentMacros.content15) {\n\n\t\tconst c15 = json.contentMacros.content15;\n\n\t\t// Map macros to cleaner fields\n\t\tjson.DeliveryAddress1 = c15['[CustomMacro2]'] || '';\n\t\tjson.DeliverySuburb  = c15['[CustomMacro3]'] || '';\n\t\tjson.DeliveryCity    = c15['[CustomMacro4]'] || '';\n\t\tjson.DeliveryPostcode = c15['[CustomMacro5]'] || '';\n\n\t\t// Optional: combined address line if you want it\n\t\tjson.DeliveryAddressFull = [\n\t\t\tjson.DeliveryAddress1,\n\t\t\tjson.DeliverySuburb,\n\t\t\tjson.DeliveryCity,\n\t\t\tjson.DeliveryPostcode,\n\t\t].filter(Boolean).join(', ');\n\t}\n}\n\n// Return updated items\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3840,
+          -512
+        ],
+        "id": "f2575c44-388d-4899-810d-64aba13acdc2",
+        "name": "Clinic Address"
+      },
+      {
+        "parameters": {
+          "content": "## Amend Delivery Address / Refine Data",
+          "height": 464,
+          "width": 784,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          3344,
+          -544
+        ],
+        "typeVersion": 1,
+        "id": "1c37455d-e32f-400c-9e9c-3bfa5ba8ef0e",
+        "name": "Sticky Note15"
+      },
+      {
+        "parameters": {
+          "content": "## Continue Flow",
+          "height": 192,
+          "width": 192
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          3104,
+          -560
+        ],
+        "typeVersion": 1,
+        "id": "8cd9f2c5-e444-4417-b3c8-29b27fe88afa",
+        "name": "Sticky Note7"
+      },
+      {
+        "parameters": {
+          "content": "## Form Check / Address",
+          "height": 592,
+          "width": 256,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          2256,
+          -624
+        ],
+        "typeVersion": 1,
+        "id": "608f384a-5a7f-4173-a1d3-b59e40b9bf69",
+        "name": "Sticky Note12"
+      },
+      {
+        "parameters": {
+          "workflowInputs": {
+            "values": [
+              {
+                "name": "body_data_guest_first_name_firstItem",
+                "type": "any"
+              },
+              {
+                "name": "body_data_guest_last_name_firstItem",
+                "type": "any"
+              },
+              {
+                "name": "body_data_appointments_firstItem",
+                "type": "any"
+              },
+              {
+                "name": "body_data_center_id_firstItem",
+                "type": "any"
+              },
+              {
+                "name": "body_data_guest_id_firstItem",
+                "type": "any"
+              },
+              {
+                "name": "personal_info_date_of_birth_firstItem",
+                "type": "any"
+              },
+              {
+                "name": "personal_info_gender_name_firstItem",
+                "type": "any"
+              },
+              {
+                "name": "personal_info_email_firstItem",
+                "type": "any"
+              },
+              {
+                "name": "code_firstItem",
+                "type": "any"
+              },
+              {
+                "name": "body_data_appointments",
+                "type": "any"
+              },
+              {
+                "name": "DeliveryLocation",
+                "type": "any"
+              }
+            ]
+          }
+        },
+        "id": "9560d2f5-ecf5-4116-9a0d-d2bd327e363c",
+        "typeVersion": 1.1,
+        "name": "Start",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "position": [
+          1904,
+          -336
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Get all incoming items\nconst items = $input.all();\n\nfor (const item of items) {\n  const boxes = item.json.selectBoxes || {};\n\n  // Work out which option is true\n  if (boxes.clinic) {\n    item.json.DeliveryLocation = 'clinic';\n  } else if (boxes.guest) {\n    item.json.DeliveryLocation = 'guest';\n  } else if (boxes.custom) {\n    item.json.DeliveryLocation = 'custom';\n  } else {\n    item.json.DeliveryLocation = 'unknown';\n  }\n}\n\n// Pass everything through with the new field added\nreturn items;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3536,
+          -768
+        ],
+        "id": "de397a4d-81e0-4374-80bf-331828423194",
+        "name": "Delivery Location1"
+      }
+    ],
+    "connections": {
+      "Format Data": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Consent Form Check": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Clinic Address",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Guest Address",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Custom Address",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Guest Address": {
+        "main": [
+          [
+            {
+              "node": "Merge UpData",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Clinic Address": {
+        "main": [
+          [
+            {
+              "node": "Merge UpData",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Custom Address": {
+        "main": [
+          [
+            {
+              "node": "Merge UpData",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge UpData": {
+        "main": [
+          [
+            {
+              "node": "MedOrderCheck",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If4": {
+        "main": [
+          [
+            {
+              "node": "Get Appointment Forms2",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Consent Form Check",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Appointment Forms2": {
+        "main": [
+          [
+            {
+              "node": "Filter2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter2": {
+        "main": [
+          [
+            {
+              "node": "Consent Form Check1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Consent Form Check1": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "CleanUpAppointment1": {
+        "main": [
+          [
+            {
+              "node": "If4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Flow Contnue": {
+        "main": [
+          [
+            {
+              "node": "CleanUpAppointment1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Format Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "No Operation, do nothing": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Start": {
+        "main": [
+          [
+            {
+              "node": "Flow Contnue",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version eed25484",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "eed25484-c7f7-490a-bf56-f031d4d6a0a3",
+  "connections": {
+    "Format Data": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consent Form Check": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Clinic Address",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Guest Address",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Custom Address",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guest Address": {
+      "main": [
+        [
+          {
+            "node": "Merge UpData",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clinic Address": {
+      "main": [
+        [
+          {
+            "node": "Merge UpData",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Custom Address": {
+      "main": [
+        [
+          {
+            "node": "Merge UpData",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge UpData": {
+      "main": [
+        [
+          {
+            "node": "MedOrderCheck",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Get Appointment Forms2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Consent Form Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Appointment Forms2": {
+      "main": [
+        [
+          {
+            "node": "Filter2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter2": {
+      "main": [
+        [
+          {
+            "node": "Consent Form Check1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consent Form Check1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "CleanUpAppointment1": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flow Contnue": {
+      "main": [
+        [
+          {
+            "node": "CleanUpAppointment1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Format Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Flow Contnue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-22T02:59:41.870Z",
+  "id": "q9l2wht86dwtjuXA",
+  "isArchived": false,
+  "meta": null,
+  "name": "ZenotiNZ-MedOrder-AddressValidation",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// Get all items from the CleanUpAppointment node\nconst items = $('CleanUpAppointment1').all();\n\n// Add your custom variables to each item\nfor (const item of items) {\n    item.json.ConsentFormFilled = true;\n    item.json.ConsentFormSubmitted = true;\n    item.json.ClientAppointmentID = $('Start').first().json.body_data_appointments_firstItem[0].id;\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2576,
+        -80
+      ],
+      "id": "0de287b7-e62f-474f-9ffd-a79104c589cf",
+      "name": "Consent Form Check"
+    },
+    {
+      "parameters": {
+        "content": "## Non First Concent Approved",
+        "height": 224,
+        "width": 272,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2512,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "afc67eb6-e2c4-4d4e-8164-7cc742d8cb48",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\n\n// Get data and turn it into an object if it's a JSON string\nlet data = item.data;\n\nif (typeof data === 'string') {\n  try {\n    data = JSON.parse(data);\n  } catch (error) {\n    throw new Error('data is not valid JSON: ' + data);\n  }\n} else if (!data || typeof data !== 'object') {\n  data = {};\n}\n\n// Pull out first file for the signature\nconst file0 = (data.file && data.file[0]) || {};\n\nconst output = {\n  ...item,      // keep original fields (guest_data, is_form_submitted, etc.)\n  ...data,      // expand fields from parsed data\n  signatureUrl: file0.presignedUrl || null,\n};\n\n// Optional: remove nested data now that it's expanded\ndelete output.data;\n\nreturn [\n  {\n    json: output,\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2336,
+        -224
+      ],
+      "id": "61c19751-1c5c-436a-bdc8-a5192261f0f9",
+      "name": "CleanUpAppointment1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// CUSTOM DELIVERY NODE\n\nconst items = $input.all();\n\n// Get the custom address from the first input item\nconst customAddress = $input.first().json.textField || '';\n\nfor (const item of items) {\n\tconst json = item.json;\n\n\t// --- 1. Rename fields for product & quantity ---\n\tif (json.select16 !== undefined) {\n\t\tjson.product = json.select16;\n\t\tdelete json.select16;\n\t}\n\n\tif (json.textField16 !== undefined) {\n\t\tjson.quantity = json.textField16;\n\t\tdelete json.textField16;\n\t}\n\n\t// --- 2. Build delivery address for CUSTOM deliveries ---\n\tif (json.DeliveryLocation === 'custom') {\n\t\t// Full address typed by user (same value as $input.first().json.textField)\n\t\tjson.DeliveryAddressFull = customAddress;\n\t}\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3840,
+        -240
+      ],
+      "id": "1238a340-8746-48fc-86ed-aee53f9ae405",
+      "name": "Custom Address"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5a7e1de6-98a0-4dcd-a2f8-0366e122e00f",
+              "leftValue": "={{ $('Start').item.json.body_data_appointments[0].service_name }}",
+              "rightValue": "Telehealth First",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "9ab233f7-5d2b-4d08-8104-8e04ed233fca",
+              "leftValue": "={{ $('Start').item.json.body_data_appointments[0].service_name }}",
+              "rightValue": "Doctor-First",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2576,
+        -320
+      ],
+      "id": "76e55d78-3032-403c-abb0-49c683e68893",
+      "name": "If4"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2112,
+        -336
+      ],
+      "id": "bceef4c6-7a27-4f7e-a1b2-81774484996c",
+      "name": "Flow Contnue"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "AppointmentID",
+              "field2": "ClientAppointmentID"
+            }
+          ]
+        },
+        "joinMode": "keepEverything",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3376,
+        -336
+      ],
+      "id": "6d399a91-a895-433d-a061-4010c2e1d8cc",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nfor (const item of items) {\n\tconst json = item.json;\n\n\t// --- Rename fields ---\n\tif (json.select13 !== undefined) {\n\t\tjson.doctorsDirections = json.select13;\n\t\tdelete json.select13;\n\t}\n\n\t// --- Remove unwanted top-level fields ---\n\tdelete json.guest_data;\n\tdelete json.selectBoxes;\n\tdelete json.file;\n\tdelete json.contentMacros;\n\tdelete json.signatureUrl;\n\tdelete json.dateTime1;\n\tdelete json.dateTime;\n\tdelete json.ClientAppointmentID;\n\n\t// Add more deletes here as needed\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4000,
+        -336
+      ],
+      "id": "fe3315db-1d5b-4da8-a950-3af946a39cc4",
+      "name": "Merge UpData"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/appointments/{{ $('GrabUserDetails').item.json.AppointmentID }}/forms",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2784,
+        -336
+      ],
+      "id": "7ea1a492-20ae-43fc-b093-d1170fc12b1a",
+      "name": "Get Appointment Forms2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "855f7d29-527d-4c75-b265-f25d3479e450",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "SIDE EFFECTS FORM",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        2960,
+        -336
+      ],
+      "id": "6a74757d-30d6-4aaf-b077-642eecafca7e",
+      "name": "Filter2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all items from the CleanUpAppointment node\nconst items = $('CleanUpAppointment1').all();\n\n// Add your custom variables to each item\nfor (const item of items) {\n    item.json.ConsentFormFilled = $input.first().json.is_filled;\n    item.json.ConsentFormSubmitted = $input.first().json.is_submitted;\n    item.json.ClientAppointmentID = $('GrabUserDetails').first().json.AppointmentID;\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3168,
+        -336
+      ],
+      "id": "cc5cf323-c07e-4f3d-8f31-55330cb7f6f8",
+      "name": "Consent Form Check1"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "nTEpzvUO2Mr96Y0V",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/nTEpzvUO2Mr96Y0V",
+          "cachedResultName": "ZenotiNZ - Medorder Address Check"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        4176,
+        -336
+      ],
+      "id": "e848e92c-da86-4898-885b-aeddc7fc0e83",
+      "name": "MedOrderCheck"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.DeliveryLocation }}",
+                    "rightValue": "clinic",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "8d4ab3ca-9811-461d-806b-1076dbe00812"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a6e7582d-a121-4ebe-99f5-eb3c32773f4e",
+                    "leftValue": "={{ $json.DeliveryLocation }}",
+                    "rightValue": "guest",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bc647ec7-6e18-4d7b-a214-6d59fc4e0e4e",
+                    "leftValue": "={{ $json.DeliveryLocation }}",
+                    "rightValue": "custom",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c05e7570-8e45-4bd2-9416-94f621df9136",
+                    "leftValue": "={{ $json.DeliveryLocation }}",
+                    "rightValue": "unknown",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        3600,
+        -368
+      ],
+      "id": "6274a019-16d5-4dd7-8dd1-7c76a1c2c698",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "jsCode": "// GUEST DELIVERY NODE\n\nconst items = $input.all();\n\nfor (const item of items) {\n\tconst json = item.json;\n\n\t// --- 1. Rename fields for product & quantity ---\n\tif (json.select16 !== undefined) {\n\t\tjson.product = json.select16;\n\t\tdelete json.select16;\n\t}\n\n\tif (json.textField16 !== undefined) {\n\t\tjson.quantity = json.textField16;\n\t\tdelete json.textField16;\n\t}\n\n\t// --- 2. Build delivery address for GUEST deliveries ---\n\t// Using contentMacros.content14\n\tif (json.DeliveryLocation === 'guest'\n\t\t&& json.contentMacros\n\t\t&& json.contentMacros.content14) {\n\n\t\tconst c14 = json.contentMacros.content14;\n\n\t\tjson.DeliveryAddress1 = c14['[GuestAddress1]'] || '';\n\t\tjson.DeliveryCity     = c14['[GuestCity]'] || '';\n\n\t\tjson.DeliveryAddressFull = [\n\t\t\tjson.DeliveryAddress1,\n\t\t\tjson.DeliveryCity,\n\t\t].filter(Boolean).join(', ');\n\t}\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3840,
+        -368
+      ],
+      "id": "e6e94075-7f21-4a55-8788-7eed30e423ed",
+      "name": "Guest Address"
+    },
+    {
+      "parameters": {
+        "content": "## Concent Form Re-check",
+        "height": 192,
+        "width": 832,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2512,
+        -368
+      ],
+      "typeVersion": 1,
+      "id": "185f3b79-0b1b-49b7-be0a-82fe3de10636",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Address Check",
+        "height": 272,
+        "width": 192,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4128,
+        -432
+      ],
+      "typeVersion": 1,
+      "id": "673cb22a-8266-44d2-8e3a-0d6a9c440682",
+      "name": "Sticky Note32"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the raw DOB\nconst rawDob = $('Start').first().json.personal_info_date_of_birth_firstItem;\n\n// Convert to dd/MM/yyyy format\nlet formattedDob = null;\n\nif (rawDob) {\n  const dateOnly = rawDob.split(\"T\")[0]; // \"1979-03-25\"\n  const [year, month, day] = dateOnly.split(\"-\");\n  formattedDob = `${day}/${month}/${year}`;\n}\n\n// Build the output\nreturn [\n  {\n    json: {\n      AppointmentID: $('Start').first().json.body_data_appointments_firstItem[0].id,\n      CustomerFirstName: $('Start').first().json.body_data_guest_first_name_firstItem,\n      CustomerLastName: $('Start').first().json.body_data_guest_last_name_firstItem,\n      CustomerCode: $('Start').first().json.code_firstItem,\n      CustomerID: $('Start').first().json.body_data_guest_id_firstItem,\n      CustomerDOB: formattedDob,\n      CustomerEmail: $('Start').first().json.personal_info_email_firstItem,\n      CustomerGender: $('Start').first().json.personal_info_gender_name_firstItem,\n      CustomerCenterID: $('Start').first().json.body_data_center_id_firstItem,\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2336,
+        -496
+      ],
+      "id": "7fe1aeac-4d26-4a60-b3b5-2f2bf2ece866",
+      "name": "Format Data"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        3152,
+        -496
+      ],
+      "id": "c8f063dd-abd2-453a-8432-aac054d4e477",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all incoming items\nconst items = $input.all();\n\nfor (const item of items) {\n\tconst json = item.json;\n\n\t// --- 1. Rename fields for product & quantity ---\n\tif (json.select16 !== undefined) {\n\t\tjson.product = json.select16;\n\t\tdelete json.select16;\n\t}\n\n\tif (json.textField16 !== undefined) {\n\t\tjson.quantity = json.textField16;\n\t\tdelete json.textField16;\n\t}\n\n\t// --- 2. Build delivery address for CLINIC deliveries ---\n\t// We’re using contentMacros.content15 for clinic\n\tif (json.DeliveryLocation === 'clinic'\n\t\t&& json.contentMacros\n\t\t&& json.contentMacros.content15) {\n\n\t\tconst c15 = json.contentMacros.content15;\n\n\t\t// Map macros to cleaner fields\n\t\tjson.DeliveryAddress1 = c15['[CustomMacro2]'] || '';\n\t\tjson.DeliverySuburb  = c15['[CustomMacro3]'] || '';\n\t\tjson.DeliveryCity    = c15['[CustomMacro4]'] || '';\n\t\tjson.DeliveryPostcode = c15['[CustomMacro5]'] || '';\n\n\t\t// Optional: combined address line if you want it\n\t\tjson.DeliveryAddressFull = [\n\t\t\tjson.DeliveryAddress1,\n\t\t\tjson.DeliverySuburb,\n\t\t\tjson.DeliveryCity,\n\t\t\tjson.DeliveryPostcode,\n\t\t].filter(Boolean).join(', ');\n\t}\n}\n\n// Return updated items\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3840,
+        -512
+      ],
+      "id": "f2575c44-388d-4899-810d-64aba13acdc2",
+      "name": "Clinic Address"
+    },
+    {
+      "parameters": {
+        "content": "## Amend Delivery Address / Refine Data",
+        "height": 464,
+        "width": 784,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3344,
+        -544
+      ],
+      "typeVersion": 1,
+      "id": "1c37455d-e32f-400c-9e9c-3bfa5ba8ef0e",
+      "name": "Sticky Note15"
+    },
+    {
+      "parameters": {
+        "content": "## Continue Flow",
+        "height": 192,
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3104,
+        -560
+      ],
+      "typeVersion": 1,
+      "id": "8cd9f2c5-e444-4417-b3c8-29b27fe88afa",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## Form Check / Address",
+        "height": 592,
+        "width": 256,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2256,
+        -624
+      ],
+      "typeVersion": 1,
+      "id": "608f384a-5a7f-4173-a1d3-b59e40b9bf69",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "body_data_guest_first_name_firstItem",
+              "type": "any"
+            },
+            {
+              "name": "body_data_guest_last_name_firstItem",
+              "type": "any"
+            },
+            {
+              "name": "body_data_appointments_firstItem",
+              "type": "any"
+            },
+            {
+              "name": "body_data_center_id_firstItem",
+              "type": "any"
+            },
+            {
+              "name": "body_data_guest_id_firstItem",
+              "type": "any"
+            },
+            {
+              "name": "personal_info_date_of_birth_firstItem",
+              "type": "any"
+            },
+            {
+              "name": "personal_info_gender_name_firstItem",
+              "type": "any"
+            },
+            {
+              "name": "personal_info_email_firstItem",
+              "type": "any"
+            },
+            {
+              "name": "code_firstItem",
+              "type": "any"
+            },
+            {
+              "name": "body_data_appointments",
+              "type": "any"
+            },
+            {
+              "name": "DeliveryLocation",
+              "type": "any"
+            }
+          ]
+        }
+      },
+      "id": "9560d2f5-ecf5-4116-9a0d-d2bd327e363c",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        1904,
+        -336
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all incoming items\nconst items = $input.all();\n\nfor (const item of items) {\n  const boxes = item.json.selectBoxes || {};\n\n  // Work out which option is true\n  if (boxes.clinic) {\n    item.json.DeliveryLocation = 'clinic';\n  } else if (boxes.guest) {\n    item.json.DeliveryLocation = 'guest';\n  } else if (boxes.custom) {\n    item.json.DeliveryLocation = 'custom';\n  } else {\n    item.json.DeliveryLocation = 'unknown';\n  }\n}\n\n// Pass everything through with the new field added\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3536,
+        -768
+      ],
+      "id": "de397a4d-81e0-4374-80bf-331828423194",
+      "name": "Delivery Location1"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "Start": [
+      {
+        "json": {
+          "body_data_guest_first_name_firstItem": "Cameron",
+          "body_data_guest_last_name_firstItem": "Mace",
+          "body_data_appointments_firstItem": [
+            {
+              "id": "b6d7094f-ede3-4ea6-a7b1-d755c464e639",
+              "invoice_item_id": "dcb64642-0e2b-4d3f-83d1-ff4d9589bbf9",
+              "service_name": "Telehealth Check-up",
+              "service_id": "ea2fab22-be5f-4342-838d-1a4bcebe9618",
+              "start_time": "2026-04-21T23:00:00",
+              "end_time": "2026-04-21T23:15:00",
+              "start_time_in_center": "2026-04-22T11:00:00",
+              "end_time_in_center": "2026-04-22T11:15:00",
+              "creation_date": "2026-04-15T04:39:32",
+              "last_updated_on": "2026-04-21T23:12:12",
+              "service_duration_in_minutes": 15,
+              "has_add_ons": false,
+              "is_add_on": false,
+              "therapist_name": "Dr Jolyn Tay 64497",
+              "therapist_id": "99b1439b-7c65-41c4-b15f-7a681614105b",
+              "is_recurring": false,
+              "show_in_calendar": false,
+              "appointment_type": 2,
+              "therapist_request_type": 0,
+              "room_name": "",
+              "equipment_name": "",
+              "appointment_progress": 1
+            }
+          ],
+          "body_data_center_id_firstItem": "8a97ae57-5822-4438-b692-4913733872a1",
+          "body_data_guest_id_firstItem": "3ea74ac5-cd9d-4f16-9146-5d7290b622b3",
+          "personal_info_date_of_birth_firstItem": "1988-06-27T00:00:00",
+          "personal_info_gender_name_firstItem": "Male",
+          "personal_info_email_firstItem": "cameronscottmace@gmail.com",
+          "code_firstItem": "WG2522",
+          "body_data_appointments": [
+            {
+              "id": "b6d7094f-ede3-4ea6-a7b1-d755c464e639",
+              "invoice_item_id": "dcb64642-0e2b-4d3f-83d1-ff4d9589bbf9",
+              "service_name": "Telehealth Check-up",
+              "service_id": "ea2fab22-be5f-4342-838d-1a4bcebe9618",
+              "start_time": "2026-04-21T23:00:00",
+              "end_time": "2026-04-21T23:15:00",
+              "start_time_in_center": "2026-04-22T11:00:00",
+              "end_time_in_center": "2026-04-22T11:15:00",
+              "creation_date": "2026-04-15T04:39:32",
+              "last_updated_on": "2026-04-21T23:12:12",
+              "service_duration_in_minutes": 15,
+              "has_add_ons": false,
+              "is_add_on": false,
+              "therapist_name": "Dr Jolyn Tay 64497",
+              "therapist_id": "99b1439b-7c65-41c4-b15f-7a681614105b",
+              "is_recurring": false,
+              "show_in_calendar": false,
+              "appointment_type": 2,
+              "therapist_request_type": 0,
+              "room_name": "",
+              "equipment_name": "",
+              "appointment_progress": 1
+            }
+          ],
+          "DeliveryLocation": "guest"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-04-22T02:59:41.872Z",
+      "createdAt": "2026-04-22T02:59:41.872Z",
+      "role": "workflow:owner",
+      "workflowId": "q9l2wht86dwtjuXA",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-04-22T05:55:15.470Z",
+  "versionId": "eed25484-c7f7-490a-bf56-f031d4d6a0a3"
+}
