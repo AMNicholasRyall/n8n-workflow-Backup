@@ -1,0 +1,246 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-04-16T04:21:19.000Z",
+    "createdAt": "2026-04-16T04:20:15.488Z",
+    "versionId": "51b66bc4-d509-4dbe-b7f9-d7d2d5d799a8",
+    "workflowId": "wSb6mqQ9GxBRrydb",
+    "nodes": [
+      {
+        "parameters": {
+          "queue": "nz.zenoti.webhooks.drfirst",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rabbitmqTrigger",
+        "typeVersion": 1,
+        "position": [
+          -224,
+          -32
+        ],
+        "id": "4ad1f07e-d286-4df9-9512-a09384d9f2e9",
+        "name": "RabbitMQ Trigger",
+        "credentials": {
+          "rabbitmq": {
+            "id": "yV61RlUAH8DmNI5J",
+            "name": "RabbitMQ account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const raw = $json.content;\nconst parsed = JSON.parse(raw);\n\nreturn [{ json: parsed }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          0,
+          -32
+        ],
+        "id": "a18cafab-3c78-4926-92b4-21c2b4a40736",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "operation": "deleteMessage"
+        },
+        "type": "n8n-nodes-base.rabbitmq",
+        "typeVersion": 1.1,
+        "position": [
+          224,
+          -32
+        ],
+        "id": "7e66b6ce-b897-4e3a-be06-aef381d6f29a",
+        "name": "RabbitMQ",
+        "credentials": {
+          "rabbitmq": {
+            "id": "yV61RlUAH8DmNI5J",
+            "name": "RabbitMQ account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "RabbitMQ Trigger": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "RabbitMQ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 51b66bc4",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "51b66bc4-d509-4dbe-b7f9-d7d2d5d799a8",
+  "connections": {
+    "RabbitMQ Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "RabbitMQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-16T04:14:34.137Z",
+  "id": "wSb6mqQ9GxBRrydb",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "NZ-RabbitMQCollector-DrFirst",
+  "nodes": [
+    {
+      "parameters": {
+        "queue": "nz.zenoti.webhooks.drfirst",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rabbitmqTrigger",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        -32
+      ],
+      "id": "4ad1f07e-d286-4df9-9512-a09384d9f2e9",
+      "name": "RabbitMQ Trigger",
+      "credentials": {
+        "rabbitmq": {
+          "id": "yV61RlUAH8DmNI5J",
+          "name": "RabbitMQ account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.content;\nconst parsed = JSON.parse(raw);\n\nreturn [{ json: parsed }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -32
+      ],
+      "id": "a18cafab-3c78-4926-92b4-21c2b4a40736",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "deleteMessage"
+      },
+      "type": "n8n-nodes-base.rabbitmq",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        -32
+      ],
+      "id": "7e66b6ce-b897-4e3a-be06-aef381d6f29a",
+      "name": "RabbitMQ",
+      "credentials": {
+        "rabbitmq": {
+          "id": "yV61RlUAH8DmNI5J",
+          "name": "RabbitMQ account"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "RabbitMQ Trigger": [
+      {
+        "json": {
+          "fields": {
+            "consumerTag": "amq.ctag-o5RPK-9B0VT3iLS1vuWpcA",
+            "deliveryTag": 1,
+            "redelivered": false,
+            "exchange": "",
+            "routingKey": "nz.zenoti.webhooks.drfirst"
+          },
+          "properties": {
+            "headers": {}
+          },
+          "content": "{\"headers\":{\"host\":\"webhook.ashleyandmartin.com.au\",\"x-forwarded-scheme\":\"https\",\"x-forwarded-proto\":\"https\",\"x-forwarded-for\":\"20.11.81.234\",\"x-real-ip\":\"20.11.81.234\",\"content-length\":\"1339\",\"nz-zenoti\":\"pXZKc0W123Z\",\"content-type\":\"application/json; charset=utf-8\"},\"params\":{},\"query\":{},\"body\":{\"id\":\"69e07c3a2a6c5c07384d9679\",\"event_id\":\"69e07c3a2a6c5c07384d9678\",\"event_schema\":\"v1\",\"event_resource\":null,\"event_type\":\"Appointment.Started\",\"event_timestamp\":\"2026-04-16T06:05:46.1507756Z\",\"data\":{\"invoice_id\":\"63849a57-c6a5-4d7c-a05f-46aa6215bbdd\",\"invoice_number\":\"21606\",\"appointment_group_id\":\"a8fdb41c-0e50-4e89-893c-41d5201297bc\",\"center_id\":\"690a5763-4215-4df2-93d5-aa0395f69bd5\",\"organization_id\":\"89978da1-cd8a-45ac-bf69-f422cf961761\",\"guest\":{\"id\":\"0abce059-ec5e-435c-b65e-a42e7e85d9a3\",\"first_name\":\"Thisal\",\"last_name\":\"Elpitiya\",\"email\":\"thisalayod@gmail.com\"},\"appointments\":[{\"id\":\"1ca0a5e3-559a-411d-a55e-433e45d9b341\",\"invoice_item_id\":\"82fa2f3f-b872-4a9a-917c-13cf49080fcb\",\"service_name\":\"Doctor-First\",\"service_id\":\"64418d09-d7dd-45b5-a985-70ff46deb4df\",\"start_time\":\"2026-04-16T05:30:00\",\"end_time\":\"2026-04-16T06:00:00\",\"start_time_in_center\":\"2026-04-16T17:30:00\",\"end_time_in_center\":\"2026-04-16T18:00:00\",\"creation_date\":\"2026-04-09T03:41:17\",\"last_updated_on\":\"2026-04-16T06:05:46\",\"service_duration_in_minutes\":30,\"has_add_ons\":false,\"is_add_on\":false,\"therapist_name\":\"Dr Istvan Orosz 76467\",\"therapist_id\":\"f1a423ce-7898-4fe9-9bd4-40c521efa9ff\",\"is_recurring\":false,\"show_in_calendar\":false,\"appointment_type\":2,\"therapist_request_type\":0,\"room_name\":\"\",\"equipment_name\":\"\",\"appointment_progress\":1}]}},\"webhookUrl\":\"https://webhook.ashleyandmartin.com.au/webhook/NZ-Zenoti\",\"executionMode\":\"production\"}"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-04-16T04:14:34.139Z",
+      "createdAt": "2026-04-16T04:14:34.139Z",
+      "role": "workflow:owner",
+      "workflowId": "wSb6mqQ9GxBRrydb",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2026-01-21T23:52:55.489Z",
+      "createdAt": "2026-01-21T23:52:55.489Z",
+      "id": "OXsRoYm7kDVlpgY1",
+      "name": "NZ"
+    },
+    {
+      "updatedAt": "2026-01-21T23:52:51.063Z",
+      "createdAt": "2026-01-21T23:52:51.063Z",
+      "id": "OuUcDlUQOF4Dgotd",
+      "name": "MedOrder"
+    },
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-04-21T04:19:56.713Z",
+  "versionId": "51b66bc4-d509-4dbe-b7f9-d7d2d5d799a8"
+}
