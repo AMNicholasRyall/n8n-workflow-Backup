@@ -1,0 +1,1089 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-05-06T04:31:27.000Z",
+    "createdAt": "2026-05-06T04:31:25.963Z",
+    "versionId": "c17806f7-b655-4d02-a669-11137579f7bb",
+    "workflowId": "fCmiDv2lGzNeykAV",
+    "nodes": [
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "QA7Qdseg7ehAOWP6",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+            "cachedResultName": "Zenoti-GetAuthToken"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          128,
+          -160
+        ],
+        "id": "7815c78b-df76-486e-b304-9f650640cfad",
+        "name": "Call 'Zenoti-GetAuthToken'"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lsINP70DmcZtIj4M",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinics",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "table_id",
+                "condition": "isNotEmpty"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          336,
+          -160
+        ],
+        "id": "faa517d1-7c21-4eea-a11a-f8e81e27126b",
+        "name": "Get row(s)"
+      },
+      {
+        "parameters": {
+          "jsCode": "const fifteenMinutesAgo = $now\n  .minus({ minutes: 30 })\n  .toFormat(\"yyyy-MM-dd'T'HH:mm:ss\");\n\nreturn [\n  {\n    json: {\n      fifteenMinutesAgo\n    }\n  }\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -80,
+          -160
+        ],
+        "id": "8e187716-7c97-4143-ab86-abd2fe522728",
+        "name": "15MinutesAgo"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "8c2bf61e-3af7-45f3-b2e5-509e5c52f2a3",
+                "leftValue": "={{ $json.creation_date }}",
+                "rightValue": "={{ $('TimeZoneLocalToClinic').item.json.clinic_time_minus_15 }}",
+                "operator": {
+                  "type": "dateTime",
+                  "operation": "after"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          1520,
+          0
+        ],
+        "id": "22c71390-cce7-4780-a680-1774ca382bce",
+        "name": "Filter",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "opportunities",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1312,
+          0
+        ],
+        "id": "da7069b2-fc58-49e5-81a1-265963ebbae3",
+        "name": "Split Out",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          544,
+          -160
+        ],
+        "id": "72d2dd2c-b5bd-457d-953b-64bc37b259a9",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "jsCode": "return items.map(item => {\n  const timeZoneText = item.json.time_zone;\n\n  // Example input:\n  // \"(UTC+09:30) Adelaide\"\n  // \"(UTC+10:00) Brisbane\"\n  const match = timeZoneText.match(/UTC([+-])(\\d{2}):(\\d{2})/);\n\n  if (!match) {\n    throw new Error(`Could not read timezone from: ${timeZoneText}`);\n  }\n\n  const sign = match[1] === \"+\" ? 1 : -1;\n  const hours = parseInt(match[2], 10);\n  const minutes = parseInt(match[3], 10);\n\n  const offsetMinutes = sign * ((hours * 60) + minutes);\n\n  const clinicTimeMinus15 = $now\n    .toUTC()\n    .plus({ minutes: offsetMinutes })\n    .minus({ minutes: 15 })\n    .toFormat(\"yyyy-MM-dd'T'HH:mm:ss\");\n\n  item.json.clinic_time_minus_15 = clinicTimeMinus15;\n\n  return item;\n});"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          832,
+          0
+        ],
+        "id": "b0e1371c-157f-40b2-9b33-7c231524e8b0",
+        "name": "TimeZoneLocalToClinic"
+      },
+      {
+        "parameters": {
+          "url": "https://api.zenoti.com/v1/opportunities",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "view_id",
+                "value": "={{ $json.Zenoti_ID }}"
+              },
+              {
+                "name": "creation_from_date",
+                "value": "={{ $today }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1104,
+          0
+        ],
+        "id": "745df9b6-8e63-4935-af09-c0c4679983fb",
+        "name": "GetOpportunities",
+        "executeOnce": false,
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "c4ff3e61-56bd-4f0d-80ec-52737074da4f",
+                "leftValue": "={{ $json.opportunity_id }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              },
+              {
+                "id": "23dd5c9f-ba62-4b71-91e7-84005a1dbbad",
+                "leftValue": "={{ $json.stage_name }}",
+                "rightValue": "Lead",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          752,
+          -256
+        ],
+        "id": "2973e314-e33c-4c05-87f2-90cc895083ef",
+        "name": "Filter1"
+      },
+      {
+        "parameters": {
+          "jsCode": "return $input.all().map(item => {\n  item.json.directlink = `https://ashleymartinau.zenoti.com/Admin/Sales/OpportunityCreate.aspx?OpportunityId=${item.json.opportunity_id}`;\n  return item;\n});"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          960,
+          -256
+        ],
+        "id": "ce614dd8-284b-4ce4-96fd-13b555bc50b4",
+        "name": "CreateDirctLink"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\n\nconst escapeHtml = (value) => {\n  if (value === null || value === undefined) return \"\";\n  return String(value)\n    .replaceAll(\"&\", \"&amp;\")\n    .replaceAll(\"<\", \"&lt;\")\n    .replaceAll(\">\", \"&gt;\")\n    .replaceAll('\"', \"&quot;\")\n    .replaceAll(\"'\", \"&#039;\");\n};\n\nconst rows = items.map(item => {\n  const data = item.json;\n\n  const centerName = data.center_name;\n  const guestName = data.guest?.guest_name;\n  const guestCode = data.guest?.guest_code;\n  const directLink = data.directlink;\n\n  return `\n    <tr>\n      <td>${escapeHtml(centerName)}</td>\n      <td>${escapeHtml(guestName)}</td>\n      <td>${escapeHtml(guestCode)}</td>\n      <td><a href=\"${escapeHtml(directLink)}\">Open Opportunity</a></td>\n    </tr>\n  `;\n}).join(\"\");\n\nconst htmlTable = `\n<table border=\"1\" cellpadding=\"6\" cellspacing=\"0\" style=\"border-collapse: collapse; font-family: Arial, sans-serif; font-size: 13px;\">\n  <thead>\n    <tr style=\"background-color: #f2f2f2;\">\n      <th>Center</th>\n      <th>Guest Name</th>\n      <th>Guest Code</th>\n      <th>Link</th>\n    </tr>\n  </thead>\n  <tbody>\n    ${rows}\n  </tbody>\n</table>\n`;\n\nreturn [\n  {\n    json: {\n      htmlTable,\n      recordCount: items.length\n    }\n  }\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1168,
+          -256
+        ],
+        "id": "d2b70db5-5143-45b6-a090-8360c248bb90",
+        "name": "HTMLTable"
+      },
+      {
+        "parameters": {
+          "toRecipients": "=AM-CC-Staff@ashleyandmartin.com.au",
+          "subject": "=Automation - New Opportunities",
+          "bodyContent": "=<div style=\"font-family: Arial, sans-serif; font-size: 14px; color: #333333; line-height: 1.5;\">\n\n  <p>Hi Team,</p>\n\n  <p>\n    Please see below for the recent Zenoti opportunities.\n  </p>\n\n  <div style=\"margin-top: 12px; margin-bottom: 18px;\">\n    {{ $json.htmlTable }}\n  </div>\n\n  <p>\n    Regards,<br>\n    Automation\n  </p>\n\n</div>",
+          "additionalFields": {
+            "bodyContentType": "html"
+          }
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          1376,
+          -256
+        ],
+        "id": "ed74765d-fca5-4851-9a8b-0eaf6c049cb0",
+        "name": "Email Clinic",
+        "webhookId": "c09feca6-a64a-4285-87fe-82e85c9a6dc7",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "*/15 6-17 * * 1-4"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -352,
+          -288
+        ],
+        "id": "21a1cad2-25bd-456f-9564-620f86f66dc4",
+        "name": "Monday-Thursday"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "*/15 6-15 * * 5"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -352,
+          -128
+        ],
+        "id": "e3f162ea-57a9-4afc-832c-193d73286a23",
+        "name": "Friday"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "*/15 7-10 * * 6"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -352,
+          16
+        ],
+        "id": "5ff2d2a5-c32a-4a59-a7c9-1550f4ae5753",
+        "name": "Saturday"
+      }
+    ],
+    "connections": {
+      "Call 'Zenoti-GetAuthToken'": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "15MinutesAgo": {
+        "main": [
+          [
+            {
+              "node": "Call 'Zenoti-GetAuthToken'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "Filter1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "TimeZoneLocalToClinic",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "TimeZoneLocalToClinic": {
+        "main": [
+          [
+            {
+              "node": "GetOpportunities",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetOpportunities": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter1": {
+        "main": [
+          [
+            {
+              "node": "CreateDirctLink",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CreateDirctLink": {
+        "main": [
+          [
+            {
+              "node": "HTMLTable",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTMLTable": {
+        "main": [
+          [
+            {
+              "node": "Email Clinic",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Monday-Thursday": {
+        "main": [
+          [
+            {
+              "node": "15MinutesAgo",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Friday": {
+        "main": [
+          [
+            {
+              "node": "15MinutesAgo",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Saturday": {
+        "main": [
+          [
+            {
+              "node": "15MinutesAgo",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version c17806f7",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "c17806f7-b655-4d02-a669-11137579f7bb",
+  "connections": {
+    "Call 'Zenoti-GetAuthToken'": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "15MinutesAgo": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti-GetAuthToken'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "TimeZoneLocalToClinic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TimeZoneLocalToClinic": {
+      "main": [
+        [
+          {
+            "node": "GetOpportunities",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetOpportunities": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "CreateDirctLink",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CreateDirctLink": {
+      "main": [
+        [
+          {
+            "node": "HTMLTable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTMLTable": {
+      "main": [
+        [
+          {
+            "node": "Email Clinic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Monday-Thursday": {
+      "main": [
+        [
+          {
+            "node": "15MinutesAgo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Friday": {
+      "main": [
+        [
+          {
+            "node": "15MinutesAgo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Saturday": {
+      "main": [
+        [
+          {
+            "node": "15MinutesAgo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-05-06T01:19:13.808Z",
+  "id": "fCmiDv2lGzNeykAV",
+  "isArchived": false,
+  "meta": null,
+  "name": "AU-Zenoti-NewOpportunity",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "QA7Qdseg7ehAOWP6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+          "cachedResultName": "Zenoti-GetAuthToken"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        128,
+        -160
+      ],
+      "id": "7815c78b-df76-486e-b304-9f650640cfad",
+      "name": "Call 'Zenoti-GetAuthToken'"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "table_id",
+              "condition": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        336,
+        -160
+      ],
+      "id": "faa517d1-7c21-4eea-a11a-f8e81e27126b",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const fifteenMinutesAgo = $now\n  .minus({ minutes: 30 })\n  .toFormat(\"yyyy-MM-dd'T'HH:mm:ss\");\n\nreturn [\n  {\n    json: {\n      fifteenMinutesAgo\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        -160
+      ],
+      "id": "8e187716-7c97-4143-ab86-abd2fe522728",
+      "name": "15MinutesAgo"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "8c2bf61e-3af7-45f3-b2e5-509e5c52f2a3",
+              "leftValue": "={{ $json.creation_date }}",
+              "rightValue": "={{ $('TimeZoneLocalToClinic').item.json.clinic_time_minus_15 }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "after"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1520,
+        0
+      ],
+      "id": "22c71390-cce7-4780-a680-1774ca382bce",
+      "name": "Filter",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "opportunities",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        0
+      ],
+      "id": "da7069b2-fc58-49e5-81a1-265963ebbae3",
+      "name": "Split Out",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        544,
+        -160
+      ],
+      "id": "72d2dd2c-b5bd-457d-953b-64bc37b259a9",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  const timeZoneText = item.json.time_zone;\n\n  // Example input:\n  // \"(UTC+09:30) Adelaide\"\n  // \"(UTC+10:00) Brisbane\"\n  const match = timeZoneText.match(/UTC([+-])(\\d{2}):(\\d{2})/);\n\n  if (!match) {\n    throw new Error(`Could not read timezone from: ${timeZoneText}`);\n  }\n\n  const sign = match[1] === \"+\" ? 1 : -1;\n  const hours = parseInt(match[2], 10);\n  const minutes = parseInt(match[3], 10);\n\n  const offsetMinutes = sign * ((hours * 60) + minutes);\n\n  const clinicTimeMinus15 = $now\n    .toUTC()\n    .plus({ minutes: offsetMinutes })\n    .minus({ minutes: 15 })\n    .toFormat(\"yyyy-MM-dd'T'HH:mm:ss\");\n\n  item.json.clinic_time_minus_15 = clinicTimeMinus15;\n\n  return item;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        0
+      ],
+      "id": "b0e1371c-157f-40b2-9b33-7c231524e8b0",
+      "name": "TimeZoneLocalToClinic"
+    },
+    {
+      "parameters": {
+        "url": "https://api.zenoti.com/v1/opportunities",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "view_id",
+              "value": "={{ $json.Zenoti_ID }}"
+            },
+            {
+              "name": "creation_from_date",
+              "value": "={{ $today }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1104,
+        0
+      ],
+      "id": "745df9b6-8e63-4935-af09-c0c4679983fb",
+      "name": "GetOpportunities",
+      "executeOnce": false,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c4ff3e61-56bd-4f0d-80ec-52737074da4f",
+              "leftValue": "={{ $json.opportunity_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "23dd5c9f-ba62-4b71-91e7-84005a1dbbad",
+              "leftValue": "={{ $json.stage_name }}",
+              "rightValue": "Lead",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        752,
+        -256
+      ],
+      "id": "2973e314-e33c-4c05-87f2-90cc895083ef",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  item.json.directlink = `https://ashleymartinau.zenoti.com/Admin/Sales/OpportunityCreate.aspx?OpportunityId=${item.json.opportunity_id}`;\n  return item;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        -256
+      ],
+      "id": "ce614dd8-284b-4ce4-96fd-13b555bc50b4",
+      "name": "CreateDirctLink"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nconst escapeHtml = (value) => {\n  if (value === null || value === undefined) return \"\";\n  return String(value)\n    .replaceAll(\"&\", \"&amp;\")\n    .replaceAll(\"<\", \"&lt;\")\n    .replaceAll(\">\", \"&gt;\")\n    .replaceAll('\"', \"&quot;\")\n    .replaceAll(\"'\", \"&#039;\");\n};\n\nconst rows = items.map(item => {\n  const data = item.json;\n\n  const centerName = data.center_name;\n  const guestName = data.guest?.guest_name;\n  const guestCode = data.guest?.guest_code;\n  const directLink = data.directlink;\n\n  return `\n    <tr>\n      <td>${escapeHtml(centerName)}</td>\n      <td>${escapeHtml(guestName)}</td>\n      <td>${escapeHtml(guestCode)}</td>\n      <td><a href=\"${escapeHtml(directLink)}\">Open Opportunity</a></td>\n    </tr>\n  `;\n}).join(\"\");\n\nconst htmlTable = `\n<table border=\"1\" cellpadding=\"6\" cellspacing=\"0\" style=\"border-collapse: collapse; font-family: Arial, sans-serif; font-size: 13px;\">\n  <thead>\n    <tr style=\"background-color: #f2f2f2;\">\n      <th>Center</th>\n      <th>Guest Name</th>\n      <th>Guest Code</th>\n      <th>Link</th>\n    </tr>\n  </thead>\n  <tbody>\n    ${rows}\n  </tbody>\n</table>\n`;\n\nreturn [\n  {\n    json: {\n      htmlTable,\n      recordCount: items.length\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1168,
+        -256
+      ],
+      "id": "d2b70db5-5143-45b6-a090-8360c248bb90",
+      "name": "HTMLTable"
+    },
+    {
+      "parameters": {
+        "toRecipients": "=AM-CC-Staff@ashleyandmartin.com.au",
+        "subject": "=Automation - New Opportunities",
+        "bodyContent": "=<div style=\"font-family: Arial, sans-serif; font-size: 14px; color: #333333; line-height: 1.5;\">\n\n  <p>Hi Team,</p>\n\n  <p>\n    Please see below for the recent Zenoti opportunities.\n  </p>\n\n  <div style=\"margin-top: 12px; margin-bottom: 18px;\">\n    {{ $json.htmlTable }}\n  </div>\n\n  <p>\n    Regards,<br>\n    Automation\n  </p>\n\n</div>",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1376,
+        -256
+      ],
+      "id": "ed74765d-fca5-4851-9a8b-0eaf6c049cb0",
+      "name": "Email Clinic",
+      "webhookId": "c09feca6-a64a-4285-87fe-82e85c9a6dc7",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/15 6-17 * * 1-4"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -352,
+        -288
+      ],
+      "id": "21a1cad2-25bd-456f-9564-620f86f66dc4",
+      "name": "Monday-Thursday"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/15 6-15 * * 5"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -352,
+        -128
+      ],
+      "id": "e3f162ea-57a9-4afc-832c-193d73286a23",
+      "name": "Friday"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/15 7-10 * * 6"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -352,
+        16
+      ],
+      "id": "5ff2d2a5-c32a-4a59-a7c9-1550f4ae5753",
+      "name": "Saturday"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "callerPolicy": "workflowsFromSameOwner",
+    "saveDataSuccessExecution": "all"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-05-06T01:19:13.811Z",
+      "createdAt": "2026-05-06T01:19:13.811Z",
+      "role": "workflow:owner",
+      "workflowId": "fCmiDv2lGzNeykAV",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": {
+    "node:Monday-Thursday": {
+      "recurrenceRules": []
+    },
+    "node:Friday": {
+      "recurrenceRules": []
+    },
+    "node:Saturday": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-05-06T04:40:17.144Z",
+      "createdAt": "2026-05-06T04:40:17.144Z",
+      "id": "ANuso19oSAW76shj",
+      "name": "CallCenter"
+    },
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    },
+    {
+      "updatedAt": "2026-01-21T23:52:24.742Z",
+      "createdAt": "2026-01-21T23:52:24.742Z",
+      "id": "gBgZjsV5vc1ZGBw4",
+      "name": "AUS"
+    }
+  ],
+  "triggerCount": 3,
+  "updatedAt": "2026-05-06T04:40:22.031Z",
+  "versionId": "c17806f7-b655-4d02-a669-11137579f7bb"
+}
