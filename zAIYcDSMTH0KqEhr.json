@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-03-09T05:13:07.000Z",
-    "createdAt": "2026-03-09T05:12:22.213Z",
-    "versionId": "9b29cfdc-8302-41b3-ab94-31fbe7113c08",
+    "updatedAt": "2026-04-30T05:09:51.000Z",
+    "createdAt": "2026-04-30T05:09:49.412Z",
+    "versionId": "71768a3b-600b-4fc7-a8d6-a2e6ebd0cbc3",
     "workflowId": "zAIYcDSMTH0KqEhr",
     "nodes": [
       {
@@ -464,7 +464,8 @@
           -512
         ],
         "id": "b5336092-c7c4-49e3-b98e-56e4bf24a0d2",
-        "name": "GetPackges"
+        "name": "GetPackges",
+        "alwaysOutputData": true
       },
       {
         "parameters": {
@@ -1353,7 +1354,7 @@
         "type": "n8n-nodes-base.microsoftOutlook",
         "typeVersion": 2,
         "position": [
-          8192,
+          8208,
           -192
         ],
         "id": "d7914fa7-baf5-4dac-a85a-8767ddac5e0b",
@@ -1558,7 +1559,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          864,
+          816,
           -336
         ],
         "id": "04f1682d-2119-473a-b605-da4eafd8fb7a",
@@ -2413,6 +2414,96 @@
         ],
         "id": "131c3a5f-27d2-4f2d-bcb3-7ee88ee9464b",
         "name": "Call 'ZenotiNZ-MedOrderBackUp'"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/guests/{{ $json.CustomerID }}/Packages",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "show_redeemable",
+                "value": "false"
+              },
+              {
+                "name": "center_id",
+                "value": "={{ $('When clicking ‘Execute workflow’').item.json.Zenoti_ID }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          6144,
+          -896
+        ],
+        "id": "3c3c7631-320c-41e2-99f8-e5d5f204ad9a",
+        "name": "GetPackges1",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a30f4e5a-961b-4182-b63f-f09802d63cbd",
+                "leftValue": "={{ $json.guest.id }}",
+                "rightValue": "9f1a80a0-71ff-46ec-b773-b1527f6af0a7",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          880,
+          80
+        ],
+        "id": "39f0f837-bc13-4432-b0a6-7f4333aa8446",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "content": "## Filter to remove broken users",
+          "height": 256,
+          "width": 384,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          752,
+          -16
+        ],
+        "typeVersion": 1,
+        "id": "32b0a6eb-fc5c-4ffc-93c5-872e05da763a",
+        "name": "Sticky Note35"
       }
     ],
     "connections": {
@@ -3366,14 +3457,19 @@
             }
           ]
         ]
+      },
+      "Filter": {
+        "main": [
+          []
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 9b29cfdc",
+    "name": "Version 71768a3b",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "9b29cfdc-8302-41b3-ab94-31fbe7113c08",
+  "activeVersionId": "71768a3b-600b-4fc7-a8d6-a2e6ebd0cbc3",
   "connections": {
     "Call 'ZenotiNZ-GetAuthToken'": {
       "main": [
@@ -4325,6 +4421,11 @@
           }
         ]
       ]
+    },
+    "Filter": {
+      "main": [
+        []
+      ]
     }
   },
   "createdAt": "2025-12-09T01:04:16.632Z",
@@ -4793,7 +4894,8 @@
         -512
       ],
       "id": "b5336092-c7c4-49e3-b98e-56e4bf24a0d2",
-      "name": "GetPackges"
+      "name": "GetPackges",
+      "alwaysOutputData": true
     },
     {
       "parameters": {
@@ -5887,7 +5989,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        864,
+        816,
         -336
       ],
       "id": "04f1682d-2119-473a-b605-da4eafd8fb7a",
@@ -6742,6 +6844,96 @@
       ],
       "id": "131c3a5f-27d2-4f2d-bcb3-7ee88ee9464b",
       "name": "Call 'ZenotiNZ-MedOrderBackUp'"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/guests/{{ $json.CustomerID }}/Packages",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "show_redeemable",
+              "value": "false"
+            },
+            {
+              "name": "center_id",
+              "value": "={{ $('When clicking ‘Execute workflow’').item.json.Zenoti_ID }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').first().json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        6144,
+        -896
+      ],
+      "id": "3c3c7631-320c-41e2-99f8-e5d5f204ad9a",
+      "name": "GetPackges1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a30f4e5a-961b-4182-b63f-f09802d63cbd",
+              "leftValue": "={{ $json.guest.id }}",
+              "rightValue": "9f1a80a0-71ff-46ec-b773-b1527f6af0a7",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        880,
+        80
+      ],
+      "id": "39f0f837-bc13-4432-b0a6-7f4333aa8446",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "content": "## Filter to remove broken users",
+        "height": 256,
+        "width": 384,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        752,
+        -16
+      ],
+      "typeVersion": 1,
+      "id": "32b0a6eb-fc5c-4ffc-93c5-872e05da763a",
+      "name": "Sticky Note35"
     }
   ],
   "origin": "n8n",
@@ -6749,27 +6941,27 @@
     "When clicking ‘Execute workflow’": [
       {
         "json": {
-          "Zenoti_ID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
-          "code": "AK",
-          "name": "Auckland",
-          "state": "Auckland",
+          "Zenoti_ID": "726c1470-f4b6-4fa1-861b-c22db94b8bbe",
+          "code": "CC",
+          "name": "Christchurch",
+          "state": "Canterbury",
           "state_short_name": "",
           "time_zone": "(UTC+12:00) Auckland, Wellington",
-          "address_1": "L6/5 Short St, Newmarket",
-          "address_2": "",
-          "postcode": 1010,
-          "display_number": "095207560",
-          "email": "Auckland@ashleyandmartin.co.nz",
+          "address_1": "Level 1, Forte 2",
+          "address_2": "132 Peterborough Street",
+          "postcode": 8013,
+          "display_number": "033661482",
+          "email": "Christchurch@ashleyandmartin.co.nz",
           "No_clients": null,
-          "Abb": "AUC",
+          "Abb": "CHR",
           "table_id": null,
           "Country_Code": null,
-          "city": "Newmarket",
-          "id": 2,
-          "createdAt": "2025-12-09T00:49:44.432Z",
-          "updatedAt": "2025-12-12T04:09:32.201Z",
-          "start_date": "2026-04-21",
-          "end_date": "2026-04-22"
+          "city": "Christchurch",
+          "id": 4,
+          "createdAt": "2025-12-09T00:49:44.503Z",
+          "updatedAt": "2025-12-12T04:09:47.023Z",
+          "start_date": "2026-04-29",
+          "end_date": "2026-04-30"
         },
         "pairedItem": {
           "item": 0
@@ -6810,6 +7002,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-04-22T00:35:06.461Z",
-  "versionId": "914fc36e-62bf-457f-8533-326e33bd7932"
+  "updatedAt": "2026-04-30T05:09:49.408Z",
+  "versionId": "71768a3b-600b-4fc7-a8d6-a2e6ebd0cbc3"
 }
