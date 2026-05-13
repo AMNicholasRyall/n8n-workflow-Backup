@@ -1,0 +1,1071 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti-GetAuthToken'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Zenoti-GetAuthToken'": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s)2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetProductQuantity": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Products-WH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out2": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetProductQuantity1": {
+      "main": [
+        [
+          {
+            "node": "Split Out2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Products-WH": {
+      "main": [
+        [
+          {
+            "node": "GetProductQuantity1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Products-Clinic": {
+      "main": [
+        [
+          {
+            "node": "GetProductQuantity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get Products-Clinic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "ProductQuantityLevel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "stock_movement": {
+      "main": [
+        [
+          {
+            "node": "ZenotiSplitout",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ClinicProducts1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ZenotiSplitout": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "FilterAllProducts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FilterAllProducts": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ProductQuantityLevel": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Loop Over Items2": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ClinicProducts1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing2": {
+      "main": [
+        [
+          {
+            "node": "Build HTML Table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "stock_movement",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build HTML Table": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-05-07T01:31:57.072Z",
+  "id": "hy0adm2fBXSkdBBF",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "ZenotiAU - StockLevels",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        672
+      ],
+      "id": "f81d3c32-9e0c-406d-a70a-4e2d7db9f9f5",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "QA7Qdseg7ehAOWP6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+          "cachedResultName": "Zenoti-GetAuthToken"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        672
+      ],
+      "id": "2ff4f0d8-c224-4896-8933-97e4c152595e",
+      "name": "Call 'Zenoti-GetAuthToken'"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "table_id",
+              "condition": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        432
+      ],
+      "id": "6ab9901d-1a05-4bf5-984c-5f16759fbc02",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        896,
+        752
+      ],
+      "id": "476e7844-52df-4983-9add-b284490d3c48",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "list",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1792,
+        816
+      ],
+      "id": "fbf7c941-baec-47ea-b70b-99e5c75aadc4",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "url": "https://api.zenoti.com/v1/inventory/stock",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "search_string",
+              "value": "={{ $json.ProductName }}"
+            },
+            {
+              "name": "center_id",
+              "value": "={{ $('Loop Over Items').item.json.Zenoti_ID }}"
+            },
+            {
+              "name": "inventory_date",
+              "value": "={{ $today }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1568,
+        816
+      ],
+      "id": "6c772c4e-cf33-4bd8-a237-fbfba9aa7ea6",
+      "name": "GetProductQuantity",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b771cd4b-d80c-4bd0-a92f-2d987487bdea",
+              "leftValue": "={{ $json.product_name }}",
+              "rightValue": "={{ $('Get Products-Clinic').item.json.ProductName }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        2000,
+        816
+      ],
+      "id": "ac9c993a-4d15-4d37-bb4c-c9d04120de46",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "code",
+              "keyValue": "WH"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        1088
+      ],
+      "id": "28cccf20-49ce-4c86-8d8d-a20229c67df8",
+      "name": "Get row(s)2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        944,
+        1088
+      ],
+      "id": "4bf7e9a4-500d-41b0-84ed-8b01af573511",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "list",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1792,
+        1168
+      ],
+      "id": "0ed1e01c-06ce-48d9-9cc6-52a72d8cb645",
+      "name": "Split Out2"
+    },
+    {
+      "parameters": {
+        "url": "https://api.zenoti.com/v1/inventory/stock",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "search_string",
+              "value": "={{ $json.ProductName }}"
+            },
+            {
+              "name": "center_id",
+              "value": "={{ $('Loop Over Items1').item.json.Zenoti_ID }}"
+            },
+            {
+              "name": "inventory_date",
+              "value": "={{ $today }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1568,
+        1168
+      ],
+      "id": "61fd666c-2134-4cbb-af67-4b20f218b470",
+      "name": "GetProductQuantity1",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b771cd4b-d80c-4bd0-a92f-2d987487bdea",
+              "leftValue": "={{ $json.product_name }}",
+              "rightValue": "={{ $('Get Products-WH').item.json.ProductName }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        2000,
+        1168
+      ],
+      "id": "dffab46f-e8d2-4296-aa2d-e4f6107dee96",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "5w9Y2flvAzAzuDPk",
+          "mode": "list",
+          "cachedResultName": "ZenotiProductID",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/5w9Y2flvAzAzuDPk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Location",
+              "keyValue": "Warehouse"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1344,
+        1168
+      ],
+      "id": "24581060-1b3d-496d-b1d5-781b65b24c35",
+      "name": "Get Products-WH"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "5w9Y2flvAzAzuDPk",
+          "mode": "list",
+          "cachedResultName": "ZenotiProductID",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/5w9Y2flvAzAzuDPk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Location",
+              "keyValue": "Clinic"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1344,
+        816
+      ],
+      "id": "86e5b724-c831-4aff-b4fe-88d689f281da",
+      "name": "Get Products-Clinic"
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1120,
+        816
+      ],
+      "id": "a0531671-7755-42d3-85f0-20daad02052a",
+      "name": "Wait",
+      "webhookId": "88f4e5a9-d1fe-4253-bd96-291c02507918"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2352,
+        992
+      ],
+      "id": "17446455-641e-4d18-b77d-02c09b6a353a",
+      "name": "Merge"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        1024
+      ],
+      "id": "a8a3343c-84ba-4e70-9c3f-88ff038fb259",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        672
+      ],
+      "id": "ebb5b382-74f8-478a-a556-3abccef743c5",
+      "name": "No Operation, do nothing1"
+    },
+    {
+      "parameters": {
+        "toRecipients": "nicholas.ryall@ashleyandmartin.com.au",
+        "subject": "Automation - Stock Level",
+        "bodyContent": "={{ $json.emailHtml }}",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        3248,
+        576
+      ],
+      "id": "d736229f-a4bf-4150-8b6e-4e2c758df24f",
+      "name": "Send a message",
+      "webhookId": "073bf778-cf31-4399-a921-ae679b8c1913",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.zenoti.com/v1/inventory/stock_movement",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "center_id",
+              "value": "={{ $json.Zenoti_ID }}"
+            },
+            {
+              "name": "start_date",
+              "value": "={{ $today.minus({ weeks: 1 }) }}"
+            },
+            {
+              "name": "report_type",
+              "value": "1"
+            },
+            {
+              "name": "end_date",
+              "value": "={{ $today }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1376,
+        512
+      ],
+      "id": "5a20cbcd-9dac-42b9-83f5-abff21eea02c",
+      "name": "stock_movement"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "5w9Y2flvAzAzuDPk",
+          "mode": "list",
+          "cachedResultName": "ZenotiProductID",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/5w9Y2flvAzAzuDPk"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Location",
+              "keyValue": "Clinic"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1600,
+        368
+      ],
+      "id": "4bcc4b32-be3c-46ac-8936-f60a733d714b",
+      "name": "ClinicProducts1"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "list",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        512
+      ],
+      "id": "1aed962c-56b8-4c9e-b29b-60529bae1578",
+      "name": "ZenotiSplitout"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1808,
+        432
+      ],
+      "id": "ad4d6cfe-d8d5-4e69-a7b1-a4fdd414ecb8",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const clinicProducts = $('ClinicProducts1').all();\nconst zenotiSplitout = $('ZenotiSplitout').all();\n\nconst allowedProductNames = new Set(\n  clinicProducts\n    .map(item => item.json.ProductName?.trim().toLowerCase())\n    .filter(Boolean)\n);\n\nconst filteredZenotiItems = zenotiSplitout.filter(item => {\n  const productName = item.json.product_name?.trim().toLowerCase();\n  return allowedProductNames.has(productName);\n});\n\nreturn filteredZenotiItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2096,
+        480
+      ],
+      "id": "11c15f3e-4f2b-433f-9ff2-081480c687f6",
+      "name": "FilterAllProducts"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nfunction escapeHtml(value) {\n  if (value === null || value === undefined) return '';\n  return String(value)\n    .replaceAll('&', '&amp;')\n    .replaceAll('<', '&lt;')\n    .replaceAll('>', '&gt;')\n    .replaceAll('\"', '&quot;')\n    .replaceAll(\"'\", '&#039;');\n}\n\nconst rows = items.map(item => item.json);\n\nconst StockMvment = `\n<table style=\"border-collapse: collapse; width: 100%; font-family: Arial, sans-serif; font-size: 13px;\">\n  <thead>\n    <tr style=\"background-color: #f2f2f2;\">\n      <th style=\"border: 1px solid #dddddd; padding: 8px; text-align: left;\">Centre</th>\n      <th style=\"border: 1px solid #dddddd; padding: 8px; text-align: left;\">Product Code</th>\n      <th style=\"border: 1px solid #dddddd; padding: 8px; text-align: left;\">Product Name</th>\n      <th style=\"border: 1px solid #dddddd; padding: 8px; text-align: left;\">Category</th>\n      <th style=\"border: 1px solid #dddddd; padding: 8px; text-align: right;\">Starting Store</th>\n      <th style=\"border: 1px solid #dddddd; padding: 8px; text-align: right;\">Checkouts</th>\n      <th style=\"border: 1px solid #dddddd; padding: 8px; text-align: right;\">Invoice Sales</th>\n      <th style=\"border: 1px solid #dddddd; padding: 8px; text-align: right;\">Ending Store</th>\n      <th style=\"border: 1px solid #dddddd; padding: 8px; text-align: right;\">Ending Floor</th>\n    </tr>\n  </thead>\n  <tbody>\n    ${rows.map(row => `\n      <tr>\n        <td style=\"border: 1px solid #dddddd; padding: 8px;\">${escapeHtml(row.center_name)}</td>\n        <td style=\"border: 1px solid #dddddd; padding: 8px;\">${escapeHtml(row.product_code)}</td>\n        <td style=\"border: 1px solid #dddddd; padding: 8px;\">${escapeHtml(row.product_name)}</td>\n        <td style=\"border: 1px solid #dddddd; padding: 8px;\">${escapeHtml(row.category)}</td>\n        <td style=\"border: 1px solid #dddddd; padding: 8px; text-align: right;\">${escapeHtml(row.starting_store_quantity)}</td>\n        <td style=\"border: 1px solid #dddddd; padding: 8px; text-align: right;\">${escapeHtml(row.quantity_checkouts)}</td>\n        <td style=\"border: 1px solid #dddddd; padding: 8px; text-align: right;\">${escapeHtml(row.quantity_outflow_invoice_sales)}</td>\n        <td style=\"border: 1px solid #dddddd; padding: 8px; text-align: right;\">${escapeHtml(row.ending_store)}</td>\n        <td style=\"border: 1px solid #dddddd; padding: 8px; text-align: right;\">${escapeHtml(row.ending_floor)}</td>\n      </tr>\n    `).join('')}\n  </tbody>\n</table>\n`;\n\nreturn [\n  {\n    json: {\n      StockMvment\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2544,
+        528
+      ],
+      "id": "7f9bc8fa-85bf-4ff0-b878-0b834b9c9156",
+      "name": "Build HTML Table"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = items.map(item => item.json);\n\nconst htmlTable = `\n<table border=\"1\" cellpadding=\"6\" cellspacing=\"0\" style=\"border-collapse: collapse; font-family: Arial, sans-serif; font-size: 13px;\">\n  <thead>\n    <tr style=\"background-color: #f2f2f2;\">\n      <th>Center Code</th>\n      <th>Center Name</th>\n      <th>Product Code</th>\n      <th>Product Name</th>\n      <th>Category</th>\n      <th>Sub Category</th>\n      <th>Store Qty</th>\n      <th>Floor Qty</th>\n      <th>Total Qty</th>\n    </tr>\n  </thead>\n  <tbody>\n    ${rows.map(row => `\n      <tr>\n        <td>${row.center_code ?? ''}</td>\n        <td>${row.center_name ?? ''}</td>\n        <td>${row.product_code ?? ''}</td>\n        <td>${row.product_name ?? ''}</td>\n        <td>${row.category ?? ''}</td>\n        <td>${row.sub_category ?? ''}</td>\n        <td style=\"text-align: right;\">${row.store_quantity ?? 0}</td>\n        <td style=\"text-align: right;\">${row.floor_quantity ?? 0}</td>\n        <td style=\"text-align: right;\"><strong>${row.total_quantity ?? 0}</strong></td>\n      </tr>\n    `).join('')}\n  </tbody>\n</table>\n`;\n\nreturn [\n  {\n    json: {\n      htmlTable\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2544,
+        720
+      ],
+      "id": "dc31d4df-b3da-4d93-83fa-7230c1026012",
+      "name": "ProductQuantityLevel"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        912,
+        352
+      ],
+      "id": "20ffb660-22f3-45d5-bded-a5fcfc2cb3aa",
+      "name": "Loop Over Items2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        304
+      ],
+      "id": "933c2465-5e71-4d93-a48e-383167281bf4",
+      "name": "No Operation, do nothing2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1152,
+        512
+      ],
+      "id": "b6286187-a13e-4d91-9e2c-84279a03fd70",
+      "name": "Wait1",
+      "webhookId": "17fe46af-8934-48e8-9ed3-ee6faed00d60"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2800,
+        576
+      ],
+      "id": "40311e5d-4d83-4ee5-9086-4ba67faee3a2",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nlet stockMvment = '';\nlet clinicStockTable = '';\n\nfor (const item of items) {\n  const json = item.json;\n\n  if (json.StockMvment) {\n    stockMvment = json.StockMvment;\n  }\n\n  if (json.htmlTable) {\n    clinicStockTable += json.htmlTable + '<br><br>';\n  }\n}\n\nreturn [\n  {\n    json: {\n      emailHtml: `\n        <div style=\"font-family: Arial, sans-serif; font-size: 14px; color: #333333; line-height: 1.5;\">\n          <p>Hi Team,</p>\n\n          <p>Please see the stock summaries below.</p>\n\n          <h3 style=\"margin-bottom: 8px;\">Clinic Stock</h3>\n          ${clinicStockTable}\n\n          <br>\n\n          <h3 style=\"margin-bottom: 8px;\">Stock Movement</h3>\n          ${stockMvment}\n\n          <br>\n\n          <p>Regards,<br>\n          Automation</p>\n        </div>\n      `\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3024,
+        576
+      ],
+      "id": "cca0f6e6-8974-47bc-81d5-1f71de681baa",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "toRecipients": "nicholas.ryall@ashleyandmartin.com.au",
+        "subject": "Automation - Stock Level",
+        "bodyContent": "={{ $json.StockMvment }}",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -320
+      ],
+      "id": "8e5ebce9-2785-4df4-9cad-13592160889c",
+      "name": "Send a message1",
+      "webhookId": "073bf778-cf31-4399-a921-ae679b8c1913",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "When clicking ‘Execute workflow’": [
+      {
+        "json": {},
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-05-07T01:31:57.074Z",
+      "createdAt": "2026-05-07T01:31:57.074Z",
+      "role": "workflow:owner",
+      "workflowId": "hy0adm2fBXSkdBBF",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-05-13T07:40:00.754Z",
+  "versionId": "52eab955-aa80-4452-8c04-8408b69472a9"
+}
