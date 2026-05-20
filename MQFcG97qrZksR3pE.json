@@ -808,8 +808,7 @@
     "availableInMCP": false,
     "timeSavedMode": "fixed",
     "callerPolicy": "workflowsFromSameOwner",
-    "errorWorkflow": "J83Enw8ArDSqhMCL",
-    "saveDataSuccessExecution": "all"
+    "errorWorkflow": "J83Enw8ArDSqhMCL"
   },
   "shared": [
     {
@@ -823,6 +822,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-03-27T05:26:13.149Z",
+  "updatedAt": "2026-05-13T23:49:00.698Z",
   "versionId": "1050c3e9-11c9-475d-9720-d6c2219a07fd"
 }
