@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-05-13T04:46:30.000Z",
-    "createdAt": "2026-05-13T04:46:26.884Z",
-    "versionId": "79d10b75-60f6-4e37-b395-c42e53d60eb2",
+    "updatedAt": "2026-05-18T01:06:36.000Z",
+    "createdAt": "2026-05-18T01:06:35.269Z",
+    "versionId": "186e08fd-5078-4d4e-a36f-32d1a2992c63",
     "workflowId": "fCmiDv2lGzNeykAV",
     "nodes": [
       {
@@ -103,8 +103,8 @@
         "type": "n8n-nodes-base.filter",
         "typeVersion": 2.3,
         "position": [
-          1440,
-          -320
+          1600,
+          -304
         ],
         "id": "22c71390-cce7-4780-a680-1774ca382bce",
         "name": "Filter",
@@ -118,8 +118,8 @@
         "type": "n8n-nodes-base.splitOut",
         "typeVersion": 1,
         "position": [
-          1216,
-          -384
+          1376,
+          -368
         ],
         "id": "da7069b2-fc58-49e5-81a1-265963ebbae3",
         "name": "Split Out",
@@ -145,8 +145,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          768,
-          -384
+          928,
+          -368
         ],
         "id": "b0e1371c-157f-40b2-9b33-7c231524e8b0",
         "name": "TimeZoneLocalToClinic"
@@ -185,8 +185,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.4,
         "position": [
-          992,
-          -384
+          1152,
+          -368
         ],
         "id": "745df9b6-8e63-4935-af09-c0c4679983fb",
         "name": "GetOpportunities",
@@ -245,7 +245,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          992,
+          1472,
           -576
         ],
         "id": "ce614dd8-284b-4ce4-96fd-13b555bc50b4",
@@ -544,7 +544,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          992,
+          1488,
           -96
         ],
         "id": "a105cf12-d783-4cc1-b35c-a43115360ad2",
@@ -600,6 +600,20 @@
         ],
         "id": "729e44ac-300b-4fce-9e37-0087146e5f90",
         "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {
+          "amount": 3
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          752,
+          -368
+        ],
+        "id": "9533502d-892a-458d-ad8d-9fd92ddc872d",
+        "name": "Wait",
+        "webhookId": "07bae026-14cf-4a1d-bd5f-787ed9e2a648"
       }
     ],
     "connections": {
@@ -663,7 +677,7 @@
           ],
           [
             {
-              "node": "TimeZoneLocalToClinic",
+              "node": "Wait",
               "type": "main",
               "index": 0
             }
@@ -896,14 +910,25 @@
             }
           ]
         ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "TimeZoneLocalToClinic",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 79d10b75",
+    "name": "Version 186e08fd",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "79d10b75-60f6-4e37-b395-c42e53d60eb2",
+  "activeVersionId": "186e08fd-5078-4d4e-a36f-32d1a2992c63",
   "connections": {
     "Call 'Zenoti-GetAuthToken'": {
       "main": [
@@ -965,7 +990,7 @@
         ],
         [
           {
-            "node": "TimeZoneLocalToClinic",
+            "node": "Wait",
             "type": "main",
             "index": 0
           }
@@ -1198,6 +1223,17 @@
           }
         ]
       ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "TimeZoneLocalToClinic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2026-05-06T01:19:13.808Z",
@@ -1303,8 +1339,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        1440,
-        -320
+        1600,
+        -304
       ],
       "id": "22c71390-cce7-4780-a680-1774ca382bce",
       "name": "Filter",
@@ -1318,8 +1354,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        1216,
-        -384
+        1376,
+        -368
       ],
       "id": "da7069b2-fc58-49e5-81a1-265963ebbae3",
       "name": "Split Out",
@@ -1345,8 +1381,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        768,
-        -384
+        928,
+        -368
       ],
       "id": "b0e1371c-157f-40b2-9b33-7c231524e8b0",
       "name": "TimeZoneLocalToClinic"
@@ -1385,8 +1421,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        992,
-        -384
+        1152,
+        -368
       ],
       "id": "745df9b6-8e63-4935-af09-c0c4679983fb",
       "name": "GetOpportunities",
@@ -1445,7 +1481,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        992,
+        1472,
         -576
       ],
       "id": "ce614dd8-284b-4ce4-96fd-13b555bc50b4",
@@ -1744,7 +1780,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        992,
+        1488,
         -96
       ],
       "id": "a105cf12-d783-4cc1-b35c-a43115360ad2",
@@ -1800,6 +1836,20 @@
       ],
       "id": "729e44ac-300b-4fce-9e37-0087146e5f90",
       "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        752,
+        -368
+      ],
+      "id": "9533502d-892a-458d-ad8d-9fd92ddc872d",
+      "name": "Wait",
+      "webhookId": "07bae026-14cf-4a1d-bd5f-787ed9e2a648"
     }
   ],
   "origin": "n8n",
@@ -1807,15 +1857,15 @@
     "Monday-Thursday": [
       {
         "json": {
-          "timestamp": "2026-05-13T12:45:00.001+08:00",
-          "Readable date": "May 13th 2026, 12:45:00 pm",
-          "Readable time": "12:45:00 pm",
-          "Day of week": "Wednesday",
+          "timestamp": "2026-05-18T09:00:00.001+08:00",
+          "Readable date": "May 18th 2026, 9:00:00 am",
+          "Readable time": "9:00:00 am",
+          "Day of week": "Monday",
           "Year": "2026",
           "Month": "May",
-          "Day of month": "13",
-          "Hour": "12",
-          "Minute": "45",
+          "Day of month": "18",
+          "Hour": "09",
+          "Minute": "00",
           "Second": "00",
           "Timezone": "Australia/Perth (UTC+08:00)"
         },
@@ -1836,7 +1886,7 @@
     "timeSavedMode": "fixed",
     "errorWorkflow": "J83Enw8ArDSqhMCL",
     "callerPolicy": "workflowsFromSameOwner",
-    "saveDataSuccessExecution": "all"
+    "timeSavedPerExecution": 1
   },
   "shared": [
     {
@@ -1879,6 +1929,6 @@
     }
   ],
   "triggerCount": 3,
-  "updatedAt": "2026-05-13T04:46:26.884Z",
-  "versionId": "79d10b75-60f6-4e37-b395-c42e53d60eb2"
+  "updatedAt": "2026-05-20T07:31:59.914Z",
+  "versionId": "186e08fd-5078-4d4e-a36f-32d1a2992c63"
 }
