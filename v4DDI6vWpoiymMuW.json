@@ -788,7 +788,7 @@
     "callerPolicy": "workflowsFromSameOwner",
     "errorWorkflow": "J83Enw8ArDSqhMCL",
     "timeSavedPerExecution": 1,
-    "saveDataSuccessExecution": "all"
+    "binaryMode": "separate"
   },
   "shared": [
     {
@@ -821,6 +821,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-03-31T23:06:37.882Z",
+  "updatedAt": "2026-05-14T23:16:02.840Z",
   "versionId": "47b62ca7-8ef0-479b-963a-0469d1480c51"
 }
