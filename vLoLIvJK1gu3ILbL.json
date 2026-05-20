@@ -2802,9 +2802,9 @@
     "executionOrder": "v1",
     "availableInMCP": false,
     "timeSavedMode": "fixed",
-    "saveDataSuccessExecution": "all",
     "callerPolicy": "workflowsFromSameOwner",
-    "errorWorkflow": "J83Enw8ArDSqhMCL"
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "binaryMode": "separate"
   },
   "shared": [
     {
@@ -2837,6 +2837,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-03-22T22:58:37.182Z",
+  "updatedAt": "2026-05-13T23:45:25.388Z",
   "versionId": "542a3230-95ad-4705-be25-558c7e42b84b"
 }
