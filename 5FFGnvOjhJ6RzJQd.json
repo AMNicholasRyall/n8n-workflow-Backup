@@ -1,0 +1,1420 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-05-27T01:45:02.000Z",
+    "createdAt": "2026-05-27T01:45:00.959Z",
+    "versionId": "effffe46-2f74-4859-b9b9-a60ad7065ed5",
+    "workflowId": "5FFGnvOjhJ6RzJQd",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "xlsx",
+          "binaryPropertyName": "={{ $('On form submission').item.binary['HeadCountForm'] }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1.1,
+        "position": [
+          -432,
+          448
+        ],
+        "id": "6fc33004-b5a3-4f42-a61c-7c674b816143",
+        "name": "Extract from File",
+        "executeOnce": true
+      },
+      {
+        "parameters": {
+          "baseDN": "OU=AMUsers,DC=AshleyandMartin,DC=local",
+          "searchFor": "(objectclass=user)",
+          "attribute": "employeeID",
+          "searchText": "={{ $json['Users / Employee Number'] }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.ldap",
+        "typeVersion": 1,
+        "position": [
+          480,
+          464
+        ],
+        "id": "edcc5d8d-98ed-4748-b856-b17632eee73c",
+        "name": "SearchForUser",
+        "alwaysOutputData": true,
+        "executeOnce": true,
+        "credentials": {
+          "ldap": {
+            "id": "jytIHVQdPwtaxqUr",
+            "name": "LDAP account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          224,
+          448
+        ],
+        "id": "57b7f460-763d-4c6c-8b11-7858b47b774f",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "baseDN": "OU=AMUsers,DC=AshleyandMartin,DC=local",
+          "searchFor": "(objectclass=user)",
+          "attribute": "name",
+          "searchText": "={{ $json['Manager / Full Name'] }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.ldap",
+        "typeVersion": 1,
+        "position": [
+          480,
+          656
+        ],
+        "id": "7b714822-831c-462a-a4c1-a1e77d122622",
+        "name": "SearchForManager",
+        "alwaysOutputData": true,
+        "executeOnce": true,
+        "credentials": {
+          "ldap": {
+            "id": "jytIHVQdPwtaxqUr",
+            "name": "LDAP account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "fieldsToMatchString": "EmployeeNumber",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          928,
+          560
+        ],
+        "id": "0b71ae54-23cc-4cce-9d9c-a3a936c67682",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "d6e188f3-13d3-4674-b106-1a287924b78d",
+                "name": "SearchUserDN",
+                "value": "={{ $json.dn }}",
+                "type": "string"
+              },
+              {
+                "id": "efcfb95c-20c9-45bd-8c4c-6952bc986e00",
+                "name": "EmployeeNumber",
+                "value": "={{ $('Loop Over Items').item.json['Users / Employee Number'] }}",
+                "type": "string"
+              },
+              {
+                "id": "f02db2a1-4b64-468b-ad15-05a28cd33c02",
+                "name": "EmployeeJobTitle",
+                "value": "={{ $('Loop Over Items').item.json['Position / Title'] }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          704,
+          464
+        ],
+        "id": "bf68874a-4522-4682-83a1-180ecac20174",
+        "name": "Set User Fields for Merge"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "d6e188f3-13d3-4674-b106-1a287924b78d",
+                "name": "SearchManagerDN",
+                "value": "={{ $json.dn }}",
+                "type": "string"
+              },
+              {
+                "id": "efcfb95c-20c9-45bd-8c4c-6952bc986e00",
+                "name": "EmployeeNumber",
+                "value": "={{ $('Loop Over Items').item.json['Users / Employee Number'] }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          704,
+          656
+        ],
+        "id": "8e6f76aa-06a3-4d04-9f79-0564dcb5cd12",
+        "name": "Set Manager Fields for Merge"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "dn": "={{ $json.SearchUserDN }}",
+          "attributes": {
+            "replace": [
+              {
+                "id": "title",
+                "value": "={{ $json.EmployeeJobTitle }}"
+              },
+              {
+                "id": "manager",
+                "value": "={{ $json.SearchManagerDN }}"
+              },
+              {
+                "id": "description",
+                "value": "={{ $json.EmployeeJobTitle }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.ldap",
+        "typeVersion": 1,
+        "position": [
+          1152,
+          560
+        ],
+        "id": "8f6e7932-d54d-4766-836a-50907d8f05a7",
+        "name": "Update User",
+        "credentials": {
+          "ldap": {
+            "id": "jytIHVQdPwtaxqUr",
+            "name": "LDAP account"
+          }
+        },
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "fae06e1a-3323-4217-be93-dbcacbd4a4ea",
+                "name": "UpdateUser",
+                "value": "Success",
+                "type": "string"
+              },
+              {
+                "id": "c4942eef-0b8f-425e-8022-cb6f690adb6c",
+                "name": "EmployeeNumber",
+                "value": "={{ $('Merge').item.json.EmployeeNumber }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1376,
+          624
+        ],
+        "id": "97515358-6d32-4a4a-954e-b353aad6a147",
+        "name": "Set Success"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "fae06e1a-3323-4217-be93-dbcacbd4a4ea",
+                "name": "UpdateUser",
+                "value": "Failed",
+                "type": "string"
+              },
+              {
+                "id": "c4942eef-0b8f-425e-8022-cb6f690adb6c",
+                "name": "EmployeeNumber",
+                "value": "={{ $('Merge').item.json.EmployeeNumber }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1376,
+          848
+        ],
+        "id": "9f8229f7-6d44-422d-a745-894b67773cae",
+        "name": "Set Failure"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "14f988a1-6fdd-4cb4-84da-0dbb27abb463",
+                "leftValue": "={{ $json['Manager / Full Name'] }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          -176,
+          448
+        ],
+        "id": "914371e2-5ae6-4a95-be63-2626df87f2e7",
+        "name": "FilterOutCEO"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a7db5160-3017-48d5-a316-cbeabea7a2cd",
+                "leftValue": "={{ $json.UpdateUser }}",
+                "rightValue": "Success",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals"
+                }
+              },
+              {
+                "id": "4c0c5f62-83fc-4e27-bf4a-ddf7f2bdd9aa",
+                "leftValue": "={{ $json.UpdateUser }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          480,
+          304
+        ],
+        "id": "ac76597c-65fd-4bd0-9dc9-0138c2206e27",
+        "name": "FilterSucess"
+      },
+      {
+        "parameters": {
+          "formTitle": "JobTitle-ManagerUpload",
+          "formDescription": "Upload the headcount form and each user will have there manager and job title adjust per form",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "HeadCountForm",
+                "fieldType": "file",
+                "acceptFileTypes": ".xlsx",
+                "requiredField": true
+              }
+            ]
+          },
+          "responseMode": "lastNode",
+          "options": {
+            "path": "AmendTitleManager",
+            "useWorkflowTimezone": true
+          }
+        },
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.5,
+        "position": [
+          -992,
+          448
+        ],
+        "id": "d51cc91c-dc6f-4ec6-b5a8-75745d75c63e",
+        "name": "On form submission",
+        "webhookId": "76152b16-4f64-47f8-ac0c-28a2d58936bd"
+      },
+      {
+        "parameters": {
+          "operation": "completion",
+          "respondWith": "showText",
+          "responseText": "={{ $('CleanListData').item.json.failedUpdateListHtml  }}"
+        },
+        "type": "n8n-nodes-base.form",
+        "typeVersion": 2.5,
+        "position": [
+          1136,
+          304
+        ],
+        "id": "de4f98f3-616f-451d-a8ea-c49b4555da90",
+        "name": "Form1",
+        "webhookId": "16639b3f-06c0-4cfc-bed2-8e2cda47d7bc"
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\n\nlet failedUpdates = [];\n\nfor (const item of items) {\n  const row = item.json;\n\n  if (row.UpdateUser === 'Failed') {\n    failedUpdates.push(`<li>Employee ${row.EmployeeNumber}: Update failed</li>`);\n  }\n}\n\nreturn [\n  {\n    json: {\n      failedUpdateListHtml: failedUpdates.length > 0\n        ? `<ul>${failedUpdates.join('')}</ul>`\n        : '<p>No failed updates</p>'\n    }\n  }\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          704,
+          304
+        ],
+        "id": "b769d778-62e6-4f50-9114-fb56b5b62956",
+        "name": "CleanListData"
+      },
+      {
+        "parameters": {
+          "formFields": {
+            "values": [
+              {
+                "fieldType": "hiddenField",
+                "fieldValue": "={{ $now }}"
+              }
+            ]
+          },
+          "options": {
+            "formDescription": "Wait one moment then press submit"
+          }
+        },
+        "type": "n8n-nodes-base.form",
+        "typeVersion": 2.5,
+        "position": [
+          912,
+          304
+        ],
+        "id": "1c9e76da-f2f0-4e01-b893-c144bdb0ca35",
+        "name": "Form",
+        "webhookId": "b68c9225-5c5a-4918-97bf-aef73210506d"
+      },
+      {
+        "parameters": {
+          "operation": "sendAndWait",
+          "toRecipients": "bverco@ashleyandmartin.com.au",
+          "subject": "Automation - Amend Title and Manager",
+          "message": "Please Approve or Deny the current upload",
+          "approvalOptions": {
+            "values": {
+              "approvalType": "double"
+            }
+          },
+          "options": {
+            "limitWaitTime": {
+              "values": {
+                "resumeAmount": 45,
+                "resumeUnit": "minutes"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          -688,
+          448
+        ],
+        "id": "d197ac2b-32be-4a69-a642-18437cf91fe9",
+        "name": "Send message and wait for response",
+        "webhookId": "d046e481-7ef0-4820-bde1-96831f8715e8",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          1680,
+          832
+        ],
+        "id": "d74042fd-7d8a-4d0c-9176-9664c2ff743f",
+        "name": "Merge1"
+      }
+    ],
+    "connections": {
+      "Extract from File": {
+        "main": [
+          [
+            {
+              "node": "FilterOutCEO",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "FilterSucess",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "SearchForUser",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "SearchForManager",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SearchForUser": {
+        "main": [
+          [
+            {
+              "node": "Set User Fields for Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Update User",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SearchForManager": {
+        "main": [
+          [
+            {
+              "node": "Set Manager Fields for Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set User Fields for Merge": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set Manager Fields for Merge": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Update User": {
+        "main": [
+          [
+            {
+              "node": "Set Success",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Set Failure",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set Success": {
+        "main": [
+          [
+            {
+              "node": "Merge1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set Failure": {
+        "main": [
+          [
+            {
+              "node": "Merge1",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "FilterOutCEO": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "FilterSucess": {
+        "main": [
+          [
+            {
+              "node": "CleanListData",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "On form submission": {
+        "main": [
+          [
+            {
+              "node": "Send message and wait for response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CleanListData": {
+        "main": [
+          [
+            {
+              "node": "Form",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Form": {
+        "main": [
+          [
+            {
+              "node": "Form1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send message and wait for response": {
+        "main": [
+          [
+            {
+              "node": "Extract from File",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version effffe46",
+    "description": "",
+    "autosaved": false
+  },
+  "activeVersionId": "effffe46-2f74-4859-b9b9-a60ad7065ed5",
+  "connections": {
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "FilterOutCEO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "FilterSucess",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "SearchForUser",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "SearchForManager",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchForUser": {
+      "main": [
+        [
+          {
+            "node": "Set User Fields for Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Update User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchForManager": {
+      "main": [
+        [
+          {
+            "node": "Set Manager Fields for Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set User Fields for Merge": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Manager Fields for Merge": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Update User": {
+      "main": [
+        [
+          {
+            "node": "Set Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Success": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Failure": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "FilterOutCEO": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FilterSucess": {
+      "main": [
+        [
+          {
+            "node": "CleanListData",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CleanListData": {
+      "main": [
+        [
+          {
+            "node": "Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form": {
+      "main": [
+        [
+          {
+            "node": "Form1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-05-22T00:21:03.580Z",
+  "id": "5FFGnvOjhJ6RzJQd",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "HO-AmendJobTitleAndManager",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "binaryPropertyName": "={{ $('On form submission').item.binary['HeadCountForm'] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -432,
+        448
+      ],
+      "id": "6fc33004-b5a3-4f42-a61c-7c674b816143",
+      "name": "Extract from File",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "baseDN": "OU=AMUsers,DC=AshleyandMartin,DC=local",
+        "searchFor": "(objectclass=user)",
+        "attribute": "employeeID",
+        "searchText": "={{ $json['Users / Employee Number'] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.ldap",
+      "typeVersion": 1,
+      "position": [
+        480,
+        464
+      ],
+      "id": "edcc5d8d-98ed-4748-b856-b17632eee73c",
+      "name": "SearchForUser",
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "credentials": {
+        "ldap": {
+          "id": "jytIHVQdPwtaxqUr",
+          "name": "LDAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        224,
+        448
+      ],
+      "id": "57b7f460-763d-4c6c-8b11-7858b47b774f",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "baseDN": "OU=AMUsers,DC=AshleyandMartin,DC=local",
+        "searchFor": "(objectclass=user)",
+        "attribute": "name",
+        "searchText": "={{ $json['Manager / Full Name'] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.ldap",
+      "typeVersion": 1,
+      "position": [
+        480,
+        656
+      ],
+      "id": "7b714822-831c-462a-a4c1-a1e77d122622",
+      "name": "SearchForManager",
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "credentials": {
+        "ldap": {
+          "id": "jytIHVQdPwtaxqUr",
+          "name": "LDAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "EmployeeNumber",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        928,
+        560
+      ],
+      "id": "0b71ae54-23cc-4cce-9d9c-a3a936c67682",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d6e188f3-13d3-4674-b106-1a287924b78d",
+              "name": "SearchUserDN",
+              "value": "={{ $json.dn }}",
+              "type": "string"
+            },
+            {
+              "id": "efcfb95c-20c9-45bd-8c4c-6952bc986e00",
+              "name": "EmployeeNumber",
+              "value": "={{ $('Loop Over Items').item.json['Users / Employee Number'] }}",
+              "type": "string"
+            },
+            {
+              "id": "f02db2a1-4b64-468b-ad15-05a28cd33c02",
+              "name": "EmployeeJobTitle",
+              "value": "={{ $('Loop Over Items').item.json['Position / Title'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        704,
+        464
+      ],
+      "id": "bf68874a-4522-4682-83a1-180ecac20174",
+      "name": "Set User Fields for Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d6e188f3-13d3-4674-b106-1a287924b78d",
+              "name": "SearchManagerDN",
+              "value": "={{ $json.dn }}",
+              "type": "string"
+            },
+            {
+              "id": "efcfb95c-20c9-45bd-8c4c-6952bc986e00",
+              "name": "EmployeeNumber",
+              "value": "={{ $('Loop Over Items').item.json['Users / Employee Number'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        704,
+        656
+      ],
+      "id": "8e6f76aa-06a3-4d04-9f79-0564dcb5cd12",
+      "name": "Set Manager Fields for Merge"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dn": "={{ $json.SearchUserDN }}",
+        "attributes": {
+          "replace": [
+            {
+              "id": "title",
+              "value": "={{ $json.EmployeeJobTitle }}"
+            },
+            {
+              "id": "manager",
+              "value": "={{ $json.SearchManagerDN }}"
+            },
+            {
+              "id": "description",
+              "value": "={{ $json.EmployeeJobTitle }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.ldap",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        560
+      ],
+      "id": "8f6e7932-d54d-4766-836a-50907d8f05a7",
+      "name": "Update User",
+      "credentials": {
+        "ldap": {
+          "id": "jytIHVQdPwtaxqUr",
+          "name": "LDAP account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fae06e1a-3323-4217-be93-dbcacbd4a4ea",
+              "name": "UpdateUser",
+              "value": "Success",
+              "type": "string"
+            },
+            {
+              "id": "c4942eef-0b8f-425e-8022-cb6f690adb6c",
+              "name": "EmployeeNumber",
+              "value": "={{ $('Merge').item.json.EmployeeNumber }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1376,
+        624
+      ],
+      "id": "97515358-6d32-4a4a-954e-b353aad6a147",
+      "name": "Set Success"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fae06e1a-3323-4217-be93-dbcacbd4a4ea",
+              "name": "UpdateUser",
+              "value": "Failed",
+              "type": "string"
+            },
+            {
+              "id": "c4942eef-0b8f-425e-8022-cb6f690adb6c",
+              "name": "EmployeeNumber",
+              "value": "={{ $('Merge').item.json.EmployeeNumber }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1376,
+        848
+      ],
+      "id": "9f8229f7-6d44-422d-a745-894b67773cae",
+      "name": "Set Failure"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "14f988a1-6fdd-4cb4-84da-0dbb27abb463",
+              "leftValue": "={{ $json['Manager / Full Name'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -176,
+        448
+      ],
+      "id": "914371e2-5ae6-4a95-be63-2626df87f2e7",
+      "name": "FilterOutCEO"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a7db5160-3017-48d5-a316-cbeabea7a2cd",
+              "leftValue": "={{ $json.UpdateUser }}",
+              "rightValue": "Success",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "4c0c5f62-83fc-4e27-bf4a-ddf7f2bdd9aa",
+              "leftValue": "={{ $json.UpdateUser }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        480,
+        304
+      ],
+      "id": "ac76597c-65fd-4bd0-9dc9-0138c2206e27",
+      "name": "FilterSucess"
+    },
+    {
+      "parameters": {
+        "formTitle": "JobTitle-ManagerUpload",
+        "formDescription": "Upload the headcount form and each user will have there manager and job title adjust per form",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "HeadCountForm",
+              "fieldType": "file",
+              "acceptFileTypes": ".xlsx",
+              "requiredField": true
+            }
+          ]
+        },
+        "responseMode": "lastNode",
+        "options": {
+          "path": "AmendTitleManager",
+          "useWorkflowTimezone": true
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -992,
+        448
+      ],
+      "id": "d51cc91c-dc6f-4ec6-b5a8-75745d75c63e",
+      "name": "On form submission",
+      "webhookId": "76152b16-4f64-47f8-ac0c-28a2d58936bd"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "respondWith": "showText",
+        "responseText": "={{ $('CleanListData').item.json.failedUpdateListHtml  }}"
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        1136,
+        304
+      ],
+      "id": "de4f98f3-616f-451d-a8ea-c49b4555da90",
+      "name": "Form1",
+      "webhookId": "16639b3f-06c0-4cfc-bed2-8e2cda47d7bc"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nlet failedUpdates = [];\n\nfor (const item of items) {\n  const row = item.json;\n\n  if (row.UpdateUser === 'Failed') {\n    failedUpdates.push(`<li>Employee ${row.EmployeeNumber}: Update failed</li>`);\n  }\n}\n\nreturn [\n  {\n    json: {\n      failedUpdateListHtml: failedUpdates.length > 0\n        ? `<ul>${failedUpdates.join('')}</ul>`\n        : '<p>No failed updates</p>'\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        704,
+        304
+      ],
+      "id": "b769d778-62e6-4f50-9114-fb56b5b62956",
+      "name": "CleanListData"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldType": "hiddenField",
+              "fieldValue": "={{ $now }}"
+            }
+          ]
+        },
+        "options": {
+          "formDescription": "Wait one moment then press submit"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        912,
+        304
+      ],
+      "id": "1c9e76da-f2f0-4e01-b893-c144bdb0ca35",
+      "name": "Form",
+      "webhookId": "b68c9225-5c5a-4918-97bf-aef73210506d"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "toRecipients": "bverco@ashleyandmartin.com.au",
+        "subject": "Automation - Amend Title and Manager",
+        "message": "Please Approve or Deny the current upload",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeAmount": 45,
+              "resumeUnit": "minutes"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        -688,
+        448
+      ],
+      "id": "d197ac2b-32be-4a69-a642-18437cf91fe9",
+      "name": "Send message and wait for response",
+      "webhookId": "d046e481-7ef0-4820-bde1-96831f8715e8",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1680,
+        832
+      ],
+      "id": "d74042fd-7d8a-4d0c-9176-9664c2ff743f",
+      "name": "Merge1"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "HeadCountForm": [
+            {
+              "filename": "Report Export - 2026-05-27 08-17-59-000.csv",
+              "mimetype": "text/csv",
+              "size": 6990
+            }
+          ],
+          "submittedAt": "2026-05-27T08:21:15.020+08:00",
+          "formMode": "production"
+        },
+        "binary": {
+          "HeadCountForm": {
+            "mimeType": "text/csv",
+            "fileType": "text",
+            "fileExtension": "csv",
+            "data": "filesystem-v2",
+            "fileName": "Report Export - 2026-05-27 08-17-59-000.csv",
+            "id": "filesystem-v2:workflows/5FFGnvOjhJ6RzJQd/executions/temp/binary_data/54d23e2e-d5af-46fc-b40a-9b251a1b0f03",
+            "fileSize": "6.99 kB",
+            "bytes": 6990
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "J83Enw8ArDSqhMCL"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-05-22T00:21:03.583Z",
+      "createdAt": "2026-05-22T00:21:03.583Z",
+      "role": "workflow:owner",
+      "workflowId": "5FFGnvOjhJ6RzJQd",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-05-27T01:45:08.240Z",
+  "versionId": "effffe46-2f74-4859-b9b9-a60ad7065ed5"
+}
