@@ -1916,7 +1916,6 @@
     "callerPolicy": "workflowsFromSameOwner",
     "errorWorkflow": "J83Enw8ArDSqhMCL",
     "timeSavedPerExecution": 0,
-    "saveDataSuccessExecution": "all",
     "binaryMode": "separate"
   },
   "shared": [
@@ -1938,6 +1937,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-03-12T23:01:34.529Z",
+  "updatedAt": "2026-05-21T00:17:11.885Z",
   "versionId": "846ffd7d-98c8-457d-96df-9dcea5f4e573"
 }
