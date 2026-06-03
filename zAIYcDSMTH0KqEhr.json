@@ -6960,8 +6960,8 @@
           "id": 2,
           "createdAt": "2025-12-09T00:49:44.432Z",
           "updatedAt": "2025-12-12T04:09:32.201Z",
-          "start_date": "2026-05-25",
-          "end_date": "2026-05-26"
+          "start_date": "2026-05-30",
+          "end_date": "2026-05-31"
         },
         "pairedItem": {
           "item": 0
@@ -7002,6 +7002,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-05-27T07:19:16.320Z",
-  "versionId": "71768a3b-600b-4fc7-a8d6-a2e6ebd0cbc3"
+  "updatedAt": "2026-06-03T00:27:11.556Z",
+  "versionId": "69ae52cf-2172-4f89-840e-080ff34e9efb"
 }
