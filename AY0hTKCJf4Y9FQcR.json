@@ -1,0 +1,498 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti-GetAuthToken'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Zenoti-GetAuthToken'": {
+      "main": [
+        [
+          {
+            "node": "Find Guest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Guest": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Get Guest Appointments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Guest Appointments": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Get Appointment Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Appointment Form": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Get Form Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Form Data": {
+      "main": [
+        [
+          {
+            "node": "CleanUpAppointment",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CleanUpAppointment": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2026-05-27T23:19:06.401Z",
+  "id": "AY0hTKCJf4Y9FQcR",
+  "isArchived": false,
+  "meta": null,
+  "name": "ZenotiAU-ConcentForm",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "fa4bce55-80b8-429f-bfc2-aa965c04638c",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "QA7Qdseg7ehAOWP6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+          "cachedResultName": "Zenoti-GetAuthToken"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "88572926-614f-4b1e-bb92-adfda2ba83d2",
+      "name": "Call 'Zenoti-GetAuthToken'"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/appointments/{{ $json.appointment_services[0].appointment_id }}/forms",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1520,
+        0
+      ],
+      "id": "c53091c2-b8d1-4f8d-9f9c-991ef578bf88",
+      "name": "Get Appointment Form"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/appointments/{{ $('Filter').item.json.appointment_services[0].appointment_id }}/forms_data",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "tag_Id",
+              "value": "={{ $json.owner_id }}"
+            },
+            {
+              "name": "view_context",
+              "value": "0"
+            },
+            {
+              "name": "version_no",
+              "value": "0"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1952,
+        0
+      ],
+      "id": "54852e95-e9a1-4901-93b6-6c9bd1886eb0",
+      "name": "Get Form Data"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "guests",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        656,
+        0
+      ],
+      "id": "27a4dd42-a632-479b-bdbf-67533c8b3675",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "url": "https://api.zenoti.com/v1/guests/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "page",
+              "value": "1"
+            },
+            {
+              "name": "size",
+              "value": "10"
+            },
+            {
+              "name": "first_name",
+              "value": "Dean"
+            },
+            {
+              "name": "last_name",
+              "value": "Jansen"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        448,
+        0
+      ],
+      "id": "9d38b7a7-44db-418f-81e8-6b7aa8ce8e9c",
+      "name": "Find Guest"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/guests/{{ $json.id }}/appointments",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "page",
+              "value": "page"
+            },
+            {
+              "name": "size",
+              "value": "size"
+            },
+            {
+              "name": "start_date",
+              "value": "start_date"
+            },
+            {
+              "name": "end_date",
+              "value": "end_date"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        864,
+        0
+      ],
+      "id": "66322078-cb5e-4e7f-9ab2-d95f5c1e24f9",
+      "name": "Get Guest Appointments"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "appointments",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        0
+      ],
+      "id": "33b53325-3840-49bb-ac47-43050d2d2a7d",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "baefbf46-3371-4224-addb-7a272e7c3495",
+              "leftValue": "={{ $json.appointment_services[0].service.name }}",
+              "rightValue": "Doctor - First",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1280,
+        0
+      ],
+      "id": "04fd963f-4e8e-4f6a-8569-911df5b00aa0",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c248a0ae-7f1b-4a98-aa19-6ef1bcfa66a8",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "SIDE EFFECTS FORM",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1728,
+        0
+      ],
+      "id": "6ac4561a-3d46-4117-89d2-88a189facdb1",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\n\n// Get data and turn it into an object if it's a JSON string\nlet data = item.data;\n\nif (typeof data === 'string') {\n  try {\n    data = JSON.parse(data);\n  } catch (error) {\n    throw new Error('data is not valid JSON: ' + data);\n  }\n} else if (!data || typeof data !== 'object') {\n  data = {};\n}\n\n// Grab signature if it exists as base64 text\nconst signatureBase64 = data.signature || null;\n\n// Optional: grab presignedUrl if a file object exists\nconst file0 = (data.file && data.file[0]) || {};\nconst signatureUrl = file0.presignedUrl || null;\n\n// Remove ugly signature/file fields before output\ndelete data.signature;\ndelete data.file;\n\nconst output = {\n  ...item,\n  ...data,\n\n  // Keep a useful marker without dumping the full signature text\n  hasSignature: !!signatureBase64,\n\n  // Keep URL only if one exists\n  signatureUrl: signatureUrl,\n};\n\n// Remove nested/raw data now that it's expanded\ndelete output.data;\n\n// Extra cleanup in case these came from the original item\ndelete output.signature;\ndelete output.file;\n\nreturn [\n  {\n    json: output,\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2192,
+        -80
+      ],
+      "id": "089a8a65-e0c8-4fb9-87a9-8aaac71a3ac9",
+      "name": "CleanUpAppointment"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\n\nlet data = item.data;\n\n// Parse data if it is a JSON string\nif (typeof data === 'string') {\n  data = JSON.parse(data);\n}\n\n// Get signature base64 data URL\nconst signatureDataUrl = data.signature;\n\nif (!signatureDataUrl) {\n  throw new Error('No signature found');\n}\n\n// Match data:image/png;base64,xxxx\nconst matches = signatureDataUrl.match(/^data:(image\\/\\w+);base64,(.+)$/);\n\nif (!matches) {\n  throw new Error('Signature is not a valid base64 image');\n}\n\nconst mimeType = matches[1];\nconst base64Data = matches[2];\n\nreturn [\n  {\n    json: {\n      hasSignature: true,\n      fileName: 'signature.png',\n      mimeType,\n    },\n    binary: {\n      signature: {\n        data: base64Data,\n        mimeType,\n        fileName: 'signature.png',\n      },\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2192,
+        96
+      ],
+      "id": "440c32d2-18f4-40ec-ab1a-6b37eb3eb442",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-05-27T23:19:06.403Z",
+      "createdAt": "2026-05-27T23:19:06.403Z",
+      "role": "workflow:owner",
+      "workflowId": "AY0hTKCJf4Y9FQcR",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    },
+    {
+      "updatedAt": "2026-01-21T23:52:24.742Z",
+      "createdAt": "2026-01-21T23:52:24.742Z",
+      "id": "gBgZjsV5vc1ZGBw4",
+      "name": "AUS"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-05-29T02:07:46.374Z",
+  "versionId": "2558377f-d54e-4aee-a930-0e1698b158fe"
+}
