@@ -1,0 +1,568 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti-GetAuthToken'",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "StripCSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Zenoti-GetAuthToken'": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchCustomer": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "StripCSV": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HelixOrderedClinic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Clinic Products": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Get Clinic Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HelixOrderedClinic": {
+      "main": [
+        [
+          {
+            "node": "SearchCustomer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-06-05T04:08:21.849Z",
+  "id": "Gu25uuubt2gQ45IW",
+  "isArchived": false,
+  "meta": null,
+  "name": "Zenoti-MedOrderImport",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "AU Med Order",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Med-Order-Import",
+              "fieldType": "file"
+            }
+          ]
+        },
+        "options": {
+          "path": "AUMedOrder"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -32,
+        16
+      ],
+      "id": "2b3f898a-13a7-4d8c-9fc2-fe1865de8fcc",
+      "name": "On form submission",
+      "webhookId": "7af26175-b54d-4f47-a8d4-cacfaa666f49"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "QA7Qdseg7ehAOWP6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+          "cachedResultName": "Zenoti-GetAuthToken"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        -128
+      ],
+      "id": "7471d393-0a5c-444d-8cea-6319f36500d3",
+      "name": "Call 'Zenoti-GetAuthToken'"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first();\n\nreturn [\n  {\n    json: {\n      binaryFieldsAvailable: Object.keys(item.binary || {}),\n      hasMedOrderImport: !!item.binary?.Med_Order_Import,\n      jsonKeys: Object.keys(item.json || {}),\n    },\n    binary: item.binary,\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        -336
+      ],
+      "id": "c60bca9f-988b-47bf-affe-93ffa21add17",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        752,
+        64
+      ],
+      "id": "2706df69-2827-4580-9408-f20106fd5602",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4a5321d3-cb69-464b-8f58-a18477c5e1cd",
+              "name": "TokenSecret",
+              "value": "={{ $json.TokenSecret }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        -128
+      ],
+      "id": "febbdc7a-cb3d-4270-94dd-472d11edf819",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        960,
+        64
+      ],
+      "id": "d3f35cf2-4dae-4707-acf1-3a58e4ce37da",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "url": "https://api.zenoti.com/v1/guests/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "page",
+              "value": "1"
+            },
+            {
+              "name": "size",
+              "value": "10"
+            },
+            {
+              "name": "first_name",
+              "value": "={{ $('Loop Over Items').item.json.PatientFirstName }}"
+            },
+            {
+              "name": "last_name",
+              "value": "={{ $('Loop Over Items').item.json.PatientSurname }}"
+            },
+            {
+              "name": "expand",
+              "value": "address_info"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Loop Over Items').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1600,
+        80
+      ],
+      "id": "43a72754-7a00-45d0-b794-ded71407d717",
+      "name": "SearchCustomer"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code node\n// Mode: Run Once for All Items\n\nconst binaryFieldName = 'Med_Order_Import';\n\nfunction parseCsvLine(line) {\n  const result = [];\n  let current = '';\n  let inQuotes = false;\n\n  for (let i = 0; i < line.length; i++) {\n    const char = line[i];\n    const nextChar = line[i + 1];\n\n    if (char === '\"' && inQuotes && nextChar === '\"') {\n      current += '\"';\n      i++;\n    } else if (char === '\"') {\n      inQuotes = !inQuotes;\n    } else if (char === ',' && !inQuotes) {\n      result.push(current.trim());\n      current = '';\n    } else {\n      current += char;\n    }\n  }\n\n  result.push(current.trim());\n  return result;\n}\n\nconst item = $input.first();\n\nif (!item.binary?.[binaryFieldName]) {\n  return [\n    {\n      json: {\n        success: false,\n        error: `Binary field \"${binaryFieldName}\" was not found on the current input item.`,\n        availableBinaryFields: Object.keys(item.binary || {}),\n        note: 'The binary file must flow into this Code node. Use a Merge node or preserve binary data in the previous node.',\n      },\n    },\n  ];\n}\n\nconst buffer = await this.helpers.getBinaryDataBuffer(0, binaryFieldName);\nconst csvText = buffer.toString('utf8');\n\nconst rawLines = csvText.split(/\\r?\\n/);\n\nconst lines = rawLines\n  .map(line => line.trim())\n  .filter(line => line !== '');\n\n// Drop first line: Results\nconst usefulLines = lines.slice(1);\n\n// Stop at Metadata\nconst metadataIndex = usefulLines.findIndex(line =>\n  line.toLowerCase().startsWith('metadata')\n);\n\nconst dataSection = metadataIndex >= 0\n  ? usefulLines.slice(0, metadataIndex)\n  : usefulLines;\n\nif (dataSection.length === 0) {\n  return [\n    {\n      json: {\n        success: false,\n        message: 'CSV was read, but no usable data section was found.',\n        preview: rawLines.slice(0, 10),\n      },\n    },\n  ];\n}\n\nconst headers = parseCsvLine(dataSection[0]);\nconst dataRows = dataSection.slice(1);\n\nconst output = [];\n\nfor (const row of dataRows) {\n  const values = parseCsvLine(row);\n\n  const hasData = values.some(value => value !== '');\n\n  if (!hasData) {\n    continue;\n  }\n\n  const obj = {};\n\n  headers.forEach((header, index) => {\n    if (header) {\n      obj[header] = values[index] || '';\n    }\n  });\n\n  output.push({\n    json: obj,\n  });\n}\n\nif (output.length === 0) {\n  return [\n    {\n      json: {\n        success: true,\n        rowsFound: 0,\n        message: 'CSV was read successfully, but there were no prescription rows before the Metadata section.',\n        headersFound: headers,\n        preview: rawLines.slice(0, 10),\n      },\n    },\n  ];\n}\n\nreturn output;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        176
+      ],
+      "id": "13320ba9-2ac2-4966-a476-68165b4bdd8f",
+      "name": "StripCSV"
+    },
+    {
+      "parameters": {
+        "jsCode": "const centreName = $input.first().json.CentreName || '';\n\nconst clinicName = centreName\n  .replace(/^Ashley\\s*&\\s*Martin\\s*-\\s*/i, '')\n  .trim();\n\nreturn [\n  {\n    json: {\n      ClinicName: clinicName,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1184,
+        80
+      ],
+      "id": "31b7998a-a5f0-45ad-8a59-56e42a506188",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/centers/{{ $('HelixOrderedClinic').item.json.Zenoti_ID }}/products",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "page",
+              "value": "1"
+            },
+            {
+              "name": "size",
+              "value": "100"
+            },
+            {
+              "name": "show_in_catalog",
+              "value": "false"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Loop Over Items').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "page",
+                    "value": "={{ $pageCount + 1 }}"
+                  }
+                ]
+              },
+              "limitPagesFetched": true,
+              "maxRequests": "={{ Math.ceil(Number($response.body.page_info.total) / Number($response.body.page_info.size)) }}\n",
+              "requestInterval": 1000
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2080,
+        80
+      ],
+      "id": "2f1a6ce3-658c-4dc9-840e-0ec48692f1dc",
+      "name": "Get Clinic Products"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "products",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2288,
+        80
+      ],
+      "id": "fb704e62-e6c1-47a3-8865-568960a1d005",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "content": "## Get Clinics Prodcuts and Filter Down to correct",
+        "height": 272,
+        "width": 704,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2032,
+        -32
+      ],
+      "typeVersion": 1,
+      "id": "67e08b15-1ce0-4042-a698-e9ddfc15f9a0",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "guests",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1808,
+        80
+      ],
+      "id": "c8867c55-79f8-49ba-8edb-6ad19445cf71",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9a883484-6ff7-449f-9ca0-990b23bbdfa6",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('Loop Over Items').item.json.DrugName }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        2496,
+        80
+      ],
+      "id": "6362e36c-a288-48f0-a4eb-69641a4ffb04",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "name",
+              "condition": "ilike",
+              "keyValue": "={{ $json.ClinicName }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1392,
+        80
+      ],
+      "id": "783b10d4-6eaf-402c-a72a-f67d1b3ed966",
+      "name": "HelixOrderedClinic"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "StripCSV": [
+      {
+        "json": {
+          "PrescribedOn": "8/06/2026",
+          "PrescriberSurname": "Goh",
+          "PrescriberFirstname": "Jia",
+          "DoctorId": "26",
+          "CentreName": "Ashley & Martin - Perth",
+          "PrescriptionType": "Printed Script",
+          "TransmittedTo": "",
+          "ScriptId": "3",
+          "DrugName": "5% Minoxidil + 0.25% Finasteride Lotion",
+          "Form": "lotion",
+          "Strength": "100mL",
+          "Dose": "\"1 at night as directed\"",
+          "Route": "hair",
+          "Repeats": "7",
+          "RepeatInterval": "",
+          "PatientId": "16490",
+          "PatientSurname": "Verco",
+          "PatientFirstName": "Belinda",
+          "PatientDateOfBirth": "3/01/1989",
+          "PhoneNumbers": "411327783"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-05T04:08:21.851Z",
+      "createdAt": "2026-06-05T04:08:21.851Z",
+      "role": "workflow:owner",
+      "workflowId": "Gu25uuubt2gQ45IW",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-06-08T01:50:46.739Z",
+  "versionId": "ff381013-1875-474c-aadf-591a11efe7d4"
+}
