@@ -1857,15 +1857,15 @@
     "Monday-Thursday": [
       {
         "json": {
-          "timestamp": "2026-05-18T09:00:00.001+08:00",
-          "Readable date": "May 18th 2026, 9:00:00 am",
-          "Readable time": "9:00:00 am",
-          "Day of week": "Monday",
+          "timestamp": "2026-06-09T13:45:00.001+08:00",
+          "Readable date": "June 9th 2026, 1:45:00 pm",
+          "Readable time": "1:45:00 pm",
+          "Day of week": "Tuesday",
           "Year": "2026",
-          "Month": "May",
-          "Day of month": "18",
-          "Hour": "09",
-          "Minute": "00",
+          "Month": "June",
+          "Day of month": "09",
+          "Hour": "13",
+          "Minute": "45",
           "Second": "00",
           "Timezone": "Australia/Perth (UTC+08:00)"
         },
@@ -1929,6 +1929,6 @@
     }
   ],
   "triggerCount": 3,
-  "updatedAt": "2026-05-20T07:31:59.914Z",
+  "updatedAt": "2026-06-09T05:46:54.389Z",
   "versionId": "186e08fd-5078-4d4e-a36f-32d1a2992c63"
 }
