@@ -797,7 +797,28 @@
     }
   ],
   "origin": "n8n",
-  "pinData": {},
+  "pinData": {
+    "RabbitMQ Trigger": [
+      {
+        "json": {
+          "fields": {
+            "consumerTag": "amq.ctag-6RONLWAlpbDweqqE_abr8w",
+            "deliveryTag": 257,
+            "redelivered": false,
+            "exchange": "",
+            "routingKey": "au.zenoti.webhooks.closedinvoice"
+          },
+          "properties": {
+            "headers": {}
+          },
+          "content": "{\"headers\":{\"host\":\"webhook.ashleyandmartin.com.au\",\"x-forwarded-scheme\":\"https\",\"x-forwarded-proto\":\"https\",\"x-forwarded-for\":\"4.237.202.144\",\"x-real-ip\":\"4.237.202.144\",\"content-length\":\"1809\",\"au-zenoti-completedapp\":\"7hTFTg7hCM3i\",\"content-type\":\"application/json; charset=utf-8\"},\"params\":{},\"query\":{},\"body\":{\"id\":\"6a27a8791c1f834721a296ce\",\"event_id\":\"6a27a8791c1f834721a296cc\",\"event_schema\":\"v1\",\"event_resource\":null,\"event_type\":\"Invoice.Closed\",\"event_timestamp\":\"2026-06-09T05:45:29.9178608Z\",\"data\":{\"invoice\":{\"id\":\"962f20c5-06fb-4d0d-80c6-531a6b627bc5\",\"invoice_number\":\"67530\",\"invoice_number_prefix\":\"DN\",\"receipt_number\":\"DNR43225\",\"appointment_group_id\":\"7c723f52-3d9b-4c77-98e6-6a5e9bf0975b\",\"lock\":false,\"is_closed\":true,\"is_refund\":false,\"invoice_date\":\"2026-06-09T13:00:00\",\"center_id\":\"8c8acebe-4306-4645-a0f7-5166f8b5ba4f\",\"total_price\":{\"currency_id\":0,\"net_price\":0,\"tax\":0,\"rounding_adjustment\":0,\"sum_total\":0},\"guest\":{\"id\":\"22d26191-438b-4598-897a-5fbfb57f54be\",\"first_name\":\"Madhan\",\"last_name\":\"Sharma\",\"gender\":1,\"code\":\"DNG3595\",\"mobile_phone\":\"+61 451938778\",\"email\":\"sharmasivara@gmail.com\"},\"invoice_items\":[{\"invoice_item_id\":\"a602052b-f330-473b-8134-850a019bbece\",\"id\":\"4647fba2-6af2-46dc-aca5-ad8f559cff98\",\"name\":\"Telehealth Re-Enrolment\",\"type\":0,\"code\":\"S00070\",\"price\":{\"currency_id\":8,\"sales\":0,\"tax\":0,\"final\":0,\"discount\":0},\"quantity\":1,\"sale_by_id\":\"48dab0a7-d066-4a91-8b3b-81e8dfec11ac\",\"therapist_name\":\"DR Cynthia\"}],\"appointments\":[{\"id\":\"a760db13-046e-4aa7-99fe-8c1c932bf02c\",\"invoice_item_id\":\"a602052b-f330-473b-8134-850a019bbece\",\"service_name\":\"Telehealth Re-Enrolment\",\"service_id\":\"4647fba2-6af2-46dc-aca5-ad8f559cff98\",\"start_time\":\"2026-06-09T03:00:00\",\"end_time\":\"2026-06-09T03:15:00\",\"serviceduration_in_miutes\":15,\"has_add_ons\":false,\"is_add_on\":false,\"therapist_name\":\"Dr Cynthia Boudeville\",\"TherapistId\":\"48dab0a7-d066-4a91-8b3b-81e8dfec11ac\",\"is_recurring\":false,\"appointment_type\":2,\"therapist_request_type\":0,\"room_name\":\"\",\"equipment_name\":\"\"}],\"transactions\":[],\"additional_fields\":[{\"key\":\"Additional invoice field\",\"value\":\"\"}]}}},\"webhookUrl\":\"https://webhook.ashleyandmartin.com.au/webhook/AppComplete\",\"executionMode\":\"production\"}"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -822,6 +843,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-05-13T23:49:00.698Z",
+  "updatedAt": "2026-06-09T05:46:16.540Z",
   "versionId": "1050c3e9-11c9-475d-9720-d6c2219a07fd"
 }
