@@ -4905,8 +4905,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -624,
-        352
+        -688,
+        1648
       ],
       "typeVersion": 1,
       "id": "ed918380-d633-4083-96ac-b866abac51df",
@@ -4919,8 +4919,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -528,
-        832
+        -592,
+        2128
       ],
       "id": "3bb11677-7775-4581-abf1-37628050009c",
       "name": "Check for Product",
@@ -4954,8 +4954,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -272,
-        832
+        -336,
+        2128
       ],
       "id": "76b44dbf-9bc7-4c4c-8254-ac51595bca2c",
       "name": "Can Have product"
@@ -4967,8 +4967,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        512,
-        688
+        448,
+        1984
       ],
       "id": "ee00b64a-ec22-4202-a665-a9334745cfe1",
       "name": "Generate INVOICE"
@@ -4980,8 +4980,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        240,
-        960
+        176,
+        2256
       ],
       "id": "866f2979-162b-4a92-a134-1c22794ecb01",
       "name": "Cannot Be redemmed"
@@ -4993,8 +4993,8 @@
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [
-        336,
-        368
+        272,
+        1664
       ],
       "id": "93019bd1-2066-4c2f-b5da-57718059cb17",
       "name": "Compound",
@@ -5014,8 +5014,8 @@
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [
-        464,
-        960
+        400,
+        2256
       ],
       "id": "cf4d15f2-ed38-43d4-b208-2c22858c23c4",
       "name": "FAILED ORDERS MANUALL FIX",
@@ -5035,8 +5035,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        672,
-        688
+        608,
+        1984
       ],
       "id": "cd8167f5-d496-4958-879d-7020b88ee312",
       "name": "Add Product"
@@ -5048,8 +5048,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        832,
-        688
+        768,
+        1984
       ],
       "id": "08db07a2-81a7-454b-9ff6-69aabfa425fd",
       "name": "Close Invoice"
@@ -5061,8 +5061,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        272,
-        672
+        208,
+        1968
       ],
       "id": "d381d5c7-2ce4-415e-bbc1-8e60dd0c52d5",
       "name": "Loop Over Items1"
@@ -5079,8 +5079,8 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        640,
-        496
+        576,
+        1792
       ],
       "id": "2064da7e-8057-4b9c-9f00-907e3bc42103",
       "name": "Aggregate"
@@ -5092,8 +5092,8 @@
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [
-        848,
-        496
+        784,
+        1792
       ],
       "id": "871326cc-1242-4991-9088-a235bedbb9a1",
       "name": "CLINIC INFO",
@@ -5858,8 +5858,8 @@
       "type": "n8n-nodes-base.convertToFile",
       "typeVersion": 1.1,
       "position": [
-        1440,
-        640
+        1376,
+        1936
       ],
       "id": "ae56431d-6dea-4481-8f7d-f6cb7a5432a2",
       "name": "Convert to File",
@@ -5878,8 +5878,8 @@
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [
-        1712,
-        640
+        1648,
+        1936
       ],
       "id": "5f42bef7-7d25-4f46-9e83-d535ee3745d1",
       "name": "Add an attachment",
@@ -5906,8 +5906,8 @@
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [
-        1936,
-        640
+        1872,
+        1936
       ],
       "id": "b14a02c2-5a54-4767-9807-2f506dc41358",
       "name": "Send a draft",
@@ -5928,8 +5928,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1360,
-        544
+        1296,
+        1840
       ],
       "typeVersion": 1,
       "id": "8b200b92-5948-430c-8c10-e8daf813e9af",
@@ -6913,8 +6913,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        880,
-        80
+        2784,
+        2096
       ],
       "id": "39f0f837-bc13-4432-b0a6-7f4333aa8446",
       "name": "Filter"
@@ -6928,8 +6928,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        752,
-        -16
+        2560,
+        1984
       ],
       "typeVersion": 1,
       "id": "32b0a6eb-fc5c-4ffc-93c5-872e05da763a",
@@ -6960,8 +6960,8 @@
           "id": 2,
           "createdAt": "2025-12-09T00:49:44.432Z",
           "updatedAt": "2025-12-12T04:09:32.201Z",
-          "start_date": "2026-05-30",
-          "end_date": "2026-05-31"
+          "start_date": "2026-06-09",
+          "end_date": "2026-06-10"
         },
         "pairedItem": {
           "item": 0
@@ -7002,6 +7002,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-06-03T00:27:11.556Z",
-  "versionId": "69ae52cf-2172-4f89-840e-080ff34e9efb"
+  "updatedAt": "2026-06-10T02:06:31.938Z",
+  "versionId": "7799548b-1bb7-4884-8f85-25eb0efbc409"
 }
