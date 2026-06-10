@@ -122,26 +122,26 @@
       {
         "json": {
           "execution": {
-            "id": "8996",
-            "url": "https://n8n.ashleyandmartin.local/workflow/STUF6Fz9PaFzUwRx/executions/8996",
+            "id": "42882",
+            "url": "https://n8n.ashleyandmartin.local/workflow/hBFwd7kqNXuMeJ9k/executions/42882",
             "error": {
               "level": "warning",
               "tags": {},
-              "description": "<html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body>\r\n<center><h1>502 Bad Gateway</h1></center>\r\n</body>\r\n</html>\r\n",
-              "timestamp": 1770483980824,
+              "timestamp": 1781024954286,
               "context": {
                 "itemIndex": 0,
                 "request": {
                   "headers": {
-                    "authorization": "**hidden**",
-                    "accept": "application/json"
+                    "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+                    "Authorization": "**hidden**"
                   },
-                  "method": "POST",
-                  "uri": "https://api.zenoti.com/v1/invoices/298dd916-45c8-4a0a-abab-3f77335f1817/close",
+                  "method": "GET",
+                  "uri": "https://graph.microsoft.com/v1.0/drives/b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU/items/01Y4DA4OOUVPWHSA2BN5G2YBSB6DOVI6HR/children?$top=200&$select=id,name,folder,file,createdDateTime,lastModifiedDateTime",
                   "gzip": true,
-                  "rejectUnauthorized": true,
+                  "rejectUnauthorized": false,
                   "followRedirect": true,
                   "resolveWithFullResponse": true,
+                  "sendCredentialsOnCrossOriginRedirect": true,
                   "followAllRedirects": true,
                   "timeout": 300000,
                   "encoding": null,
@@ -153,27 +153,14 @@
               "name": "NodeApiError",
               "node": {
                 "parameters": {
-                  "preBuiltAgentsCalloutHttpRequest": "",
                   "curlImport": "",
-                  "method": "POST",
-                  "url": "=https://api.zenoti.com/v1/invoices/{{ $('Generate Invoice With Meds').item.json.invoice_id }}/close",
-                  "authentication": "none",
+                  "method": "GET",
+                  "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.ItemsID }}/children?$top=200&$select=id,name,folder,file,createdDateTime,lastModifiedDateTime",
+                  "authentication": "genericCredentialType",
+                  "genericAuthType": "oAuth2Api",
                   "provideSslCertificates": false,
                   "sendQuery": false,
-                  "sendHeaders": true,
-                  "specifyHeaders": "keypair",
-                  "headerParameters": {
-                    "parameters": [
-                      {
-                        "name": "Authorization",
-                        "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').item.json.TokenSecret }}"
-                      },
-                      {
-                        "name": "accept",
-                        "value": "application/json"
-                      }
-                    ]
-                  },
+                  "sendHeaders": false,
                   "sendBody": false,
                   "options": {},
                   "infoMessage": ""
@@ -181,35 +168,53 @@
                 "type": "n8n-nodes-base.httpRequest",
                 "typeVersion": 4.3,
                 "position": [
-                  1408,
-                  80
+                  -848,
+                  272
                 ],
-                "id": "2777c1bd-d4c6-4407-9875-341f60b47595",
-                "name": "Close Invoice"
+                "id": "678c300e-8676-4233-8f43-fe8944cf57f6",
+                "name": "Search Inprogress Orders",
+                "credentials": {
+                  "microsoftSharePointOAuth2Api": {
+                    "id": "8eWNjQciijocacKo",
+                    "name": "Microsoft SharePoint account"
+                  },
+                  "microsoftGraphSecurityOAuth2Api": {
+                    "id": "7IYTPqhMSd9yOy8S",
+                    "name": "Microsoft Graph Security account"
+                  },
+                  "microsoftOAuth2Api": {
+                    "id": "yjHQESADfULqo4lZ",
+                    "name": "Microsoft account"
+                  },
+                  "oAuth2Api": {
+                    "id": "j30zGPdAyzTUMgGs",
+                    "name": "MS graph"
+                  }
+                }
               },
               "messages": [
-                "502 - \"<html>\\r\\n<head><title>502 Bad Gateway</title></head>\\r\\n<body>\\r\\n<center><h1>502 Bad Gateway</h1></center>\\r\\n</body>\\r\\n</html>\\r\\n\""
+                "The provided authorization grant (e.g., authorization code, resource owner credentials) or refresh token is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client."
               ],
-              "httpCode": "502",
-              "message": "Bad gateway - the service failed to handle your request",
-              "stack": "NodeApiError: Bad gateway - the service failed to handle your request\n    at ExecuteContext.execute (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-nodes-base@file+packages+nodes-base_@aws-sdk+credential-providers@3.808.0_asn1.js@5_8da18263ca0574b0db58d4fefd8173ce/node_modules/n8n-nodes-base/nodes/HttpRequest/V3/HttpRequestV3.node.ts:859:16)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at WorkflowExecute.executeNode (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1045:8)\n    at WorkflowExecute.runNode (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1226:11)\n    at /usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1662:27\n    at /usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+sdk-trace-base@1.30_ec37920eb95917b28efaa783206b20f3/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:2274:11"
+              "httpCode": "EAUTH",
+              "message": "The provided authorization grant (e.g., authorization code, resource owner credentials) or refresh token is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client.",
+              "stack": "NodeApiError: The provided authorization grant (e.g., authorization code, resource owner credentials) or refresh token is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client.\n    at ExecuteContext.execute (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-nodes-base@file+packages+nodes-base_@aws-sdk+credential-providers@3.808.0_asn1.js@5_8da18263ca0574b0db58d4fefd8173ce/node_modules/n8n-nodes-base/nodes/HttpRequest/V3/HttpRequestV3.node.ts:864:16)\n    at processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at WorkflowExecute.executeNode (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+exporter-trace-otlp_9f358c3eeaef0d2736f54ac9757ada43/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1043:8)\n    at WorkflowExecute.runNode (/usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+exporter-trace-otlp_9f358c3eeaef0d2736f54ac9757ada43/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1222:11)\n    at /usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+exporter-trace-otlp_9f358c3eeaef0d2736f54ac9757ada43/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:1659:27\n    at /usr/local/lib/node_modules/n8n/node_modules/.pnpm/n8n-core@file+packages+core_@opentelemetry+api@1.9.0_@opentelemetry+exporter-trace-otlp_9f358c3eeaef0d2736f54ac9757ada43/node_modules/n8n-core/src/execution-engine/workflow-execute.ts:2302:11"
             },
-            "lastNodeExecuted": "Close Invoice",
+            "lastNodeExecuted": "Search Inprogress Orders",
             "mode": "integrated",
             "executionContext": {
               "version": 1,
-              "establishedAt": 1770483976343,
+              "establishedAt": 1781024636969,
               "source": "integrated",
               "triggerNode": {
                 "name": "Schedule Trigger",
                 "type": "n8n-nodes-base.scheduleTrigger"
               },
-              "parentExecutionId": "8877"
+              "parentExecutionId": "42881"
             }
           },
           "workflow": {
-            "id": "STUF6Fz9PaFzUwRx",
-            "name": "Zenoti - Order Meds"
+            "id": "hBFwd7kqNXuMeJ9k",
+            "name": "ZenotiNZ - AddtoFinance"
           }
         },
         "pairedItem": {
@@ -237,6 +242,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-02-08T23:06:11.528Z",
+  "updatedAt": "2026-06-09T23:27:14.372Z",
   "versionId": "0cf774db-6d94-44be-b722-503e326b23c9"
 }
