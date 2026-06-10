@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-03-31T23:07:14.000Z",
-    "createdAt": "2026-03-31T23:06:37.883Z",
-    "versionId": "47b62ca7-8ef0-479b-963a-0469d1480c51",
+    "updatedAt": "2026-06-08T00:27:35.000Z",
+    "createdAt": "2026-06-08T00:25:11.749Z",
+    "versionId": "08a87137-3fa2-4001-b37d-6ba7f4fd006d",
     "workflowId": "v4DDI6vWpoiymMuW",
     "nodes": [
       {
@@ -14,7 +14,7 @@
         "typeVersion": 1.1,
         "position": [
           -144,
-          -320
+          -272
         ],
         "id": "a55077b5-bd05-4e77-9f43-79ccea8a0f31",
         "name": "When Executed by Another Workflow"
@@ -48,7 +48,7 @@
         "typeVersion": 2.3,
         "position": [
           304,
-          -240
+          -192
         ],
         "id": "365eb60f-a203-47c9-866b-37ba29ecc8a2",
         "name": "If"
@@ -71,7 +71,7 @@
         "typeVersion": 4.3,
         "position": [
           80,
-          -240
+          -192
         ],
         "id": "1e31adca-f682-4126-b1af-349bc7f29214",
         "name": "CheckPlayWrightisUp"
@@ -94,7 +94,7 @@
         "typeVersion": 3.4,
         "position": [
           528,
-          -320
+          -272
         ],
         "id": "c9ad3cf4-da27-41b9-b864-18090d927776",
         "name": "Set Address"
@@ -117,8 +117,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          752,
-          -320
+          1424,
+          -336
         ],
         "id": "99dbf60b-48f0-460f-9063-b897f2a48a48",
         "name": "Check Region",
@@ -153,8 +153,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          976,
-          -320
+          1648,
+          -336
         ],
         "id": "b01cfcf0-213a-4ca1-96f5-7037e156ffed",
         "name": "If1"
@@ -176,7 +176,7 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          1200,
+          1872,
           -144
         ],
         "id": "6b94b20d-0423-4e0f-bd61-41e5a5362bcb",
@@ -205,7 +205,7 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          1200,
+          1872,
           -368
         ],
         "id": "dd52d921-d7ac-4af9-b354-f13293a928e8",
@@ -216,8 +216,8 @@
         "type": "n8n-nodes-base.wait",
         "typeVersion": 1.1,
         "position": [
-          1648,
-          -320
+          2320,
+          -272
         ],
         "id": "bb1ff91f-c4c7-4743-859e-7d279fbad46c",
         "name": "Wait",
@@ -233,11 +233,197 @@
         "type": "n8n-nodes-base.merge",
         "typeVersion": 3.2,
         "position": [
-          1424,
+          2096,
           -432
         ],
         "id": "fef43dc6-b00c-4dc6-aba8-3a0c39083273",
         "name": "Merge"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "1e920222-fb7f-437c-a629-f674974c35df",
+                "leftValue": "={{ $json.address }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          752,
+          -272
+        ],
+        "id": "6faa9d5c-b2ca-4afd-a73d-ba8cc85cea8c",
+        "name": "If2"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "pVbLONb8Gh393bg0",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinicsNZ",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/pVbLONb8Gh393bg0"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Zenoti_ID",
+                "keyValue": "={{ $('When Executed by Another Workflow').item.json.CustomerCenterID }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          976,
+          -96
+        ],
+        "id": "477b4731-affa-4ff6-be38-db182fdd6eba",
+        "name": "Get row(s)1"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http:///10.64.1.140:3000/regioncheck",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "address",
+                "value": "={{ $json.data['Shipping Address'] }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          1424,
+          -96
+        ],
+        "id": "699d9cfe-126e-4c84-9e28-9beb810fb7fa",
+        "name": "Check Region1",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "05bc7029-9b76-4269-84e2-f77428259f0e",
+                "name": "Region",
+                "value": "={{ $('Check Region1').item.json.status }}",
+                "type": "string"
+              },
+              {
+                "id": "17482d1a-a4bb-4c1d-8846-91405f11dbd0",
+                "name": "RegionConfidence",
+                "value": "={{ $('Check Region1').item.json.confidence }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1872,
+          48
+        ],
+        "id": "f919813e-557c-4340-ac23-bb998bee587d",
+        "name": "Add Region1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "f23d0e48-4ad9-45c7-b918-58508e436980",
+                "leftValue": "={{ $json.ok }}",
+                "rightValue": false,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1648,
+          -96
+        ],
+        "id": "de303730-221b-443c-9786-a5e63a3dd4b9",
+        "name": "If3"
+      },
+      {
+        "parameters": {
+          "operation": "sendAndWait",
+          "toRecipients": "={{ $json.email }}",
+          "subject": "=Automation - Med Order - Address Issue - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
+          "message": "=Hi Team,\n\nAutomation requires you to confirm the address for client {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\n\nTheir adrdress for med orders is either missing or has been entered incorrectly and is unasble to be identified.\n\nPlease confirmed correct address formatting against https://www.nzpost.co.nz/tools/address-postcode-finder and enter into the field below.\n\nRegards,\nAutomation\n",
+          "responseType": "customForm",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "Shipping Address",
+                "placeholder": "Shipping Address",
+                "requiredField": true
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          1200,
+          -96
+        ],
+        "id": "2129aa9d-e05b-4418-8646-f601cb0392c7",
+        "name": "ConfirmAddress",
+        "webhookId": "28fd15e6-582c-4484-8900-622634ade477",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
       }
     ],
     "connections": {
@@ -290,7 +476,7 @@
         "main": [
           [
             {
-              "node": "Check Region",
+              "node": "If2",
               "type": "main",
               "index": 0
             }
@@ -358,14 +544,94 @@
             }
           ]
         ]
+      },
+      "If2": {
+        "main": [
+          [
+            {
+              "node": "Check Region",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Get row(s)1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)1": {
+        "main": [
+          [
+            {
+              "node": "ConfirmAddress",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check Region1": {
+        "main": [
+          [
+            {
+              "node": "If3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If3": {
+        "main": [
+          [
+            {
+              "node": "Add Region1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Set Unknown Region",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Add Region1": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "ConfirmAddress": {
+        "main": [
+          [
+            {
+              "node": "Check Region1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 47b62ca7",
+    "name": "Version 08a87137",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "47b62ca7-8ef0-479b-963a-0469d1480c51",
+  "activeVersionId": "08a87137-3fa2-4001-b37d-6ba7f4fd006d",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -416,7 +682,7 @@
       "main": [
         [
           {
-            "node": "Check Region",
+            "node": "If2",
             "type": "main",
             "index": 0
           }
@@ -484,12 +750,94 @@
           }
         ]
       ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Check Region",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)1": {
+      "main": [
+        [
+          {
+            "node": "ConfirmAddress",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Region1": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Add Region1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Unknown Region",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Region1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "ConfirmAddress": {
+      "main": [
+        [
+          {
+            "node": "Check Region1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2026-02-13T01:00:39.121Z",
   "id": "v4DDI6vWpoiymMuW",
   "isArchived": false,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "name": "ZenotiNZ - RegionCheck",
   "nodes": [
     {
@@ -500,7 +848,7 @@
       "typeVersion": 1.1,
       "position": [
         -144,
-        -320
+        -272
       ],
       "id": "a55077b5-bd05-4e77-9f43-79ccea8a0f31",
       "name": "When Executed by Another Workflow"
@@ -534,7 +882,7 @@
       "typeVersion": 2.3,
       "position": [
         304,
-        -240
+        -192
       ],
       "id": "365eb60f-a203-47c9-866b-37ba29ecc8a2",
       "name": "If"
@@ -557,7 +905,7 @@
       "typeVersion": 4.3,
       "position": [
         80,
-        -240
+        -192
       ],
       "id": "1e31adca-f682-4126-b1af-349bc7f29214",
       "name": "CheckPlayWrightisUp"
@@ -580,7 +928,7 @@
       "typeVersion": 3.4,
       "position": [
         528,
-        -320
+        -272
       ],
       "id": "c9ad3cf4-da27-41b9-b864-18090d927776",
       "name": "Set Address"
@@ -603,8 +951,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        752,
-        -320
+        1424,
+        -336
       ],
       "id": "99dbf60b-48f0-460f-9063-b897f2a48a48",
       "name": "Check Region",
@@ -639,8 +987,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        976,
-        -320
+        1648,
+        -336
       ],
       "id": "b01cfcf0-213a-4ca1-96f5-7037e156ffed",
       "name": "If1"
@@ -662,7 +1010,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1200,
+        1872,
         -144
       ],
       "id": "6b94b20d-0423-4e0f-bd61-41e5a5362bcb",
@@ -691,7 +1039,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1200,
+        1872,
         -368
       ],
       "id": "dd52d921-d7ac-4af9-b354-f13293a928e8",
@@ -702,8 +1050,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1648,
-        -320
+        2320,
+        -272
       ],
       "id": "bb1ff91f-c4c7-4743-859e-7d279fbad46c",
       "name": "Wait",
@@ -719,11 +1067,197 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        1424,
+        2096,
         -432
       ],
       "id": "fef43dc6-b00c-4dc6-aba8-3a0c39083273",
       "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "1e920222-fb7f-437c-a629-f674974c35df",
+              "leftValue": "={{ $json.address }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        752,
+        -272
+      ],
+      "id": "6faa9d5c-b2ca-4afd-a73d-ba8cc85cea8c",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pVbLONb8Gh393bg0",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinicsNZ",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/pVbLONb8Gh393bg0"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Zenoti_ID",
+              "keyValue": "={{ $('When Executed by Another Workflow').item.json.CustomerCenterID }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        976,
+        -96
+      ],
+      "id": "477b4731-affa-4ff6-be38-db182fdd6eba",
+      "name": "Get row(s)1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http:///10.64.1.140:3000/regioncheck",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "address",
+              "value": "={{ $json.data['Shipping Address'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1424,
+        -96
+      ],
+      "id": "699d9cfe-126e-4c84-9e28-9beb810fb7fa",
+      "name": "Check Region1",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "05bc7029-9b76-4269-84e2-f77428259f0e",
+              "name": "Region",
+              "value": "={{ $('Check Region1').item.json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "17482d1a-a4bb-4c1d-8846-91405f11dbd0",
+              "name": "RegionConfidence",
+              "value": "={{ $('Check Region1').item.json.confidence }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1872,
+        48
+      ],
+      "id": "f919813e-557c-4340-ac23-bb998bee587d",
+      "name": "Add Region1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f23d0e48-4ad9-45c7-b918-58508e436980",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1648,
+        -96
+      ],
+      "id": "de303730-221b-443c-9786-a5e63a3dd4b9",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "toRecipients": "={{ $json.email }}",
+        "subject": "=Automation - Med Order - Address Issue - {{ $('When Executed by Another Workflow').item.json.CustomerCode }}",
+        "message": "=Hi Team,\n\nAutomation requires you to confirm the address for client {{ $('When Executed by Another Workflow').item.json.CustomerCode }}\n\nTheir adrdress for med orders is either missing or has been entered incorrectly and is unasble to be identified.\n\nPlease confirmed correct address formatting against https://www.nzpost.co.nz/tools/address-postcode-finder and enter into the field below.\n\nRegards,\nAutomation\n",
+        "responseType": "customForm",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Shipping Address",
+              "placeholder": "Shipping Address",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        -96
+      ],
+      "id": "2129aa9d-e05b-4418-8646-f601cb0392c7",
+      "name": "ConfirmAddress",
+      "webhookId": "28fd15e6-582c-4484-8900-622634ade477",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
     }
   ],
   "origin": "n8n",
@@ -731,45 +1265,55 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "AppointmentID": "4e785d83-be59-45ef-b22f-f1f70b4e5104",
-          "CustomerFirstName": "Jordie",
-          "CustomerLastName": "Smeets",
-          "CustomerCode": "AK6290",
-          "CustomerID": "7e9df674-1537-4c6b-a78b-73f345267b18",
-          "CustomerDOB": "25/08/1996",
-          "CustomerEmail": "jordiesmeets@gmail.com",
+          "AppointmentID": "5431bb38-9d24-4032-bea2-133e69a492c1",
+          "CustomerFirstName": "Isaiah",
+          "CustomerLastName": "Balenti",
+          "CustomerCode": "AK9300",
+          "CustomerID": "6d15c0cb-efb7-49be-8ec0-33f7619c282b",
+          "CustomerDOB": "28/12/1997",
+          "CustomerEmail": "iabalenti@yahoo.com",
           "CustomerGender": "Male",
           "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
           "is_form_submitted": true,
-          "textField5": "Jordie Smeets",
+          "textField5": "Isaiah Balenti",
           "select6": "no",
-          "textField2": "Annemarie Hern 15150",
+          "textField2": "Dr Annemarie Hern 15150 ",
           "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
           "btnFormioSubmit": false,
-          "textField": "9/20 Kemp Street, Thornbury, Melbourne 3071",
           "ConsentFormFilled": true,
           "ConsentFormSubmitted": true,
-          "DeliveryLocation": "custom",
+          "DeliveryLocation": "clinic",
           "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
-          "quantity": "2",
-          "DeliveryAddressFull": "9/20 Kemp Street, Thornbury, Melbourne 3071",
+          "quantity": "1",
           "doctorsDirections": "ApplyToScalp",
-          "addresscompared": false,
+          "addresscompared": true,
           "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
           "ZenotiProductName": "Minoxidil + Finasteride Solution",
           "ZenotiProductNameShort": "Minox",
           "ZenotiProductNameEnd": "tion",
           "CanSubtract": true,
-          "RemainingBalance": 5,
+          "RemainingBalance": 4,
           "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
           "packagesavailable": true,
           "perfectrun": true,
           "CLinicABB": "AUC",
-          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=f20ab449-841f-4ec1-bfda-b010175b8a3f&ServiceId=2c75ccbc-e2e5-4dcf-b3a7-19e9cd195eb3&Service=Doctor%20Scripts%204mth&GuestId=7e9df674-1537-4c6b-a78b-73f345267b18&AppointmentId=4e785d83-be59-45ef-b22f-f1f70b4e5104",
-          "StartDate": "2026-03-31",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=d35d81a2-e0d0-4988-ae39-3d0b626350bc&ServiceId=e18c697e-da48-4aee-a7a5-a0fd6c6fc0f6&Service=Doctor%20Scripts%201mth&GuestId=6d15c0cb-efb7-49be-8ec0-33f7619c282b&AppointmentId=5431bb38-9d24-4032-bea2-133e69a492c1",
+          "StartDate": "2026-06-06",
           "InvoiceNumber": true,
-          "Invoicedate": "2026-04-01",
+          "Invoicedate": "2026-06-07",
           "TrueCLinicAbb": "AUC"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "ConfirmAddress": [
+      {
+        "json": {
+          "data": {
+            "Shipping Address": "L6/5 Short Street, Newmarket, Auckland 1023"
+          }
         },
         "pairedItem": {
           "item": 0
@@ -821,6 +1365,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-05-14T23:16:02.840Z",
-  "versionId": "47b62ca7-8ef0-479b-963a-0469d1480c51"
+  "updatedAt": "2026-06-08T00:25:17.865Z",
+  "versionId": "08a87137-3fa2-4001-b37d-6ba7f4fd006d"
 }
