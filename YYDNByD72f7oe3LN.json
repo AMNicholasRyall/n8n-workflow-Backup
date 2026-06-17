@@ -1803,26 +1803,26 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "Zenoti_ID": "b0ffaa9d-5ccc-4771-95ae-43e9d4819104",
-          "code": "AD",
-          "name": "Adelaide",
-          "state": "South Australia",
-          "state_short_name": "SA",
-          "time_zone": "(UTC+09:30) Adelaide",
-          "address_1": "223 Flinders Street",
-          "address_2": "The black WOTSO building",
-          "city": "Adelaide",
+          "Zenoti_ID": "d95173f6-2bee-4b8c-bee4-79c839ad3a1f",
+          "code": "BB",
+          "name": "Brisbane",
+          "state": "Queensland",
+          "state_short_name": "QLD",
+          "time_zone": "(UTC+10:00) Brisbane",
+          "address_1": "Ground Floor, 133 Leichhardt Street",
+          "address_2": "",
+          "city": "Spring Hill",
           "postcode": 0,
-          "display_number": "0882271577",
-          "email": "adelaide@ashleyandmartin.com.au",
-          "No_Clients": 22947,
-          "Abb": "ADE",
-          "table_id": "iaTsV9px13OrTCWt",
+          "display_number": "0738399255",
+          "email": "brisbane@ashleyandmartin.com.au",
+          "No_Clients": 37376,
+          "Abb": "BRI",
+          "table_id": "MrRiQjPiow9fQvJ3",
           "Country_Code": "AU",
           "Country": "Australia",
-          "id": 3,
-          "createdAt": "2025-11-07T02:19:53.355Z",
-          "updatedAt": "2026-01-22T00:46:24.974Z"
+          "id": 4,
+          "createdAt": "2025-11-07T02:19:53.364Z",
+          "updatedAt": "2026-01-23T02:12:45.289Z"
         },
         "pairedItem": {
           "item": 0
@@ -1867,6 +1867,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-03-18T04:58:08.929Z",
+  "updatedAt": "2026-06-14T22:56:38.757Z",
   "versionId": "abdd90ab-6a20-461b-a3b1-339b8448f3e0"
 }
