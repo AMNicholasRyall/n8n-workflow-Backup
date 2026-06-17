@@ -1873,6 +1873,26 @@
           "item": 0
         }
       }
+    ],
+    "Friday": [
+      {
+        "json": {
+          "timestamp": "2026-06-12T08:15:00.002+08:00",
+          "Readable date": "June 12th 2026, 8:15:00 am",
+          "Readable time": "8:15:00 am",
+          "Day of week": "Friday",
+          "Year": "2026",
+          "Month": "June",
+          "Day of month": "12",
+          "Hour": "08",
+          "Minute": "15",
+          "Second": "00",
+          "Timezone": "Australia/Perth (UTC+08:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
     ]
   },
   "repo": {
@@ -1929,6 +1949,6 @@
     }
   ],
   "triggerCount": 3,
-  "updatedAt": "2026-06-09T05:46:54.389Z",
+  "updatedAt": "2026-06-12T00:29:12.735Z",
   "versionId": "186e08fd-5078-4d4e-a36f-32d1a2992c63"
 }
