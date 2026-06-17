@@ -1973,7 +1973,28 @@
     }
   ],
   "origin": "n8n",
-  "pinData": {},
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-06-14T01:00:40.002+08:00",
+          "Readable date": "June 14th 2026, 1:00:40 am",
+          "Readable time": "1:00:40 am",
+          "Day of week": "Sunday",
+          "Year": "2026",
+          "Month": "June",
+          "Day of month": "14",
+          "Hour": "01",
+          "Minute": "00",
+          "Second": "40",
+          "Timezone": "Australia/Perth (UTC+08:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -2021,6 +2042,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-02-23T01:38:33.772Z",
+  "updatedAt": "2026-06-14T22:58:07.013Z",
   "versionId": "0c4fa80e-b4df-42d9-b7da-6ad7d69a29f1"
 }
