@@ -1,0 +1,104 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-06-15T06:25:53.000Z",
+    "createdAt": "2026-06-15T06:25:39.276Z",
+    "versionId": "850cfa78-05da-4b47-8306-00af3a5f96d3",
+    "workflowId": "zb6JAGyUF4QY1c2k",
+    "nodes": [
+      {
+        "parameters": {
+          "inputSource": "jsonExample",
+          "jsonExample": "    {\n        \"clinic\": \"AUC\",\n        \"sheetName\": \"AUC\",\n        \"address\": \"AUC!A1:M21\",\n        \"endRow\": 21,\n        \"orderCount\": 20,\n        \"expectedRows\": 20,\n        \"hasOrders\": true,\n        \"readyForSubflow\": true,\n        \"driveId\": \"b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU\",\n        \"currentExcelDriveId\": \"01Y4DA4OILQMKWMUR65FH3FBVD4WWORW6C\",\n        \"startDate\": \"2026-06-13\",\n        \"sourceStatus\": \"ReadyForClinicSubflow\"\n    }"
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "1651d55a-44b7-45ef-8f86-85f3c1831acb",
+        "name": "When Executed by Another Workflow"
+      }
+    ],
+    "connections": {},
+    "authors": "Nicholas Ryall",
+    "name": "Version 850cfa78",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "850cfa78-05da-4b47-8306-00af3a5f96d3",
+  "connections": {},
+  "createdAt": "2026-06-15T06:22:54.539Z",
+  "id": "zb6JAGyUF4QY1c2k",
+  "isArchived": false,
+  "meta": null,
+  "name": "ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "    {\n        \"clinic\": \"AUC\",\n        \"sheetName\": \"AUC\",\n        \"address\": \"AUC!A1:M21\",\n        \"endRow\": 21,\n        \"orderCount\": 20,\n        \"expectedRows\": 20,\n        \"hasOrders\": true,\n        \"readyForSubflow\": true,\n        \"driveId\": \"b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU\",\n        \"currentExcelDriveId\": \"01Y4DA4OILQMKWMUR65FH3FBVD4WWORW6C\",\n        \"startDate\": \"2026-06-13\",\n        \"sourceStatus\": \"ReadyForClinicSubflow\"\n    }"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1651d55a-44b7-45ef-8f86-85f3c1831acb",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "clinic": "HAM",
+          "sheetName": "HAM",
+          "address": "HAM!A1:M2",
+          "endRow": 2,
+          "orderCount": 1,
+          "expectedRows": 1,
+          "hasOrders": true,
+          "readyForSubflow": true,
+          "driveId": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
+          "currentExcelDriveId": "01Y4DA4OILQMKWMUR65FH3FBVD4WWORW6C",
+          "startDate": "2026-06-13",
+          "sourceStatus": "ReadyForClinicSubflow"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-15T06:22:54.542Z",
+      "createdAt": "2026-06-15T06:22:54.542Z",
+      "role": "workflow:owner",
+      "workflowId": "zb6JAGyUF4QY1c2k",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-06-15T06:26:26.976Z",
+  "versionId": "850cfa78-05da-4b47-8306-00af3a5f96d3"
+}
