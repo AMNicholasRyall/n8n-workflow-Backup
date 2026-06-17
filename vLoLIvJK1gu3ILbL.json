@@ -1605,6 +1605,11 @@
             "node": "Get row(s)",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -1713,6 +1718,17 @@
         [
           {
             "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
             "type": "main",
             "index": 0
           }
@@ -2327,6 +2343,24 @@
               "name": "CurrentExcelDriveID",
               "value": "={{ $('Upload file').item.json.id }}",
               "type": "string"
+            },
+            {
+              "id": "a174daaf-563a-4372-9bd8-1b34569dc45c",
+              "name": "ClinicFolderName",
+              "value": "={{ $('When Executed by Another Workflow').item.json.TrueCLinicAbb }}",
+              "type": "string"
+            },
+            {
+              "id": "30d42f21-6eec-4b41-acc1-5b46d6987b5f",
+              "name": "DateFolderID",
+              "value": "={{ $json.value[0].parentReference.id }}",
+              "type": "string"
+            },
+            {
+              "id": "b92c8d17-1ec8-430d-b68c-5d24a56fff0c",
+              "name": "DriveID",
+              "value": "={{ $json.value[0].parentReference.driveId }}",
+              "type": "string"
             }
           ]
         },
@@ -2349,6 +2383,24 @@
               "id": "9021e372-3edf-4f13-97dc-1ef601fcbfdf",
               "name": "CurrentExcelDriveID",
               "value": "={{ $('Upload file1').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "8a5de884-719f-4d87-946b-0ada6795aa44",
+              "name": "ClinicFolderName",
+              "value": "={{ $('When Executed by Another Workflow').item.json.TrueCLinicAbb }}",
+              "type": "string"
+            },
+            {
+              "id": "1a20b608-1176-4d4f-9116-3896417214b3",
+              "name": "DateFolderID",
+              "value": "={{ $json.value[0].parentReference.id }}",
+              "type": "string"
+            },
+            {
+              "id": "94b2fd59-3921-4644-b899-481b464c0da2",
+              "name": "DriveID",
+              "value": "={{ $json.value[0].parentReference.driveId }}",
               "type": "string"
             }
           ]
@@ -2571,6 +2623,24 @@
               "name": "CurrentExcelDriveID",
               "value": "={{ $json.value[0].id }}",
               "type": "string"
+            },
+            {
+              "id": "8ceadbaa-a2dd-4f5e-92ce-8b0e8a7891a9",
+              "name": "ClinicFolderName",
+              "value": "={{ $('When Executed by Another Workflow').item.json.TrueCLinicAbb }}",
+              "type": "string"
+            },
+            {
+              "id": "e31ec61f-7d6f-40db-8b1b-fdb28f41738c",
+              "name": "DateFolderID",
+              "value": "={{ $json.value[0].parentReference.id }}",
+              "type": "string"
+            },
+            {
+              "id": "109b3cb9-3e16-434c-a3c4-830aa7e51751",
+              "name": "DriveID",
+              "value": "={{ $json.value[0].parentReference.driveId }}",
+              "type": "string"
             }
           ]
         },
@@ -2740,6 +2810,54 @@
       "typeVersion": 1,
       "id": "f8d265e1-f35d-4a1f-86b6-97704b235a5d",
       "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.DateFolderID }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder,parentReference"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3456,
+        256
+      ],
+      "id": "4c11ec18-b765-4511-99ba-8d10dc9ef70c",
+      "name": "HTTP Request",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\n\nconst row = input.data?.[0];\n\nif (!row) {\n  throw new Error('No data[0] found from Aggregate node');\n}\n\nreturn [\n  {\n    json: {\n      CurrentExcelDriveID: row.CurrentExcelDriveID,\n      ClinicFolderName: row.ClinicFolderName,\n      DateFolderID: row.DateFolderID,\n      DriveID: row.DriveID\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3232,
+        256
+      ],
+      "id": "b0159eb9-7b71-4e06-b7f2-9668b82bc7c4",
+      "name": "Code in JavaScript"
     }
   ],
   "origin": "n8n",
@@ -2839,6 +2957,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-06-09T23:43:43.239Z",
-  "versionId": "542a3230-95ad-4705-be25-558c7e42b84b"
+  "updatedAt": "2026-06-17T05:59:02.676Z",
+  "versionId": "ac08caf6-e899-4f6e-a332-416d87f96713"
 }
