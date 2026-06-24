@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2025-12-01T07:36:23.311Z",
-    "createdAt": "2025-12-01T07:36:23.311Z",
-    "versionId": "e5e709d0-713d-461b-92b3-7e1240c39276",
+    "updatedAt": "2026-06-22T07:52:17.000Z",
+    "createdAt": "2026-06-22T07:52:07.529Z",
+    "versionId": "bf0a7da2-9162-48cb-bc28-c39c8f9e98a6",
     "workflowId": "J83Enw8ArDSqhMCL",
     "nodes": [
       {
@@ -19,9 +19,9 @@
       },
       {
         "parameters": {
-          "toRecipients": "monitoring",
+          "toRecipients": "monitoring@ashleyandmartin.com.au",
           "subject": "=n8n Error -  {{ $json.execution.id }}",
-          "bodyContent": "=Hi Team,\n\nLooks like there is a error in your flow. Go check it out\n{{ $json.execution.url }}\n\n{{ $json.execution.error.message }}\n\nRegards,\nAutomation",
+          "bodyContent": "=Hi Team,\n\nLooks like there is a error in your flow. Go check it out\n{{ $json.execution.url }}\n{{ $json.workflow.name }}\n{{ $json.execution.error.message }}\n\nRegards,\nAutomation",
           "additionalFields": {}
         },
         "type": "n8n-nodes-base.microsoftOutlook",
@@ -55,11 +55,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": null,
-    "description": null,
-    "autosaved": false
+    "name": "Version bf0a7da2",
+    "description": "",
+    "autosaved": true
   },
-  "activeVersionId": "e5e709d0-713d-461b-92b3-7e1240c39276",
+  "activeVersionId": "bf0a7da2-9162-48cb-bc28-c39c8f9e98a6",
   "connections": {
     "Error Trigger": {
       "main": [
@@ -96,7 +96,7 @@
       "parameters": {
         "toRecipients": "monitoring@ashleyandmartin.com.au",
         "subject": "=n8n Error -  {{ $json.execution.id }}",
-        "bodyContent": "=Hi Team,\n\nLooks like there is a error in your flow. Go check it out\n{{ $json.execution.url }}\n\n{{ $json.execution.error.message }}\n\nRegards,\nAutomation",
+        "bodyContent": "=Hi Team,\n\nLooks like there is a error in your flow. Go check it out\n{{ $json.execution.url }}\n{{ $json.workflow.name }}\n{{ $json.execution.error.message }}\n\nRegards,\nAutomation",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.microsoftOutlook",
@@ -242,6 +242,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-06-09T23:27:14.372Z",
-  "versionId": "0cf774db-6d94-44be-b722-503e326b23c9"
+  "updatedAt": "2026-06-22T07:52:07.528Z",
+  "versionId": "bf0a7da2-9162-48cb-bc28-c39c8f9e98a6"
 }
