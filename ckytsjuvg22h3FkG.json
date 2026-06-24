@@ -1,0 +1,1515 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-06-24T05:02:12.000Z",
+    "createdAt": "2026-06-24T05:02:08.964Z",
+    "versionId": "d5a344ac-0cd0-4162-849f-1112941b9d96",
+    "workflowId": "ckytsjuvg22h3FkG",
+    "nodes": [
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Start').item.json.DriveID }}/items/{{ $('Start').item.json.id }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          2656,
+          144
+        ],
+        "id": "085cde40-52c1-4476-9230-03cf2b31c48a",
+        "name": "GetClinicPdfs",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          2880,
+          240
+        ],
+        "id": "b43452d1-6521-4ca8-90c4-f35241163d08",
+        "name": "Split Out2"
+      },
+      {
+        "parameters": {
+          "jsCode": "// n8n Code node\n// Mode: Run Once for All Items\n//\n// Place this directly after GetClinicPdfs.\n// This creates one summary item for the email body.\n\nconst inputItems = $input.all();\n\nlet totalFiles = 0;\nlet totalClinics = 0;\n\nconst clinicSummaries = [];\nconst allFiles = [];\n\nfor (const item of inputItems) {\n  const json = item.json || {};\n\n  // GetClinicPdfs returns Graph response with json.value[]\n  const files = Array.isArray(json.value) ? json.value : [];\n\n  // Try to get the clinic folder name from paired Loop item.\n  // This should work when GetClinicPdfs is inside the Loop Over Items path.\n  let clinicName = 'Unknown Clinic';\n\n  try {\n    clinicName = $('Start').item.json.name || clinicName;\n  } catch (error) {\n    // fallback only\n  }\n\n  const pdfFiles = files.filter(file => {\n    const name = file.name || '';\n    return name.toLowerCase().endsWith('.pdf');\n  });\n\n  totalClinics++;\n  totalFiles += pdfFiles.length;\n\n  clinicSummaries.push({\n    clinic: clinicName,\n    orderCount: pdfFiles.length,\n  });\n\n  for (const file of pdfFiles) {\n    allFiles.push({\n      clinic: clinicName,\n      fileName: file.name,\n      fileId: file.id,\n    });\n  }\n}\n\nconst clinicRowsHtml = clinicSummaries\n  .map(row => `\n    <tr>\n      <td style=\"padding:6px 10px;border:1px solid #ddd;\">${row.clinic}</td>\n      <td style=\"padding:6px 10px;border:1px solid #ddd;text-align:center;\">${row.orderCount}</td>\n    </tr>\n  `)\n  .join('');\n\nconst fileRowsHtml = allFiles\n  .map(file => `\n    <tr>\n      <td style=\"padding:6px 10px;border:1px solid #ddd;\">${file.clinic}</td>\n      <td style=\"padding:6px 10px;border:1px solid #ddd;\">${file.fileName}</td>\n    </tr>\n  `)\n  .join('');\n\nconst emailSummaryHtml = `\n<p>Hi Team,</p>\n\n<p>The automation has identified <strong>${totalFiles}</strong> med order PDF(s) ready to send across <strong>${totalClinics}</strong> clinic folder(s).</p>\n\n<table style=\"border-collapse:collapse;margin-top:10px;margin-bottom:16px;\">\n  <thead>\n    <tr>\n      <th style=\"padding:6px 10px;border:1px solid #ddd;text-align:left;\">Clinic</th>\n      <th style=\"padding:6px 10px;border:1px solid #ddd;text-align:center;\">Orders</th>\n    </tr>\n  </thead>\n  <tbody>\n    ${clinicRowsHtml || `\n      <tr>\n        <td colspan=\"2\" style=\"padding:6px 10px;border:1px solid #ddd;\">No PDF files found.</td>\n      </tr>\n    `}\n  </tbody>\n</table>\n\n<p><strong>Files included:</strong></p>\n\n<table style=\"border-collapse:collapse;margin-top:10px;\">\n  <thead>\n    <tr>\n      <th style=\"padding:6px 10px;border:1px solid #ddd;text-align:left;\">Clinic</th>\n      <th style=\"padding:6px 10px;border:1px solid #ddd;text-align:left;\">File Name</th>\n    </tr>\n  </thead>\n  <tbody>\n    ${fileRowsHtml || `\n      <tr>\n        <td colspan=\"2\" style=\"padding:6px 10px;border:1px solid #ddd;\">No PDF files found.</td>\n      </tr>\n    `}\n  </tbody>\n</table>\n`;\n\nconst emailSummaryText = [\n  `Med order summary`,\n  ``,\n  `Total clinics: ${totalClinics}`,\n  `Total orders: ${totalFiles}`,\n  ``,\n  ...clinicSummaries.map(row => `${row.clinic}: ${row.orderCount} order(s)`),\n].join('\\n');\n\nreturn [\n  {\n    json: {\n      totalClinics,\n      totalOrders: totalFiles,\n      clinicSummaries,\n      files: allFiles,\n      emailSummaryHtml,\n      emailSummaryText,\n    },\n  },\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2880,
+          48
+        ],
+        "id": "581b4ceb-0b25-4a1a-8f79-ef09f1567da4",
+        "name": "ReportBuilder"
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Start').item.json.DriveID }}/items/{{ $json.id }}/content",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          3104,
+          240
+        ],
+        "id": "e2f1af08-98c8-45d9-858f-b6c5a0451371",
+        "name": "Download PDF's",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\n\nif (!items.length) {\n  throw new Error('No PDF files found to combine');\n}\n\nconst first = items[0];\n\nconst output = {\n  json: {\n    ...first.json,\n    pdfCountForZip: items.length,\n    zipFileName: `${first.json.clinic}_Scripts_${first.json.startDate}.zip`,\n    sourceStatus: 'PdfFilesCombinedForZip'\n  },\n  binary: {}\n};\n\nitems.forEach((item, index) => {\n  if (!item.binary?.data) {\n    throw new Error(`Missing binary data on PDF item ${index + 1}`);\n  }\n\n  const binaryKey = `PDF_${index + 1}`;\n\n  output.binary[binaryKey] = {\n    ...item.binary.data,\n    fileName: item.binary.data.fileName || item.json.pdfFileName || `script_${index + 1}.pdf`,\n    mimeType: item.binary.data.mimeType || 'application/pdf'\n  };\n});\n\n// This gives the Compression node a dynamic list of fields to zip\noutput.json.binaryFieldsToZip = Object.keys(output.binary).join(',');\n\nreturn [output];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3328,
+          240
+        ],
+        "id": "8d8a2806-8cc5-4b1d-8009-ca4d9db047a5",
+        "name": "Combine PDFs Into One Item"
+      },
+      {
+        "parameters": {
+          "operation": "compress",
+          "binaryPropertyName": "={{ $json.binaryFieldsToZip }}",
+          "fileName": "={{ $('Start').item.json.TodaysDate }}.zip"
+        },
+        "type": "n8n-nodes-base.compression",
+        "typeVersion": 1.1,
+        "position": [
+          3552,
+          240
+        ],
+        "id": "c3fc2654-b01c-45ec-b49b-e3c6d5814138",
+        "name": "Compression"
+      },
+      {
+        "parameters": {
+          "jsCode": "const zipItem = $input.first();\n\nif (!zipItem) {\n  throw new Error('No input item found from Compression');\n}\n\nconst zipBinaryKeys = Object.keys(zipItem.binary ?? {});\n\nif (!zipBinaryKeys.length) {\n  throw new Error('ZIP binary not found from Compression');\n}\n\nconst zipKey = zipBinaryKeys[0];\nconst zipBinary = zipItem.binary[zipKey];\n\n// Pull the email summary created by ReportBuilder\nlet report = {};\n\ntry {\n  report = $('ReportBuilder').first().json || {};\n} catch (error) {\n  report = {};\n}\n\nconst clinic =\n  report.files?.[0]?.clinic ||\n  report.clinicSummaries?.[0]?.clinic ||\n  zipItem.json.clinic ||\n  'Unknown Clinic';\n\nconst totalOrders =\n  report.totalOrders ??\n  zipItem.json.pdfCountForZip ??\n  0;\n\nconst todaysDate = $('Start').first().json.TodaysDate_firstItem;\n\nconst zipFileName =\n  zipBinary.fileName ||\n  zipItem.json.zipFileName ||\n  `${clinic}_AuMedOrder_${todaysDate}.zip`;\n\nconst subject =\n  `Automation - AuMedOrder - ${clinic} - ${totalOrders} Orders`;\n\nconst emailBodyHtml =\n  report.emailSummaryHtml ||\n  `\n  <p>Hi Team,</p>\n  <p>The automation has identified <strong>${totalOrders}</strong> med order PDF(s) ready to send for <strong>${clinic}</strong>.</p>\n  <p>Regards,<br>Automation</p>\n  `;\n\nreturn [\n  {\n    json: {\n      ...zipItem.json,\n      ...report,\n\n      clinic,\n      totalOrders,\n      attachmentCount: 1,\n      scriptsAttachmentName: zipFileName,\n\n      emailSubject: subject,\n      emailBodyHtml,\n\n      sourceStatus: 'ReadyToEmailAuMedOrder',\n    },\n    binary: {\n      scripts_zip: {\n        ...zipBinary,\n        fileName: zipFileName,\n        mimeType: zipBinary.mimeType || 'application/zip',\n      },\n    },\n  },\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3776,
+          240
+        ],
+        "id": "35dd8bcc-17ca-4a98-8283-74359061ffc4",
+        "name": "Prepare Email Attachments"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lsINP70DmcZtIj4M",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinics",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "name",
+                "condition": "ilike",
+                "keyValue": "={{ $('Start').item.json.name }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          2432,
+          144
+        ],
+        "id": "d35d1f73-0682-4900-8244-a59d14ed005a",
+        "name": "Get row(s)"
+      },
+      {
+        "parameters": {
+          "toRecipients": "nicholas.ryall@ashleyandmartin.com.au",
+          "subject": "=Automation - AuMedOrder - {{ $json.files[0].clinic }} - {{ $json.totalOrders }} Orders",
+          "bodyContent": "={{ $json.emailSummaryHtml }}\n\nRegards,\nAutomation",
+          "additionalFields": {
+            "bodyContentType": "html"
+          }
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          3104,
+          48
+        ],
+        "id": "89de892d-bb6e-4c4e-a93e-aa20bbde0fef",
+        "name": "SendReport",
+        "webhookId": "e193cb80-5288-4529-8c06-3303626e431d",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "toRecipients": "nicholas.ryall@ashleyandmartin.com.au",
+          "subject": "=Automation A&M - AuMedOrder - {{ $('Start').item.json.name }}",
+          "bodyContent": "=Hi Team,\n\nPlease see attached files to order for the clinic {{ $('Start').item.json.name }} for date {{ $('Start').item.json.TodaysDate }}. Any issues please contact {{ $('Get row(s)').item.json.email }}.\n\nRegards,\nAutomation",
+          "additionalFields": {
+            "attachments": {
+              "attachments": [
+                {
+                  "binaryPropertyName": "scripts_zip"
+                }
+              ]
+            }
+          }
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          4000,
+          240
+        ],
+        "id": "7a3f0782-276b-444b-9dba-5a4b2d15e9d1",
+        "name": "SendPharmacy",
+        "webhookId": "db0bd1c7-5a4f-4c8b-aefc-68fb0d262ab6",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "d29ea38e-3bbe-485e-af04-4a0ff969a973",
+                "leftValue": "={{ $json.success }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          4176,
+          240
+        ],
+        "id": "ee3a9cf0-83dd-43b3-b0a8-c0d335d1204b",
+        "name": "If2"
+      },
+      {
+        "parameters": {
+          "method": "PUT",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Start').item.json.DriveID }}/items/{{ $('Start').first().json.id_firstItem }}:/_AuMedOrder_COMPLETE_{{ $('Start').item.json.name }}.txt:/content",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendBody": true,
+          "contentType": "raw",
+          "rawContentType": "text/plain",
+          "body": "=Clinic: {{ $('Start').first().json.name_firstItem }} Date: {{ $('Start').item.json.TodaysDate }} Status: Email sent to PharmacySentAt: {{ $now.toISO() }} Orders: {{ $('Prepare Email Attachments').first().json.totalOrders }} Subject: {{ $('Prepare Email Attachments').first().json.emailSubject }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          4448,
+          240
+        ],
+        "id": "628b4869-ba1f-4206-b2d8-d08a05ccbff2",
+        "name": "Write Complete FIle",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Start').item.json.DriveID }}/items/{{ $('Start').item.json.DateFolderIF_id_1 }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1760,
+          144
+        ],
+        "id": "191da57a-f73d-4994-935a-b4e915347131",
+        "name": "GetClinicFoldersForDate1",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "b087e2a8-428b-4a1e-9b1f-8115c4120c4f",
+                "leftValue": "={{ $json.shouldProcessClinic }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          2208,
+          144
+        ],
+        "id": "3f385232-f269-4dd2-aa77-ed2382db4953",
+        "name": "If",
+        "executeOnce": false
+      },
+      {
+        "parameters": {
+          "jsCode": "const item = $input.first();\n\nif (!item) {\n  throw new Error('No input item found from GetClinicFoldersForDate1');\n}\n\nconst dateFolderChildren = Array.isArray(item.json.value) ? item.json.value : [];\n\nconst clinicName = $('Start').item.json.name;\nconst clinicFolderId = $('Start').item.json.id;\n\nconst expectedLockFileName = `_AuMedOrder_COMPLETE_${clinicName}.txt`;\n\nconst lockFile = dateFolderChildren.find(child =>\n  (child.name || '').toLowerCase() === expectedLockFileName.toLowerCase()\n);\n\nreturn [\n  {\n    json: {\n      clinic: clinicName,\n      clinicFolderId,\n      expectedLockFileName,\n      lockFileExists: !!lockFile,\n      lockFileId: lockFile?.id || null,\n      lockFileName: lockFile?.name || null,\n      dateFolderId: $('Start').item.json.DateFolderIF_id_1,\n      shouldProcessClinic: !lockFile,\n    },\n  },\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1984,
+          144
+        ],
+        "id": "de856082-dfaa-48f1-934b-348d5056d4d6",
+        "name": "CheckforLock"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "81974069-fbf9-4042-b3c0-ab9f3a6c5378",
+                "name": "ClinicLockFileExist",
+                "value": true,
+                "type": "boolean"
+              },
+              {
+                "id": "e9779e37-cea5-4ba3-9d6d-4dd78b647cf0",
+                "name": "ClinicName",
+                "value": "={{ $json.clinic }}",
+                "type": "string"
+              },
+              {
+                "id": "8c4c0372-ef11-4a6c-a3ec-61ca9c93993a",
+                "name": "lockFileWrittenThisRun",
+                "value": false,
+                "type": "boolean"
+              },
+              {
+                "id": "d1189189-8c37-4a23-a2f3-dce6131493a5",
+                "name": "status",
+                "value": "skipped_lock_already_present",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2656,
+          384
+        ],
+        "id": "bfc941a6-a0b0-4318-8822-ffd15328c643",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "81974069-fbf9-4042-b3c0-ab9f3a6c5378",
+                "name": "lockFilePresent",
+                "value": true,
+                "type": "boolean"
+              },
+              {
+                "id": "317291cf-b333-47a7-a2f5-02df35438a05",
+                "name": "Clinic",
+                "value": "={{ $('Start').item.json.name }}",
+                "type": "string"
+              },
+              {
+                "id": "f9276129-40a4-449e-8a51-35c5f64c92ea",
+                "name": "lockFileWrittenThisRun",
+                "value": true,
+                "type": "boolean"
+              },
+              {
+                "id": "ac5d812e-5fdc-48d8-844b-77a937eaac5f",
+                "name": "status",
+                "value": "completed_lock_written",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          4688,
+          240
+        ],
+        "id": "8fbd4b61-4bf1-4572-98b1-b1f3282fe1e4",
+        "name": "Edit Fields1"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          4896,
+          384
+        ],
+        "id": "d8ab56bc-ada2-4636-84bd-6bd54d64e8ab",
+        "name": "LockFileAggregate"
+      },
+      {
+        "parameters": {
+          "workflowInputs": {
+            "values": [
+              {
+                "name": "DriveID",
+                "type": "any"
+              },
+              {
+                "name": "id",
+                "type": "any"
+              },
+              {
+                "name": "name",
+                "type": "any"
+              },
+              {
+                "name": "TodaysDate",
+                "type": "any"
+              },
+              {
+                "name": "TodaysDate_firstItem",
+                "type": "any"
+              },
+              {
+                "name": "id_firstItem",
+                "type": "any"
+              },
+              {
+                "name": "name_firstItem",
+                "type": "any"
+              },
+              {
+                "name": "DateFolderIF_id_1",
+                "type": "any"
+              }
+            ]
+          }
+        },
+        "id": "5a3f639e-bf02-4c41-b414-2b1fdd2fb6fd",
+        "typeVersion": 1.1,
+        "name": "Start",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "position": [
+          1552,
+          144
+        ]
+      },
+      {
+        "parameters": {
+          "errorMessage": "EmailNotSentToPharmacy"
+        },
+        "type": "n8n-nodes-base.stopAndError",
+        "typeVersion": 1,
+        "position": [
+          4384,
+          480
+        ],
+        "id": "b8d2be1b-4481-4c0f-879e-2e9ec7f1d97b",
+        "name": "Stop and Error"
+      }
+    ],
+    "connections": {
+      "GetClinicPdfs": {
+        "main": [
+          [
+            {
+              "node": "Split Out2",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "ReportBuilder",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "ReportBuilder": {
+        "main": [
+          [
+            {
+              "node": "SendReport",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out2": {
+        "main": [
+          [
+            {
+              "node": "Download PDF's",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Combine PDFs Into One Item": {
+        "main": [
+          [
+            {
+              "node": "Compression",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Compression": {
+        "main": [
+          [
+            {
+              "node": "Prepare Email Attachments",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Download PDF's": {
+        "main": [
+          [
+            {
+              "node": "Combine PDFs Into One Item",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Prepare Email Attachments": {
+        "main": [
+          [
+            {
+              "node": "SendPharmacy",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "GetClinicPdfs",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SendReport": {
+        "main": [
+          []
+        ]
+      },
+      "If2": {
+        "main": [
+          [
+            {
+              "node": "Write Complete FIle",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Stop and Error",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SendPharmacy": {
+        "main": [
+          [
+            {
+              "node": "If2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetClinicFoldersForDate1": {
+        "main": [
+          [
+            {
+              "node": "CheckforLock",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Write Complete FIle": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CheckforLock": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields1": {
+        "main": [
+          [
+            {
+              "node": "LockFileAggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "LockFileAggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Start": {
+        "main": [
+          [
+            {
+              "node": "GetClinicFoldersForDate1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version d5a344ac",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "d5a344ac-0cd0-4162-849f-1112941b9d96",
+  "connections": {
+    "GetClinicPdfs": {
+      "main": [
+        [
+          {
+            "node": "Split Out2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "ReportBuilder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ReportBuilder": {
+      "main": [
+        [
+          {
+            "node": "SendReport",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out2": {
+      "main": [
+        [
+          {
+            "node": "Download PDF's",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine PDFs Into One Item": {
+      "main": [
+        [
+          {
+            "node": "Compression",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compression": {
+      "main": [
+        [
+          {
+            "node": "Prepare Email Attachments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download PDF's": {
+      "main": [
+        [
+          {
+            "node": "Combine PDFs Into One Item",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Email Attachments": {
+      "main": [
+        [
+          {
+            "node": "SendPharmacy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "GetClinicPdfs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SendReport": {
+      "main": [
+        []
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Write Complete FIle",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SendPharmacy": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetClinicFoldersForDate1": {
+      "main": [
+        [
+          {
+            "node": "CheckforLock",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Complete FIle": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CheckforLock": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "LockFileAggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "LockFileAggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "GetClinicFoldersForDate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-06-24T04:57:40.144Z",
+  "id": "ckytsjuvg22h3FkG",
+  "isArchived": false,
+  "meta": null,
+  "name": "Helix-MedOrder-SendtoPharmacy-Sub",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Start').item.json.DriveID }}/items/{{ $('Start').item.json.id }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2656,
+        144
+      ],
+      "id": "085cde40-52c1-4476-9230-03cf2b31c48a",
+      "name": "GetClinicPdfs",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2880,
+        240
+      ],
+      "id": "b43452d1-6521-4ca8-90c4-f35241163d08",
+      "name": "Split Out2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code node\n// Mode: Run Once for All Items\n//\n// Place this directly after GetClinicPdfs.\n// This creates one summary item for the email body.\n\nconst inputItems = $input.all();\n\nlet totalFiles = 0;\nlet totalClinics = 0;\n\nconst clinicSummaries = [];\nconst allFiles = [];\n\nfor (const item of inputItems) {\n  const json = item.json || {};\n\n  // GetClinicPdfs returns Graph response with json.value[]\n  const files = Array.isArray(json.value) ? json.value : [];\n\n  // Try to get the clinic folder name from paired Loop item.\n  // This should work when GetClinicPdfs is inside the Loop Over Items path.\n  let clinicName = 'Unknown Clinic';\n\n  try {\n    clinicName = $('Start').item.json.name || clinicName;\n  } catch (error) {\n    // fallback only\n  }\n\n  const pdfFiles = files.filter(file => {\n    const name = file.name || '';\n    return name.toLowerCase().endsWith('.pdf');\n  });\n\n  totalClinics++;\n  totalFiles += pdfFiles.length;\n\n  clinicSummaries.push({\n    clinic: clinicName,\n    orderCount: pdfFiles.length,\n  });\n\n  for (const file of pdfFiles) {\n    allFiles.push({\n      clinic: clinicName,\n      fileName: file.name,\n      fileId: file.id,\n    });\n  }\n}\n\nconst clinicRowsHtml = clinicSummaries\n  .map(row => `\n    <tr>\n      <td style=\"padding:6px 10px;border:1px solid #ddd;\">${row.clinic}</td>\n      <td style=\"padding:6px 10px;border:1px solid #ddd;text-align:center;\">${row.orderCount}</td>\n    </tr>\n  `)\n  .join('');\n\nconst fileRowsHtml = allFiles\n  .map(file => `\n    <tr>\n      <td style=\"padding:6px 10px;border:1px solid #ddd;\">${file.clinic}</td>\n      <td style=\"padding:6px 10px;border:1px solid #ddd;\">${file.fileName}</td>\n    </tr>\n  `)\n  .join('');\n\nconst emailSummaryHtml = `\n<p>Hi Team,</p>\n\n<p>The automation has identified <strong>${totalFiles}</strong> med order PDF(s) ready to send across <strong>${totalClinics}</strong> clinic folder(s).</p>\n\n<table style=\"border-collapse:collapse;margin-top:10px;margin-bottom:16px;\">\n  <thead>\n    <tr>\n      <th style=\"padding:6px 10px;border:1px solid #ddd;text-align:left;\">Clinic</th>\n      <th style=\"padding:6px 10px;border:1px solid #ddd;text-align:center;\">Orders</th>\n    </tr>\n  </thead>\n  <tbody>\n    ${clinicRowsHtml || `\n      <tr>\n        <td colspan=\"2\" style=\"padding:6px 10px;border:1px solid #ddd;\">No PDF files found.</td>\n      </tr>\n    `}\n  </tbody>\n</table>\n\n<p><strong>Files included:</strong></p>\n\n<table style=\"border-collapse:collapse;margin-top:10px;\">\n  <thead>\n    <tr>\n      <th style=\"padding:6px 10px;border:1px solid #ddd;text-align:left;\">Clinic</th>\n      <th style=\"padding:6px 10px;border:1px solid #ddd;text-align:left;\">File Name</th>\n    </tr>\n  </thead>\n  <tbody>\n    ${fileRowsHtml || `\n      <tr>\n        <td colspan=\"2\" style=\"padding:6px 10px;border:1px solid #ddd;\">No PDF files found.</td>\n      </tr>\n    `}\n  </tbody>\n</table>\n`;\n\nconst emailSummaryText = [\n  `Med order summary`,\n  ``,\n  `Total clinics: ${totalClinics}`,\n  `Total orders: ${totalFiles}`,\n  ``,\n  ...clinicSummaries.map(row => `${row.clinic}: ${row.orderCount} order(s)`),\n].join('\\n');\n\nreturn [\n  {\n    json: {\n      totalClinics,\n      totalOrders: totalFiles,\n      clinicSummaries,\n      files: allFiles,\n      emailSummaryHtml,\n      emailSummaryText,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        48
+      ],
+      "id": "581b4ceb-0b25-4a1a-8f79-ef09f1567da4",
+      "name": "ReportBuilder"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Start').item.json.DriveID }}/items/{{ $json.id }}/content",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3104,
+        240
+      ],
+      "id": "e2f1af08-98c8-45d9-858f-b6c5a0451371",
+      "name": "Download PDF's",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nif (!items.length) {\n  throw new Error('No PDF files found to combine');\n}\n\nconst first = items[0];\n\nconst output = {\n  json: {\n    ...first.json,\n    pdfCountForZip: items.length,\n    zipFileName: `${first.json.clinic}_Scripts_${first.json.startDate}.zip`,\n    sourceStatus: 'PdfFilesCombinedForZip'\n  },\n  binary: {}\n};\n\nitems.forEach((item, index) => {\n  if (!item.binary?.data) {\n    throw new Error(`Missing binary data on PDF item ${index + 1}`);\n  }\n\n  const binaryKey = `PDF_${index + 1}`;\n\n  output.binary[binaryKey] = {\n    ...item.binary.data,\n    fileName: item.binary.data.fileName || item.json.pdfFileName || `script_${index + 1}.pdf`,\n    mimeType: item.binary.data.mimeType || 'application/pdf'\n  };\n});\n\n// This gives the Compression node a dynamic list of fields to zip\noutput.json.binaryFieldsToZip = Object.keys(output.binary).join(',');\n\nreturn [output];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3328,
+        240
+      ],
+      "id": "8d8a2806-8cc5-4b1d-8009-ca4d9db047a5",
+      "name": "Combine PDFs Into One Item"
+    },
+    {
+      "parameters": {
+        "operation": "compress",
+        "binaryPropertyName": "={{ $json.binaryFieldsToZip }}",
+        "fileName": "={{ $('Start').item.json.TodaysDate }}.zip"
+      },
+      "type": "n8n-nodes-base.compression",
+      "typeVersion": 1.1,
+      "position": [
+        3552,
+        240
+      ],
+      "id": "c3fc2654-b01c-45ec-b49b-e3c6d5814138",
+      "name": "Compression"
+    },
+    {
+      "parameters": {
+        "jsCode": "const zipItem = $input.first();\n\nif (!zipItem) {\n  throw new Error('No input item found from Compression');\n}\n\nconst zipBinaryKeys = Object.keys(zipItem.binary ?? {});\n\nif (!zipBinaryKeys.length) {\n  throw new Error('ZIP binary not found from Compression');\n}\n\nconst zipKey = zipBinaryKeys[0];\nconst zipBinary = zipItem.binary[zipKey];\n\n// Pull the email summary created by ReportBuilder\nlet report = {};\n\ntry {\n  report = $('ReportBuilder').first().json || {};\n} catch (error) {\n  report = {};\n}\n\nconst clinic =\n  report.files?.[0]?.clinic ||\n  report.clinicSummaries?.[0]?.clinic ||\n  zipItem.json.clinic ||\n  'Unknown Clinic';\n\nconst totalOrders =\n  report.totalOrders ??\n  zipItem.json.pdfCountForZip ??\n  0;\n\nconst todaysDate = $('Start').first().json.TodaysDate_firstItem;\n\nconst zipFileName =\n  zipBinary.fileName ||\n  zipItem.json.zipFileName ||\n  `${clinic}_AuMedOrder_${todaysDate}.zip`;\n\nconst subject =\n  `Automation - AuMedOrder - ${clinic} - ${totalOrders} Orders`;\n\nconst emailBodyHtml =\n  report.emailSummaryHtml ||\n  `\n  <p>Hi Team,</p>\n  <p>The automation has identified <strong>${totalOrders}</strong> med order PDF(s) ready to send for <strong>${clinic}</strong>.</p>\n  <p>Regards,<br>Automation</p>\n  `;\n\nreturn [\n  {\n    json: {\n      ...zipItem.json,\n      ...report,\n\n      clinic,\n      totalOrders,\n      attachmentCount: 1,\n      scriptsAttachmentName: zipFileName,\n\n      emailSubject: subject,\n      emailBodyHtml,\n\n      sourceStatus: 'ReadyToEmailAuMedOrder',\n    },\n    binary: {\n      scripts_zip: {\n        ...zipBinary,\n        fileName: zipFileName,\n        mimeType: zipBinary.mimeType || 'application/zip',\n      },\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3776,
+        240
+      ],
+      "id": "35dd8bcc-17ca-4a98-8283-74359061ffc4",
+      "name": "Prepare Email Attachments"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "name",
+              "condition": "ilike",
+              "keyValue": "={{ $('Start').item.json.name }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2432,
+        144
+      ],
+      "id": "d35d1f73-0682-4900-8244-a59d14ed005a",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "toRecipients": "nicholas.ryall@ashleyandmartin.com.au",
+        "subject": "=Automation - AuMedOrder - {{ $json.files[0].clinic }} - {{ $json.totalOrders }} Orders",
+        "bodyContent": "={{ $json.emailSummaryHtml }}\n\nRegards,\nAutomation",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        3104,
+        48
+      ],
+      "id": "89de892d-bb6e-4c4e-a93e-aa20bbde0fef",
+      "name": "SendReport",
+      "webhookId": "e193cb80-5288-4529-8c06-3303626e431d",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toRecipients": "nicholas.ryall@ashleyandmartin.com.au",
+        "subject": "=Automation A&M - AuMedOrder - {{ $('Start').item.json.name }}",
+        "bodyContent": "=Hi Team,\n\nPlease see attached files to order for the clinic {{ $('Start').item.json.name }} for date {{ $('Start').item.json.TodaysDate }}. Any issues please contact {{ $('Get row(s)').item.json.email }}.\n\nRegards,\nAutomation",
+        "additionalFields": {
+          "attachments": {
+            "attachments": [
+              {
+                "binaryPropertyName": "scripts_zip"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        4000,
+        240
+      ],
+      "id": "7a3f0782-276b-444b-9dba-5a4b2d15e9d1",
+      "name": "SendPharmacy",
+      "webhookId": "db0bd1c7-5a4f-4c8b-aefc-68fb0d262ab6",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d29ea38e-3bbe-485e-af04-4a0ff969a973",
+              "leftValue": "={{ $json.success }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4176,
+        240
+      ],
+      "id": "ee3a9cf0-83dd-43b3-b0a8-c0d335d1204b",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Start').item.json.DriveID }}/items/{{ $('Start').first().json.id_firstItem }}:/_AuMedOrder_COMPLETE_{{ $('Start').item.json.name }}.txt:/content",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "text/plain",
+        "body": "=Clinic: {{ $('Start').first().json.name_firstItem }} Date: {{ $('Start').item.json.TodaysDate }} Status: Email sent to PharmacySentAt: {{ $now.toISO() }} Orders: {{ $('Prepare Email Attachments').first().json.totalOrders }} Subject: {{ $('Prepare Email Attachments').first().json.emailSubject }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4448,
+        240
+      ],
+      "id": "628b4869-ba1f-4206-b2d8-d08a05ccbff2",
+      "name": "Write Complete FIle",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Start').item.json.DriveID }}/items/{{ $('Start').item.json.DateFolderIF_id_1 }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1760,
+        144
+      ],
+      "id": "191da57a-f73d-4994-935a-b4e915347131",
+      "name": "GetClinicFoldersForDate1",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b087e2a8-428b-4a1e-9b1f-8115c4120c4f",
+              "leftValue": "={{ $json.shouldProcessClinic }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2208,
+        144
+      ],
+      "id": "3f385232-f269-4dd2-aa77-ed2382db4953",
+      "name": "If",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first();\n\nif (!item) {\n  throw new Error('No input item found from GetClinicFoldersForDate1');\n}\n\nconst dateFolderChildren = Array.isArray(item.json.value) ? item.json.value : [];\n\nconst clinicName = $('Start').item.json.name;\nconst clinicFolderId = $('Start').item.json.id;\n\nconst expectedLockFileName = `_AuMedOrder_COMPLETE_${clinicName}.txt`;\n\nconst lockFile = dateFolderChildren.find(child =>\n  (child.name || '').toLowerCase() === expectedLockFileName.toLowerCase()\n);\n\nreturn [\n  {\n    json: {\n      clinic: clinicName,\n      clinicFolderId,\n      expectedLockFileName,\n      lockFileExists: !!lockFile,\n      lockFileId: lockFile?.id || null,\n      lockFileName: lockFile?.name || null,\n      dateFolderId: $('Start').item.json.DateFolderIF_id_1,\n      shouldProcessClinic: !lockFile,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1984,
+        144
+      ],
+      "id": "de856082-dfaa-48f1-934b-348d5056d4d6",
+      "name": "CheckforLock"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "81974069-fbf9-4042-b3c0-ab9f3a6c5378",
+              "name": "ClinicLockFileExist",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "e9779e37-cea5-4ba3-9d6d-4dd78b647cf0",
+              "name": "ClinicName",
+              "value": "={{ $json.clinic }}",
+              "type": "string"
+            },
+            {
+              "id": "8c4c0372-ef11-4a6c-a3ec-61ca9c93993a",
+              "name": "lockFileWrittenThisRun",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "d1189189-8c37-4a23-a2f3-dce6131493a5",
+              "name": "status",
+              "value": "skipped_lock_already_present",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2656,
+        384
+      ],
+      "id": "bfc941a6-a0b0-4318-8822-ffd15328c643",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "81974069-fbf9-4042-b3c0-ab9f3a6c5378",
+              "name": "lockFilePresent",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "317291cf-b333-47a7-a2f5-02df35438a05",
+              "name": "Clinic",
+              "value": "={{ $('Start').item.json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "f9276129-40a4-449e-8a51-35c5f64c92ea",
+              "name": "lockFileWrittenThisRun",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "ac5d812e-5fdc-48d8-844b-77a937eaac5f",
+              "name": "status",
+              "value": "completed_lock_written",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4688,
+        240
+      ],
+      "id": "8fbd4b61-4bf1-4572-98b1-b1f3282fe1e4",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        4896,
+        384
+      ],
+      "id": "d8ab56bc-ada2-4636-84bd-6bd54d64e8ab",
+      "name": "LockFileAggregate"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "DriveID",
+              "type": "any"
+            },
+            {
+              "name": "id",
+              "type": "any"
+            },
+            {
+              "name": "name",
+              "type": "any"
+            },
+            {
+              "name": "TodaysDate",
+              "type": "any"
+            },
+            {
+              "name": "TodaysDate_firstItem",
+              "type": "any"
+            },
+            {
+              "name": "id_firstItem",
+              "type": "any"
+            },
+            {
+              "name": "name_firstItem",
+              "type": "any"
+            },
+            {
+              "name": "DateFolderIF_id_1",
+              "type": "any"
+            }
+          ]
+        }
+      },
+      "id": "5a3f639e-bf02-4c41-b414-2b1fdd2fb6fd",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        1552,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "errorMessage": "EmailNotSentToPharmacy"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        4384,
+        480
+      ],
+      "id": "b8d2be1b-4481-4c0f-879e-2e9ec7f1d97b",
+      "name": "Stop and Error"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "Start": [
+      {
+        "json": {
+          "DriveID": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
+          "id": "01Y4DA4OPTEUEJBSAO7NA3NVRA2EUDRJPC",
+          "name": "PERTH",
+          "TodaysDate": "2026-06-23",
+          "TodaysDate_firstItem": "2026-06-23",
+          "id_firstItem": "01Y4DA4OLQ2RMPK5Q2VZAJG7D5EHAMHF2N",
+          "name_firstItem": "PERTH",
+          "DateFolderIF_id_1": "01Y4DA4OLQ2RMPK5Q2VZAJG7D5EHAMHF2N"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "saveDataSuccessExecution": "none",
+    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-24T04:57:40.148Z",
+      "createdAt": "2026-06-24T04:57:40.148Z",
+      "role": "workflow:owner",
+      "workflowId": "ckytsjuvg22h3FkG",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-06-24T05:13:58.415Z",
+  "versionId": "d5a344ac-0cd0-4162-849f-1112941b9d96"
+}
