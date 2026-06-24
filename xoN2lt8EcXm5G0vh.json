@@ -1,0 +1,1190 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-06-23T05:41:30.000Z",
+    "createdAt": "2026-06-23T05:41:28.028Z",
+    "versionId": "956e312e-06e8-4542-993e-65ce24cccbc5",
+    "workflowId": "xoN2lt8EcXm5G0vh",
+    "nodes": [
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names').item.json.DriveID }}/items/{{ $('Prep Folder Names').item.json.OrderInProgressID }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"name\": \"{{ $('Prep Folder Names').item.json.dateFolderName }}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"fail\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          2176,
+          16
+        ],
+        "id": "7f716844-97da-4c33-af41-cb4ec7f8d00e",
+        "name": "CreateDateFolder",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "8a2f23f9-ba9b-4ce1-aa62-f9c0142702a0",
+                "name": "DateFolderID",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2384,
+          16
+        ],
+        "id": "75fb73b4-c1d1-4649-b49d-65b21950bfd5",
+        "name": "Edit Fields1"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "8a2f23f9-ba9b-4ce1-aa62-f9c0142702a0",
+                "name": "ClinicFolderID",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          3648,
+          -48
+        ],
+        "id": "a08f84a7-4a5e-4442-9e6f-ed6b568d8ad9",
+        "name": "Edit Fields2"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names').item.json.DriveID }}/items/{{ $('DateFolderID').item.json.data[0].DateFolderID }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"name\": \"{{ $('Prep Folder Names').item.json.clinic }}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"fail\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          3376,
+          -48
+        ],
+        "id": "961f0d8e-8e62-46bb-9cb3-fc7b285bc537",
+        "name": "CreateClinicFolder",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const email = $json;\n\nconst dateFolderName = email.dateFolderName || email.receivedDate;\nconst clinicFolderName = email.clinicFolderName || email.clinic;\n\nconst safeDate = dateFolderName || new Date().toISOString().slice(0, 10);\nconst safeScriptId = email.scriptId || \"UnknownScript\";\nconst safePatientInitials = email.patientInitials || \"UnknownInitials\";\n\nconst fileName =\n  email.fileName ||\n  `${safeDate}-${safeScriptId}-${safePatientInitials}.pdf`;\n\nreturn {\n  json: {\n    ...email,\n\n    dateFolderName,\n    clinicFolderName,\n    fileName,\n\n    // Keep these flat so every node after this can use $json directly\n    DriveID: email.DriveID,\n    AUMedOrderID: email.AUMedOrderID,\n    CompletedOrdersID: email.CompletedOrdersID,\n    OrderInProgressID: email.OrderInProgressID,\n  }\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1488,
+          -64
+        ],
+        "id": "5ec9a679-de04-473d-8b95-95a4070741ad",
+        "name": "Prep Folder Names"
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.OrderInProgressID }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1696,
+          -64
+        ],
+        "id": "cfe02f78-3cf4-4742-9f7c-577262ba65b7",
+        "name": "CheckDateFolder",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "3c6ca86e-637c-480b-89cd-3f18b1a4f04b",
+                "leftValue": "={{ $json.value[0].name }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "dateTime",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1904,
+          -64
+        ],
+        "id": "5b72d100-8c4c-401e-8b04-3d1c5e70320d",
+        "name": "If1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "3c6ca86e-637c-480b-89cd-3f18b1a4f04b",
+                "leftValue": "={{ $json.value[0].name }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          3088,
+          -128
+        ],
+        "id": "c7ba92e7-9490-425f-b2f0-06f69e924354",
+        "name": "If2"
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names').item.json.DriveID }}/items/{{ $json.data[0].DateFolderID }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          2880,
+          -128
+        ],
+        "id": "c0d3b1f9-5f49-4c7f-975e-cf30be5040ff",
+        "name": "CheckClinicFolder",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          2672,
+          -128
+        ],
+        "id": "8e2bf964-134d-48fb-a441-84ce0f0828e3",
+        "name": "DateFolderID"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          4000,
+          -144
+        ],
+        "id": "274e62b1-83e7-49ad-8f58-fb9dcf57e960",
+        "name": "ClinicFolderID"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "b2bc3c16-7564-4c84-849e-afefbbd8f954",
+                "name": "ClinicFolderID",
+                "value": "={{ $json.data[0].ClinicFolderID }}",
+                "type": "string"
+              },
+              {
+                "id": "1f291578-bcdb-4a86-a7a4-adce6b69f8e2",
+                "name": "DateFolderID",
+                "value": "={{ $('DateFolderID').item.json.data[0].DateFolderID }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          4208,
+          -144
+        ],
+        "id": "7671f655-b798-4bfe-88c0-84ddd1e9e335",
+        "name": "SetClinicAndDateFolderID"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "c3bc6f63-19d0-4d5c-b0eb-a882a22766d4",
+                "name": "DateFolderID",
+                "value": "={{ $json.value[0].id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2160,
+          -176
+        ],
+        "id": "a43aaa2a-3ded-4b75-9e89-174cac7bf4f2",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "8a2f23f9-ba9b-4ce1-aa62-f9c0142702a0",
+                "name": "ClinicFolderID",
+                "value": "={{ $json.value[0].id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          3648,
+          -208
+        ],
+        "id": "aace599b-3ba1-431e-b34d-ee89e202af8c",
+        "name": "Edit Fields3"
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "id": "15a38636-26f6-4ca4-b1a0-bdb7c3676097",
+        "typeVersion": 1.1,
+        "name": "Start",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "position": [
+          1280,
+          -64
+        ]
+      }
+    ],
+    "connections": {
+      "Prep Folder Names": {
+        "main": [
+          [
+            {
+              "node": "CheckDateFolder",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CheckDateFolder": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "CreateDateFolder",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CreateDateFolder": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields1": {
+        "main": [
+          [
+            {
+              "node": "DateFolderID",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "DateFolderID",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If2": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields3",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "CreateClinicFolder",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CreateClinicFolder": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields3": {
+        "main": [
+          [
+            {
+              "node": "ClinicFolderID",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields2": {
+        "main": [
+          [
+            {
+              "node": "ClinicFolderID",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CheckClinicFolder": {
+        "main": [
+          [
+            {
+              "node": "If2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "DateFolderID": {
+        "main": [
+          [
+            {
+              "node": "CheckClinicFolder",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "ClinicFolderID": {
+        "main": [
+          [
+            {
+              "node": "SetClinicAndDateFolderID",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Start": {
+        "main": [
+          [
+            {
+              "node": "Prep Folder Names",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 956e312e",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "956e312e-06e8-4542-993e-65ce24cccbc5",
+  "connections": {
+    "Prep Folder Names": {
+      "main": [
+        [
+          {
+            "node": "CheckDateFolder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CheckDateFolder": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CreateDateFolder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CreateDateFolder": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "DateFolderID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "DateFolderID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CreateClinicFolder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CreateClinicFolder": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "ClinicFolderID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "ClinicFolderID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CheckClinicFolder": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DateFolderID": {
+      "main": [
+        [
+          {
+            "node": "CheckClinicFolder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ClinicFolderID": {
+      "main": [
+        [
+          {
+            "node": "SetClinicAndDateFolderID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Prep Folder Names",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-06-23T05:36:48.873Z",
+  "id": "xoN2lt8EcXm5G0vh",
+  "isArchived": false,
+  "meta": null,
+  "name": "HelixScript-Data-Clinic-FolderCheck",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names').item.json.DriveID }}/items/{{ $('Prep Folder Names').item.json.OrderInProgressID }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $('Prep Folder Names').item.json.dateFolderName }}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"fail\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2176,
+        16
+      ],
+      "id": "7f716844-97da-4c33-af41-cb4ec7f8d00e",
+      "name": "CreateDateFolder",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8a2f23f9-ba9b-4ce1-aa62-f9c0142702a0",
+              "name": "DateFolderID",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2384,
+        16
+      ],
+      "id": "75fb73b4-c1d1-4649-b49d-65b21950bfd5",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8a2f23f9-ba9b-4ce1-aa62-f9c0142702a0",
+              "name": "ClinicFolderID",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3648,
+        -48
+      ],
+      "id": "a08f84a7-4a5e-4442-9e6f-ed6b568d8ad9",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names').item.json.DriveID }}/items/{{ $('DateFolderID').item.json.data[0].DateFolderID }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $('Prep Folder Names').item.json.clinic }}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"fail\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3376,
+        -48
+      ],
+      "id": "961f0d8e-8e62-46bb-9cb3-fc7b285bc537",
+      "name": "CreateClinicFolder",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const email = $json;\n\nconst dateFolderName = email.dateFolderName || email.receivedDate;\nconst clinicFolderName = email.clinicFolderName || email.clinic;\n\nconst safeDate = dateFolderName || new Date().toISOString().slice(0, 10);\nconst safeScriptId = email.scriptId || \"UnknownScript\";\nconst safePatientInitials = email.patientInitials || \"UnknownInitials\";\n\nconst fileName =\n  email.fileName ||\n  `${safeDate}-${safeScriptId}-${safePatientInitials}.pdf`;\n\nreturn {\n  json: {\n    ...email,\n\n    dateFolderName,\n    clinicFolderName,\n    fileName,\n\n    // Keep these flat so every node after this can use $json directly\n    DriveID: email.DriveID,\n    AUMedOrderID: email.AUMedOrderID,\n    CompletedOrdersID: email.CompletedOrdersID,\n    OrderInProgressID: email.OrderInProgressID,\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1488,
+        -64
+      ],
+      "id": "5ec9a679-de04-473d-8b95-95a4070741ad",
+      "name": "Prep Folder Names"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.OrderInProgressID }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1696,
+        -64
+      ],
+      "id": "cfe02f78-3cf4-4742-9f7c-577262ba65b7",
+      "name": "CheckDateFolder",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3c6ca86e-637c-480b-89cd-3f18b1a4f04b",
+              "leftValue": "={{ $json.value[0].name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "dateTime",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1904,
+        -64
+      ],
+      "id": "5b72d100-8c4c-401e-8b04-3d1c5e70320d",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3c6ca86e-637c-480b-89cd-3f18b1a4f04b",
+              "leftValue": "={{ $json.value[0].name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3088,
+        -128
+      ],
+      "id": "c7ba92e7-9490-425f-b2f0-06f69e924354",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names').item.json.DriveID }}/items/{{ $json.data[0].DateFolderID }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2880,
+        -128
+      ],
+      "id": "c0d3b1f9-5f49-4c7f-975e-cf30be5040ff",
+      "name": "CheckClinicFolder",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2672,
+        -128
+      ],
+      "id": "8e2bf964-134d-48fb-a441-84ce0f0828e3",
+      "name": "DateFolderID"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        4000,
+        -144
+      ],
+      "id": "274e62b1-83e7-49ad-8f58-fb9dcf57e960",
+      "name": "ClinicFolderID"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b2bc3c16-7564-4c84-849e-afefbbd8f954",
+              "name": "ClinicFolderID",
+              "value": "={{ $json.data[0].ClinicFolderID }}",
+              "type": "string"
+            },
+            {
+              "id": "1f291578-bcdb-4a86-a7a4-adce6b69f8e2",
+              "name": "DateFolderID",
+              "value": "={{ $('DateFolderID').item.json.data[0].DateFolderID }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4208,
+        -144
+      ],
+      "id": "7671f655-b798-4bfe-88c0-84ddd1e9e335",
+      "name": "SetClinicAndDateFolderID"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c3bc6f63-19d0-4d5c-b0eb-a882a22766d4",
+              "name": "DateFolderID",
+              "value": "={{ $json.value[0].id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2160,
+        -176
+      ],
+      "id": "a43aaa2a-3ded-4b75-9e89-174cac7bf4f2",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8a2f23f9-ba9b-4ce1-aa62-f9c0142702a0",
+              "name": "ClinicFolderID",
+              "value": "={{ $json.value[0].id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3648,
+        -208
+      ],
+      "id": "aace599b-3ba1-431e-b34d-ee89e202af8c",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "15a38636-26f6-4ca4-b1a0-bdb7c3676097",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        1280,
+        -64
+      ]
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "Start": [
+      {
+        "json": {
+          "isPrescriptionEmail": true,
+          "clinic": "PERTH",
+          "clinicFolderName": "PERTH",
+          "patientInitials": "BV",
+          "productName": "5% Minoxidil + 0.25% Finasteride Lotion",
+          "scriptUrl": "https://ausscripts.erx.com.au/scripts/2M13GPK54KT1F0CYK9",
+          "scriptId": "2M13GPK54KT1F0CYK9",
+          "originalMessageId": "AAMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1OABGAAAAAAClrM7JrALpR5gWZ2M2MX76BwDXiFn9j2FwSaxBKrApLY6NAAAAAAEMAADXiFn9j2FwSaxBKrApLY6NAAAIP63xAAA=",
+          "receivedDate": "2026-06-23",
+          "dateFolderName": "2026-06-23",
+          "fileName": "2026-06-23-2M13GPK54KT1F0CYK9-BV.pdf",
+          "DriveID": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
+          "AUMedOrderID": "01Y4DA4OPCXITTGW45PJHZBMOQ2WVAPCD2",
+          "CompletedOrdersID": "01Y4DA4OMCIC7MC3JRSBG2QB4JYEGHALNK",
+          "OrderInProgressID": "01Y4DA4OMQFXPAO6YE25F2FTI3HY3VF4HL"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-23T05:36:48.875Z",
+      "createdAt": "2026-06-23T05:36:48.875Z",
+      "role": "workflow:owner",
+      "workflowId": "xoN2lt8EcXm5G0vh",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2026-06-23T07:20:53.826Z",
+      "createdAt": "2026-06-23T07:20:53.826Z",
+      "id": "IGQhT6ige0xQKnQ9",
+      "name": "Helix"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-06-23T07:21:08.457Z",
+  "versionId": "956e312e-06e8-4542-993e-65ce24cccbc5"
+}
