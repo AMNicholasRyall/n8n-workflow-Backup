@@ -1,0 +1,579 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-06-23T22:55:49.000Z",
+    "createdAt": "2026-06-23T22:55:43.856Z",
+    "versionId": "96bdb541-da6a-4e8f-98fe-ef5b61134db4",
+    "workflowId": "7wi1O22UOdi54X0c",
+    "nodes": [
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.DateFolderID }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder,parentReference"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          3664,
+          256
+        ],
+        "id": "4c11ec18-b765-4511-99ba-8d10dc9ef70c",
+        "name": "HTTP Request",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const input = $input.first().json;\n\nconst row = input.data?.[0];\n\nif (!row) {\n  throw new Error('No data[0] found from Aggregate node');\n}\n\nreturn [\n  {\n    json: {\n      CurrentExcelDriveID: row.CurrentExcelDriveID,\n      ClinicFolderName: row.ClinicFolderName,\n      DateFolderID: row.DateFolderID,\n      DriveID: row.DriveID\n    }\n  }\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3232,
+          256
+        ],
+        "id": "b0159eb9-7b71-4e06-b7f2-9668b82bc7c4",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "id": "0656bf8e-b4c4-478e-8991-bdf3ff5fac7f",
+        "typeVersion": 1.1,
+        "name": "Start",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "position": [
+          3024,
+          256
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const input = $input.first().json;\n\n// These values came from the flattened node before the HTTP Request\nconst folderDetails = $('Code in JavaScript').first().json;\n\nconst clinicFolderName = folderDetails.ClinicFolderName;\nconst children = input.value ?? [];\n\nconst match = children.find(item =>\n  item.name === clinicFolderName &&\n  item.folder\n);\n\nreturn [\n  {\n    json: {\n      DriveID: folderDetails.DriveID,\n      DateFolderID: folderDetails.DateFolderID,\n      ClinicFolderName: clinicFolderName,\n      ClinicFolderExists: !!match,\n      ClinicFolderID: match?.id ?? null,\n      CurrentExcelDriveID: folderDetails.CurrentExcelDriveID\n    }\n  }\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3872,
+          256
+        ],
+        "id": "5281b3df-d224-4b78-8511-a4d79f5b224d",
+        "name": "Check Clinic Folder Match"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "4a2c8ca5-368e-453c-9965-151da2e41faa",
+                "leftValue": "={{ $json.ClinicFolderExists }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          4080,
+          256
+        ],
+        "id": "d4174454-f12b-4a39-b531-235eef0e6858",
+        "name": "If"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          4288,
+          160
+        ],
+        "id": "2cac4db4-6778-4c52-bae5-911845b3f3d3",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.DateFolderID }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"name\": \"{{ $json.ClinicFolderName }}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"fail\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          4288,
+          352
+        ],
+        "id": "37296fa4-31f2-4a87-9234-57ca13caf6f1",
+        "name": "HTTP Request1",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "6b588115-8f82-4b45-a0f4-7ae8906eba99",
+                "leftValue": "={{ $json.DateFolderID }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          3440,
+          256
+        ],
+        "id": "1110d731-3971-4279-b97f-50d0da69b990",
+        "name": "Filter"
+      }
+    ],
+    "connections": {
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Start": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "Check Clinic Folder Match",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check Clinic Folder Match": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "HTTP Request1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 96bdb541",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "96bdb541-da6a-4e8f-98fe-ef5b61134db4",
+  "connections": {
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Check Clinic Folder Match",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Clinic Folder Match": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-06-18T01:29:38.822Z",
+  "id": "7wi1O22UOdi54X0c",
+  "isArchived": false,
+  "meta": null,
+  "name": "Zenoti - AddtoSpreadSheet - ClinicPDF Folder",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.DateFolderID }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder,parentReference"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3664,
+        256
+      ],
+      "id": "4c11ec18-b765-4511-99ba-8d10dc9ef70c",
+      "name": "HTTP Request",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\n\nconst row = input.data?.[0];\n\nif (!row) {\n  throw new Error('No data[0] found from Aggregate node');\n}\n\nreturn [\n  {\n    json: {\n      CurrentExcelDriveID: row.CurrentExcelDriveID,\n      ClinicFolderName: row.ClinicFolderName,\n      DateFolderID: row.DateFolderID,\n      DriveID: row.DriveID\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3232,
+        256
+      ],
+      "id": "b0159eb9-7b71-4e06-b7f2-9668b82bc7c4",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "0656bf8e-b4c4-478e-8991-bdf3ff5fac7f",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        3024,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\n\n// These values came from the flattened node before the HTTP Request\nconst folderDetails = $('Code in JavaScript').first().json;\n\nconst clinicFolderName = folderDetails.ClinicFolderName;\nconst children = input.value ?? [];\n\nconst match = children.find(item =>\n  item.name === clinicFolderName &&\n  item.folder\n);\n\nreturn [\n  {\n    json: {\n      DriveID: folderDetails.DriveID,\n      DateFolderID: folderDetails.DateFolderID,\n      ClinicFolderName: clinicFolderName,\n      ClinicFolderExists: !!match,\n      ClinicFolderID: match?.id ?? null,\n      CurrentExcelDriveID: folderDetails.CurrentExcelDriveID\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3872,
+        256
+      ],
+      "id": "5281b3df-d224-4b78-8511-a4d79f5b224d",
+      "name": "Check Clinic Folder Match"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4a2c8ca5-368e-453c-9965-151da2e41faa",
+              "leftValue": "={{ $json.ClinicFolderExists }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4080,
+        256
+      ],
+      "id": "d4174454-f12b-4a39-b531-235eef0e6858",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        4288,
+        160
+      ],
+      "id": "2cac4db4-6778-4c52-bae5-911845b3f3d3",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.DateFolderID }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $json.ClinicFolderName }}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"fail\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4288,
+        352
+      ],
+      "id": "37296fa4-31f2-4a87-9234-57ca13caf6f1",
+      "name": "HTTP Request1",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6b588115-8f82-4b45-a0f4-7ae8906eba99",
+              "leftValue": "={{ $json.DateFolderID }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        3440,
+        256
+      ],
+      "id": "1110d731-3971-4279-b97f-50d0da69b990",
+      "name": "Filter"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "Start": [
+      {
+        "json": {
+          "data": [
+            {
+              "CurrentExcelDriveID": "01Y4DA4OIGIIOFGQKTPFEKFAZIJGTGILGM",
+              "ClinicFolderName": "AUC",
+              "DateFolderID": null,
+              "DriveID": null
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate",
+    "errorWorkflow": "J83Enw8ArDSqhMCL"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-18T01:29:38.824Z",
+      "createdAt": "2026-06-18T01:29:38.824Z",
+      "role": "workflow:owner",
+      "workflowId": "7wi1O22UOdi54X0c",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-06-23T22:55:43.856Z",
+  "versionId": "96bdb541-da6a-4e8f-98fe-ef5b61134db4"
+}
