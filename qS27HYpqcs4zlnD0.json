@@ -1,0 +1,2090 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-06-24T06:03:32.000Z",
+    "createdAt": "2026-06-24T06:03:20.279Z",
+    "versionId": "618d844e-d430-4af5-b901-72eaf7f06698",
+    "workflowId": "qS27HYpqcs4zlnD0",
+    "nodes": [
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "2c9d5b51-52fb-4cee-bac9-ebdcfebe5931",
+                "name": "InboxFolderID",
+                "value": "AQMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1ADgALgAAA6WszsmsAulHmBZnYzYxfvoBANeIWf2PYXBJrEEqsCktjo0AAAIBDAAAAA==",
+                "type": "string"
+              },
+              {
+                "id": "77cc06a7-bcaf-4909-9c30-4ec6c768f293",
+                "name": "ShouldNoBeInHere",
+                "value": "AAMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1OAAuAAAAAAClrM7JrALpR5gWZ2M2MX76AQDXiFn9j2FwSaxBKrApLY6NAAAIP6YnAAA=",
+                "type": "string"
+              },
+              {
+                "id": "63f0b1f8-3a5a-4766-99f1-1329bbe38ea2",
+                "name": "DriveID",
+                "value": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
+                "type": "string"
+              },
+              {
+                "id": "ab1e5653-3856-462e-8e88-5070243c1fb9",
+                "name": "AUMedOrderID",
+                "value": "01Y4DA4OPCXITTGW45PJHZBMOQ2WVAPCD2",
+                "type": "string"
+              },
+              {
+                "id": "e05de8d7-4797-447f-975f-15802967b09f",
+                "name": "CompletedOrders",
+                "value": "01Y4DA4OMCIC7MC3JRSBG2QB4JYEGHALNK",
+                "type": "string"
+              },
+              {
+                "id": "98d15330-823b-422a-9a14-41329cf893a0",
+                "name": "OrderInProgress",
+                "value": "01Y4DA4OMQFXPAO6YE25F2FTI3HY3VF4HL",
+                "type": "string"
+              },
+              {
+                "id": "173513a1-aedc-43fd-a815-e7f89f90d870",
+                "name": "TodaysDate",
+                "value": "={{ $now.toFormat('yyyy-MM-dd') }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -304,
+          -64
+        ],
+        "id": "097e431d-5356-408a-9d6c-6a59841573df",
+        "name": "Master Field Set"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          -656,
+          -224
+        ],
+        "id": "1eae949c-66bf-4c56-b2a7-9a75810ac7f7",
+        "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.OrderInProgress }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -80,
+          -64
+        ],
+        "id": "0cd27205-d97b-470c-9af0-7f082063c68c",
+        "name": "CheckDateFolder",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "0ff25cf4-3596-43c8-b944-673213aa4e32",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('Master Field Set').item.json.TodaysDate }}",
+                "operator": {
+                  "type": "dateTime",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          368,
+          -64
+        ],
+        "id": "11befca6-8336-4769-974b-1203e923db11",
+        "name": "Filter",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          144,
+          -64
+        ],
+        "id": "0aacbbc8-b3e9-4c87-ab48-e77a443e2416",
+        "name": "Split Out",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Master Field Set').item.json.DriveID }}/items/{{ $json.id }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          816,
+          -64
+        ],
+        "id": "d5dd7d0e-2c97-4ac8-b82e-6f8a612015f8",
+        "name": "GetClinicFoldersForDate",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1040,
+          -64
+        ],
+        "id": "fcae63c6-1c0d-44c8-a0c3-a688cdb0573d",
+        "name": "Split Out1"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          1520,
+          -64
+        ],
+        "id": "fd84a0ee-9dda-46e7-bdbb-b87435c46950",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "3c6ca86e-637c-480b-89cd-3f18b1a4f04b",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "dateTime",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          592,
+          -64
+        ],
+        "id": "8bf50efc-f7a6-47c0-845a-d161b2b4bad6",
+        "name": "DateFolderIF",
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "f8ee5eb8-704f-45d5-b69b-c3cdaeba3038",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": ".txt",
+                "operator": {
+                  "type": "string",
+                  "operation": "notContains"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          1248,
+          -64
+        ],
+        "id": "6157cbae-f0d9-42a8-b47c-361e3cde2781",
+        "name": "Filter1"
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Master Field Set').item.json.DriveID }}/items/{{ $('DateFolderIF').item.json.id }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1744,
+          -272
+        ],
+        "id": "0c35ad88-e61d-4b1b-bbc4-b4db78d49efe",
+        "name": "Re-CheckDateFolder",
+        "executeOnce": true,
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const inputItem = $input.first();\n\nif (!inputItem) {\n  throw new Error('No input item found');\n}\n\nconst children = Array.isArray(inputItem.json.value) ? inputItem.json.value : [];\n\n// Clinic folders only\nconst clinicFolders = children.filter(item => item.folder);\n\n// Lock files only\nconst lockFiles = children.filter(item => {\n  const name = item.name || '';\n  return !item.folder && name.toUpperCase().startsWith('_AUMEDORDER_COMPLETE_');\n});\n\nconst clinicResults = clinicFolders.map(folder => {\n  const clinic = folder.name;\n  const expectedLockFileName = `_AuMedOrder_COMPLETE_${clinic}.txt`;\n\n  const matchingLockFile = lockFiles.find(file =>\n    (file.name || '').toUpperCase() === expectedLockFileName.toUpperCase()\n  );\n\n  const hasLockFile = !!matchingLockFile;\n\n  return {\n    clinic,\n    clinicFolderId: folder.id,\n    clinicChildCount: folder.folder?.childCount ?? 0,\n\n    expectedLockFileName,\n    hasLockFile,\n\n    lockFileId: matchingLockFile?.id || null,\n    lockFileName: matchingLockFile?.name || null,\n\n    // Useful for future routing\n    route: hasLockFile ? 'complete' : 'incomplete',\n  };\n});\n\nconst completedClinics = clinicResults.filter(row => row.hasLockFile);\nconst incompleteClinics = clinicResults.filter(row => !row.hasLockFile);\n\nconst allClinicsComplete =\n  clinicFolders.length > 0 &&\n  incompleteClinics.length === 0;\n\nreturn [\n  {\n    json: {\n      totalClinicFolders: clinicFolders.length,\n      totalLockFiles: lockFiles.length,\n\n      completedClinicCount: completedClinics.length,\n      incompleteClinicCount: incompleteClinics.length,\n\n      allClinicsComplete,\n      shouldArchive: allClinicsComplete,\n      shouldRedirectIncomplete: !allClinicsComplete,\n\n      completedClinics,\n      incompleteClinics,\n\n      completedClinicNames: completedClinics.map(row => row.clinic),\n      incompleteClinicNames: incompleteClinics.map(row => row.clinic),\n\n      clinicResults,\n    },\n  },\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1968,
+          -272
+        ],
+        "id": "12dbd0b2-9e4a-461b-bca9-292f0776a69b",
+        "name": "CheckClinicLockFile"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "f3029ce4-64db-4f0e-ab5f-063eb7c361f4",
+                "leftValue": "={{ $json.allClinicsComplete }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          2176,
+          -272
+        ],
+        "id": "cc02a973-9985-448e-9037-1470089e58a3",
+        "name": "ReadyToArchive"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "incompleteClinics",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          2384,
+          -176
+        ],
+        "id": "35d5dbf5-b060-431e-bacd-26f3f498b08b",
+        "name": "Split Out3"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "ckytsjuvg22h3FkG",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/ckytsjuvg22h3FkG",
+            "cachedResultName": "Helix-MedOrder-SendtoPharmacy-Sub"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "DriveID": "={{ $('Master Field Set').item.json.DriveID }}",
+              "id": "={{ $('Loop Over Items').item.json.id }}",
+              "name": "={{ $('Loop Over Items').item.json.name }}",
+              "TodaysDate": "={{ $('Master Field Set').item.json.TodaysDate }}",
+              "TodaysDate_firstItem": "={{ $('Master Field Set').first().json.TodaysDate }}",
+              "id_firstItem": "={{ $('DateFolderIF').first().json.id }}",
+              "name_firstItem": "={{ $('Loop Over Items').first().json.name }}",
+              "DateFolderIF_id_1": "={{ $('DateFolderIF').item.json.id }}"
+            },
+            "matchingColumns": [
+              "DriveID",
+              "id",
+              "name",
+              "TodaysDate",
+              "TodaysDate_firstItem",
+              "id_firstItem",
+              "name_firstItem",
+              "DateFolderIF_id_1"
+            ],
+            "schema": [
+              {
+                "id": "DriveID",
+                "displayName": "DriveID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "name",
+                "displayName": "name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "TodaysDate",
+                "displayName": "TodaysDate",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "TodaysDate_firstItem",
+                "displayName": "TodaysDate_firstItem",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "id_firstItem",
+                "displayName": "id_firstItem",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "name_firstItem",
+                "displayName": "name_firstItem",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "DateFolderIF_id_1",
+                "displayName": "DateFolderIF_id_1",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.2,
+        "position": [
+          1776,
+          32
+        ],
+        "name": "Call Helix-MedOrder-SendtoPharmacy-Sub",
+        "id": "cf848a04-1332-4f64-a48f-b9ba85effe0d"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "ckytsjuvg22h3FkG",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/ckytsjuvg22h3FkG",
+            "cachedResultName": "Helix-MedOrder-SendtoPharmacy-Sub"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "DriveID": "={{ $('Master Field Set').item.json.DriveID }}",
+              "id": "={{ $json.clinicFolderId }}",
+              "name": "={{ $json.clinic }}",
+              "TodaysDate": "={{ $('Master Field Set').item.json.TodaysDate }}",
+              "TodaysDate_firstItem": "={{ $('Master Field Set').first().json.TodaysDate }}",
+              "id_firstItem": "={{ $('DateFolderIF').first().json.id }}",
+              "name_firstItem": "={{ $json.clinic }}",
+              "DateFolderIF_id_1": "={{ $('DateFolderIF').item.json.id }}"
+            },
+            "matchingColumns": [
+              "DriveID",
+              "id",
+              "name",
+              "TodaysDate",
+              "TodaysDate_firstItem",
+              "id_firstItem",
+              "name_firstItem",
+              "DateFolderIF_id_1"
+            ],
+            "schema": [
+              {
+                "id": "DriveID",
+                "displayName": "DriveID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "name",
+                "displayName": "name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "TodaysDate",
+                "displayName": "TodaysDate",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "TodaysDate_firstItem",
+                "displayName": "TodaysDate_firstItem",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "id_firstItem",
+                "displayName": "id_firstItem",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "name_firstItem",
+                "displayName": "name_firstItem",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "DateFolderIF_id_1",
+                "displayName": "DateFolderIF_id_1",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.2,
+        "position": [
+          2832,
+          -80
+        ],
+        "name": "Call Helix-MedOrder-SendtoPharmacy-Sub1",
+        "id": "3b955796-4360-4a1a-9f42-659ee65dd74c"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          2592,
+          -176
+        ],
+        "id": "f899b8bd-3ce9-4ebf-a3d7-536d51147743",
+        "name": "Loop Over Items1"
+      },
+      {
+        "parameters": {
+          "method": "PATCH",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Master Field Set').item.json.DriveID }}/items/{{ $('DateFolderIF').item.json.id }}",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"parentReference\": {\n    \"id\": \"{{ $('Master Field Set').item.json.CompletedOrders }}\"\n  }\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          2384,
+          -368
+        ],
+        "id": "0cfb9508-6080-414f-afe7-5a3e364de6c9",
+        "name": "ArchiveFolder",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "formTitle": "Manual Pharmacy Flow",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "Start Flow to send Scripts to Pharmacy",
+                "fieldType": "radio",
+                "fieldOptions": {
+                  "values": [
+                    {
+                      "option": "Start Flow"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "responseMode": "lastNode",
+          "options": {
+            "path": "ManualHelix"
+          }
+        },
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.5,
+        "position": [
+          -672,
+          144
+        ],
+        "id": "8dd0e8bf-d04a-41e6-a71b-f4d139b516bf",
+        "name": "On form submission",
+        "webhookId": "8f8f09ec-f3f1-400b-9ad6-d1141f50a679"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "41f84b5b-4f69-484e-a6f4-ac5faf0a1d28",
+                "leftValue": "={{ $json[\"Start Flow to send Scripts to Pharmacy\"] }}",
+                "rightValue": "Start Flow",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          -480,
+          32
+        ],
+        "id": "5c840cbc-08bc-41ae-b250-459b2f354503",
+        "name": "Filter2"
+      },
+      {
+        "parameters": {
+          "operation": "completion",
+          "completionTitle": "Form Status",
+          "completionMessage": "Failed to Find Any Folders for Todays date",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.form",
+        "typeVersion": 2.5,
+        "position": [
+          832,
+          144
+        ],
+        "id": "15847b43-608a-4291-ba2c-aeeb3dd9d269",
+        "name": "Form",
+        "webhookId": "228d692d-bef1-48b2-b260-e7e41b53c202"
+      },
+      {
+        "parameters": {
+          "operation": "completion",
+          "completionTitle": "Form Status",
+          "completionMessage": "Flow was Successful ",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.form",
+        "typeVersion": 2.5,
+        "position": [
+          2592,
+          -368
+        ],
+        "id": "efbc7775-2fc0-4081-b47c-bdd61030a84d",
+        "name": "Form1",
+        "webhookId": "228d692d-bef1-48b2-b260-e7e41b53c202"
+      }
+    ],
+    "connections": {
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "Master Field Set",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CheckDateFolder": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Master Field Set": {
+        "main": [
+          [
+            {
+              "node": "CheckDateFolder",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "DateFolderIF",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetClinicFoldersForDate": {
+        "main": [
+          [
+            {
+              "node": "Split Out1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out1": {
+        "main": [
+          [
+            {
+              "node": "Filter1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "Re-CheckDateFolder",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Call Helix-MedOrder-SendtoPharmacy-Sub",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "DateFolderIF": {
+        "main": [
+          [
+            {
+              "node": "GetClinicFoldersForDate",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Form",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Re-CheckDateFolder": {
+        "main": [
+          [
+            {
+              "node": "CheckClinicLockFile",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CheckClinicLockFile": {
+        "main": [
+          [
+            {
+              "node": "ReadyToArchive",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "ReadyToArchive": {
+        "main": [
+          [
+            {
+              "node": "ArchiveFolder",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Split Out3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call Helix-MedOrder-SendtoPharmacy-Sub": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out3": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items1": {
+        "main": [
+          [
+            {
+              "node": "Re-CheckDateFolder",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Call Helix-MedOrder-SendtoPharmacy-Sub1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call Helix-MedOrder-SendtoPharmacy-Sub1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "On form submission": {
+        "main": [
+          [
+            {
+              "node": "Filter2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter2": {
+        "main": [
+          [
+            {
+              "node": "Master Field Set",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "ArchiveFolder": {
+        "main": [
+          [
+            {
+              "node": "Form1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 618d844e",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "618d844e-d430-4af5-b901-72eaf7f06698",
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Master Field Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CheckDateFolder": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Master Field Set": {
+      "main": [
+        [
+          {
+            "node": "CheckDateFolder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "DateFolderIF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetClinicFoldersForDate": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Re-CheckDateFolder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call Helix-MedOrder-SendtoPharmacy-Sub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DateFolderIF": {
+      "main": [
+        [
+          {
+            "node": "GetClinicFoldersForDate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Re-CheckDateFolder": {
+      "main": [
+        [
+          {
+            "node": "CheckClinicLockFile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CheckClinicLockFile": {
+      "main": [
+        [
+          {
+            "node": "ReadyToArchive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ReadyToArchive": {
+      "main": [
+        [
+          {
+            "node": "ArchiveFolder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split Out3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Helix-MedOrder-SendtoPharmacy-Sub": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out3": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Re-CheckDateFolder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call Helix-MedOrder-SendtoPharmacy-Sub1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Helix-MedOrder-SendtoPharmacy-Sub1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Filter2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter2": {
+      "main": [
+        [
+          {
+            "node": "Master Field Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ArchiveFolder": {
+      "main": [
+        [
+          {
+            "node": "Form1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-06-24T02:19:03.888Z",
+  "id": "qS27HYpqcs4zlnD0",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Helix-MedOrder-SendtoPharmacy-Master",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2c9d5b51-52fb-4cee-bac9-ebdcfebe5931",
+              "name": "InboxFolderID",
+              "value": "AQMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1ADgALgAAA6WszsmsAulHmBZnYzYxfvoBANeIWf2PYXBJrEEqsCktjo0AAAIBDAAAAA==",
+              "type": "string"
+            },
+            {
+              "id": "77cc06a7-bcaf-4909-9c30-4ec6c768f293",
+              "name": "ShouldNoBeInHere",
+              "value": "AAMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1OAAuAAAAAAClrM7JrALpR5gWZ2M2MX76AQDXiFn9j2FwSaxBKrApLY6NAAAIP6YnAAA=",
+              "type": "string"
+            },
+            {
+              "id": "63f0b1f8-3a5a-4766-99f1-1329bbe38ea2",
+              "name": "DriveID",
+              "value": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
+              "type": "string"
+            },
+            {
+              "id": "ab1e5653-3856-462e-8e88-5070243c1fb9",
+              "name": "AUMedOrderID",
+              "value": "01Y4DA4OPCXITTGW45PJHZBMOQ2WVAPCD2",
+              "type": "string"
+            },
+            {
+              "id": "e05de8d7-4797-447f-975f-15802967b09f",
+              "name": "CompletedOrders",
+              "value": "01Y4DA4OMCIC7MC3JRSBG2QB4JYEGHALNK",
+              "type": "string"
+            },
+            {
+              "id": "98d15330-823b-422a-9a14-41329cf893a0",
+              "name": "OrderInProgress",
+              "value": "01Y4DA4OMQFXPAO6YE25F2FTI3HY3VF4HL",
+              "type": "string"
+            },
+            {
+              "id": "173513a1-aedc-43fd-a815-e7f89f90d870",
+              "name": "TodaysDate",
+              "value": "={{ $now.toFormat('yyyy-MM-dd') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -304,
+        -64
+      ],
+      "id": "097e431d-5356-408a-9d6c-6a59841573df",
+      "name": "Master Field Set"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -656,
+        -224
+      ],
+      "id": "1eae949c-66bf-4c56-b2a7-9a75810ac7f7",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.OrderInProgress }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -80,
+        -64
+      ],
+      "id": "0cd27205-d97b-470c-9af0-7f082063c68c",
+      "name": "CheckDateFolder",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0ff25cf4-3596-43c8-b944-673213aa4e32",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('Master Field Set').item.json.TodaysDate }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        368,
+        -64
+      ],
+      "id": "11befca6-8336-4769-974b-1203e923db11",
+      "name": "Filter",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        144,
+        -64
+      ],
+      "id": "0aacbbc8-b3e9-4c87-ab48-e77a443e2416",
+      "name": "Split Out",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Master Field Set').item.json.DriveID }}/items/{{ $json.id }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        816,
+        -64
+      ],
+      "id": "d5dd7d0e-2c97-4ac8-b82e-6f8a612015f8",
+      "name": "GetClinicFoldersForDate",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        -64
+      ],
+      "id": "fcae63c6-1c0d-44c8-a0c3-a688cdb0573d",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1520,
+        -64
+      ],
+      "id": "fd84a0ee-9dda-46e7-bdbb-b87435c46950",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3c6ca86e-637c-480b-89cd-3f18b1a4f04b",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "dateTime",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        592,
+        -64
+      ],
+      "id": "8bf50efc-f7a6-47c0-845a-d161b2b4bad6",
+      "name": "DateFolderIF",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f8ee5eb8-704f-45d5-b69b-c3cdaeba3038",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": ".txt",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1248,
+        -64
+      ],
+      "id": "6157cbae-f0d9-42a8-b47c-361e3cde2781",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Master Field Set').item.json.DriveID }}/items/{{ $('DateFolderIF').item.json.id }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1744,
+        -272
+      ],
+      "id": "0c35ad88-e61d-4b1b-bbc4-b4db78d49efe",
+      "name": "Re-CheckDateFolder",
+      "executeOnce": true,
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputItem = $input.first();\n\nif (!inputItem) {\n  throw new Error('No input item found');\n}\n\nconst children = Array.isArray(inputItem.json.value) ? inputItem.json.value : [];\n\n// Clinic folders only\nconst clinicFolders = children.filter(item => item.folder);\n\n// Lock files only\nconst lockFiles = children.filter(item => {\n  const name = item.name || '';\n  return !item.folder && name.toUpperCase().startsWith('_AUMEDORDER_COMPLETE_');\n});\n\nconst clinicResults = clinicFolders.map(folder => {\n  const clinic = folder.name;\n  const expectedLockFileName = `_AuMedOrder_COMPLETE_${clinic}.txt`;\n\n  const matchingLockFile = lockFiles.find(file =>\n    (file.name || '').toUpperCase() === expectedLockFileName.toUpperCase()\n  );\n\n  const hasLockFile = !!matchingLockFile;\n\n  return {\n    clinic,\n    clinicFolderId: folder.id,\n    clinicChildCount: folder.folder?.childCount ?? 0,\n\n    expectedLockFileName,\n    hasLockFile,\n\n    lockFileId: matchingLockFile?.id || null,\n    lockFileName: matchingLockFile?.name || null,\n\n    // Useful for future routing\n    route: hasLockFile ? 'complete' : 'incomplete',\n  };\n});\n\nconst completedClinics = clinicResults.filter(row => row.hasLockFile);\nconst incompleteClinics = clinicResults.filter(row => !row.hasLockFile);\n\nconst allClinicsComplete =\n  clinicFolders.length > 0 &&\n  incompleteClinics.length === 0;\n\nreturn [\n  {\n    json: {\n      totalClinicFolders: clinicFolders.length,\n      totalLockFiles: lockFiles.length,\n\n      completedClinicCount: completedClinics.length,\n      incompleteClinicCount: incompleteClinics.length,\n\n      allClinicsComplete,\n      shouldArchive: allClinicsComplete,\n      shouldRedirectIncomplete: !allClinicsComplete,\n\n      completedClinics,\n      incompleteClinics,\n\n      completedClinicNames: completedClinics.map(row => row.clinic),\n      incompleteClinicNames: incompleteClinics.map(row => row.clinic),\n\n      clinicResults,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1968,
+        -272
+      ],
+      "id": "12dbd0b2-9e4a-461b-bca9-292f0776a69b",
+      "name": "CheckClinicLockFile"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f3029ce4-64db-4f0e-ab5f-063eb7c361f4",
+              "leftValue": "={{ $json.allClinicsComplete }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2176,
+        -272
+      ],
+      "id": "cc02a973-9985-448e-9037-1470089e58a3",
+      "name": "ReadyToArchive"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "incompleteClinics",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2384,
+        -176
+      ],
+      "id": "35d5dbf5-b060-431e-bacd-26f3f498b08b",
+      "name": "Split Out3"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "ckytsjuvg22h3FkG",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/ckytsjuvg22h3FkG",
+          "cachedResultName": "Helix-MedOrder-SendtoPharmacy-Sub"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "DriveID": "={{ $('Master Field Set').item.json.DriveID }}",
+            "id": "={{ $('Loop Over Items').item.json.id }}",
+            "name": "={{ $('Loop Over Items').item.json.name }}",
+            "TodaysDate": "={{ $('Master Field Set').item.json.TodaysDate }}",
+            "TodaysDate_firstItem": "={{ $('Master Field Set').first().json.TodaysDate }}",
+            "id_firstItem": "={{ $('DateFolderIF').first().json.id }}",
+            "name_firstItem": "={{ $('Loop Over Items').first().json.name }}",
+            "DateFolderIF_id_1": "={{ $('DateFolderIF').item.json.id }}"
+          },
+          "matchingColumns": [
+            "DriveID",
+            "id",
+            "name",
+            "TodaysDate",
+            "TodaysDate_firstItem",
+            "id_firstItem",
+            "name_firstItem",
+            "DateFolderIF_id_1"
+          ],
+          "schema": [
+            {
+              "id": "DriveID",
+              "displayName": "DriveID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "TodaysDate",
+              "displayName": "TodaysDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "TodaysDate_firstItem",
+              "displayName": "TodaysDate_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "id_firstItem",
+              "displayName": "id_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name_firstItem",
+              "displayName": "name_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "DateFolderIF_id_1",
+              "displayName": "DateFolderIF_id_1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1776,
+        32
+      ],
+      "name": "Call Helix-MedOrder-SendtoPharmacy-Sub",
+      "id": "cf848a04-1332-4f64-a48f-b9ba85effe0d"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "ckytsjuvg22h3FkG",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/ckytsjuvg22h3FkG",
+          "cachedResultName": "Helix-MedOrder-SendtoPharmacy-Sub"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "DriveID": "={{ $('Master Field Set').item.json.DriveID }}",
+            "id": "={{ $json.clinicFolderId }}",
+            "name": "={{ $json.clinic }}",
+            "TodaysDate": "={{ $('Master Field Set').item.json.TodaysDate }}",
+            "TodaysDate_firstItem": "={{ $('Master Field Set').first().json.TodaysDate }}",
+            "id_firstItem": "={{ $('DateFolderIF').first().json.id }}",
+            "name_firstItem": "={{ $json.clinic }}",
+            "DateFolderIF_id_1": "={{ $('DateFolderIF').item.json.id }}"
+          },
+          "matchingColumns": [
+            "DriveID",
+            "id",
+            "name",
+            "TodaysDate",
+            "TodaysDate_firstItem",
+            "id_firstItem",
+            "name_firstItem",
+            "DateFolderIF_id_1"
+          ],
+          "schema": [
+            {
+              "id": "DriveID",
+              "displayName": "DriveID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "TodaysDate",
+              "displayName": "TodaysDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "TodaysDate_firstItem",
+              "displayName": "TodaysDate_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "id_firstItem",
+              "displayName": "id_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name_firstItem",
+              "displayName": "name_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "DateFolderIF_id_1",
+              "displayName": "DateFolderIF_id_1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        2832,
+        -80
+      ],
+      "name": "Call Helix-MedOrder-SendtoPharmacy-Sub1",
+      "id": "3b955796-4360-4a1a-9f42-659ee65dd74c"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2592,
+        -176
+      ],
+      "id": "f899b8bd-3ce9-4ebf-a3d7-536d51147743",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Master Field Set').item.json.DriveID }}/items/{{ $('DateFolderIF').item.json.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"parentReference\": {\n    \"id\": \"{{ $('Master Field Set').item.json.CompletedOrders }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2384,
+        -368
+      ],
+      "id": "0cfb9508-6080-414f-afe7-5a3e364de6c9",
+      "name": "ArchiveFolder",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Manual Pharmacy Flow",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Start Flow to send Scripts to Pharmacy",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Start Flow"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "responseMode": "lastNode",
+        "options": {
+          "path": "ManualHelix"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -672,
+        144
+      ],
+      "id": "8dd0e8bf-d04a-41e6-a71b-f4d139b516bf",
+      "name": "On form submission",
+      "webhookId": "8f8f09ec-f3f1-400b-9ad6-d1141f50a679"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "41f84b5b-4f69-484e-a6f4-ac5faf0a1d28",
+              "leftValue": "={{ $json[\"Start Flow to send Scripts to Pharmacy\"] }}",
+              "rightValue": "Start Flow",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -480,
+        32
+      ],
+      "id": "5c840cbc-08bc-41ae-b250-459b2f354503",
+      "name": "Filter2"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Form Status",
+        "completionMessage": "Failed to Find Any Folders for Todays date",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        832,
+        144
+      ],
+      "id": "15847b43-608a-4291-ba2c-aeeb3dd9d269",
+      "name": "Form",
+      "webhookId": "228d692d-bef1-48b2-b260-e7e41b53c202"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Form Status",
+        "completionMessage": "Flow was Successful ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        2592,
+        -368
+      ],
+      "id": "efbc7775-2fc0-4081-b47c-bdd61030a84d",
+      "name": "Form1",
+      "webhookId": "228d692d-bef1-48b2-b260-e7e41b53c202"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Start Flow to send Scripts to Pharmacy": "Start Flow",
+          "submittedAt": "2026-06-24T13:59:02.653+08:00",
+          "formMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "callerPolicy": "workflowsFromSameOwner",
+    "saveDataSuccessExecution": "all"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-24T02:19:03.890Z",
+      "createdAt": "2026-06-24T02:19:03.890Z",
+      "role": "workflow:owner",
+      "workflowId": "qS27HYpqcs4zlnD0",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2026-06-23T07:20:53.826Z",
+      "createdAt": "2026-06-23T07:20:53.826Z",
+      "id": "IGQhT6ige0xQKnQ9",
+      "name": "Helix"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-06-24T06:03:20.278Z",
+  "versionId": "618d844e-d430-4af5-b901-72eaf7f06698"
+}
