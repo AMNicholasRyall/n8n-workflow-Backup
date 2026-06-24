@@ -1,0 +1,764 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-06-22T07:29:34.000Z",
+    "createdAt": "2026-06-22T05:15:23.039Z",
+    "versionId": "c5c1c1ef-983d-41ec-a664-f8a194b1b3ed",
+    "workflowId": "VkMFSeAr4ErzOkYM",
+    "nodes": [
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{$json.driveId}}/items/{{$json.itemsId}}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder,file,parentReference"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          208,
+          0
+        ],
+        "id": "29dde3a2-6363-484a-a9d8-8e6d0adabf74",
+        "name": "HTTP Request",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          416,
+          0
+        ],
+        "id": "8dea0819-caa5-4c74-b426-8c1496e9b00d",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "b47115ca-7e4d-4cd9-b496-4a8264eec4f6",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('Start').item.json.startDate }}",
+                "operator": {
+                  "type": "dateTime",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          624,
+          0
+        ],
+        "id": "d3adcf76-0b93-4f80-ae4c-34847725789e",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.parentReference.driveId }}/items/{{$json.id}}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder,file,parentReference"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          832,
+          0
+        ],
+        "id": "e36564bf-db77-46fd-b044-83d9dfbf4146",
+        "name": "HTTP Request1",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1040,
+          0
+        ],
+        "id": "7cf4fa37-f1c6-4810-9f38-3801bbcba78d",
+        "name": "Split Out1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "2fff9319-d4ea-4289-8ace-e6efce474af7",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('Start').item.json.clinic }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          1248,
+          0
+        ],
+        "id": "a73ef61f-8854-4185-8b94-fe8ea9481b83",
+        "name": "Filter1"
+      },
+      {
+        "parameters": {
+          "jsCode": "const trigger = $('Start').first().json._firstItem;\nconst folder = $json;\n\nconst expectedRows = Number(trigger.expectedRows ?? trigger.orderCount ?? 0);\nconst folderChildCount = Number(folder.folder?.childCount ?? 0);\n\nconst countMatches = folderChildCount === expectedRows;\n\nreturn [\n  {\n    json: {\n      ...trigger,\n\n      clinicFolderId: folder.id,\n      clinicFolderName: folder.name,\n\n      dateFolderId: folder.parentReference?.id ?? null,\n      dateFolderName: folder.parentReference?.name ?? null,\n      dateFolderPath: folder.parentReference?.path ?? null,\n\n      expectedRows,\n      orderCount: Number(trigger.orderCount ?? expectedRows),\n\n      folderChildCount,\n      fileCount: folderChildCount,\n\n      countMatches,\n      readyForZip: countMatches,\n\n      pdfStatus: countMatches ? 'PdfCountMatched' : 'PdfCountMismatch',\n      sourceStatus: countMatches ? 'ReadyForZip' : 'PdfCountMismatch',\n\n      message: countMatches\n        ? `${trigger.clinic}: ${expectedRows} order rows and ${folderChildCount} files matched.`\n        : `${trigger.clinic}: expected ${expectedRows} files but found ${folderChildCount}.`,\n    },\n  },\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1456,
+          0
+        ],
+        "id": "2d82bfd0-e93a-4760-adc6-72d9c9952a3d",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "624afae6-57a6-4fb3-8277-9ab90a380496",
+                "name": "dateFolderName",
+                "value": "={{ $('Code in JavaScript').item.json.dateFolderName }}",
+                "type": "string"
+              },
+              {
+                "id": "8de01caf-3213-4341-87b5-2818ac41ba1a",
+                "name": "orderCount",
+                "value": "={{ $('Code in JavaScript').item.json.orderCount }}",
+                "type": "string"
+              },
+              {
+                "id": "2fdeab97-15b1-4819-903d-44ba0f910405",
+                "name": "fileCount",
+                "value": "={{ $('Code in JavaScript').item.json.fileCount }}",
+                "type": "string"
+              },
+              {
+                "id": "49b3cdf3-9c1f-4ce9-bfe9-06b34a57a2e4",
+                "name": "pdfStatus",
+                "value": "={{ $json.pdfStatus }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1664,
+          0
+        ],
+        "id": "6824428e-f9d7-41d0-bf77-d4bd62ec6fb4",
+        "name": "Return"
+      },
+      {
+        "parameters": {
+          "workflowInputs": {
+            "values": [
+              {
+                "name": "driveId",
+                "type": "any"
+              },
+              {
+                "name": "itemsId",
+                "type": "any"
+              },
+              {
+                "name": "startDate",
+                "type": "any"
+              },
+              {
+                "name": "clinic",
+                "type": "any"
+              },
+              {
+                "name": "_firstItem",
+                "type": "any"
+              }
+            ]
+          }
+        },
+        "id": "bd8c2d82-b23b-492a-a8a1-5fb63fcf5986",
+        "typeVersion": 1.1,
+        "name": "Start",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "position": [
+          0,
+          0
+        ]
+      }
+    ],
+    "connections": {
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request1": {
+        "main": [
+          [
+            {
+              "node": "Split Out1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out1": {
+        "main": [
+          [
+            {
+              "node": "Filter1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter1": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Start": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Return",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version c5c1c1ef",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "c5c1c1ef-983d-41ec-a664-f8a194b1b3ed",
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Return",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-06-22T04:31:05.154Z",
+  "id": "VkMFSeAr4ErzOkYM",
+  "isArchived": false,
+  "meta": null,
+  "name": "ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{$json.driveId}}/items/{{$json.itemsId}}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder,file,parentReference"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "29dde3a2-6363-484a-a9d8-8e6d0adabf74",
+      "name": "HTTP Request",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "8dea0819-caa5-4c74-b426-8c1496e9b00d",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b47115ca-7e4d-4cd9-b496-4a8264eec4f6",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('Start').item.json.startDate }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        624,
+        0
+      ],
+      "id": "d3adcf76-0b93-4f80-ae4c-34847725789e",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.parentReference.driveId }}/items/{{$json.id}}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder,file,parentReference"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        832,
+        0
+      ],
+      "id": "e36564bf-db77-46fd-b044-83d9dfbf4146",
+      "name": "HTTP Request1",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        0
+      ],
+      "id": "7cf4fa37-f1c6-4810-9f38-3801bbcba78d",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2fff9319-d4ea-4289-8ace-e6efce474af7",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('Start').item.json.clinic }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1248,
+        0
+      ],
+      "id": "a73ef61f-8854-4185-8b94-fe8ea9481b83",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const trigger = $('Start').first().json._firstItem;\nconst folder = $json;\n\nconst expectedRows = Number(trigger.expectedRows ?? trigger.orderCount ?? 0);\nconst folderChildCount = Number(folder.folder?.childCount ?? 0);\n\nconst countMatches = folderChildCount === expectedRows;\n\nreturn [\n  {\n    json: {\n      ...trigger,\n\n      clinicFolderId: folder.id,\n      clinicFolderName: folder.name,\n\n      dateFolderId: folder.parentReference?.id ?? null,\n      dateFolderName: folder.parentReference?.name ?? null,\n      dateFolderPath: folder.parentReference?.path ?? null,\n\n      expectedRows,\n      orderCount: Number(trigger.orderCount ?? expectedRows),\n\n      folderChildCount,\n      fileCount: folderChildCount,\n\n      countMatches,\n      readyForZip: countMatches,\n\n      pdfStatus: countMatches ? 'PdfCountMatched' : 'PdfCountMismatch',\n      sourceStatus: countMatches ? 'ReadyForZip' : 'PdfCountMismatch',\n\n      message: countMatches\n        ? `${trigger.clinic}: ${expectedRows} order rows and ${folderChildCount} files matched.`\n        : `${trigger.clinic}: expected ${expectedRows} files but found ${folderChildCount}.`,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1456,
+        0
+      ],
+      "id": "2d82bfd0-e93a-4760-adc6-72d9c9952a3d",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "624afae6-57a6-4fb3-8277-9ab90a380496",
+              "name": "dateFolderName",
+              "value": "={{ $('Code in JavaScript').item.json.dateFolderName }}",
+              "type": "string"
+            },
+            {
+              "id": "8de01caf-3213-4341-87b5-2818ac41ba1a",
+              "name": "orderCount",
+              "value": "={{ $('Code in JavaScript').item.json.orderCount }}",
+              "type": "string"
+            },
+            {
+              "id": "2fdeab97-15b1-4819-903d-44ba0f910405",
+              "name": "fileCount",
+              "value": "={{ $('Code in JavaScript').item.json.fileCount }}",
+              "type": "string"
+            },
+            {
+              "id": "49b3cdf3-9c1f-4ce9-bfe9-06b34a57a2e4",
+              "name": "pdfStatus",
+              "value": "={{ $json.pdfStatus }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1664,
+        0
+      ],
+      "id": "6824428e-f9d7-41d0-bf77-d4bd62ec6fb4",
+      "name": "Return"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "driveId",
+              "type": "any"
+            },
+            {
+              "name": "itemsId",
+              "type": "any"
+            },
+            {
+              "name": "startDate",
+              "type": "any"
+            },
+            {
+              "name": "clinic",
+              "type": "any"
+            },
+            {
+              "name": "_firstItem",
+              "type": "any"
+            }
+          ]
+        }
+      },
+      "id": "bd8c2d82-b23b-492a-a8a1-5fb63fcf5986",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        0,
+        0
+      ]
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "Start": [
+      {
+        "json": {
+          "startDate": "2026-06-20",
+          "clinic": "AUC",
+          "_firstItem": {
+            "clinic": "AUC",
+            "sheetName": "AUC",
+            "address": "AUC!A1:M10",
+            "endRow": 10,
+            "orderCount": 9,
+            "expectedRows": 9,
+            "hasOrders": true,
+            "readyForSubflow": true,
+            "driveId": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
+            "itemsId": "01Y4DA4OOUVPWHSA2BN5G2YBSB6DOVI6HR",
+            "currentExcelDriveId": "01Y4DA4OOLGSSBQRFK7JBJQY5JWHGCIG7S",
+            "startDate": "2026-06-20",
+            "checkedRows": 9,
+            "actualOrderRows": 9,
+            "sourceStatus": "ReadyForClinicSubflow"
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-22T04:31:05.156Z",
+      "createdAt": "2026-06-22T04:31:05.156Z",
+      "role": "workflow:owner",
+      "workflowId": "VkMFSeAr4ErzOkYM",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-06-22T05:15:23.038Z",
+  "versionId": "c5c1c1ef-983d-41ec-a664-f8a194b1b3ed"
+}
