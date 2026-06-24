@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-03-22T23:00:54.000Z",
-    "createdAt": "2026-03-22T22:58:37.183Z",
-    "versionId": "542a3230-95ad-4705-be25-558c7e42b84b",
+    "updatedAt": "2026-06-18T23:22:28.000Z",
+    "createdAt": "2026-06-18T23:15:25.093Z",
+    "versionId": "f7e41cd8-00b7-43ac-b574-0031361b629b",
     "workflowId": "vLoLIvJK1gu3ILbL",
     "nodes": [
       {
@@ -332,7 +332,7 @@
         "type": "n8n-nodes-base.microsoftSharePoint",
         "typeVersion": 1,
         "position": [
-          1840,
+          1632,
           -224
         ],
         "id": "1518d5b7-596d-4ec0-876f-834835a8cddb",
@@ -356,7 +356,7 @@
             "conditions": [
               {
                 "id": "6e1a84b7-6dfd-4ea5-b9e2-755eecf496e0",
-                "leftValue": "={{ $json.value[0].name }}",
+                "leftValue": "={{ $json.name }}",
                 "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
                 "operator": {
                   "type": "string",
@@ -371,7 +371,7 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          1632,
+          2048,
           -432
         ],
         "id": "f6f6df5a-bdcf-4ab1-b802-b5f86f699670",
@@ -396,7 +396,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          4080,
+          4288,
           -240
         ],
         "id": "f2fcfd25-4a24-48e7-9140-e1c9c639230f",
@@ -481,7 +481,7 @@
       },
       {
         "parameters": {
-          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/children",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Filter1').item.json.id }}/children",
           "authentication": "genericCredentialType",
           "genericAuthType": "oAuth2Api",
           "options": {}
@@ -489,7 +489,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          2064,
+          1856,
           -224
         ],
         "id": "c27423b4-984a-4db2-8af7-b13a225acc51",
@@ -543,7 +543,7 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          2288,
+          2496,
           -224
         ],
         "id": "77f5593f-1cc2-46c2-912f-33511cc8440c",
@@ -590,7 +590,7 @@
         "type": "n8n-nodes-base.aggregate",
         "typeVersion": 1,
         "position": [
-          2848,
+          3056,
           -240
         ],
         "id": "092e96a6-610b-4c8d-8972-685525fb07b2",
@@ -604,6 +604,24 @@
                 "id": "9021e372-3edf-4f13-97dc-1ef601fcbfdf",
                 "name": "CurrentExcelDriveID",
                 "value": "={{ $('Upload file').item.json.id }}",
+                "type": "string"
+              },
+              {
+                "id": "a174daaf-563a-4372-9bd8-1b34569dc45c",
+                "name": "ClinicFolderName",
+                "value": "={{ $('When Executed by Another Workflow').item.json.TrueCLinicAbb }}",
+                "type": "string"
+              },
+              {
+                "id": "30d42f21-6eec-4b41-acc1-5b46d6987b5f",
+                "name": "DateFolderID",
+                "value": "={{ $json.value[0].parentReference.id }}",
+                "type": "string"
+              },
+              {
+                "id": "b92c8d17-1ec8-430d-b68c-5d24a56fff0c",
+                "name": "DriveID",
+                "value": "={{ $json.value[0].parentReference.driveId }}",
                 "type": "string"
               }
             ]
@@ -628,6 +646,24 @@
                 "name": "CurrentExcelDriveID",
                 "value": "={{ $('Upload file1').item.json.id }}",
                 "type": "string"
+              },
+              {
+                "id": "8a5de884-719f-4d87-946b-0ada6795aa44",
+                "name": "ClinicFolderName",
+                "value": "={{ $('When Executed by Another Workflow').item.json.TrueCLinicAbb }}",
+                "type": "string"
+              },
+              {
+                "id": "1a20b608-1176-4d4f-9116-3896417214b3",
+                "name": "DateFolderID",
+                "value": "={{ $json.value[0].parentReference.id }}",
+                "type": "string"
+              },
+              {
+                "id": "94b2fd59-3921-4644-b899-481b464c0da2",
+                "name": "DriveID",
+                "value": "={{ $json.value[0].parentReference.driveId }}",
+                "type": "string"
               }
             ]
           },
@@ -636,7 +672,7 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          2576,
+          2784,
           -240
         ],
         "id": "11f1deca-02fa-45d1-9c06-01a826706415",
@@ -649,7 +685,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          4528,
+          4736,
           -240
         ],
         "id": "7cbfcb3c-2181-4df1-96be-032e0770b07a",
@@ -665,7 +701,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          3648,
+          3856,
           -240
         ],
         "id": "83118901-e5f5-475f-b418-30b2e744e9b8",
@@ -687,7 +723,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          4304,
+          4512,
           -240
         ],
         "id": "ebd6a89b-7547-4c4c-b12b-1545985acfec",
@@ -713,7 +749,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          4752,
+          4960,
           -240
         ],
         "id": "3a290bf0-603c-44f2-8d10-9bc3f6732f6e",
@@ -749,7 +785,7 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
-          3168,
+          3376,
           -240
         ],
         "id": "0025650b-5d62-4510-b7b1-a8816d1b2bb8",
@@ -762,7 +798,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          3376,
+          3584,
           -240
         ],
         "id": "df173d65-b7a0-46b4-ad05-0ecf4fa774e4",
@@ -775,7 +811,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          3840,
+          4048,
           -240
         ],
         "id": "5d95de1d-e538-45fa-80ff-f4511554b231",
@@ -788,7 +824,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          4992,
+          5200,
           -240
         ],
         "id": "29499f04-5c8d-491d-8dd3-5bd007c898b8",
@@ -829,7 +865,7 @@
         "parameters": {
           "content": "## Find Excel File and Sets the Variable",
           "height": 192,
-          "width": 1456
+          "width": 1604
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
@@ -847,7 +883,25 @@
               {
                 "id": "9021e372-3edf-4f13-97dc-1ef601fcbfdf",
                 "name": "CurrentExcelDriveID",
-                "value": "={{ $json.value[0].id }}",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              },
+              {
+                "id": "8ceadbaa-a2dd-4f5e-92ce-8b0e8a7891a9",
+                "name": "ClinicFolderName",
+                "value": "={{ $('When Executed by Another Workflow').item.json.TrueCLinicAbb }}",
+                "type": "string"
+              },
+              {
+                "id": "e31ec61f-7d6f-40db-8b1b-fdb28f41738c",
+                "name": "DateFolderID",
+                "value": "={{ $json.parentReference.id }}",
+                "type": "string"
+              },
+              {
+                "id": "109b3cb9-3e16-434c-a3c4-830aa7e51751",
+                "name": "DriveID",
+                "value": "={{ $json.parentReference.driveId }}",
                 "type": "string"
               }
             ]
@@ -857,7 +911,7 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          2576,
+          2784,
           -448
         ],
         "id": "1b9c069b-b1a4-4d9c-ac5d-735b03b59608",
@@ -872,7 +926,7 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          1296,
+          1504,
           -304
         ],
         "typeVersion": 1,
@@ -904,7 +958,7 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          2752,
+          2960,
           -496
         ],
         "typeVersion": 1,
@@ -919,7 +973,7 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          3056,
+          3264,
           -336
         ],
         "typeVersion": 1,
@@ -935,7 +989,7 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          3552,
+          3760,
           -336
         ],
         "typeVersion": 1,
@@ -950,7 +1004,7 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          4000,
+          4208,
           -336
         ],
         "typeVersion": 1,
@@ -966,7 +1020,7 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          4912,
+          5120,
           -336
         ],
         "typeVersion": 1,
@@ -1018,6 +1072,131 @@
         "typeVersion": 1,
         "id": "f8d265e1-f35d-4a1f-86b6-97704b235a5d",
         "name": "Sticky Note10"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "7wi1O22UOdi54X0c",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/7wi1O22UOdi54X0c",
+            "cachedResultName": "Zenoti - AddtoSpreadSheet - ClinicPDF Folder"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {
+            "waitForSubWorkflow": false
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.2,
+        "position": [
+          3360,
+          -512
+        ],
+        "name": "Call Zenoti - AddtoSpreadSheet - ClinicPDF Folder",
+        "id": "9784ed9e-c9eb-48bd-b0f3-a4febec38dfe"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1616,
+          -432
+        ],
+        "id": "8f91ca6e-aba3-42e9-b53c-f33ad7daaa9a",
+        "name": "Split Out1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "895a2ac7-db96-49f9-8c2e-794da4420003",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          1824,
+          -432
+        ],
+        "id": "6f9817bb-fe5a-468e-870b-9f040437d6e7",
+        "name": "Filter1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "895a2ac7-db96-49f9-8c2e-794da4420003",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          2288,
+          -224
+        ],
+        "id": "321014e4-88de-40ba-aa44-744082b632cb",
+        "name": "Filter2"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          2080,
+          -224
+        ],
+        "id": "bd378321-cc07-42b3-8e2c-51822c6d8c7a",
+        "name": "Split Out2"
       }
     ],
     "connections": {
@@ -1107,7 +1286,7 @@
         "main": [
           [
             {
-              "node": "If for File",
+              "node": "Split Out1",
               "type": "main",
               "index": 0
             }
@@ -1209,7 +1388,7 @@
         "main": [
           [
             {
-              "node": "If for File2",
+              "node": "Split Out2",
               "type": "main",
               "index": 0
             }
@@ -1250,6 +1429,11 @@
           [
             {
               "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Call Zenoti - AddtoSpreadSheet - ClinicPDF Folder",
               "type": "main",
               "index": 0
             }
@@ -1365,14 +1549,58 @@
             }
           ]
         ]
+      },
+      "Split Out1": {
+        "main": [
+          [
+            {
+              "node": "Filter1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter1": {
+        "main": [
+          [
+            {
+              "node": "If for File",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out2": {
+        "main": [
+          [
+            {
+              "node": "Filter2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter2": {
+        "main": [
+          [
+            {
+              "node": "If for File2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 542a3230",
+    "name": "Version f7e41cd8",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "542a3230-95ad-4705-be25-558c7e42b84b",
+  "activeVersionId": "f7e41cd8-00b7-43ac-b574-0031361b629b",
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -1460,7 +1688,7 @@
       "main": [
         [
           {
-            "node": "If for File",
+            "node": "Split Out1",
             "type": "main",
             "index": 0
           }
@@ -1562,7 +1790,7 @@
       "main": [
         [
           {
-            "node": "If for File2",
+            "node": "Split Out2",
             "type": "main",
             "index": 0
           }
@@ -1607,7 +1835,7 @@
             "index": 0
           },
           {
-            "node": "Code in JavaScript",
+            "node": "Call Zenoti - AddtoSpreadSheet - ClinicPDF Folder",
             "type": "main",
             "index": 0
           }
@@ -1724,11 +1952,44 @@
         ]
       ]
     },
-    "Code in JavaScript": {
+    "Split Out1": {
       "main": [
         [
           {
-            "node": "HTTP Request",
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "If for File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out2": {
+      "main": [
+        [
+          {
+            "node": "Filter2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter2": {
+      "main": [
+        [
+          {
+            "node": "If for File2",
             "type": "main",
             "index": 0
           }
@@ -2070,7 +2331,7 @@
       "type": "n8n-nodes-base.microsoftSharePoint",
       "typeVersion": 1,
       "position": [
-        1840,
+        1632,
         -224
       ],
       "id": "1518d5b7-596d-4ec0-876f-834835a8cddb",
@@ -2094,7 +2355,7 @@
           "conditions": [
             {
               "id": "6e1a84b7-6dfd-4ea5-b9e2-755eecf496e0",
-              "leftValue": "={{ $json.value[0].name }}",
+              "leftValue": "={{ $json.name }}",
               "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
               "operator": {
                 "type": "string",
@@ -2109,7 +2370,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1632,
+        2048,
         -432
       ],
       "id": "f6f6df5a-bdcf-4ab1-b802-b5f86f699670",
@@ -2134,7 +2395,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        4080,
+        4288,
         -240
       ],
       "id": "f2fcfd25-4a24-48e7-9140-e1c9c639230f",
@@ -2219,7 +2480,7 @@
     },
     {
       "parameters": {
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $json.id }}/children",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('SetDriveID').item.json.DriveID }}/items/{{ $('Filter1').item.json.id }}/children",
         "authentication": "genericCredentialType",
         "genericAuthType": "oAuth2Api",
         "options": {}
@@ -2227,7 +2488,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        2064,
+        1856,
         -224
       ],
       "id": "c27423b4-984a-4db2-8af7-b13a225acc51",
@@ -2281,7 +2542,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        2288,
+        2496,
         -224
       ],
       "id": "77f5593f-1cc2-46c2-912f-33511cc8440c",
@@ -2328,7 +2589,7 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        2848,
+        3056,
         -240
       ],
       "id": "092e96a6-610b-4c8d-8972-685525fb07b2",
@@ -2410,7 +2671,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2576,
+        2784,
         -240
       ],
       "id": "11f1deca-02fa-45d1-9c06-01a826706415",
@@ -2423,7 +2684,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4528,
+        4736,
         -240
       ],
       "id": "7cbfcb3c-2181-4df1-96be-032e0770b07a",
@@ -2439,7 +2700,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        3648,
+        3856,
         -240
       ],
       "id": "83118901-e5f5-475f-b418-30b2e744e9b8",
@@ -2461,7 +2722,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4304,
+        4512,
         -240
       ],
       "id": "ebd6a89b-7547-4c4c-b12b-1545985acfec",
@@ -2487,7 +2748,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        4752,
+        4960,
         -240
       ],
       "id": "3a290bf0-603c-44f2-8d10-9bc3f6732f6e",
@@ -2523,7 +2784,7 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        3168,
+        3376,
         -240
       ],
       "id": "0025650b-5d62-4510-b7b1-a8816d1b2bb8",
@@ -2536,7 +2797,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3376,
+        3584,
         -240
       ],
       "id": "df173d65-b7a0-46b4-ad05-0ecf4fa774e4",
@@ -2549,7 +2810,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3840,
+        4048,
         -240
       ],
       "id": "5d95de1d-e538-45fa-80ff-f4511554b231",
@@ -2562,7 +2823,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4992,
+        5200,
         -240
       ],
       "id": "29499f04-5c8d-491d-8dd3-5bd007c898b8",
@@ -2603,7 +2864,7 @@
       "parameters": {
         "content": "## Find Excel File and Sets the Variable",
         "height": 192,
-        "width": 1456
+        "width": 1604
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
@@ -2621,7 +2882,7 @@
             {
               "id": "9021e372-3edf-4f13-97dc-1ef601fcbfdf",
               "name": "CurrentExcelDriveID",
-              "value": "={{ $json.value[0].id }}",
+              "value": "={{ $json.id }}",
               "type": "string"
             },
             {
@@ -2633,13 +2894,13 @@
             {
               "id": "e31ec61f-7d6f-40db-8b1b-fdb28f41738c",
               "name": "DateFolderID",
-              "value": "={{ $json.value[0].parentReference.id }}",
+              "value": "={{ $json.parentReference.id }}",
               "type": "string"
             },
             {
               "id": "109b3cb9-3e16-434c-a3c4-830aa7e51751",
               "name": "DriveID",
-              "value": "={{ $json.value[0].parentReference.driveId }}",
+              "value": "={{ $json.parentReference.driveId }}",
               "type": "string"
             }
           ]
@@ -2649,7 +2910,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2576,
+        2784,
         -448
       ],
       "id": "1b9c069b-b1a4-4d9c-ac5d-735b03b59608",
@@ -2664,7 +2925,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1296,
+        1504,
         -304
       ],
       "typeVersion": 1,
@@ -2696,7 +2957,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        2752,
+        2960,
         -496
       ],
       "typeVersion": 1,
@@ -2711,7 +2972,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        3056,
+        3264,
         -336
       ],
       "typeVersion": 1,
@@ -2727,7 +2988,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        3552,
+        3760,
         -336
       ],
       "typeVersion": 1,
@@ -2742,7 +3003,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        4000,
+        4208,
         -336
       ],
       "typeVersion": 1,
@@ -2758,7 +3019,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        4912,
+        5120,
         -336
       ],
       "typeVersion": 1,
@@ -2813,51 +3074,128 @@
     },
     {
       "parameters": {
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.DateFolderID }}/children",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "oAuth2Api",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "$top",
-              "value": "200"
-            },
-            {
-              "name": "$select",
-              "value": "id,name,folder,parentReference"
-            }
-          ]
+        "workflowId": {
+          "__rl": true,
+          "value": "7wi1O22UOdi54X0c",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/7wi1O22UOdi54X0c",
+          "cachedResultName": "Zenoti - AddtoSpreadSheet - ClinicPDF Folder"
         },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.4,
-      "position": [
-        3456,
-        256
-      ],
-      "id": "4c11ec18-b765-4511-99ba-8d10dc9ef70c",
-      "name": "HTTP Request",
-      "credentials": {
-        "oAuth2Api": {
-          "id": "j30zGPdAyzTUMgGs",
-          "name": "MS graph"
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": false
         }
-      }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        3360,
+        -512
+      ],
+      "name": "Call Zenoti - AddtoSpreadSheet - ClinicPDF Folder",
+      "id": "9784ed9e-c9eb-48bd-b0f3-a4febec38dfe"
     },
     {
       "parameters": {
-        "jsCode": "const input = $input.first().json;\n\nconst row = input.data?.[0];\n\nif (!row) {\n  throw new Error('No data[0] found from Aggregate node');\n}\n\nreturn [\n  {\n    json: {\n      CurrentExcelDriveID: row.CurrentExcelDriveID,\n      ClinicFolderName: row.ClinicFolderName,\n      DateFolderID: row.DateFolderID,\n      DriveID: row.DriveID\n    }\n  }\n];"
+        "fieldToSplitOut": "value",
+        "options": {}
       },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
       "position": [
-        3232,
-        256
+        1616,
+        -432
       ],
-      "id": "b0159eb9-7b71-4e06-b7f2-9668b82bc7c4",
-      "name": "Code in JavaScript"
+      "id": "8f91ca6e-aba3-42e9-b53c-f33ad7daaa9a",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "895a2ac7-db96-49f9-8c2e-794da4420003",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1824,
+        -432
+      ],
+      "id": "6f9817bb-fe5a-468e-870b-9f040437d6e7",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "895a2ac7-db96-49f9-8c2e-794da4420003",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('When Executed by Another Workflow').item.json.StartDate }}.xlsx",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        2288,
+        -224
+      ],
+      "id": "321014e4-88de-40ba-aa44-744082b632cb",
+      "name": "Filter2"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2080,
+        -224
+      ],
+      "id": "bd378321-cc07-42b3-8e2c-51822c6d8c7a",
+      "name": "Split Out2"
     }
   ],
   "origin": "n8n",
@@ -2865,31 +3203,29 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "AppointmentID": "00cbc56f-ec18-40ae-8af4-1089d365817a",
-          "CustomerFirstName": "Manpreet",
-          "CustomerLastName": "Singh -",
-          "CustomerCode": "1083221-GAK",
-          "CustomerID": "f2749689-cb87-4880-8b3d-4a0016b35513",
-          "CustomerDOB": "28/07/1991",
-          "CustomerEmail": "manpreet.thiara7@gmail.com",
+          "AppointmentID": "2143c48d-017b-41d5-9b65-4ab4f3529ff3",
+          "CustomerFirstName": "Chris",
+          "CustomerLastName": "Speedy",
+          "CustomerCode": "1084867-GAK",
+          "CustomerID": "90b1697c-4a08-4279-bda1-6238a7fb3ff0",
+          "CustomerDOB": "22/09/1986",
+          "CustomerEmail": "cmspeedy@windowslive.com",
           "CustomerGender": "Male",
           "CustomerCenterID": "fb9c0794-12d3-4a8a-b989-5b72dc947163",
           "is_form_submitted": true,
-          "textField5": "Manpreet Singh -",
+          "textField5": "Chris Speedy",
           "select6": "no",
-          "textField2": "Dr Annemarie Hern 15150 ",
+          "textField2": "Dr Annemarie Hern 15150",
           "textField4": "L6/5 Short Street, Newmarket, Auckland 1010",
           "btnFormioSubmit": false,
           "ConsentFormFilled": true,
           "ConsentFormSubmitted": true,
-          "DeliveryLocation": "clinic",
+          "DeliveryLocation": "guest",
           "product": "7Minoxidil001RetinoicAcid025FinasterideLotion",
           "quantity": "2",
-          "DeliveryAddress1": "L6/5 Short Street, Newmarket, Auckland 1010",
-          "DeliverySuburb": "Newmarket",
-          "DeliveryCity": "Auckland",
-          "DeliveryPostcode": "1023",
-          "DeliveryAddressFull": "L6/5 Short Street, Newmarket, Auckland 1010, Newmarket, Auckland, 1023",
+          "DeliveryAddress1": "13 Kitchener Road, Waiuku 2123",
+          "DeliveryCity": "Goodyear autocare",
+          "DeliveryAddressFull": "13 Kitchener Road, Waiuku 2123, Goodyear autocare",
           "doctorsDirections": "ApplyToScalp",
           "addresscompared": true,
           "ProductNameCleaned": "7% Minoxidil 0.01% Retinoic Acid 0.25% Finasteride Lotion",
@@ -2897,15 +3233,15 @@
           "ZenotiProductNameShort": "Minox",
           "ZenotiProductNameEnd": "tion",
           "CanSubtract": true,
-          "RemainingBalance": 0,
+          "RemainingBalance": 5,
           "ProductID": "8e1f12d0-2f24-44ca-8cb3-c2411968a150",
           "packagesavailable": true,
           "perfectrun": true,
           "CLinicABB": "AUC",
-          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=20a6d45b-f358-4ad1-9e30-78db47fd5424&ServiceId=cf690070-2b50-484d-9ec9-67c786576eb6&Service=Doctor%20Scripts%208mth&GuestId=f2749689-cb87-4880-8b3d-4a0016b35513&AppointmentId=00cbc56f-ec18-40ae-8af4-1089d365817a",
-          "StartDate": "2026-06-09",
+          "scriptURL": "https://ashleymartinnz.zenoti.com/Appointment/appointmentcustomdatav2.aspx?AppGroupId=fcb4a36d-c7e5-4ae2-b6cc-ba67b4d6fb72&ServiceId=ea2fab22-be5f-4342-838d-1a4bcebe9618&Service=Telehealth%20Check-up&GuestId=90b1697c-4a08-4279-bda1-6238a7fb3ff0&AppointmentId=2143c48d-017b-41d5-9b65-4ab4f3529ff3",
+          "StartDate": "2026-06-18",
           "InvoiceNumber": true,
-          "Invoicedate": "2026-06-10",
+          "Invoicedate": "2026-06-19",
           "TrueCLinicAbb": "AUC"
         },
         "pairedItem": {
@@ -2957,6 +3293,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-06-17T05:59:02.676Z",
-  "versionId": "ac08caf6-e899-4f6e-a332-416d87f96713"
+  "updatedAt": "2026-06-18T23:22:14.991Z",
+  "versionId": "f7e41cd8-00b7-43ac-b574-0031361b629b"
 }
