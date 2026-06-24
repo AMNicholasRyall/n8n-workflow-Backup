@@ -1,53 +1,3009 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-06-15T06:25:53.000Z",
-    "createdAt": "2026-06-15T06:25:39.276Z",
-    "versionId": "850cfa78-05da-4b47-8306-00af3a5f96d3",
+    "updatedAt": "2026-06-22T07:29:49.000Z",
+    "createdAt": "2026-06-22T06:35:06.132Z",
+    "versionId": "ed3cb1a7-4586-48ae-8cf6-68f250fda88d",
     "workflowId": "zb6JAGyUF4QY1c2k",
     "nodes": [
       {
         "parameters": {
-          "inputSource": "jsonExample",
-          "jsonExample": "    {\n        \"clinic\": \"AUC\",\n        \"sheetName\": \"AUC\",\n        \"address\": \"AUC!A1:M21\",\n        \"endRow\": 21,\n        \"orderCount\": 20,\n        \"expectedRows\": 20,\n        \"hasOrders\": true,\n        \"readyForSubflow\": true,\n        \"driveId\": \"b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU\",\n        \"currentExcelDriveId\": \"01Y4DA4OILQMKWMUR65FH3FBVD4WWORW6C\",\n        \"startDate\": \"2026-06-13\",\n        \"sourceStatus\": \"ReadyForClinicSubflow\"\n    }"
+          "inputSource": "passthrough"
         },
         "type": "n8n-nodes-base.executeWorkflowTrigger",
         "typeVersion": 1.1,
         "position": [
-          0,
-          0
+          -1008,
+          -416
         ],
         "id": "1651d55a-44b7-45ef-8f86-85f3c1831acb",
         "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "4d6fe674-56a2-425a-a968-44d4adb9c216",
+                "leftValue": "={{ $json.pdfStatus }}",
+                "rightValue": "PdfCountMatched",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -112,
+          -320
+        ],
+        "id": "2f7dfadc-058c-49ea-85fc-7aa799e3d504",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "pVbLONb8Gh393bg0",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinicsNZ",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/pVbLONb8Gh393bg0"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Abb",
+                "keyValue": "={{ $('When Executed by Another Workflow').item.json.clinic }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          112,
+          -256
+        ],
+        "id": "2d5ffced-13c6-47fd-9a0e-df9773d0c855",
+        "name": "Get row(s)"
+      },
+      {
+        "parameters": {
+          "operation": "sendAndWait",
+          "toRecipients": "={{ $('Get row(s)').item.json.email }}",
+          "subject": "=Automation - Med Order - Miss matched Script",
+          "message": "=Hi Team,\n\nAutomation has identified a mismatch between Med Orders and the scripts uploaded for orders generated on {{ $('Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder').item.json.dateFolderName }}.\n\nAt this stage, I can see {{ $('Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder').item.json.orderCount }} orders and {{ $('Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder').item.json.fileCount }} scripts.\n\nPlease review the folder and upload the missing scripts so the number of scripts matches the number of orders.\n\nRegards,\nAutomation\n",
+          "approvalOptions": {
+            "values": {
+              "approveLabel": "Continue"
+            }
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          336,
+          -256
+        ],
+        "id": "9c7e6740-f28b-4cc3-bad0-9595588bf712",
+        "name": "Send message and wait for response",
+        "webhookId": "7f0de5bb-4566-4fa0-9698-1d8e350c4d53",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "cf5ed641-1e44-493e-9d4a-5a5b3b5de5a2",
+                "leftValue": "={{ $json.data.approved }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          560,
+          -320
+        ],
+        "id": "d1ce0f2a-dcba-49cf-9333-80050bbef282",
+        "name": "If1"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "VkMFSeAr4ErzOkYM",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/VkMFSeAr4ErzOkYM",
+            "cachedResultName": "ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "driveId": "={{ $('When Executed by Another Workflow').item.json.driveId }}",
+              "itemsId": "={{ $('When Executed by Another Workflow').item.json.itemsId }}",
+              "startDate": "={{ $('When Executed by Another Workflow').item.json.startDate }}",
+              "clinic": "={{ $('When Executed by Another Workflow').item.json.clinic }}",
+              "_firstItem": "={{ $('When Executed by Another Workflow').first().json }}"
+            },
+            "matchingColumns": [
+              "driveId",
+              "itemsId",
+              "startDate",
+              "clinic",
+              "_firstItem"
+            ],
+            "schema": [
+              {
+                "id": "driveId",
+                "displayName": "driveId",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "itemsId",
+                "displayName": "itemsId",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "startDate",
+                "displayName": "startDate",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "clinic",
+                "displayName": "clinic",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "_firstItem",
+                "displayName": "_firstItem",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.2,
+        "position": [
+          -336,
+          -320
+        ],
+        "name": "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder",
+        "id": "4352648c-20e3-4cee-a910-d5c11077aba8"
+      },
+      {
+        "parameters": {
+          "jsCode": "const original = $('When Executed by Another Workflow').first().json;\n\n// Current item should be the result coming out of the approval IF path.\n// Usually this contains something like:\n// {\n//   data: {\n//     approved: true,\n//     ...\n//   }\n// }\nconst approvalResult = $json ?? {};\n\nconst approvalData = approvalResult.data ?? {};\nconst approvalApproved = approvalData.approved ?? null;\n\nreturn [\n  {\n    json: {\n      // Bring forward the original payload from the parent flow\n      clinic: original.clinic,\n      sheetName: original.sheetName,\n      address: original.address,\n      endRow: original.endRow,\n\n      orderCount: original.orderCount,\n      expectedRows: original.expectedRows,\n\n      hasOrders: original.hasOrders,\n      readyForSubflow: original.readyForSubflow,\n\n      driveId: original.driveId,\n      itemsId: original.itemsId,\n      currentExcelDriveId: original.currentExcelDriveId,\n      startDate: original.startDate,\n\n      checkedRows: original.checkedRows,\n      actualOrderRows: original.actualOrderRows,\n\n      // Approval details from the mismatch approval email\n      mismatchApprovalApproved: approvalApproved,\n      mismatchApprovalResponse: approvalData,\n\n      // Status for the next re-check\n      sourceStatus: approvalApproved === true\n        ? 'RecheckAfterMismatchApproval'\n        : 'MismatchApprovalNotApproved',\n\n      // Handy message for debugging\n      message: approvalApproved === true\n        ? `${original.clinic}: mismatch approval received. Rechecking folder.`\n        : `${original.clinic}: mismatch approval was not approved.`,\n    },\n  },\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          784,
+          -320
+        ],
+        "id": "6b73e3e7-a6f1-426f-bd80-aad7d09bbafb",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "VkMFSeAr4ErzOkYM",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/VkMFSeAr4ErzOkYM",
+            "cachedResultName": "ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "driveId": "={{ $json.driveId }}",
+              "itemsId": "={{ $json.itemsId }}",
+              "startDate": "={{ $('When Executed by Another Workflow').item.json.startDate }}",
+              "clinic": "={{ $('When Executed by Another Workflow').item.json.clinic }}",
+              "_firstItem": "={{ $('When Executed by Another Workflow').first().json }}"
+            },
+            "matchingColumns": [
+              "driveId",
+              "itemsId",
+              "startDate",
+              "clinic",
+              "_firstItem"
+            ],
+            "schema": [
+              {
+                "id": "driveId",
+                "displayName": "driveId",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "itemsId",
+                "displayName": "itemsId",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "startDate",
+                "displayName": "startDate",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "clinic",
+                "displayName": "clinic",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "_firstItem",
+                "displayName": "_firstItem",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.2,
+        "position": [
+          1008,
+          -320
+        ],
+        "name": "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder1",
+        "id": "0062d52a-4a35-4345-8d26-dc4be7fa8629"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "4d6fe674-56a2-425a-a968-44d4adb9c216",
+                "leftValue": "={{ $json.pdfStatus }}",
+                "rightValue": "PdfCountMatched",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1232,
+          -248
+        ],
+        "id": "3832401e-e231-47a8-8b32-3a7cf91bc502",
+        "name": "FolderExcelComparison"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          1232,
+          -464
+        ],
+        "id": "75f4d88c-8753-423a-9018-99717aa2cc69",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "operation": "sendAndWait",
+          "toRecipients": "={{ $json.email }}",
+          "subject": "=Automation - Med Order - {{ $json.name }}",
+          "message": "=Hi Team,\n\nAutomation is ready to sends meds for {{ $json.name }} to Compound Lab.\n\nPlease go over Med Order and click Continue when ready!\n\nRegards,\nAutomation\n",
+          "approvalOptions": {
+            "values": {
+              "approveLabel": "Continue"
+            }
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          1904,
+          -320
+        ],
+        "id": "ca301fe3-894f-4128-b822-17461a65c342",
+        "name": "Send message and wait for response1",
+        "webhookId": "7f0de5bb-4566-4fa0-9698-1d8e350c4d53",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "pVbLONb8Gh393bg0",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinicsNZ",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/pVbLONb8Gh393bg0"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Abb",
+                "keyValue": "={{ $('When Executed by Another Workflow').item.json.clinic }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          1680,
+          -320
+        ],
+        "id": "faffdf0a-8750-46fd-b0e8-060e2c2595ac",
+        "name": "Get Clinic"
+      },
+      {
+        "parameters": {
+          "jsCode": "const original = $('When Executed by Another Workflow').first().json;\nconst approval = $json.data ?? {};\n\nreturn [\n  {\n    json: {\n      ...original,\n      clinicApprovalApproved: approval.approved === true,\n      clinicApprovalResponse: approval,\n      sourceStatus: 'ClinicApprovedForCsvExport'\n    }\n  }\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2128,
+          -320
+        ],
+        "id": "1448dd01-d2e5-4e80-b734-fb96c91ed808",
+        "name": "Bring Forward Clinic Payload"
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{$json.driveId}}/items/{{$json.currentExcelDriveId}}/workbook/worksheets('{{$json.sheetName}}')/range(address='{{$json.address}}')",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          2352,
+          -320
+        ],
+        "id": "c12a010a-e37b-4b2a-961c-23839248f798",
+        "name": "HTTP Request",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const original = $('Bring Forward Clinic Payload').first().json;\n\n// Prefer displayed Excel text, fallback to raw values\nconst values = Array.isArray($json.text) ? $json.text : $json.values;\n\nif (!Array.isArray(values)) {\n  throw new Error('Graph response does not contain text or values array');\n}\n\nif (values.length < 2) {\n  throw new Error('Excel range does not contain header row and data rows');\n}\n\nconst headers = values[0];\nconst dataRows = values.slice(1);\n\n// Remove fully blank rows\nconst nonBlankRows = dataRows.filter(row =>\n  row.some(cell => cell !== null && cell !== undefined && String(cell).trim() !== '')\n);\n\nif (nonBlankRows.length !== original.orderCount) {\n  throw new Error(\n    `CSV row count mismatch for ${original.clinic}. Expected ${original.orderCount}, got ${nonBlankRows.length}`\n  );\n}\n\nfunction escapeCsv(value) {\n  if (value === null || value === undefined) return '';\n\n  const stringValue = String(value);\n\n  if (\n    stringValue.includes(',') ||\n    stringValue.includes('\"') ||\n    stringValue.includes('\\n') ||\n    stringValue.includes('\\r')\n  ) {\n    return `\"${stringValue.replace(/\"/g, '\"\"')}\"`;\n  }\n\n  return stringValue;\n}\n\nconst csv = [\n  headers.map(escapeCsv).join(','),\n  ...nonBlankRows.map(row =>\n    headers.map((_, index) => escapeCsv(row[index])).join(',')\n  )\n].join('\\r\\n');\n\nconst clinic = original.clinic;\nconst startDate = original.startDate;\nconst fileName = `${clinic}_MedOrders_${startDate}.csv`;\n\nreturn [\n  {\n    json: {\n      ...original,\n      csvFileName: fileName,\n      csvRowCount: nonBlankRows.length,\n      csvHeaderCount: headers.length,\n      csvSourceUsed: Array.isArray($json.text) ? 'text' : 'values',\n      sourceStatus: 'CsvCreated'\n    },\n    binary: {\n      data: {\n        data: Buffer.from(csv, 'utf8').toString('base64'),\n        mimeType: 'text/csv',\n        fileName\n      }\n    }\n  }\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2576,
+          -320
+        ],
+        "id": "3a3ad6a7-3db2-4415-a51b-dcf8228f65af",
+        "name": "ExceltoCSV"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          3024,
+          -320
+        ],
+        "id": "7d629486-cacb-4105-855d-ea75485a6cea",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "59fae2c7-cfb1-4acb-b1d5-50e57510b51c",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('Bring Forward Clinic Payload').item.json.startDate }}",
+                "operator": {
+                  "type": "dateTime",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          3248,
+          -320
+        ],
+        "id": "1247fba5-84df-433a-962e-b37a88152e45",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          3696,
+          -320
+        ],
+        "id": "76f4b120-4190-4695-8d50-a7e49ce5a50e",
+        "name": "Split Out1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "6b2c1999-1659-4b71-8b06-237c11cd2d19",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('Bring Forward Clinic Payload').item.json.clinic }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          3920,
+          -320
+        ],
+        "id": "14b47c5c-5427-42fa-b11e-692b27a642f7",
+        "name": "Filter1"
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.parentReference.driveId }}/items/{{$json.id}}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder,file,parentReference"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          3472,
+          -320
+        ],
+        "id": "a6fe4d30-47da-4e43-8f4b-248db1bb17f7",
+        "name": "Get Clinic Folder",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.parentReference.driveId }}/items/{{$json.id}}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder,file,parentReference"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          4144,
+          -320
+        ],
+        "id": "2e69123a-4ca6-4b22-8190-2bd162c12b43",
+        "name": "Get PDF's",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          4368,
+          -320
+        ],
+        "id": "5365372c-12a1-49ef-9d68-8b74b9cc3076",
+        "name": "Split Out2"
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.driveId }}/items/{{ $json.itemsId }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          2800,
+          -320
+        ],
+        "id": "9e6fc49b-65c3-46ef-a309-5af2fcf624c8",
+        "name": "Find Date Folder",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.parentReference.driveId }}/items/{{ $json.id }}/content",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          4592,
+          -320
+        ],
+        "id": "31c9e078-4289-4783-b4f0-2ce5505bf939",
+        "name": "Download PDF's",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all();\n\nif (!items.length) {\n  throw new Error('No PDF files found to combine');\n}\n\nconst first = items[0];\n\nconst output = {\n  json: {\n    ...first.json,\n    pdfCountForZip: items.length,\n    zipFileName: `${first.json.clinic}_Scripts_${first.json.startDate}.zip`,\n    sourceStatus: 'PdfFilesCombinedForZip'\n  },\n  binary: {}\n};\n\nitems.forEach((item, index) => {\n  if (!item.binary?.data) {\n    throw new Error(`Missing binary data on PDF item ${index + 1}`);\n  }\n\n  const binaryKey = `PDF_${index + 1}`;\n\n  output.binary[binaryKey] = {\n    ...item.binary.data,\n    fileName: item.binary.data.fileName || item.json.pdfFileName || `script_${index + 1}.pdf`,\n    mimeType: item.binary.data.mimeType || 'application/pdf'\n  };\n});\n\n// This gives the Compression node a dynamic list of fields to zip\noutput.json.binaryFieldsToZip = Object.keys(output.binary).join(',');\n\nreturn [output];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          4816,
+          -320
+        ],
+        "id": "1138b573-ef62-45ad-a4f0-c7e6ee15b64f",
+        "name": "Combine PDFs Into One Item"
+      },
+      {
+        "parameters": {
+          "operation": "compress",
+          "binaryPropertyName": "={{ $json.binaryFieldsToZip }}",
+          "fileName": "={{ $('Bring Forward Clinic Payload').item.json.startDate }}.zip"
+        },
+        "type": "n8n-nodes-base.compression",
+        "typeVersion": 1.1,
+        "position": [
+          5040,
+          -320
+        ],
+        "id": "9b232023-1ae5-4990-944f-05075c9caa88",
+        "name": "Compression"
+      },
+      {
+        "parameters": {
+          "jsCode": "const csvItem = $('ExceltoCSV').first();\nconst zipItem = $input.first();\n\nif (!csvItem.binary?.data) {\n  throw new Error('CSV binary not found from ExceltoCSV');\n}\n\nconst zipBinaryKeys = Object.keys(zipItem.binary ?? {});\n\nif (!zipBinaryKeys.length) {\n  throw new Error('ZIP binary not found from Compression');\n}\n\nconst zipKey = zipBinaryKeys[0];\nconst zipBinary = zipItem.binary[zipKey];\n\nreturn [\n  {\n    json: {\n      ...csvItem.json,\n      ...zipItem.json,\n\n      attachmentCount: 2,\n      csvAttachmentName: csvItem.binary.data.fileName || csvItem.json.csvFileName,\n      scriptsAttachmentName: zipBinary.fileName || zipItem.json.zipFileName,\n\n      sourceStatus: 'ReadyToEmailCompoundLab'\n    },\n    binary: {\n      med_orders_csv: {\n        ...csvItem.binary.data,\n        fileName: csvItem.binary.data.fileName || csvItem.json.csvFileName || 'MedOrders.csv',\n        mimeType: csvItem.binary.data.mimeType || 'text/csv'\n      },\n\n      scripts_zip: {\n        ...zipBinary,\n        fileName: zipBinary.fileName || zipItem.json.zipFileName || `${csvItem.json.clinic}_Scripts_${csvItem.json.startDate}.zip`,\n        mimeType: zipBinary.mimeType || 'application/zip'\n      }\n    }\n  }\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          5264,
+          -320
+        ],
+        "id": "19d7c9be-d391-47c9-b3d2-c750d22158da",
+        "name": "Prepare Email Attachments"
+      },
+      {
+        "parameters": {
+          "toRecipients": "nicholas.ryall@ashleyandmartin.com.au",
+          "subject": "=AM NZ - Automate Med Order - {{ $json.startDate }}",
+          "bodyContent": "=Hi Team,\n\nPlease see attached files to order for the clinic {{ $('Get Clinic').item.json.name }} for date {{ $('Bring Forward Clinic Payload').item.json.startDate }}. Any issues please contact {{ $('Get Clinic').item.json.email }}.\n\nRegards,\nAutomation",
+          "additionalFields": {
+            "attachments": {
+              "attachments": [
+                {
+                  "binaryPropertyName": "med_orders_csv"
+                },
+                {
+                  "binaryPropertyName": "scripts_zip"
+                }
+              ]
+            }
+          }
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          5488,
+          -320
+        ],
+        "id": "3e839e56-c4a9-49f3-8a48-aa0451cec9db",
+        "name": "Send a message",
+        "webhookId": "db0bd1c7-5a4f-4c8b-aefc-68fb0d262ab6",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "d29ea38e-3bbe-485e-af04-4a0ff969a973",
+                "leftValue": "={{ $json.success }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          5712,
+          -320
+        ],
+        "id": "21ea8a91-6001-45d9-b978-08aaa56bea1e",
+        "name": "If2"
+      },
+      {
+        "parameters": {
+          "method": "PUT",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Filter1').item.json.parentReference.driveId }}/items/{{ $('Filter1').item.json.id }}:/{{ $('Bring Forward Clinic Payload').item.json.clinic }}:/content",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendBody": true,
+          "contentType": "raw",
+          "rawContentType": "=text/plain",
+          "body": "=Clinic: {{ $('Bring Forward Clinic Payload').item.json.clinic }}Date: {{ $('Bring Forward Clinic Payload').item.json.startDate }}Status: Email sent to Compound LabSentAt: {{ $now }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          5936,
+          -320
+        ],
+        "id": "c89ef5cc-cd39-45ae-b36f-0000600e2ca8",
+        "name": "Write Complete FIle",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "62EtafKD9fXs8RJy",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/62EtafKD9fXs8RJy",
+            "cachedResultName": "ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "driveId": "={{ $json.driveId }}",
+              "itemsId": "={{ $json.itemsId }}",
+              "startDate": "={{ $('When Executed by Another Workflow').item.json.startDate }}",
+              "clinic": "={{ $('When Executed by Another Workflow').item.json.clinic }}"
+            },
+            "matchingColumns": [
+              "driveId",
+              "itemsId",
+              "startDate",
+              "clinic"
+            ],
+            "schema": [
+              {
+                "id": "driveId",
+                "displayName": "driveId",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "itemsId",
+                "displayName": "itemsId",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "startDate",
+                "displayName": "startDate",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "clinic",
+                "displayName": "clinic",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.2,
+        "position": [
+          -784,
+          -416
+        ],
+        "name": "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock",
+        "id": "9bea540c-74e3-4fe0-a326-28b926df0f7c"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "b8bad714-85f4-49a6-a71b-57d4002b2373",
+                "leftValue": "={{ $json.data[0].CompletedLockFile }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -560,
+          -416
+        ],
+        "id": "4bf3bd28-6aed-4c1b-809d-37474b61477c",
+        "name": "If3"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          -336,
+          -512
+        ],
+        "id": "582574b5-99db-49cb-a7e0-cc6cb71aa8c7",
+        "name": "No Operation, do nothing1"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "62EtafKD9fXs8RJy",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/62EtafKD9fXs8RJy",
+            "cachedResultName": "ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "driveId": "={{ $('When Executed by Another Workflow').item.json.driveId }}",
+              "itemsId": "={{ $('When Executed by Another Workflow').item.json.itemsId }}",
+              "startDate": "={{ $('When Executed by Another Workflow').item.json.startDate }}",
+              "clinic": "={{ $('When Executed by Another Workflow').item.json.clinic }}"
+            },
+            "matchingColumns": [
+              "driveId",
+              "itemsId",
+              "startDate",
+              "clinic"
+            ],
+            "schema": [
+              {
+                "id": "driveId",
+                "displayName": "driveId",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "itemsId",
+                "displayName": "itemsId",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "startDate",
+                "displayName": "startDate",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "clinic",
+                "displayName": "clinic",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.2,
+        "position": [
+          6160,
+          -320
+        ],
+        "name": "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock1",
+        "id": "069ffc5f-23e0-4ff4-a663-8599fbba473f"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "b8bad714-85f4-49a6-a71b-57d4002b2373",
+                "leftValue": "={{ $json.data[0].CompletedLockFile }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          6384,
+          -320
+        ],
+        "id": "780c472c-a6e3-4d9d-8ebc-a57a4800ff9b",
+        "name": "If4"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          6608,
+          -416
+        ],
+        "id": "edacdefb-8c8f-4f76-b5c9-917f935ef639",
+        "name": "No Operation, do nothing2"
+      },
+      {
+        "parameters": {
+          "toRecipients": "monitoring@ashleyandmartin.com.au",
+          "subject": "=AM NZ - Automate Med Order - {{ $('When Executed by Another Workflow').item.json.startDate }} {{ $('When Executed by Another Workflow').item.json.clinic }}",
+          "bodyContent": "=Hey Monitoring,\n\n{{ $('When Executed by Another Workflow').item.json.clinic }} Med ordering has process but didnt create its completed lock file.\n\n{{ $execution }}\n{{ $workflow.name }}\n{{ $execution.resumeUrl }}\n\nRegards,\nAutomation",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          6608,
+          -224
+        ],
+        "id": "487b0b50-d3cf-450b-a83e-78a35dee9339",
+        "name": "Send a message1",
+        "webhookId": "db0bd1c7-5a4f-4c8b-aefc-68fb0d262ab6",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
       }
     ],
-    "connections": {},
+    "connections": {
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "Send message and wait for response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send message and wait for response": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder1": {
+        "main": [
+          [
+            {
+              "node": "FolderExcelComparison",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "FolderExcelComparison": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "No Operation, do nothing": {
+        "main": [
+          [
+            {
+              "node": "Get Clinic",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Clinic": {
+        "main": [
+          [
+            {
+              "node": "Send message and wait for response1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send message and wait for response1": {
+        "main": [
+          [
+            {
+              "node": "Bring Forward Clinic Payload",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Bring Forward Clinic Payload": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "ExceltoCSV",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "ExceltoCSV": {
+        "main": [
+          [
+            {
+              "node": "Find Date Folder",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "Get Clinic Folder",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out1": {
+        "main": [
+          [
+            {
+              "node": "Filter1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter1": {
+        "main": [
+          [
+            {
+              "node": "Get PDF's",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Clinic Folder": {
+        "main": [
+          [
+            {
+              "node": "Split Out1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get PDF's": {
+        "main": [
+          [
+            {
+              "node": "Split Out2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Find Date Folder": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out2": {
+        "main": [
+          [
+            {
+              "node": "Download PDF's",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Download PDF's": {
+        "main": [
+          [
+            {
+              "node": "Combine PDFs Into One Item",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Combine PDFs Into One Item": {
+        "main": [
+          [
+            {
+              "node": "Compression",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Compression": {
+        "main": [
+          [
+            {
+              "node": "Prepare Email Attachments",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Prepare Email Attachments": {
+        "main": [
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send a message": {
+        "main": [
+          [
+            {
+              "node": "If2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If2": {
+        "main": [
+          [
+            {
+              "node": "Write Complete FIle",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Write Complete FIle": {
+        "main": [
+          [
+            {
+              "node": "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock": {
+        "main": [
+          [
+            {
+              "node": "If3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If3": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock1": {
+        "main": [
+          [
+            {
+              "node": "If4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If4": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing2",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Send a message1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
     "authors": "Nicholas Ryall",
-    "name": "Version 850cfa78",
+    "name": "Version ed3cb1a7",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "850cfa78-05da-4b47-8306-00af3a5f96d3",
-  "connections": {},
+  "activeVersionId": "ed3cb1a7-4586-48ae-8cf6-68f250fda88d",
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder1": {
+      "main": [
+        [
+          {
+            "node": "FolderExcelComparison",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FolderExcelComparison": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        [
+          {
+            "node": "Get Clinic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Clinic": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response1": {
+      "main": [
+        [
+          {
+            "node": "Bring Forward Clinic Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bring Forward Clinic Payload": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "ExceltoCSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ExceltoCSV": {
+      "main": [
+        [
+          {
+            "node": "Find Date Folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Get Clinic Folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Get PDF's",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Clinic Folder": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get PDF's": {
+      "main": [
+        [
+          {
+            "node": "Split Out2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Date Folder": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out2": {
+      "main": [
+        [
+          {
+            "node": "Download PDF's",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download PDF's": {
+      "main": [
+        [
+          {
+            "node": "Combine PDFs Into One Item",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine PDFs Into One Item": {
+      "main": [
+        [
+          {
+            "node": "Compression",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compression": {
+      "main": [
+        [
+          {
+            "node": "Prepare Email Attachments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Email Attachments": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Write Complete FIle",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Complete FIle": {
+      "main": [
+        [
+          {
+            "node": "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock1": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
   "createdAt": "2026-06-15T06:22:54.539Z",
   "id": "zb6JAGyUF4QY1c2k",
   "isArchived": false,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "name": "ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder",
   "nodes": [
     {
       "parameters": {
-        "inputSource": "jsonExample",
-        "jsonExample": "    {\n        \"clinic\": \"AUC\",\n        \"sheetName\": \"AUC\",\n        \"address\": \"AUC!A1:M21\",\n        \"endRow\": 21,\n        \"orderCount\": 20,\n        \"expectedRows\": 20,\n        \"hasOrders\": true,\n        \"readyForSubflow\": true,\n        \"driveId\": \"b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU\",\n        \"currentExcelDriveId\": \"01Y4DA4OILQMKWMUR65FH3FBVD4WWORW6C\",\n        \"startDate\": \"2026-06-13\",\n        \"sourceStatus\": \"ReadyForClinicSubflow\"\n    }"
+        "inputSource": "passthrough"
       },
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        0,
-        0
+        -1008,
+        -416
       ],
       "id": "1651d55a-44b7-45ef-8f86-85f3c1831acb",
       "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4d6fe674-56a2-425a-a968-44d4adb9c216",
+              "leftValue": "={{ $json.pdfStatus }}",
+              "rightValue": "PdfCountMatched",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -112,
+        -320
+      ],
+      "id": "2f7dfadc-058c-49ea-85fc-7aa799e3d504",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pVbLONb8Gh393bg0",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinicsNZ",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/pVbLONb8Gh393bg0"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Abb",
+              "keyValue": "={{ $('When Executed by Another Workflow').item.json.clinic }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        112,
+        -256
+      ],
+      "id": "2d5ffced-13c6-47fd-9a0e-df9773d0c855",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "toRecipients": "={{ $('Get row(s)').item.json.email }}",
+        "subject": "=Automation - Med Order - Miss matched Script",
+        "message": "=Hi Team,\n\nAutomation has identified a mismatch between Med Orders and the scripts uploaded for orders generated on {{ $('Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder').item.json.dateFolderName }}.\n\nAt this stage, I can see {{ $('Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder').item.json.orderCount }} orders and {{ $('Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder').item.json.fileCount }} scripts.\n\nPlease review the folder and upload the missing scripts so the number of scripts matches the number of orders.\n\nRegards,\nAutomation\n",
+        "approvalOptions": {
+          "values": {
+            "approveLabel": "Continue"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        336,
+        -256
+      ],
+      "id": "9c7e6740-f28b-4cc3-bad0-9595588bf712",
+      "name": "Send message and wait for response",
+      "webhookId": "7f0de5bb-4566-4fa0-9698-1d8e350c4d53",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "cf5ed641-1e44-493e-9d4a-5a5b3b5de5a2",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        560,
+        -320
+      ],
+      "id": "d1ce0f2a-dcba-49cf-9333-80050bbef282",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "VkMFSeAr4ErzOkYM",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/VkMFSeAr4ErzOkYM",
+          "cachedResultName": "ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "driveId": "={{ $('When Executed by Another Workflow').item.json.driveId }}",
+            "itemsId": "={{ $('When Executed by Another Workflow').item.json.itemsId }}",
+            "startDate": "={{ $('When Executed by Another Workflow').item.json.startDate }}",
+            "clinic": "={{ $('When Executed by Another Workflow').item.json.clinic }}",
+            "_firstItem": "={{ $('When Executed by Another Workflow').first().json }}"
+          },
+          "matchingColumns": [
+            "driveId",
+            "itemsId",
+            "startDate",
+            "clinic",
+            "_firstItem"
+          ],
+          "schema": [
+            {
+              "id": "driveId",
+              "displayName": "driveId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "itemsId",
+              "displayName": "itemsId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "startDate",
+              "displayName": "startDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "clinic",
+              "displayName": "clinic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "_firstItem",
+              "displayName": "_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -336,
+        -320
+      ],
+      "name": "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder",
+      "id": "4352648c-20e3-4cee-a910-d5c11077aba8"
+    },
+    {
+      "parameters": {
+        "jsCode": "const original = $('When Executed by Another Workflow').first().json;\n\n// Current item should be the result coming out of the approval IF path.\n// Usually this contains something like:\n// {\n//   data: {\n//     approved: true,\n//     ...\n//   }\n// }\nconst approvalResult = $json ?? {};\n\nconst approvalData = approvalResult.data ?? {};\nconst approvalApproved = approvalData.approved ?? null;\n\nreturn [\n  {\n    json: {\n      // Bring forward the original payload from the parent flow\n      clinic: original.clinic,\n      sheetName: original.sheetName,\n      address: original.address,\n      endRow: original.endRow,\n\n      orderCount: original.orderCount,\n      expectedRows: original.expectedRows,\n\n      hasOrders: original.hasOrders,\n      readyForSubflow: original.readyForSubflow,\n\n      driveId: original.driveId,\n      itemsId: original.itemsId,\n      currentExcelDriveId: original.currentExcelDriveId,\n      startDate: original.startDate,\n\n      checkedRows: original.checkedRows,\n      actualOrderRows: original.actualOrderRows,\n\n      // Approval details from the mismatch approval email\n      mismatchApprovalApproved: approvalApproved,\n      mismatchApprovalResponse: approvalData,\n\n      // Status for the next re-check\n      sourceStatus: approvalApproved === true\n        ? 'RecheckAfterMismatchApproval'\n        : 'MismatchApprovalNotApproved',\n\n      // Handy message for debugging\n      message: approvalApproved === true\n        ? `${original.clinic}: mismatch approval received. Rechecking folder.`\n        : `${original.clinic}: mismatch approval was not approved.`,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        784,
+        -320
+      ],
+      "id": "6b73e3e7-a6f1-426f-bd80-aad7d09bbafb",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "VkMFSeAr4ErzOkYM",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/VkMFSeAr4ErzOkYM",
+          "cachedResultName": "ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "driveId": "={{ $json.driveId }}",
+            "itemsId": "={{ $json.itemsId }}",
+            "startDate": "={{ $('When Executed by Another Workflow').item.json.startDate }}",
+            "clinic": "={{ $('When Executed by Another Workflow').item.json.clinic }}",
+            "_firstItem": "={{ $('When Executed by Another Workflow').first().json }}"
+          },
+          "matchingColumns": [
+            "driveId",
+            "itemsId",
+            "startDate",
+            "clinic",
+            "_firstItem"
+          ],
+          "schema": [
+            {
+              "id": "driveId",
+              "displayName": "driveId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "itemsId",
+              "displayName": "itemsId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "startDate",
+              "displayName": "startDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "clinic",
+              "displayName": "clinic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "_firstItem",
+              "displayName": "_firstItem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1008,
+        -320
+      ],
+      "name": "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CheckFolder1",
+      "id": "0062d52a-4a35-4345-8d26-dc4be7fa8629"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4d6fe674-56a2-425a-a968-44d4adb9c216",
+              "leftValue": "={{ $json.pdfStatus }}",
+              "rightValue": "PdfCountMatched",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1232,
+        -248
+      ],
+      "id": "3832401e-e231-47a8-8b32-3a7cf91bc502",
+      "name": "FolderExcelComparison"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        -464
+      ],
+      "id": "75f4d88c-8753-423a-9018-99717aa2cc69",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "toRecipients": "={{ $json.email }}",
+        "subject": "=Automation - Med Order - {{ $json.name }}",
+        "message": "=Hi Team,\n\nAutomation is ready to sends meds for {{ $json.name }} to Compound Lab.\n\nPlease go over Med Order and click Continue when ready!\n\nRegards,\nAutomation\n",
+        "approvalOptions": {
+          "values": {
+            "approveLabel": "Continue"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1904,
+        -320
+      ],
+      "id": "ca301fe3-894f-4128-b822-17461a65c342",
+      "name": "Send message and wait for response1",
+      "webhookId": "7f0de5bb-4566-4fa0-9698-1d8e350c4d53",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pVbLONb8Gh393bg0",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinicsNZ",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/pVbLONb8Gh393bg0"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Abb",
+              "keyValue": "={{ $('When Executed by Another Workflow').item.json.clinic }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1680,
+        -320
+      ],
+      "id": "faffdf0a-8750-46fd-b0e8-060e2c2595ac",
+      "name": "Get Clinic"
+    },
+    {
+      "parameters": {
+        "jsCode": "const original = $('When Executed by Another Workflow').first().json;\nconst approval = $json.data ?? {};\n\nreturn [\n  {\n    json: {\n      ...original,\n      clinicApprovalApproved: approval.approved === true,\n      clinicApprovalResponse: approval,\n      sourceStatus: 'ClinicApprovedForCsvExport'\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2128,
+        -320
+      ],
+      "id": "1448dd01-d2e5-4e80-b734-fb96c91ed808",
+      "name": "Bring Forward Clinic Payload"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{$json.driveId}}/items/{{$json.currentExcelDriveId}}/workbook/worksheets('{{$json.sheetName}}')/range(address='{{$json.address}}')",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2352,
+        -320
+      ],
+      "id": "c12a010a-e37b-4b2a-961c-23839248f798",
+      "name": "HTTP Request",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const original = $('Bring Forward Clinic Payload').first().json;\n\n// Prefer displayed Excel text, fallback to raw values\nconst values = Array.isArray($json.text) ? $json.text : $json.values;\n\nif (!Array.isArray(values)) {\n  throw new Error('Graph response does not contain text or values array');\n}\n\nif (values.length < 2) {\n  throw new Error('Excel range does not contain header row and data rows');\n}\n\nconst headers = values[0];\nconst dataRows = values.slice(1);\n\n// Remove fully blank rows\nconst nonBlankRows = dataRows.filter(row =>\n  row.some(cell => cell !== null && cell !== undefined && String(cell).trim() !== '')\n);\n\nif (nonBlankRows.length !== original.orderCount) {\n  throw new Error(\n    `CSV row count mismatch for ${original.clinic}. Expected ${original.orderCount}, got ${nonBlankRows.length}`\n  );\n}\n\nfunction escapeCsv(value) {\n  if (value === null || value === undefined) return '';\n\n  const stringValue = String(value);\n\n  if (\n    stringValue.includes(',') ||\n    stringValue.includes('\"') ||\n    stringValue.includes('\\n') ||\n    stringValue.includes('\\r')\n  ) {\n    return `\"${stringValue.replace(/\"/g, '\"\"')}\"`;\n  }\n\n  return stringValue;\n}\n\nconst csv = [\n  headers.map(escapeCsv).join(','),\n  ...nonBlankRows.map(row =>\n    headers.map((_, index) => escapeCsv(row[index])).join(',')\n  )\n].join('\\r\\n');\n\nconst clinic = original.clinic;\nconst startDate = original.startDate;\nconst fileName = `${clinic}_MedOrders_${startDate}.csv`;\n\nreturn [\n  {\n    json: {\n      ...original,\n      csvFileName: fileName,\n      csvRowCount: nonBlankRows.length,\n      csvHeaderCount: headers.length,\n      csvSourceUsed: Array.isArray($json.text) ? 'text' : 'values',\n      sourceStatus: 'CsvCreated'\n    },\n    binary: {\n      data: {\n        data: Buffer.from(csv, 'utf8').toString('base64'),\n        mimeType: 'text/csv',\n        fileName\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2576,
+        -320
+      ],
+      "id": "3a3ad6a7-3db2-4415-a51b-dcf8228f65af",
+      "name": "ExceltoCSV"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        3024,
+        -320
+      ],
+      "id": "7d629486-cacb-4105-855d-ea75485a6cea",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "59fae2c7-cfb1-4acb-b1d5-50e57510b51c",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('Bring Forward Clinic Payload').item.json.startDate }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        3248,
+        -320
+      ],
+      "id": "1247fba5-84df-433a-962e-b37a88152e45",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        3696,
+        -320
+      ],
+      "id": "76f4b120-4190-4695-8d50-a7e49ce5a50e",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6b2c1999-1659-4b71-8b06-237c11cd2d19",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('Bring Forward Clinic Payload').item.json.clinic }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        3920,
+        -320
+      ],
+      "id": "14b47c5c-5427-42fa-b11e-692b27a642f7",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.parentReference.driveId }}/items/{{$json.id}}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder,file,parentReference"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3472,
+        -320
+      ],
+      "id": "a6fe4d30-47da-4e43-8f4b-248db1bb17f7",
+      "name": "Get Clinic Folder",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.parentReference.driveId }}/items/{{$json.id}}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder,file,parentReference"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4144,
+        -320
+      ],
+      "id": "2e69123a-4ca6-4b22-8190-2bd162c12b43",
+      "name": "Get PDF's",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        4368,
+        -320
+      ],
+      "id": "5365372c-12a1-49ef-9d68-8b74b9cc3076",
+      "name": "Split Out2"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.driveId }}/items/{{ $json.itemsId }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2800,
+        -320
+      ],
+      "id": "9e6fc49b-65c3-46ef-a309-5af2fcf624c8",
+      "name": "Find Date Folder",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.parentReference.driveId }}/items/{{ $json.id }}/content",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4592,
+        -320
+      ],
+      "id": "31c9e078-4289-4783-b4f0-2ce5505bf939",
+      "name": "Download PDF's",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nif (!items.length) {\n  throw new Error('No PDF files found to combine');\n}\n\nconst first = items[0];\n\nconst output = {\n  json: {\n    ...first.json,\n    pdfCountForZip: items.length,\n    zipFileName: `${first.json.clinic}_Scripts_${first.json.startDate}.zip`,\n    sourceStatus: 'PdfFilesCombinedForZip'\n  },\n  binary: {}\n};\n\nitems.forEach((item, index) => {\n  if (!item.binary?.data) {\n    throw new Error(`Missing binary data on PDF item ${index + 1}`);\n  }\n\n  const binaryKey = `PDF_${index + 1}`;\n\n  output.binary[binaryKey] = {\n    ...item.binary.data,\n    fileName: item.binary.data.fileName || item.json.pdfFileName || `script_${index + 1}.pdf`,\n    mimeType: item.binary.data.mimeType || 'application/pdf'\n  };\n});\n\n// This gives the Compression node a dynamic list of fields to zip\noutput.json.binaryFieldsToZip = Object.keys(output.binary).join(',');\n\nreturn [output];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4816,
+        -320
+      ],
+      "id": "1138b573-ef62-45ad-a4f0-c7e6ee15b64f",
+      "name": "Combine PDFs Into One Item"
+    },
+    {
+      "parameters": {
+        "operation": "compress",
+        "binaryPropertyName": "={{ $json.binaryFieldsToZip }}",
+        "fileName": "={{ $('Bring Forward Clinic Payload').item.json.startDate }}.zip"
+      },
+      "type": "n8n-nodes-base.compression",
+      "typeVersion": 1.1,
+      "position": [
+        5040,
+        -320
+      ],
+      "id": "9b232023-1ae5-4990-944f-05075c9caa88",
+      "name": "Compression"
+    },
+    {
+      "parameters": {
+        "jsCode": "const csvItem = $('ExceltoCSV').first();\nconst zipItem = $input.first();\n\nif (!csvItem.binary?.data) {\n  throw new Error('CSV binary not found from ExceltoCSV');\n}\n\nconst zipBinaryKeys = Object.keys(zipItem.binary ?? {});\n\nif (!zipBinaryKeys.length) {\n  throw new Error('ZIP binary not found from Compression');\n}\n\nconst zipKey = zipBinaryKeys[0];\nconst zipBinary = zipItem.binary[zipKey];\n\nreturn [\n  {\n    json: {\n      ...csvItem.json,\n      ...zipItem.json,\n\n      attachmentCount: 2,\n      csvAttachmentName: csvItem.binary.data.fileName || csvItem.json.csvFileName,\n      scriptsAttachmentName: zipBinary.fileName || zipItem.json.zipFileName,\n\n      sourceStatus: 'ReadyToEmailCompoundLab'\n    },\n    binary: {\n      med_orders_csv: {\n        ...csvItem.binary.data,\n        fileName: csvItem.binary.data.fileName || csvItem.json.csvFileName || 'MedOrders.csv',\n        mimeType: csvItem.binary.data.mimeType || 'text/csv'\n      },\n\n      scripts_zip: {\n        ...zipBinary,\n        fileName: zipBinary.fileName || zipItem.json.zipFileName || `${csvItem.json.clinic}_Scripts_${csvItem.json.startDate}.zip`,\n        mimeType: zipBinary.mimeType || 'application/zip'\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5264,
+        -320
+      ],
+      "id": "19d7c9be-d391-47c9-b3d2-c750d22158da",
+      "name": "Prepare Email Attachments"
+    },
+    {
+      "parameters": {
+        "toRecipients": "nicholas.ryall@ashleyandmartin.com.au",
+        "subject": "=AM NZ - Automate Med Order - {{ $json.startDate }}",
+        "bodyContent": "=Hi Team,\n\nPlease see attached files to order for the clinic {{ $('Get Clinic').item.json.name }} for date {{ $('Bring Forward Clinic Payload').item.json.startDate }}. Any issues please contact {{ $('Get Clinic').item.json.email }}.\n\nRegards,\nAutomation",
+        "additionalFields": {
+          "attachments": {
+            "attachments": [
+              {
+                "binaryPropertyName": "med_orders_csv"
+              },
+              {
+                "binaryPropertyName": "scripts_zip"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        5488,
+        -320
+      ],
+      "id": "3e839e56-c4a9-49f3-8a48-aa0451cec9db",
+      "name": "Send a message",
+      "webhookId": "db0bd1c7-5a4f-4c8b-aefc-68fb0d262ab6",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d29ea38e-3bbe-485e-af04-4a0ff969a973",
+              "leftValue": "={{ $json.success }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        5712,
+        -320
+      ],
+      "id": "21ea8a91-6001-45d9-b978-08aaa56bea1e",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Filter1').item.json.parentReference.driveId }}/items/{{ $('Filter1').item.json.id }}:/{{ $('Bring Forward Clinic Payload').item.json.clinic }}:/content",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "=text/plain",
+        "body": "=Clinic: {{ $('Bring Forward Clinic Payload').item.json.clinic }}Date: {{ $('Bring Forward Clinic Payload').item.json.startDate }}Status: Email sent to Compound LabSentAt: {{ $now }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        5936,
+        -320
+      ],
+      "id": "c89ef5cc-cd39-45ae-b36f-0000600e2ca8",
+      "name": "Write Complete FIle",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "62EtafKD9fXs8RJy",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/62EtafKD9fXs8RJy",
+          "cachedResultName": "ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "driveId": "={{ $json.driveId }}",
+            "itemsId": "={{ $json.itemsId }}",
+            "startDate": "={{ $('When Executed by Another Workflow').item.json.startDate }}",
+            "clinic": "={{ $('When Executed by Another Workflow').item.json.clinic }}"
+          },
+          "matchingColumns": [
+            "driveId",
+            "itemsId",
+            "startDate",
+            "clinic"
+          ],
+          "schema": [
+            {
+              "id": "driveId",
+              "displayName": "driveId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "itemsId",
+              "displayName": "itemsId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "startDate",
+              "displayName": "startDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "clinic",
+              "displayName": "clinic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -784,
+        -416
+      ],
+      "name": "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock",
+      "id": "9bea540c-74e3-4fe0-a326-28b926df0f7c"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b8bad714-85f4-49a6-a71b-57d4002b2373",
+              "leftValue": "={{ $json.data[0].CompletedLockFile }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -560,
+        -416
+      ],
+      "id": "4bf3bd28-6aed-4c1b-809d-37474b61477c",
+      "name": "If3"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        -512
+      ],
+      "id": "582574b5-99db-49cb-a7e0-cc6cb71aa8c7",
+      "name": "No Operation, do nothing1"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "62EtafKD9fXs8RJy",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/62EtafKD9fXs8RJy",
+          "cachedResultName": "ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "driveId": "={{ $('When Executed by Another Workflow').item.json.driveId }}",
+            "itemsId": "={{ $('When Executed by Another Workflow').item.json.itemsId }}",
+            "startDate": "={{ $('When Executed by Another Workflow').item.json.startDate }}",
+            "clinic": "={{ $('When Executed by Another Workflow').item.json.clinic }}"
+          },
+          "matchingColumns": [
+            "driveId",
+            "itemsId",
+            "startDate",
+            "clinic"
+          ],
+          "schema": [
+            {
+              "id": "driveId",
+              "displayName": "driveId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "itemsId",
+              "displayName": "itemsId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "startDate",
+              "displayName": "startDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "clinic",
+              "displayName": "clinic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        6160,
+        -320
+      ],
+      "name": "Call ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock1",
+      "id": "069ffc5f-23e0-4ff4-a663-8599fbba473f"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b8bad714-85f4-49a6-a71b-57d4002b2373",
+              "leftValue": "={{ $json.data[0].CompletedLockFile }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        6384,
+        -320
+      ],
+      "id": "780c472c-a6e3-4d9d-8ebc-a57a4800ff9b",
+      "name": "If4"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        6608,
+        -416
+      ],
+      "id": "edacdefb-8c8f-4f76-b5c9-917f935ef639",
+      "name": "No Operation, do nothing2"
+    },
+    {
+      "parameters": {
+        "toRecipients": "monitoring@ashleyandmartin.com.au",
+        "subject": "=AM NZ - Automate Med Order - {{ $('When Executed by Another Workflow').item.json.startDate }} {{ $('When Executed by Another Workflow').item.json.clinic }}",
+        "bodyContent": "=Hey Monitoring,\n\n{{ $('When Executed by Another Workflow').item.json.clinic }} Med ordering has process but didnt create its completed lock file.\n\n{{ $execution }}\n{{ $workflow.name }}\n{{ $execution.resumeUrl }}\n\nRegards,\nAutomation",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        6608,
+        -224
+      ],
+      "id": "487b0b50-d3cf-450b-a83e-78a35dee9339",
+      "name": "Send a message1",
+      "webhookId": "db0bd1c7-5a4f-4c8b-aefc-68fb0d262ab6",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
     }
   ],
   "origin": "n8n",
@@ -55,17 +3011,20 @@
     "When Executed by Another Workflow": [
       {
         "json": {
-          "clinic": "HAM",
-          "sheetName": "HAM",
-          "address": "HAM!A1:M2",
-          "endRow": 2,
-          "orderCount": 1,
-          "expectedRows": 1,
+          "clinic": "AUC",
+          "sheetName": "AUC",
+          "address": "AUC!A1:M7",
+          "endRow": 7,
+          "orderCount": 6,
+          "expectedRows": 6,
           "hasOrders": true,
           "readyForSubflow": true,
           "driveId": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
-          "currentExcelDriveId": "01Y4DA4OILQMKWMUR65FH3FBVD4WWORW6C",
-          "startDate": "2026-06-13",
+          "itemsId": "01Y4DA4OOUVPWHSA2BN5G2YBSB6DOVI6HR",
+          "currentExcelDriveId": "01Y4DA4OIZIN2PNOFBEBC2DUJ5QNJ3PRNS",
+          "startDate": "2026-06-22",
+          "checkedRows": 6,
+          "actualOrderRows": 6,
           "sourceStatus": "ReadyForClinicSubflow"
         },
         "pairedItem": {
@@ -99,6 +3058,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-06-15T06:26:26.976Z",
-  "versionId": "850cfa78-05da-4b47-8306-00af3a5f96d3"
+  "updatedAt": "2026-06-23T00:38:49.518Z",
+  "versionId": "ed3cb1a7-4586-48ae-8cf6-68f250fda88d"
 }
