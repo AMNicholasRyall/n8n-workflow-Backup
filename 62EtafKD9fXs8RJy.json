@@ -1,0 +1,1215 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-06-22T06:17:25.544Z",
+    "createdAt": "2026-06-22T06:17:25.544Z",
+    "versionId": "23d2e22b-75eb-488d-abbf-80c58df0a297",
+    "workflowId": "62EtafKD9fXs8RJy",
+    "nodes": [
+      {
+        "parameters": {
+          "mode": "manual",
+          "duplicateItem": false,
+          "assignments": {
+            "assignments": [
+              {
+                "id": "59695c30-7357-44c8-a36a-d51f5ff78b98",
+                "name": "CompletedLockFile",
+                "value": false,
+                "type": "boolean"
+              }
+            ]
+          },
+          "includeOtherFields": false,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -1200,
+          256
+        ],
+        "id": "49531610-5487-4d86-887e-12d57bd0e552",
+        "name": "Edit Fields1",
+        "disabled": false
+      },
+      {
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          -1632,
+          208
+        ],
+        "id": "98bff28f-931e-4c86-ac5d-db1d6f0e354e",
+        "name": "Filter2",
+        "disabled": false,
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "2d4f39fd-d98a-4c3b-9b8f-fa987a2af0cc",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('Start').item.json.clinic }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": false,
+          "options": {}
+        },
+        "alwaysOutputData": true
+      },
+      {
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -1424,
+          208
+        ],
+        "id": "747d1987-aa35-4451-a6ee-b24e55e152a6",
+        "name": "If3",
+        "disabled": false,
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "b77faa41-2210-41bc-a5c0-6ea2b985cff8",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": false,
+          "options": {}
+        }
+      },
+      {
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          -944,
+          128
+        ],
+        "id": "58654f72-28cc-491b-88d6-9aadc99baa0c",
+        "name": "Aggregate",
+        "disabled": false,
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "destinationFieldName": "data",
+          "include": "allFields",
+          "options": {}
+        }
+      },
+      {
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -1200,
+          80
+        ],
+        "id": "1b67e97b-ac04-4b48-931d-94eb58474101",
+        "name": "Edit Fields",
+        "disabled": false,
+        "parameters": {
+          "mode": "manual",
+          "duplicateItem": false,
+          "assignments": {
+            "assignments": [
+              {
+                "id": "59695c30-7357-44c8-a36a-d51f5ff78b98",
+                "name": "CompletedLockFile",
+                "value": true,
+                "type": "boolean"
+              }
+            ]
+          },
+          "includeOtherFields": false,
+          "options": {}
+        }
+      },
+      {
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -1808,
+          -208
+        ],
+        "id": "7b9421f0-2083-4768-a8e4-6d4d53bb28df",
+        "name": "ClinicDateFolder-1",
+        "disabled": false,
+        "parameters": {
+          "curlImport": "",
+          "method": "GET",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.driveId }}/items/{{ $json.itemsId }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "provideSslCertificates": false,
+          "sendQuery": true,
+          "specifyQuery": "keypair",
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder,file,parentReference"
+              }
+            ]
+          },
+          "sendHeaders": false,
+          "sendBody": false,
+          "options": {},
+          "infoMessage": ""
+        },
+        "issues": {},
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          -1600,
+          -208
+        ],
+        "id": "e87bf97f-2559-4781-a69c-669ab0a3a738",
+        "name": "Split-ClinicDateFolder-1",
+        "disabled": false,
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "include": "noOtherFields",
+          "options": {}
+        },
+        "issues": {}
+      },
+      {
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          -1392,
+          -208
+        ],
+        "id": "59aa757e-738c-40af-8f00-43be732bd1f0",
+        "name": "Filter-ClinicDateFolder-1",
+        "disabled": false,
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "3126c696-f522-4368-a6eb-7d3025d15f86",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('Start').item.json.startDate }}",
+                "operator": {
+                  "type": "dateTime",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": false,
+          "options": {}
+        }
+      },
+      {
+        "parameters": {
+          "curlImport": "",
+          "method": "GET",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.parentReference.driveId }}/items/{{$json.id}}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "provideSslCertificates": false,
+          "sendQuery": true,
+          "specifyQuery": "keypair",
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder,file,parentReference"
+              }
+            ]
+          },
+          "sendHeaders": false,
+          "sendBody": false,
+          "options": {},
+          "infoMessage": ""
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -1152,
+          -208
+        ],
+        "id": "dcd9a34d-f9dc-4387-94d9-b49e59218bee",
+        "name": "ClinicFolder-1",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        },
+        "disabled": false
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "include": "noOtherFields",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          -928,
+          -208
+        ],
+        "id": "7246bc24-28f1-444b-9815-5013225b816b",
+        "name": "Split-ClinicFolder-1",
+        "disabled": false
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "6b2c1999-1659-4b71-8b06-237c11cd2d19",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('Start').item.json.clinic }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": false,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          -736,
+          -208
+        ],
+        "id": "dc50c0b0-82d6-4a34-8eb7-66ea1302d1c0",
+        "name": "Filter-ClinicFolder-1",
+        "disabled": false
+      },
+      {
+        "parameters": {
+          "curlImport": "",
+          "method": "GET",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.parentReference.driveId }}/items/{{$json.id}}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "provideSslCertificates": false,
+          "sendQuery": true,
+          "specifyQuery": "keypair",
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder,file,parentReference"
+              }
+            ]
+          },
+          "sendHeaders": false,
+          "sendBody": false,
+          "options": {},
+          "infoMessage": ""
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -544,
+          -208
+        ],
+        "id": "d7266de0-0da0-4054-a3cd-ff65118cdd3f",
+        "name": "Get-Clinic-Complete",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        },
+        "disabled": false
+      },
+      {
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          -336,
+          -208
+        ],
+        "id": "9fced22a-7c4d-403b-a4b6-bd704b122149",
+        "name": "Split-Clinc-Complete",
+        "disabled": false,
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "include": "noOtherFields",
+          "options": {}
+        },
+        "issues": {}
+      },
+      {
+        "id": "885195f2-7abd-46a6-b0a6-129cfa671ca4",
+        "typeVersion": 1.1,
+        "name": "Start",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "position": [
+          -2016,
+          -208
+        ],
+        "parameters": {
+          "workflowInputs": {
+            "values": [
+              {
+                "name": "driveId",
+                "type": "any"
+              },
+              {
+                "name": "itemsId",
+                "type": "any"
+              },
+              {
+                "name": "startDate",
+                "type": "any"
+              },
+              {
+                "name": "clinic",
+                "type": "any"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "connections": {
+      "ClinicDateFolder-1": {
+        "main": [
+          [
+            {
+              "node": "Split-ClinicDateFolder-1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split-ClinicDateFolder-1": {
+        "main": [
+          [
+            {
+              "node": "Filter-ClinicDateFolder-1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter-ClinicDateFolder-1": {
+        "main": [
+          [
+            {
+              "node": "ClinicFolder-1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "ClinicFolder-1": {
+        "main": [
+          [
+            {
+              "node": "Split-ClinicFolder-1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split-ClinicFolder-1": {
+        "main": [
+          [
+            {
+              "node": "Filter-ClinicFolder-1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter-ClinicFolder-1": {
+        "main": [
+          [
+            {
+              "node": "Get-Clinic-Complete",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get-Clinic-Complete": {
+        "main": [
+          [
+            {
+              "node": "Split-Clinc-Complete",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split-Clinc-Complete": {
+        "main": [
+          [
+            {
+              "node": "Filter2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter2": {
+        "main": [
+          [
+            {
+              "node": "If3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If3": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Edit Fields1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields1": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          []
+        ]
+      },
+      "Start": {
+        "main": [
+          [
+            {
+              "node": "ClinicDateFolder-1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": null,
+    "description": null,
+    "autosaved": false
+  },
+  "activeVersionId": "23d2e22b-75eb-488d-abbf-80c58df0a297",
+  "connections": {
+    "ClinicDateFolder-1": {
+      "main": [
+        [
+          {
+            "node": "Split-ClinicDateFolder-1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split-ClinicDateFolder-1": {
+      "main": [
+        [
+          {
+            "node": "Filter-ClinicDateFolder-1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter-ClinicDateFolder-1": {
+      "main": [
+        [
+          {
+            "node": "ClinicFolder-1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ClinicFolder-1": {
+      "main": [
+        [
+          {
+            "node": "Split-ClinicFolder-1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split-ClinicFolder-1": {
+      "main": [
+        [
+          {
+            "node": "Filter-ClinicFolder-1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter-ClinicFolder-1": {
+      "main": [
+        [
+          {
+            "node": "Get-Clinic-Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get-Clinic-Complete": {
+      "main": [
+        [
+          {
+            "node": "Split-Clinc-Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split-Clinc-Complete": {
+      "main": [
+        [
+          {
+            "node": "Filter2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter2": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        []
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "ClinicDateFolder-1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-06-22T06:17:25.540Z",
+  "id": "62EtafKD9fXs8RJy",
+  "isArchived": false,
+  "meta": null,
+  "name": "ZenotiNZ-MasterTriggerChildClinicCompoundLabOrder-CompletFolderLock",
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "59695c30-7357-44c8-a36a-d51f5ff78b98",
+              "name": "CompletedLockFile",
+              "value": false,
+              "type": "boolean"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1200,
+        256
+      ],
+      "id": "49531610-5487-4d86-887e-12d57bd0e552",
+      "name": "Edit Fields1",
+      "disabled": false
+    },
+    {
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -1632,
+        208
+      ],
+      "id": "98bff28f-931e-4c86-ac5d-db1d6f0e354e",
+      "name": "Filter2",
+      "disabled": false,
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2d4f39fd-d98a-4c3b-9b8f-fa987a2af0cc",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('Start').item.json.clinic }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1424,
+        208
+      ],
+      "id": "747d1987-aa35-4451-a6ee-b24e55e152a6",
+      "name": "If3",
+      "disabled": false,
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b77faa41-2210-41bc-a5c0-6ea2b985cff8",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      }
+    },
+    {
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -944,
+        128
+      ],
+      "id": "58654f72-28cc-491b-88d6-9aadc99baa0c",
+      "name": "Aggregate",
+      "disabled": false,
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "data",
+        "include": "allFields",
+        "options": {}
+      }
+    },
+    {
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1200,
+        80
+      ],
+      "id": "1b67e97b-ac04-4b48-931d-94eb58474101",
+      "name": "Edit Fields",
+      "disabled": false,
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "59695c30-7357-44c8-a36a-d51f5ff78b98",
+              "name": "CompletedLockFile",
+              "value": true,
+              "type": "boolean"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      }
+    },
+    {
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1808,
+        -208
+      ],
+      "id": "7b9421f0-2083-4768-a8e4-6d4d53bb28df",
+      "name": "ClinicDateFolder-1",
+      "disabled": false,
+      "parameters": {
+        "curlImport": "",
+        "method": "GET",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.driveId }}/items/{{ $json.itemsId }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "provideSslCertificates": false,
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder,file,parentReference"
+            }
+          ]
+        },
+        "sendHeaders": false,
+        "sendBody": false,
+        "options": {},
+        "infoMessage": ""
+      },
+      "issues": {},
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -1600,
+        -208
+      ],
+      "id": "e87bf97f-2559-4781-a69c-669ab0a3a738",
+      "name": "Split-ClinicDateFolder-1",
+      "disabled": false,
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "include": "noOtherFields",
+        "options": {}
+      },
+      "issues": {}
+    },
+    {
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -1392,
+        -208
+      ],
+      "id": "59aa757e-738c-40af-8f00-43be732bd1f0",
+      "name": "Filter-ClinicDateFolder-1",
+      "disabled": false,
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3126c696-f522-4368-a6eb-7d3025d15f86",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('Start').item.json.startDate }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      }
+    },
+    {
+      "parameters": {
+        "curlImport": "",
+        "method": "GET",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.parentReference.driveId }}/items/{{$json.id}}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "provideSslCertificates": false,
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder,file,parentReference"
+            }
+          ]
+        },
+        "sendHeaders": false,
+        "sendBody": false,
+        "options": {},
+        "infoMessage": ""
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1152,
+        -208
+      ],
+      "id": "dcd9a34d-f9dc-4387-94d9-b49e59218bee",
+      "name": "ClinicFolder-1",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      },
+      "disabled": false
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "include": "noOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -928,
+        -208
+      ],
+      "id": "7246bc24-28f1-444b-9815-5013225b816b",
+      "name": "Split-ClinicFolder-1",
+      "disabled": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6b2c1999-1659-4b71-8b06-237c11cd2d19",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('Start').item.json.clinic }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -736,
+        -208
+      ],
+      "id": "dc50c0b0-82d6-4a34-8eb7-66ea1302d1c0",
+      "name": "Filter-ClinicFolder-1",
+      "disabled": false
+    },
+    {
+      "parameters": {
+        "curlImport": "",
+        "method": "GET",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.parentReference.driveId }}/items/{{$json.id}}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "provideSslCertificates": false,
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder,file,parentReference"
+            }
+          ]
+        },
+        "sendHeaders": false,
+        "sendBody": false,
+        "options": {},
+        "infoMessage": ""
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -544,
+        -208
+      ],
+      "id": "d7266de0-0da0-4054-a3cd-ff65118cdd3f",
+      "name": "Get-Clinic-Complete",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      },
+      "disabled": false
+    },
+    {
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        -208
+      ],
+      "id": "9fced22a-7c4d-403b-a4b6-bd704b122149",
+      "name": "Split-Clinc-Complete",
+      "disabled": false,
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "include": "noOtherFields",
+        "options": {}
+      },
+      "issues": {}
+    },
+    {
+      "id": "885195f2-7abd-46a6-b0a6-129cfa671ca4",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -2016,
+        -208
+      ],
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "driveId",
+              "type": "any"
+            },
+            {
+              "name": "itemsId",
+              "type": "any"
+            },
+            {
+              "name": "startDate",
+              "type": "any"
+            },
+            {
+              "name": "clinic",
+              "type": "any"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": null,
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-22T06:17:25.542Z",
+      "createdAt": "2026-06-22T06:17:25.542Z",
+      "role": "workflow:owner",
+      "workflowId": "62EtafKD9fXs8RJy",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-06-23T00:39:02.887Z",
+  "versionId": "23d2e22b-75eb-488d-abbf-80c58df0a297"
+}
