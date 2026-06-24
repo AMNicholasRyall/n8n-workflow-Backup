@@ -1,0 +1,1079 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-06-23T07:28:20.000Z",
+    "createdAt": "2026-06-23T07:28:18.523Z",
+    "versionId": "b1b8fdfc-e0a5-489c-b3b0-9d34b4a74632",
+    "workflowId": "L0hoSKxaW3ccB61f",
+    "nodes": [
+      {
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          624,
+          0
+        ],
+        "id": "d857b876-0a04-4387-969e-f3c2f6b01689",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "d9cddf6b-320a-4891-9ed5-72b7ec01a4ea",
+                "leftValue": "={{ $json.subject }}",
+                "rightValue": "Your Electronic Prescription",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          832,
+          0
+        ],
+        "id": "d1556a4f-f1db-4efe-b108-0df9538a23ca",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "2c9d5b51-52fb-4cee-bac9-ebdcfebe5931",
+                "name": "InboxFolderID",
+                "value": "AQMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1ADgALgAAA6WszsmsAulHmBZnYzYxfvoBANeIWf2PYXBJrEEqsCktjo0AAAIBDAAAAA==",
+                "type": "string"
+              },
+              {
+                "id": "77cc06a7-bcaf-4909-9c30-4ec6c768f293",
+                "name": "ShouldNoBeInHere",
+                "value": "AAMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1OAAuAAAAAAClrM7JrALpR5gWZ2M2MX76AQDXiFn9j2FwSaxBKrApLY6NAAAIP6YnAAA=",
+                "type": "string"
+              },
+              {
+                "id": "63f0b1f8-3a5a-4766-99f1-1329bbe38ea2",
+                "name": "DriveID",
+                "value": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
+                "type": "string"
+              },
+              {
+                "id": "ab1e5653-3856-462e-8e88-5070243c1fb9",
+                "name": "AUMedOrderID",
+                "value": "01Y4DA4OPCXITTGW45PJHZBMOQ2WVAPCD2",
+                "type": "string"
+              },
+              {
+                "id": "e05de8d7-4797-447f-975f-15802967b09f",
+                "name": "CompletedOrders",
+                "value": "01Y4DA4OMCIC7MC3JRSBG2QB4JYEGHALNK",
+                "type": "string"
+              },
+              {
+                "id": "98d15330-823b-422a-9a14-41329cf893a0",
+                "name": "OrderInProgress",
+                "value": "01Y4DA4OMQFXPAO6YE25F2FTI3HY3VF4HL",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          208,
+          0
+        ],
+        "id": "d0c6c6cb-4221-4f12-a08b-8ee40941c958",
+        "name": "Master Field Set"
+      },
+      {
+        "parameters": {
+          "url": "https://graph.microsoft.com/v1.0/users/au.pharmacy@ashleyandmartin.com.au/mailFolders/inbox/messages",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "microsoftOutlookOAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {}
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          416,
+          0
+        ],
+        "id": "e2b8ba0e-4690-45b8-8607-8957aade5dc0",
+        "name": "Check Emails",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "eTjXE2aZrDK0PHJV",
+            "name": "au.pharmacy@ashleyandmartin.com.au"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://graph.microsoft.com/v1.0/users/au.pharmacy@ashleyandmartin.com.au/messages/{{ $json.id }}/move",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "microsoftOutlookOAuth2Api",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "destinationId",
+                "value": "={{ $('Master Field Set').item.json.ShouldNoBeInHere }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1056,
+          176
+        ],
+        "id": "14ba85ab-5de3-45bc-b718-48a4e6331c81",
+        "name": "Remove Incorrect Emails",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "eTjXE2aZrDK0PHJV",
+            "name": "au.pharmacy@ashleyandmartin.com.au"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// n8n Code node\n// Email Cleanup\n\nconst input = $json;\n\n// -----------------------------\n// Email basics\n// -----------------------------\nconst emailId = input.id || null;\n\nconst html =\n  input.body?.content ||\n  $input.first().json.body?.content ||\n  \"\";\n\n// Pull clinic from first recipient email address.\n// Example: AUC.pharmacy@ashleyandmartin.com.au -> AUC\nconst toAddress =\n  input.toRecipients?.[0]?.emailAddress?.address ||\n  $input.first().json.toRecipients?.[0]?.emailAddress?.address ||\n  \"\";\n\nconst clinic = toAddress\n  ? toAddress.split(\".\")[0].trim().toUpperCase()\n  : null;\n\n// -----------------------------\n// Helpers\n// -----------------------------\nfunction decodeHtml(value) {\n  return String(value || \"\")\n    .replace(/&nbsp;/gi, \" \")\n    .replace(/&amp;/gi, \"&\")\n    .replace(/&quot;/gi, '\"')\n    .replace(/&#39;/gi, \"'\")\n    .replace(/&lt;/gi, \"<\")\n    .replace(/&gt;/gi, \">\");\n}\n\nfunction htmlToText(value) {\n  return decodeHtml(value)\n    .replace(/<style[\\s\\S]*?<\\/style>/gi, \" \")\n    .replace(/<script[\\s\\S]*?<\\/script>/gi, \" \")\n    .replace(/<[^>]+>/g, \" \")\n    .replace(/[\\u200B-\\u200D\\uFEFF\\u200A\\u202F]/g, \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction safeDecodeUrl(value) {\n  try {\n    return decodeURIComponent(value);\n  } catch (error) {\n    return value;\n  }\n}\n\nfunction extractScriptUrl(value) {\n  const raw = String(value || \"\");\n\n  // Direct clean Ausscripts URL\n  let match = raw.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n  if (match) return match[0];\n\n  // Proofpoint URLDefense wrapped URL\n  const proofpointMatch = raw.match(/https:\\/\\/urldefense\\.com\\/v3\\/__([^;]+)__/i);\n  if (proofpointMatch) {\n    const innerUrl = safeDecodeUrl(proofpointMatch[1]);\n\n    match = innerUrl.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n    if (match) return match[0];\n  }\n\n  // Fallback after HTML entity decode\n  const decodedHtml = decodeHtml(raw);\n  match = decodedHtml.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n  if (match) return match[0];\n\n  return null;\n}\n\n// -----------------------------\n// Extract script details\n// -----------------------------\nconst text = htmlToText(html);\nconst scriptUrl = extractScriptUrl(html);\nconst scriptId = scriptUrl ? scriptUrl.split(\"/\").pop() : null;\n\n// Example text:\n// Tap the link to view BV's ePrescription for 5% Minoxidil + 0.25% Finasteride Lotion lotion ...\nconst prescriptionMatch = text.match(\n  /Tap the link to view\\s+(.+?)'s ePrescription for\\s+(.+?)(?:\\s+https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/| Have a question|$)/i\n);\n\nconst patientInitials = prescriptionMatch?.[1]?.trim() || null;\n\nlet productName = prescriptionMatch?.[2]?.trim() || null;\n\nif (productName) {\n  productName = productName\n    .replace(/\\s+/g, \" \")\n    .replace(/\\s+lotion\\s+/i, \" Lotion \")\n    .replace(/(Lotion)\\s+\\1/gi, \"$1\")\n    .trim();\n\n  // Fix duplicated product format from this email template\n  const words = productName.split(\" \");\n  const midpoint = Math.floor(words.length / 2);\n\n  const firstHalf = words.slice(0, midpoint).join(\" \").trim();\n  const secondHalf = words.slice(midpoint).join(\" \").trim();\n\n  if (\n    firstHalf &&\n    secondHalf &&\n    firstHalf.toLowerCase() === secondHalf.toLowerCase()\n  ) {\n    productName = firstHalf;\n  }\n\n  // Specific cleanup for duplicated \"Lotion product again\" style\n  const duplicateProductMatch = productName.match(/^(.+?Lotion)\\s+\\1$/i);\n  if (duplicateProductMatch) {\n    productName = duplicateProductMatch[1];\n  }\n}\n\n// -----------------------------\n// Date and folder names\n// -----------------------------\nconst receivedDate = input.receivedDateTime\n  ? new Date(input.receivedDateTime).toISOString().slice(0, 10)\n  : new Date().toISOString().slice(0, 10);\n\nconst dateFolderName = receivedDate;\nconst clinicFolderName = clinic || \"UNKNOWNCLINIC\";\n\nconst safePatientInitials = patientInitials || \"UnknownInitials\";\nconst safeScriptId = scriptId || \"UnknownScript\";\nconst fileName = `${receivedDate}-${safeScriptId}-${safePatientInitials}.pdf`;\n\n// -----------------------------\n// SharePoint / Graph IDs\n// -----------------------------\nconst DriveID = \"b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU\";\n\nconst AUMedOrderID = \"01Y4DA4OPCXITTGW45PJHZBMOQ2WVAPCD2\";\n\nconst CompletedOrdersID = \"01Y4DA4OMCIC7MC3JRSBG2QB4JYEGHALNK\";\n\n// Correct folder ID for:\n// -=AU Med Orders=- / OrderInProgress\nconst OrderInProgressID = \"01Y4DA4OMQFXPAO6YE25F2FTI3HY3VF4HL\";\n\n// -----------------------------\n// Final output\n// -----------------------------\nreturn {\n  json: {\n    isPrescriptionEmail: !!scriptUrl,\n\n    emailId,\n    originalMessageId: emailId,\n\n    clinic,\n    clinicFolderName,\n\n    patientInitials,\n    productName,\n\n    scriptUrl,\n    scriptId,\n\n    receivedDate,\n    dateFolderName,\n\n    fileName,\n\n    DriveID,\n    AUMedOrderID,\n    CompletedOrdersID,\n    OrderInProgressID,\n  },\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1312,
+          -48
+        ],
+        "id": "634ea638-f617-4645-ba4e-f42224595ddf",
+        "name": "Email Cleanup"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://playwright_runner:3000/pdf-from-script",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "scriptId",
+                "value": "={{ $('Email Cleanup').item.json.scriptId }}"
+              },
+              {
+                "name": "filename",
+                "value": "= {{ $('Email Cleanup').item.json.receivedDate }}-{{ $('Email Cleanup').item.json.scriptId }}-{{ $('Email Cleanup').item.json.patientInitials }}.pdf"
+              }
+            ]
+          },
+          "options": {
+            "response": {
+              "response": {
+                "responseFormat": "file"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1776,
+          -48
+        ],
+        "id": "331b3ac6-7c4e-407d-8d35-dcb9b2e0dbf2",
+        "name": "Download Script"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          1072,
+          -64
+        ],
+        "id": "bf53b8aa-49bb-4a22-8d4e-ca0dc8446143",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "xoN2lt8EcXm5G0vh",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/xoN2lt8EcXm5G0vh",
+            "cachedResultName": "HelixScript-Data-Clinic-FolderCheck"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          1520,
+          -48
+        ],
+        "id": "cbaa212d-0a84-4772-ae24-c53032e2cd17",
+        "name": "Call 'HelixScript-Data-Clinic-FolderCheck'"
+      },
+      {
+        "parameters": {
+          "method": "PUT",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Email Cleanup').first().json.DriveID }}/items/{{ $(\"Call 'HelixScript-Data-Clinic-FolderCheck'\").first().json.ClinicFolderID }}:/{{ $('Email Cleanup').first().json.receivedDate }}-{{ $('Email Cleanup').first().json.scriptId }}-{{ $('Email Cleanup').first().json.patientInitials }}.pdf:/content",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendBody": true,
+          "contentType": "binaryData",
+          "inputDataFieldName": "data",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          2000,
+          -48
+        ],
+        "id": "bfe9bd3c-541e-491e-8387-fdca33393de7",
+        "name": "UploadScript",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lsINP70DmcZtIj4M",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinics",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "name",
+                "condition": "ilike",
+                "keyValue": "={{ $('Email Cleanup').item.json.clinic }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          2208,
+          -48
+        ],
+        "id": "74b0bb0e-510c-48f7-9e18-c8b737112629",
+        "name": "Get row(s)"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://graph.microsoft.com/v1.0/users/au.pharmacy@ashleyandmartin.com.au/messages/{{ $('Email Cleanup').item.json.emailId }}/move",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "microsoftOutlookOAuth2Api",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "destinationId",
+                "value": "={{ $json.MailboxFolderID }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          2416,
+          -48
+        ],
+        "id": "98f1d3a5-20d4-4d8c-be29-ed1d0256c7ee",
+        "name": "ArchiveEmailtoFolder",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "eTjXE2aZrDK0PHJV",
+            "name": "au.pharmacy@ashleyandmartin.com.au"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "*/10 8-18 * * 1-5"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -16,
+          0
+        ],
+        "id": "9d743029-cd8e-4ce6-9b16-437f12f616f6",
+        "name": "Schedule Trigger"
+      }
+    ],
+    "connections": {
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Remove Incorrect Emails",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Master Field Set": {
+        "main": [
+          [
+            {
+              "node": "Check Emails",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check Emails": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Email Cleanup": {
+        "main": [
+          [
+            {
+              "node": "Call 'HelixScript-Data-Clinic-FolderCheck'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Email Cleanup",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Download Script": {
+        "main": [
+          [
+            {
+              "node": "UploadScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'HelixScript-Data-Clinic-FolderCheck'": {
+        "main": [
+          [
+            {
+              "node": "Download Script",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "UploadScript": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "ArchiveEmailtoFolder",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "ArchiveEmailtoFolder": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Master Field Set",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version b1b8fdfc",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "b1b8fdfc-e0a5-489c-b3b0-9d34b4a74632",
+  "connections": {
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Remove Incorrect Emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Master Field Set": {
+      "main": [
+        [
+          {
+            "node": "Check Emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Emails": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Cleanup": {
+      "main": [
+        [
+          {
+            "node": "Call 'HelixScript-Data-Clinic-FolderCheck'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Email Cleanup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Script": {
+      "main": [
+        [
+          {
+            "node": "UploadScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'HelixScript-Data-Clinic-FolderCheck'": {
+      "main": [
+        [
+          {
+            "node": "Download Script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UploadScript": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "ArchiveEmailtoFolder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ArchiveEmailtoFolder": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Master Field Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-06-23T01:36:23.376Z",
+  "id": "L0hoSKxaW3ccB61f",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "HelixScript-MailboxSchedule",
+  "nodes": [
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "d857b876-0a04-4387-969e-f3c2f6b01689",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d9cddf6b-320a-4891-9ed5-72b7ec01a4ea",
+              "leftValue": "={{ $json.subject }}",
+              "rightValue": "Your Electronic Prescription",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        832,
+        0
+      ],
+      "id": "d1556a4f-f1db-4efe-b108-0df9538a23ca",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2c9d5b51-52fb-4cee-bac9-ebdcfebe5931",
+              "name": "InboxFolderID",
+              "value": "AQMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1ADgALgAAA6WszsmsAulHmBZnYzYxfvoBANeIWf2PYXBJrEEqsCktjo0AAAIBDAAAAA==",
+              "type": "string"
+            },
+            {
+              "id": "77cc06a7-bcaf-4909-9c30-4ec6c768f293",
+              "name": "ShouldNoBeInHere",
+              "value": "AAMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1OAAuAAAAAAClrM7JrALpR5gWZ2M2MX76AQDXiFn9j2FwSaxBKrApLY6NAAAIP6YnAAA=",
+              "type": "string"
+            },
+            {
+              "id": "63f0b1f8-3a5a-4766-99f1-1329bbe38ea2",
+              "name": "DriveID",
+              "value": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
+              "type": "string"
+            },
+            {
+              "id": "ab1e5653-3856-462e-8e88-5070243c1fb9",
+              "name": "AUMedOrderID",
+              "value": "01Y4DA4OPCXITTGW45PJHZBMOQ2WVAPCD2",
+              "type": "string"
+            },
+            {
+              "id": "e05de8d7-4797-447f-975f-15802967b09f",
+              "name": "CompletedOrders",
+              "value": "01Y4DA4OMCIC7MC3JRSBG2QB4JYEGHALNK",
+              "type": "string"
+            },
+            {
+              "id": "98d15330-823b-422a-9a14-41329cf893a0",
+              "name": "OrderInProgress",
+              "value": "01Y4DA4OMQFXPAO6YE25F2FTI3HY3VF4HL",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "d0c6c6cb-4221-4f12-a08b-8ee40941c958",
+      "name": "Master Field Set"
+    },
+    {
+      "parameters": {
+        "url": "https://graph.microsoft.com/v1.0/users/au.pharmacy@ashleyandmartin.com.au/mailFolders/inbox/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOutlookOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "e2b8ba0e-4690-45b8-8607-8957aade5dc0",
+      "name": "Check Emails",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "eTjXE2aZrDK0PHJV",
+          "name": "au.pharmacy@ashleyandmartin.com.au"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/users/au.pharmacy@ashleyandmartin.com.au/messages/{{ $json.id }}/move",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOutlookOAuth2Api",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "destinationId",
+              "value": "={{ $('Master Field Set').item.json.ShouldNoBeInHere }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1056,
+        176
+      ],
+      "id": "14ba85ab-5de3-45bc-b718-48a4e6331c81",
+      "name": "Remove Incorrect Emails",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "eTjXE2aZrDK0PHJV",
+          "name": "au.pharmacy@ashleyandmartin.com.au"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code node\n// Email Cleanup\n\nconst input = $json;\n\n// -----------------------------\n// Email basics\n// -----------------------------\nconst emailId = input.id || null;\n\nconst html =\n  input.body?.content ||\n  $input.first().json.body?.content ||\n  \"\";\n\n// Pull clinic from first recipient email address.\n// Example: AUC.pharmacy@ashleyandmartin.com.au -> AUC\nconst toAddress =\n  input.toRecipients?.[0]?.emailAddress?.address ||\n  $input.first().json.toRecipients?.[0]?.emailAddress?.address ||\n  \"\";\n\nconst clinic = toAddress\n  ? toAddress.split(\".\")[0].trim().toUpperCase()\n  : null;\n\n// -----------------------------\n// Helpers\n// -----------------------------\nfunction decodeHtml(value) {\n  return String(value || \"\")\n    .replace(/&nbsp;/gi, \" \")\n    .replace(/&amp;/gi, \"&\")\n    .replace(/&quot;/gi, '\"')\n    .replace(/&#39;/gi, \"'\")\n    .replace(/&lt;/gi, \"<\")\n    .replace(/&gt;/gi, \">\");\n}\n\nfunction htmlToText(value) {\n  return decodeHtml(value)\n    .replace(/<style[\\s\\S]*?<\\/style>/gi, \" \")\n    .replace(/<script[\\s\\S]*?<\\/script>/gi, \" \")\n    .replace(/<[^>]+>/g, \" \")\n    .replace(/[\\u200B-\\u200D\\uFEFF\\u200A\\u202F]/g, \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction safeDecodeUrl(value) {\n  try {\n    return decodeURIComponent(value);\n  } catch (error) {\n    return value;\n  }\n}\n\nfunction extractScriptUrl(value) {\n  const raw = String(value || \"\");\n\n  // Direct clean Ausscripts URL\n  let match = raw.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n  if (match) return match[0];\n\n  // Proofpoint URLDefense wrapped URL\n  const proofpointMatch = raw.match(/https:\\/\\/urldefense\\.com\\/v3\\/__([^;]+)__/i);\n  if (proofpointMatch) {\n    const innerUrl = safeDecodeUrl(proofpointMatch[1]);\n\n    match = innerUrl.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n    if (match) return match[0];\n  }\n\n  // Fallback after HTML entity decode\n  const decodedHtml = decodeHtml(raw);\n  match = decodedHtml.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n  if (match) return match[0];\n\n  return null;\n}\n\n// -----------------------------\n// Extract script details\n// -----------------------------\nconst text = htmlToText(html);\nconst scriptUrl = extractScriptUrl(html);\nconst scriptId = scriptUrl ? scriptUrl.split(\"/\").pop() : null;\n\n// Example text:\n// Tap the link to view BV's ePrescription for 5% Minoxidil + 0.25% Finasteride Lotion lotion ...\nconst prescriptionMatch = text.match(\n  /Tap the link to view\\s+(.+?)'s ePrescription for\\s+(.+?)(?:\\s+https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/| Have a question|$)/i\n);\n\nconst patientInitials = prescriptionMatch?.[1]?.trim() || null;\n\nlet productName = prescriptionMatch?.[2]?.trim() || null;\n\nif (productName) {\n  productName = productName\n    .replace(/\\s+/g, \" \")\n    .replace(/\\s+lotion\\s+/i, \" Lotion \")\n    .replace(/(Lotion)\\s+\\1/gi, \"$1\")\n    .trim();\n\n  // Fix duplicated product format from this email template\n  const words = productName.split(\" \");\n  const midpoint = Math.floor(words.length / 2);\n\n  const firstHalf = words.slice(0, midpoint).join(\" \").trim();\n  const secondHalf = words.slice(midpoint).join(\" \").trim();\n\n  if (\n    firstHalf &&\n    secondHalf &&\n    firstHalf.toLowerCase() === secondHalf.toLowerCase()\n  ) {\n    productName = firstHalf;\n  }\n\n  // Specific cleanup for duplicated \"Lotion product again\" style\n  const duplicateProductMatch = productName.match(/^(.+?Lotion)\\s+\\1$/i);\n  if (duplicateProductMatch) {\n    productName = duplicateProductMatch[1];\n  }\n}\n\n// -----------------------------\n// Date and folder names\n// -----------------------------\nconst receivedDate = input.receivedDateTime\n  ? new Date(input.receivedDateTime).toISOString().slice(0, 10)\n  : new Date().toISOString().slice(0, 10);\n\nconst dateFolderName = receivedDate;\nconst clinicFolderName = clinic || \"UNKNOWNCLINIC\";\n\nconst safePatientInitials = patientInitials || \"UnknownInitials\";\nconst safeScriptId = scriptId || \"UnknownScript\";\nconst fileName = `${receivedDate}-${safeScriptId}-${safePatientInitials}.pdf`;\n\n// -----------------------------\n// SharePoint / Graph IDs\n// -----------------------------\nconst DriveID = \"b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU\";\n\nconst AUMedOrderID = \"01Y4DA4OPCXITTGW45PJHZBMOQ2WVAPCD2\";\n\nconst CompletedOrdersID = \"01Y4DA4OMCIC7MC3JRSBG2QB4JYEGHALNK\";\n\n// Correct folder ID for:\n// -=AU Med Orders=- / OrderInProgress\nconst OrderInProgressID = \"01Y4DA4OMQFXPAO6YE25F2FTI3HY3VF4HL\";\n\n// -----------------------------\n// Final output\n// -----------------------------\nreturn {\n  json: {\n    isPrescriptionEmail: !!scriptUrl,\n\n    emailId,\n    originalMessageId: emailId,\n\n    clinic,\n    clinicFolderName,\n\n    patientInitials,\n    productName,\n\n    scriptUrl,\n    scriptId,\n\n    receivedDate,\n    dateFolderName,\n\n    fileName,\n\n    DriveID,\n    AUMedOrderID,\n    CompletedOrdersID,\n    OrderInProgressID,\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1312,
+        -48
+      ],
+      "id": "634ea638-f617-4645-ba4e-f42224595ddf",
+      "name": "Email Cleanup"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://playwright_runner:3000/pdf-from-script",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "scriptId",
+              "value": "={{ $('Email Cleanup').item.json.scriptId }}"
+            },
+            {
+              "name": "filename",
+              "value": "= {{ $('Email Cleanup').item.json.receivedDate }}-{{ $('Email Cleanup').item.json.scriptId }}-{{ $('Email Cleanup').item.json.patientInitials }}.pdf"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1776,
+        -48
+      ],
+      "id": "331b3ac6-7c4e-407d-8d35-dcb9b2e0dbf2",
+      "name": "Download Script"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1072,
+        -64
+      ],
+      "id": "bf53b8aa-49bb-4a22-8d4e-ca0dc8446143",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "xoN2lt8EcXm5G0vh",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/xoN2lt8EcXm5G0vh",
+          "cachedResultName": "HelixScript-Data-Clinic-FolderCheck"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1520,
+        -48
+      ],
+      "id": "cbaa212d-0a84-4772-ae24-c53032e2cd17",
+      "name": "Call 'HelixScript-Data-Clinic-FolderCheck'"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Email Cleanup').first().json.DriveID }}/items/{{ $(\"Call 'HelixScript-Data-Clinic-FolderCheck'\").first().json.ClinicFolderID }}:/{{ $('Email Cleanup').first().json.receivedDate }}-{{ $('Email Cleanup').first().json.scriptId }}-{{ $('Email Cleanup').first().json.patientInitials }}.pdf:/content",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2000,
+        -48
+      ],
+      "id": "bfe9bd3c-541e-491e-8387-fdca33393de7",
+      "name": "UploadScript",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "name",
+              "condition": "ilike",
+              "keyValue": "={{ $('Email Cleanup').item.json.clinic }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2208,
+        -48
+      ],
+      "id": "74b0bb0e-510c-48f7-9e18-c8b737112629",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/users/au.pharmacy@ashleyandmartin.com.au/messages/{{ $('Email Cleanup').item.json.emailId }}/move",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOutlookOAuth2Api",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "destinationId",
+              "value": "={{ $json.MailboxFolderID }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2416,
+        -48
+      ],
+      "id": "98f1d3a5-20d4-4d8c-be29-ed1d0256c7ee",
+      "name": "ArchiveEmailtoFolder",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "eTjXE2aZrDK0PHJV",
+          "name": "au.pharmacy@ashleyandmartin.com.au"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/10 8-18 * * 1-5"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -16,
+        0
+      ],
+      "id": "9d743029-cd8e-4ce6-9b16-437f12f616f6",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-06-24T09:20:00.003+08:00",
+          "Readable date": "June 24th 2026, 9:20:00 am",
+          "Readable time": "9:20:00 am",
+          "Day of week": "Wednesday",
+          "Year": "2026",
+          "Month": "June",
+          "Day of month": "24",
+          "Hour": "09",
+          "Minute": "20",
+          "Second": "00",
+          "Timezone": "Australia/Perth (UTC+08:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-23T01:36:23.378Z",
+      "createdAt": "2026-06-23T01:36:23.378Z",
+      "role": "workflow:owner",
+      "workflowId": "L0hoSKxaW3ccB61f",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-06-23T07:20:53.826Z",
+      "createdAt": "2026-06-23T07:20:53.826Z",
+      "id": "IGQhT6ige0xQKnQ9",
+      "name": "Helix"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-06-24T02:29:22.486Z",
+  "versionId": "1dd1c923-87ec-4815-b439-aa1efeab82c6"
+}
