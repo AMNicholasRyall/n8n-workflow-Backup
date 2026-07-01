@@ -1,0 +1,257 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-06-29T07:02:53.000Z",
+    "createdAt": "2026-06-29T07:02:51.741Z",
+    "versionId": "668cf82f-7bb8-4806-8a79-7a0b05758787",
+    "workflowId": "OfE5XUgNaz7MsDjO",
+    "nodes": [
+      {
+        "parameters": {
+          "path": "HelixID",
+          "authentication": "headerAuth",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -496,
+          -240
+        ],
+        "id": "1e37dd94-3ff2-40ed-9ab1-6a124604e704",
+        "name": "Webhook",
+        "webhookId": "24c86a10-1405-41bf-b3a8-0cc8ed46ff7f",
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "sY8yquWKR2Bgy5b8",
+            "name": "Header Auth account 2"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "O7QvEberheUcDwMp",
+            "mode": "list",
+            "cachedResultName": "ZenotiTokens",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "TokenName",
+                "keyValue": "access_token"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          -272,
+          -240
+        ],
+        "id": "437550cc-64f1-4a58-bf29-dd9ed9153269",
+        "name": "Get row(s)"
+      },
+      {
+        "parameters": {
+          "options": {
+            "responseHeaders": {
+              "entries": [
+                {
+                  "name": "TokenSecret",
+                  "value": "={{ $json.TokenSecret }}"
+                },
+                {
+                  "name": "TokenExpirr",
+                  "value": "={{ $json.Token_Expiry }}"
+                }
+              ]
+            }
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          -48,
+          -240
+        ],
+        "id": "83f3dd1b-3025-4e19-a6ad-8ee0257f8c13",
+        "name": "Respond to Webhook"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 668cf82f",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "668cf82f-7bb8-4806-8a79-7a0b05758787",
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-06-29T06:35:32.550Z",
+  "id": "OfE5XUgNaz7MsDjO",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Helix-CallZenotiToken",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "HelixID",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -496,
+        -240
+      ],
+      "id": "1e37dd94-3ff2-40ed-9ab1-6a124604e704",
+      "name": "Webhook",
+      "webhookId": "24c86a10-1405-41bf-b3a8-0cc8ed46ff7f",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "sY8yquWKR2Bgy5b8",
+          "name": "Header Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "O7QvEberheUcDwMp",
+          "mode": "list",
+          "cachedResultName": "ZenotiTokens",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "TokenName",
+              "keyValue": "access_token"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -272,
+        -240
+      ],
+      "id": "437550cc-64f1-4a58-bf29-dd9ed9153269",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "TokenSecret",
+                "value": "={{ $json.TokenSecret }}"
+              },
+              {
+                "name": "TokenExpirr",
+                "value": "={{ $json.Token_Expiry }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -48,
+        -240
+      ],
+      "id": "83f3dd1b-3025-4e19-a6ad-8ee0257f8c13",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-29T06:35:32.552Z",
+      "createdAt": "2026-06-29T06:35:32.552Z",
+      "role": "workflow:owner",
+      "workflowId": "OfE5XUgNaz7MsDjO",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-06-29T07:02:51.741Z",
+  "versionId": "668cf82f-7bb8-4806-8a79-7a0b05758787"
+}
