@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-06-23T07:28:20.000Z",
-    "createdAt": "2026-06-23T07:28:18.523Z",
-    "versionId": "b1b8fdfc-e0a5-489c-b3b0-9d34b4a74632",
+    "updatedAt": "2026-06-30T04:13:15.000Z",
+    "createdAt": "2026-06-30T04:09:00.555Z",
+    "versionId": "5f5f1723-8717-4359-a338-46f9c8d21666",
     "workflowId": "L0hoSKxaW3ccB61f",
     "nodes": [
       {
@@ -92,6 +92,12 @@
                 "name": "OrderInProgress",
                 "value": "01Y4DA4OMQFXPAO6YE25F2FTI3HY3VF4HL",
                 "type": "string"
+              },
+              {
+                "id": "585b8774-0f16-4b67-8f8d-89724c97d641",
+                "name": "NewUserFolderID",
+                "value": "AAMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1OAAuAAAAAAClrM7JrALpR5gWZ2M2MX76AQDXiFn9j2FwSaxBKrApLY6NAAAJn8erAAA=",
+                "type": "string"
               }
             ]
           },
@@ -154,8 +160,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.4,
         "position": [
-          1056,
-          176
+          1072,
+          208
         ],
         "id": "14ba85ab-5de3-45bc-b718-48a4e6331c81",
         "name": "Remove Incorrect Emails",
@@ -168,13 +174,13 @@
       },
       {
         "parameters": {
-          "jsCode": "// n8n Code node\n// Email Cleanup\n\nconst input = $json;\n\n// -----------------------------\n// Email basics\n// -----------------------------\nconst emailId = input.id || null;\n\nconst html =\n  input.body?.content ||\n  $input.first().json.body?.content ||\n  \"\";\n\n// Pull clinic from first recipient email address.\n// Example: AUC.pharmacy@ashleyandmartin.com.au -> AUC\nconst toAddress =\n  input.toRecipients?.[0]?.emailAddress?.address ||\n  $input.first().json.toRecipients?.[0]?.emailAddress?.address ||\n  \"\";\n\nconst clinic = toAddress\n  ? toAddress.split(\".\")[0].trim().toUpperCase()\n  : null;\n\n// -----------------------------\n// Helpers\n// -----------------------------\nfunction decodeHtml(value) {\n  return String(value || \"\")\n    .replace(/&nbsp;/gi, \" \")\n    .replace(/&amp;/gi, \"&\")\n    .replace(/&quot;/gi, '\"')\n    .replace(/&#39;/gi, \"'\")\n    .replace(/&lt;/gi, \"<\")\n    .replace(/&gt;/gi, \">\");\n}\n\nfunction htmlToText(value) {\n  return decodeHtml(value)\n    .replace(/<style[\\s\\S]*?<\\/style>/gi, \" \")\n    .replace(/<script[\\s\\S]*?<\\/script>/gi, \" \")\n    .replace(/<[^>]+>/g, \" \")\n    .replace(/[\\u200B-\\u200D\\uFEFF\\u200A\\u202F]/g, \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction safeDecodeUrl(value) {\n  try {\n    return decodeURIComponent(value);\n  } catch (error) {\n    return value;\n  }\n}\n\nfunction extractScriptUrl(value) {\n  const raw = String(value || \"\");\n\n  // Direct clean Ausscripts URL\n  let match = raw.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n  if (match) return match[0];\n\n  // Proofpoint URLDefense wrapped URL\n  const proofpointMatch = raw.match(/https:\\/\\/urldefense\\.com\\/v3\\/__([^;]+)__/i);\n  if (proofpointMatch) {\n    const innerUrl = safeDecodeUrl(proofpointMatch[1]);\n\n    match = innerUrl.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n    if (match) return match[0];\n  }\n\n  // Fallback after HTML entity decode\n  const decodedHtml = decodeHtml(raw);\n  match = decodedHtml.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n  if (match) return match[0];\n\n  return null;\n}\n\n// -----------------------------\n// Extract script details\n// -----------------------------\nconst text = htmlToText(html);\nconst scriptUrl = extractScriptUrl(html);\nconst scriptId = scriptUrl ? scriptUrl.split(\"/\").pop() : null;\n\n// Example text:\n// Tap the link to view BV's ePrescription for 5% Minoxidil + 0.25% Finasteride Lotion lotion ...\nconst prescriptionMatch = text.match(\n  /Tap the link to view\\s+(.+?)'s ePrescription for\\s+(.+?)(?:\\s+https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/| Have a question|$)/i\n);\n\nconst patientInitials = prescriptionMatch?.[1]?.trim() || null;\n\nlet productName = prescriptionMatch?.[2]?.trim() || null;\n\nif (productName) {\n  productName = productName\n    .replace(/\\s+/g, \" \")\n    .replace(/\\s+lotion\\s+/i, \" Lotion \")\n    .replace(/(Lotion)\\s+\\1/gi, \"$1\")\n    .trim();\n\n  // Fix duplicated product format from this email template\n  const words = productName.split(\" \");\n  const midpoint = Math.floor(words.length / 2);\n\n  const firstHalf = words.slice(0, midpoint).join(\" \").trim();\n  const secondHalf = words.slice(midpoint).join(\" \").trim();\n\n  if (\n    firstHalf &&\n    secondHalf &&\n    firstHalf.toLowerCase() === secondHalf.toLowerCase()\n  ) {\n    productName = firstHalf;\n  }\n\n  // Specific cleanup for duplicated \"Lotion product again\" style\n  const duplicateProductMatch = productName.match(/^(.+?Lotion)\\s+\\1$/i);\n  if (duplicateProductMatch) {\n    productName = duplicateProductMatch[1];\n  }\n}\n\n// -----------------------------\n// Date and folder names\n// -----------------------------\nconst receivedDate = input.receivedDateTime\n  ? new Date(input.receivedDateTime).toISOString().slice(0, 10)\n  : new Date().toISOString().slice(0, 10);\n\nconst dateFolderName = receivedDate;\nconst clinicFolderName = clinic || \"UNKNOWNCLINIC\";\n\nconst safePatientInitials = patientInitials || \"UnknownInitials\";\nconst safeScriptId = scriptId || \"UnknownScript\";\nconst fileName = `${receivedDate}-${safeScriptId}-${safePatientInitials}.pdf`;\n\n// -----------------------------\n// SharePoint / Graph IDs\n// -----------------------------\nconst DriveID = \"b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU\";\n\nconst AUMedOrderID = \"01Y4DA4OPCXITTGW45PJHZBMOQ2WVAPCD2\";\n\nconst CompletedOrdersID = \"01Y4DA4OMCIC7MC3JRSBG2QB4JYEGHALNK\";\n\n// Correct folder ID for:\n// -=AU Med Orders=- / OrderInProgress\nconst OrderInProgressID = \"01Y4DA4OMQFXPAO6YE25F2FTI3HY3VF4HL\";\n\n// -----------------------------\n// Final output\n// -----------------------------\nreturn {\n  json: {\n    isPrescriptionEmail: !!scriptUrl,\n\n    emailId,\n    originalMessageId: emailId,\n\n    clinic,\n    clinicFolderName,\n\n    patientInitials,\n    productName,\n\n    scriptUrl,\n    scriptId,\n\n    receivedDate,\n    dateFolderName,\n\n    fileName,\n\n    DriveID,\n    AUMedOrderID,\n    CompletedOrdersID,\n    OrderInProgressID,\n  },\n};"
+          "jsCode": "// n8n Code node\n// Email Cleanup\n\nconst input = $json;\n\n// -----------------------------\n// Email basics\n// -----------------------------\nconst emailId = input.id || null;\n\nconst html =\n  input.body?.content ||\n  $input.first().json.body?.content ||\n  \"\";\n\n// Pull clinic/customer/pharmacy from first recipient.\n// Example:\n// perth.pharmacy+151-EAD.KCP@ashleyandmartin.com.au\n//\n// clinic       = PERTH\n// customerCode = 151-EAD\n// pharmacy     = KCP\n\nconst recipientEmailAddress =\n  input.toRecipients?.[0]?.emailAddress?.address ||\n  $input.first().json.toRecipients?.[0]?.emailAddress?.address ||\n  \"\";\n\nconst recipientEmailName =\n  input.toRecipients?.[0]?.emailAddress?.name ||\n  $input.first().json.toRecipients?.[0]?.emailAddress?.name ||\n  \"\";\n\nconst toAddress = recipientEmailAddress || recipientEmailName || \"\";\n\nconst clinic = toAddress\n  ? toAddress.split(\".\")[0].trim().toUpperCase()\n  : null;\n\nlet customerCode = null;\nlet pharmacy = null;\n\nconst recipientMatch = toAddress.match(/\\+([^\\.@]+)\\.([^@]+)@/i);\n\nif (recipientMatch) {\n  customerCode = recipientMatch[1]?.trim() || null;\n  pharmacy = recipientMatch[2]?.trim().toUpperCase() || null;\n}\n\n// -----------------------------\n// Helpers\n// -----------------------------\nfunction decodeHtml(value) {\n  return String(value || \"\")\n    .replace(/&nbsp;/gi, \" \")\n    .replace(/&amp;/gi, \"&\")\n    .replace(/&quot;/gi, '\"')\n    .replace(/&#39;/gi, \"'\")\n    .replace(/&lt;/gi, \"<\")\n    .replace(/&gt;/gi, \">\");\n}\n\nfunction htmlToText(value) {\n  return decodeHtml(value)\n    .replace(/<style[\\s\\S]*?<\\/style>/gi, \" \")\n    .replace(/<script[\\s\\S]*?<\\/script>/gi, \" \")\n    .replace(/<[^>]+>/g, \" \")\n    .replace(/[\\u200B-\\u200D\\uFEFF\\u200A\\u202F]/g, \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction safeDecodeUrl(value) {\n  try {\n    return decodeURIComponent(value);\n  } catch (error) {\n    return value;\n  }\n}\n\nfunction extractScriptUrl(value) {\n  const raw = String(value || \"\");\n\n  // Direct clean Ausscripts URL\n  let match = raw.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n  if (match) return match[0];\n\n  // Proofpoint URLDefense wrapped URL\n  const proofpointMatch = raw.match(/https:\\/\\/urldefense\\.com\\/v3\\/__([^;]+)__/i);\n  if (proofpointMatch) {\n    const innerUrl = safeDecodeUrl(proofpointMatch[1]);\n\n    match = innerUrl.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n    if (match) return match[0];\n  }\n\n  // Fallback after HTML entity decode\n  const decodedHtml = decodeHtml(raw);\n  match = decodedHtml.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n  if (match) return match[0];\n\n  return null;\n}\n\n// -----------------------------\n// Extract script details\n// -----------------------------\nconst text = htmlToText(html);\nconst scriptUrl = extractScriptUrl(html);\nconst scriptId = scriptUrl ? scriptUrl.split(\"/\").pop() : null;\n\n// Example text:\n// Tap the link to view BV's ePrescription for 5% Minoxidil + 0.25% Finasteride Lotion lotion ...\nconst prescriptionMatch = text.match(\n  /Tap the link to view\\s+(.+?)'s ePrescription for\\s+(.+?)(?:\\s+https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/| Have a question|$)/i\n);\n\nconst patientInitials = prescriptionMatch?.[1]?.trim() || null;\n\nlet productName = prescriptionMatch?.[2]?.trim() || null;\n\nif (productName) {\n  productName = productName\n    .replace(/\\s+/g, \" \")\n    .replace(/\\s+lotion\\s+/i, \" Lotion \")\n    .replace(/(Lotion)\\s+\\1/gi, \"$1\")\n    .trim();\n\n  // Fix duplicated product format from this email template\n  const words = productName.split(\" \");\n  const midpoint = Math.floor(words.length / 2);\n\n  const firstHalf = words.slice(0, midpoint).join(\" \").trim();\n  const secondHalf = words.slice(midpoint).join(\" \").trim();\n\n  if (\n    firstHalf &&\n    secondHalf &&\n    firstHalf.toLowerCase() === secondHalf.toLowerCase()\n  ) {\n    productName = firstHalf;\n  }\n\n  // Specific cleanup for duplicated \"Lotion product again\" style\n  const duplicateProductMatch = productName.match(/^(.+?Lotion)\\s+\\1$/i);\n  if (duplicateProductMatch) {\n    productName = duplicateProductMatch[1];\n  }\n}\n\n// -----------------------------\n// Date and folder names\n// -----------------------------\nconst receivedDate = input.receivedDateTime\n  ? new Date(input.receivedDateTime).toISOString().slice(0, 10)\n  : new Date().toISOString().slice(0, 10);\n\nconst dateFolderName = receivedDate;\nconst clinicFolderName = clinic || \"UNKNOWNCLINIC\";\n\nconst safePatientInitials = patientInitials || \"UnknownInitials\";\nconst safeScriptId = scriptId || \"UnknownScript\";\nconst fileName = `${receivedDate}-${safeScriptId}-${safePatientInitials}.pdf`;\n\n// -----------------------------\n// SharePoint / Graph IDs\n// -----------------------------\nconst DriveID = \"b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU\";\n\nconst AUMedOrderID = \"01Y4DA4OPCXITTGW45PJHZBMOQ2WVAPCD2\";\n\nconst CompletedOrdersID = \"01Y4DA4OMCIC7MC3JRSBG2QB4JYEGHALNK\";\n\n// Correct folder ID for:\n// -=AU Med Orders=- / OrderInProgress\nconst OrderInProgressID = \"01Y4DA4OMQFXPAO6YE25F2FTI3HY3VF4HL\";\n\n// -----------------------------\n// Final output\n// -----------------------------\nreturn {\n  json: {\n    isPrescriptionEmail: !!scriptUrl,\n\n    emailId,\n    originalMessageId: emailId,\n\n    toAddress,\n\n    clinic,\n    clinicFolderName,\n\n    customerCode,\n    pharmacy,\n\n    patientInitials,\n    productName,\n\n    scriptUrl,\n    scriptId,\n\n    receivedDate,\n    dateFolderName,\n\n    fileName,\n\n    DriveID,\n    AUMedOrderID,\n    CompletedOrdersID,\n    OrderInProgressID,\n  },\n};"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          1312,
-          -48
+          1696,
+          -256
         ],
         "id": "634ea638-f617-4645-ba4e-f42224595ddf",
         "name": "Email Cleanup"
@@ -192,7 +198,7 @@
               },
               {
                 "name": "filename",
-                "value": "= {{ $('Email Cleanup').item.json.receivedDate }}-{{ $('Email Cleanup').item.json.scriptId }}-{{ $('Email Cleanup').item.json.patientInitials }}.pdf"
+                "value": "= {{ $('Email Cleanup').item.json.receivedDate }}-{{ $('Email Cleanup').item.json.scriptId }}-{{ $('Email Cleanup').item.json.customerCode }}.pdf"
               }
             ]
           },
@@ -207,11 +213,12 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.4,
         "position": [
-          1776,
-          -48
+          2160,
+          -256
         ],
         "id": "331b3ac6-7c4e-407d-8d35-dcb9b2e0dbf2",
-        "name": "Download Script"
+        "name": "Download Script",
+        "retryOnFail": true
       },
       {
         "parameters": {
@@ -220,8 +227,8 @@
         "type": "n8n-nodes-base.splitInBatches",
         "typeVersion": 3,
         "position": [
-          1072,
-          -64
+          1456,
+          -272
         ],
         "id": "bf53b8aa-49bb-4a22-8d4e-ca0dc8446143",
         "name": "Loop Over Items"
@@ -248,8 +255,8 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.3,
         "position": [
-          1520,
-          -48
+          1904,
+          -256
         ],
         "id": "cbaa212d-0a84-4772-ae24-c53032e2cd17",
         "name": "Call 'HelixScript-Data-Clinic-FolderCheck'"
@@ -257,7 +264,7 @@
       {
         "parameters": {
           "method": "PUT",
-          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Email Cleanup').first().json.DriveID }}/items/{{ $(\"Call 'HelixScript-Data-Clinic-FolderCheck'\").first().json.ClinicFolderID }}:/{{ $('Email Cleanup').first().json.receivedDate }}-{{ $('Email Cleanup').first().json.scriptId }}-{{ $('Email Cleanup').first().json.patientInitials }}.pdf:/content",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Email Cleanup').first().json.DriveID }}/items/{{ $('Call \\'HelixScript-Data-Clinic-FolderCheck\\'').item.json.PharmacyFolderID }}:/{{ $('Email Cleanup').first().json.receivedDate }}-{{ $('Email Cleanup').first().json.scriptId }}-{{ $('Email Cleanup').item.json.customerCode }}.pdf:/content",
           "authentication": "genericCredentialType",
           "genericAuthType": "oAuth2Api",
           "sendBody": true,
@@ -268,8 +275,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.4,
         "position": [
-          2000,
-          -48
+          2384,
+          -256
         ],
         "id": "bfe9bd3c-541e-491e-8387-fdca33393de7",
         "name": "UploadScript",
@@ -293,7 +300,7 @@
           "filters": {
             "conditions": [
               {
-                "keyName": "name",
+                "keyName": "MailboxFolderName",
                 "condition": "ilike",
                 "keyValue": "={{ $('Email Cleanup').item.json.clinic }}"
               }
@@ -303,8 +310,8 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
-          2208,
-          -48
+          2592,
+          -256
         ],
         "id": "74b0bb0e-510c-48f7-9e18-c8b737112629",
         "name": "Get row(s)"
@@ -329,8 +336,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.4,
         "position": [
-          2416,
-          -48
+          2800,
+          -256
         ],
         "id": "98f1d3a5-20d4-4d8c-be29-ed1d0256c7ee",
         "name": "ArchiveEmailtoFolder",
@@ -360,6 +367,122 @@
         ],
         "id": "9d743029-cd8e-4ce6-9b16-437f12f616f6",
         "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a3afa1c5-3b4b-4909-9be1-9f5add5a0403",
+                "leftValue": "={{ $json.toRecipients[0].emailAddress.name }}",
+                "rightValue": "au.pharmacy",
+                "operator": {
+                  "type": "string",
+                  "operation": "notStartsWith"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1088,
+          -96
+        ],
+        "id": "1f6439a9-faa6-4d91-ab30-ae2d1cabffc6",
+        "name": "If1"
+      },
+      {
+        "parameters": {
+          "jsCode": "// n8n Code node\n// Email Cleanup\n\nconst input = $json;\n\n// -----------------------------\n// Email basics\n// -----------------------------\nconst emailId = input.id || null;\n\nconst html =\n  input.body?.content ||\n  $input.first().json.body?.content ||\n  \"\";\n\n// Pull email prefix/customer code from first recipient.\n// Example:\n// au.pharmacy+151-EAD@ashleyandmartin.com.au\n//\n// emailPrefix  = au.pharmacy\n// clinic       = AU\n// pharmacy     = PHARMACY\n// customerCode = 151-EAD\n\nconst recipientEmailAddress =\n  input.toRecipients?.[0]?.emailAddress?.address ||\n  $input.first().json.toRecipients?.[0]?.emailAddress?.address ||\n  \"\";\n\nconst recipientEmailName =\n  input.toRecipients?.[0]?.emailAddress?.name ||\n  $input.first().json.toRecipients?.[0]?.emailAddress?.name ||\n  \"\";\n\nconst toAddress = recipientEmailAddress || recipientEmailName || \"\";\n\nlet emailPrefix = null;\nlet customerCode = null;\n\nconst recipientMatch = toAddress.match(/^([^+@]+)\\+([^@]+)@/i);\n\nif (recipientMatch) {\n  emailPrefix = recipientMatch[1]?.trim().toLowerCase() || null;\n  customerCode = recipientMatch[2]?.trim() || null;\n}\n\n// Keep clinic based on the first part before the dot.\n// Example: au.pharmacy -> AU\nconst clinic = emailPrefix\n  ? emailPrefix.split(\".\")[0].trim().toUpperCase()\n  : null;\n\n// Keep pharmacy based on the second part after the dot.\n// Example: au.pharmacy -> PHARMACY\nconst pharmacy = emailPrefix?.includes(\".\")\n  ? emailPrefix.split(\".\")[1].trim().toUpperCase()\n  : null;\n\n// -----------------------------\n// Helpers\n// -----------------------------\nfunction decodeHtml(value) {\n  return String(value || \"\")\n    .replace(/&nbsp;/gi, \" \")\n    .replace(/&amp;/gi, \"&\")\n    .replace(/&quot;/gi, '\"')\n    .replace(/&#39;/gi, \"'\")\n    .replace(/&lt;/gi, \"<\")\n    .replace(/&gt;/gi, \">\");\n}\n\nfunction htmlToText(value) {\n  return decodeHtml(value)\n    .replace(/<style[\\s\\S]*?<\\/style>/gi, \" \")\n    .replace(/<script[\\s\\S]*?<\\/script>/gi, \" \")\n    .replace(/<[^>]+>/g, \" \")\n    .replace(/[\\u200B-\\u200D\\uFEFF\\u200A\\u202F]/g, \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction safeDecodeUrl(value) {\n  try {\n    return decodeURIComponent(value);\n  } catch (error) {\n    return value;\n  }\n}\n\nfunction extractScriptUrl(value) {\n  const raw = String(value || \"\");\n\n  // Direct clean Ausscripts URL\n  let match = raw.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n  if (match) return match[0];\n\n  // Proofpoint URLDefense wrapped URL\n  const proofpointMatch = raw.match(/https:\\/\\/urldefense\\.com\\/v3\\/__([^;]+)__/i);\n  if (proofpointMatch) {\n    const innerUrl = safeDecodeUrl(proofpointMatch[1]);\n\n    match = innerUrl.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n    if (match) return match[0];\n  }\n\n  // Fallback after HTML entity decode\n  const decodedHtml = decodeHtml(raw);\n  match = decodedHtml.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n  if (match) return match[0];\n\n  return null;\n}\n\n// -----------------------------\n// Extract script details\n// -----------------------------\nconst text = htmlToText(html);\nconst scriptUrl = extractScriptUrl(html);\nconst scriptId = scriptUrl ? scriptUrl.split(\"/\").pop() : null;\n\n// Example text:\n// Tap the link to view BV's ePrescription for 5% Minoxidil + 0.25% Finasteride Lotion lotion ...\nconst prescriptionMatch = text.match(\n  /Tap the link to view\\s+(.+?)'s ePrescription for\\s+(.+?)(?:\\s+https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/| Have a question|$)/i\n);\n\nconst patientInitials = prescriptionMatch?.[1]?.trim() || null;\n\nlet productName = prescriptionMatch?.[2]?.trim() || null;\n\nif (productName) {\n  productName = productName\n    .replace(/\\s+/g, \" \")\n    .replace(/\\s+lotion\\s+/i, \" Lotion \")\n    .replace(/(Lotion)\\s+\\1/gi, \"$1\")\n    .trim();\n\n  // Fix duplicated product format from this email template\n  const words = productName.split(\" \");\n  const midpoint = Math.floor(words.length / 2);\n\n  const firstHalf = words.slice(0, midpoint).join(\" \").trim();\n  const secondHalf = words.slice(midpoint).join(\" \").trim();\n\n  if (\n    firstHalf &&\n    secondHalf &&\n    firstHalf.toLowerCase() === secondHalf.toLowerCase()\n  ) {\n    productName = firstHalf;\n  }\n\n  // Specific cleanup for duplicated \"Lotion product again\" style\n  const duplicateProductMatch = productName.match(/^(.+?Lotion)\\s+\\1$/i);\n  if (duplicateProductMatch) {\n    productName = duplicateProductMatch[1];\n  }\n}\n\n// -----------------------------\n// Date and folder names\n// -----------------------------\nconst receivedDate = input.receivedDateTime\n  ? new Date(input.receivedDateTime).toISOString().slice(0, 10)\n  : new Date().toISOString().slice(0, 10);\n\nconst dateFolderName = receivedDate;\nconst clinicFolderName = clinic || \"UNKNOWNCLINIC\";\n\nconst safePatientInitials = patientInitials || \"UnknownInitials\";\nconst safeScriptId = scriptId || \"UnknownScript\";\nconst fileName = `${receivedDate}-${safeScriptId}-${safePatientInitials}.pdf`;\n\n// -----------------------------\n// SharePoint / Graph IDs\n// -----------------------------\nconst DriveID = \"b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU\";\n\nconst AUMedOrderID = \"01Y4DA4OPCXITTGW45PJHZBMOQ2WVAPCD2\";\n\nconst CompletedOrdersID = \"01Y4DA4OMCIC7MC3JRSBG2QB4JYEGHALNK\";\n\n// Correct folder ID for:\n// -=AU Med Orders=- / OrderInProgress\nconst OrderInProgressID = \"01Y4DA4OMQFXPAO6YE25F2FTI3HY3VF4HL\";\n\n// -----------------------------\n// Final output\n// -----------------------------\nreturn {\n  json: {\n    isPrescriptionEmail: !!scriptUrl,\n\n    emailId,\n    originalMessageId: emailId,\n\n    toAddress,\n\n    emailPrefix,\n\n    clinic,\n    clinicFolderName,\n\n    customerCode,\n    pharmacy,\n\n    patientInitials,\n    productName,\n\n    scriptUrl,\n    scriptId,\n\n    receivedDate,\n    dateFolderName,\n\n    fileName,\n\n    DriveID,\n    AUMedOrderID,\n    CompletedOrdersID,\n    OrderInProgressID,\n  },\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1936,
+          48
+        ],
+        "id": "02f9eaf5-bf4b-4ae3-a5bd-a5c1cd4ce066",
+        "name": "NewUserCleanup"
+      },
+      {
+        "parameters": {
+          "toRecipients": "operations@ashleyandmartin.com.au",
+          "subject": "=Automation - Pharmacy Order - {{ $json.customerCode }}",
+          "bodyContent": "=<p>Hi Team,</p>\n\n<p>\n  A new email has been sent to <strong>Au.Pharmacy</strong>, however the user appears to be incorrectly configured.\n</p>\n\n<p>\n  They have been moved to the <strong>New User</strong> folder and you will need to manually process their order.\n</p>\n\n<table style=\"border-collapse: collapse; width: 100%; max-width: 600px;\">\n  <tr>\n    <td style=\"padding: 8px; border: 1px solid #ddd; font-weight: bold;\">Customer Code</td>\n    <td style=\"padding: 8px; border: 1px solid #ddd;\">{{ $json.customerCode }}</td>\n  </tr>\n  <tr>\n    <td style=\"padding: 8px; border: 1px solid #ddd; font-weight: bold;\">Helix Email</td>\n    <td style=\"padding: 8px; border: 1px solid #ddd;\">{{ $json.toAddress }}</td>\n  </tr>\n</table>\n\n<p>Regards,<br>\nAutomation</p>",
+          "additionalFields": {
+            "bodyContentType": "html"
+          }
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          2160,
+          48
+        ],
+        "id": "ab22f13a-eda1-4492-a106-33de194845db",
+        "name": "Send a message",
+        "webhookId": "8fe79f98-0939-4358-b4cc-cd723e1dd558",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://graph.microsoft.com/v1.0/users/au.pharmacy@ashleyandmartin.com.au/messages/{{ $('NewUserCleanup').item.json.emailId }}/move",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "microsoftOutlookOAuth2Api",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "destinationId",
+                "value": "={{ $('Master Field Set').item.json.NewUserFolderID }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          2384,
+          48
+        ],
+        "id": "d08421dd-14f6-4d08-92eb-9c0cc6cf2c6b",
+        "name": "MovetoNEWUser",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "eTjXE2aZrDK0PHJV",
+            "name": "au.pharmacy@ashleyandmartin.com.au"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          1520,
+          32
+        ],
+        "id": "bc753493-f292-4e5e-848f-37fdafe2234c",
+        "name": "Loop Over Items1"
       }
     ],
     "connections": {
@@ -378,7 +501,7 @@
         "main": [
           [
             {
-              "node": "Loop Over Items",
+              "node": "If1",
               "type": "main",
               "index": 0
             }
@@ -502,14 +625,77 @@
             }
           ]
         ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "NewUserCleanup": {
+        "main": [
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send a message": {
+        "main": [
+          [
+            {
+              "node": "MovetoNEWUser",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items1": {
+        "main": [
+          [],
+          [
+            {
+              "node": "NewUserCleanup",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "MovetoNEWUser": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version b1b8fdfc",
+    "name": "Version 5f5f1723",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "b1b8fdfc-e0a5-489c-b3b0-9d34b4a74632",
+  "activeVersionId": "5f5f1723-8717-4359-a338-46f9c8d21666",
   "connections": {
     "Split Out": {
       "main": [
@@ -526,7 +712,7 @@
       "main": [
         [
           {
-            "node": "Loop Over Items",
+            "node": "If1",
             "type": "main",
             "index": 0
           }
@@ -650,6 +836,69 @@
           }
         ]
       ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NewUserCleanup": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "MovetoNEWUser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "NewUserCleanup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MovetoNEWUser": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2026-06-23T01:36:23.376Z",
@@ -746,6 +995,12 @@
               "name": "OrderInProgress",
               "value": "01Y4DA4OMQFXPAO6YE25F2FTI3HY3VF4HL",
               "type": "string"
+            },
+            {
+              "id": "585b8774-0f16-4b67-8f8d-89724c97d641",
+              "name": "NewUserFolderID",
+              "value": "AAMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1OAAuAAAAAAClrM7JrALpR5gWZ2M2MX76AQDXiFn9j2FwSaxBKrApLY6NAAAJn8erAAA=",
+              "type": "string"
             }
           ]
         },
@@ -808,8 +1063,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1056,
-        176
+        1072,
+        208
       ],
       "id": "14ba85ab-5de3-45bc-b718-48a4e6331c81",
       "name": "Remove Incorrect Emails",
@@ -822,13 +1077,13 @@
     },
     {
       "parameters": {
-        "jsCode": "// n8n Code node\n// Email Cleanup\n\nconst input = $json;\n\n// -----------------------------\n// Email basics\n// -----------------------------\nconst emailId = input.id || null;\n\nconst html =\n  input.body?.content ||\n  $input.first().json.body?.content ||\n  \"\";\n\n// Pull clinic from first recipient email address.\n// Example: AUC.pharmacy@ashleyandmartin.com.au -> AUC\nconst toAddress =\n  input.toRecipients?.[0]?.emailAddress?.address ||\n  $input.first().json.toRecipients?.[0]?.emailAddress?.address ||\n  \"\";\n\nconst clinic = toAddress\n  ? toAddress.split(\".\")[0].trim().toUpperCase()\n  : null;\n\n// -----------------------------\n// Helpers\n// -----------------------------\nfunction decodeHtml(value) {\n  return String(value || \"\")\n    .replace(/&nbsp;/gi, \" \")\n    .replace(/&amp;/gi, \"&\")\n    .replace(/&quot;/gi, '\"')\n    .replace(/&#39;/gi, \"'\")\n    .replace(/&lt;/gi, \"<\")\n    .replace(/&gt;/gi, \">\");\n}\n\nfunction htmlToText(value) {\n  return decodeHtml(value)\n    .replace(/<style[\\s\\S]*?<\\/style>/gi, \" \")\n    .replace(/<script[\\s\\S]*?<\\/script>/gi, \" \")\n    .replace(/<[^>]+>/g, \" \")\n    .replace(/[\\u200B-\\u200D\\uFEFF\\u200A\\u202F]/g, \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction safeDecodeUrl(value) {\n  try {\n    return decodeURIComponent(value);\n  } catch (error) {\n    return value;\n  }\n}\n\nfunction extractScriptUrl(value) {\n  const raw = String(value || \"\");\n\n  // Direct clean Ausscripts URL\n  let match = raw.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n  if (match) return match[0];\n\n  // Proofpoint URLDefense wrapped URL\n  const proofpointMatch = raw.match(/https:\\/\\/urldefense\\.com\\/v3\\/__([^;]+)__/i);\n  if (proofpointMatch) {\n    const innerUrl = safeDecodeUrl(proofpointMatch[1]);\n\n    match = innerUrl.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n    if (match) return match[0];\n  }\n\n  // Fallback after HTML entity decode\n  const decodedHtml = decodeHtml(raw);\n  match = decodedHtml.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n  if (match) return match[0];\n\n  return null;\n}\n\n// -----------------------------\n// Extract script details\n// -----------------------------\nconst text = htmlToText(html);\nconst scriptUrl = extractScriptUrl(html);\nconst scriptId = scriptUrl ? scriptUrl.split(\"/\").pop() : null;\n\n// Example text:\n// Tap the link to view BV's ePrescription for 5% Minoxidil + 0.25% Finasteride Lotion lotion ...\nconst prescriptionMatch = text.match(\n  /Tap the link to view\\s+(.+?)'s ePrescription for\\s+(.+?)(?:\\s+https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/| Have a question|$)/i\n);\n\nconst patientInitials = prescriptionMatch?.[1]?.trim() || null;\n\nlet productName = prescriptionMatch?.[2]?.trim() || null;\n\nif (productName) {\n  productName = productName\n    .replace(/\\s+/g, \" \")\n    .replace(/\\s+lotion\\s+/i, \" Lotion \")\n    .replace(/(Lotion)\\s+\\1/gi, \"$1\")\n    .trim();\n\n  // Fix duplicated product format from this email template\n  const words = productName.split(\" \");\n  const midpoint = Math.floor(words.length / 2);\n\n  const firstHalf = words.slice(0, midpoint).join(\" \").trim();\n  const secondHalf = words.slice(midpoint).join(\" \").trim();\n\n  if (\n    firstHalf &&\n    secondHalf &&\n    firstHalf.toLowerCase() === secondHalf.toLowerCase()\n  ) {\n    productName = firstHalf;\n  }\n\n  // Specific cleanup for duplicated \"Lotion product again\" style\n  const duplicateProductMatch = productName.match(/^(.+?Lotion)\\s+\\1$/i);\n  if (duplicateProductMatch) {\n    productName = duplicateProductMatch[1];\n  }\n}\n\n// -----------------------------\n// Date and folder names\n// -----------------------------\nconst receivedDate = input.receivedDateTime\n  ? new Date(input.receivedDateTime).toISOString().slice(0, 10)\n  : new Date().toISOString().slice(0, 10);\n\nconst dateFolderName = receivedDate;\nconst clinicFolderName = clinic || \"UNKNOWNCLINIC\";\n\nconst safePatientInitials = patientInitials || \"UnknownInitials\";\nconst safeScriptId = scriptId || \"UnknownScript\";\nconst fileName = `${receivedDate}-${safeScriptId}-${safePatientInitials}.pdf`;\n\n// -----------------------------\n// SharePoint / Graph IDs\n// -----------------------------\nconst DriveID = \"b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU\";\n\nconst AUMedOrderID = \"01Y4DA4OPCXITTGW45PJHZBMOQ2WVAPCD2\";\n\nconst CompletedOrdersID = \"01Y4DA4OMCIC7MC3JRSBG2QB4JYEGHALNK\";\n\n// Correct folder ID for:\n// -=AU Med Orders=- / OrderInProgress\nconst OrderInProgressID = \"01Y4DA4OMQFXPAO6YE25F2FTI3HY3VF4HL\";\n\n// -----------------------------\n// Final output\n// -----------------------------\nreturn {\n  json: {\n    isPrescriptionEmail: !!scriptUrl,\n\n    emailId,\n    originalMessageId: emailId,\n\n    clinic,\n    clinicFolderName,\n\n    patientInitials,\n    productName,\n\n    scriptUrl,\n    scriptId,\n\n    receivedDate,\n    dateFolderName,\n\n    fileName,\n\n    DriveID,\n    AUMedOrderID,\n    CompletedOrdersID,\n    OrderInProgressID,\n  },\n};"
+        "jsCode": "// n8n Code node\n// Email Cleanup\n\nconst input = $json;\n\n// -----------------------------\n// Email basics\n// -----------------------------\nconst emailId = input.id || null;\n\nconst html =\n  input.body?.content ||\n  $input.first().json.body?.content ||\n  \"\";\n\n// Pull clinic/customer/pharmacy from first recipient.\n// Example:\n// perth.pharmacy+151-EAD.KCP@ashleyandmartin.com.au\n//\n// clinic       = PERTH\n// customerCode = 151-EAD\n// pharmacy     = KCP\n\nconst recipientEmailAddress =\n  input.toRecipients?.[0]?.emailAddress?.address ||\n  $input.first().json.toRecipients?.[0]?.emailAddress?.address ||\n  \"\";\n\nconst recipientEmailName =\n  input.toRecipients?.[0]?.emailAddress?.name ||\n  $input.first().json.toRecipients?.[0]?.emailAddress?.name ||\n  \"\";\n\nconst toAddress = recipientEmailAddress || recipientEmailName || \"\";\n\nconst clinic = toAddress\n  ? toAddress.split(\".\")[0].trim().toUpperCase()\n  : null;\n\nlet customerCode = null;\nlet pharmacy = null;\n\nconst recipientMatch = toAddress.match(/\\+([^\\.@]+)\\.([^@]+)@/i);\n\nif (recipientMatch) {\n  customerCode = recipientMatch[1]?.trim() || null;\n  pharmacy = recipientMatch[2]?.trim().toUpperCase() || null;\n}\n\n// -----------------------------\n// Helpers\n// -----------------------------\nfunction decodeHtml(value) {\n  return String(value || \"\")\n    .replace(/&nbsp;/gi, \" \")\n    .replace(/&amp;/gi, \"&\")\n    .replace(/&quot;/gi, '\"')\n    .replace(/&#39;/gi, \"'\")\n    .replace(/&lt;/gi, \"<\")\n    .replace(/&gt;/gi, \">\");\n}\n\nfunction htmlToText(value) {\n  return decodeHtml(value)\n    .replace(/<style[\\s\\S]*?<\\/style>/gi, \" \")\n    .replace(/<script[\\s\\S]*?<\\/script>/gi, \" \")\n    .replace(/<[^>]+>/g, \" \")\n    .replace(/[\\u200B-\\u200D\\uFEFF\\u200A\\u202F]/g, \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction safeDecodeUrl(value) {\n  try {\n    return decodeURIComponent(value);\n  } catch (error) {\n    return value;\n  }\n}\n\nfunction extractScriptUrl(value) {\n  const raw = String(value || \"\");\n\n  // Direct clean Ausscripts URL\n  let match = raw.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n  if (match) return match[0];\n\n  // Proofpoint URLDefense wrapped URL\n  const proofpointMatch = raw.match(/https:\\/\\/urldefense\\.com\\/v3\\/__([^;]+)__/i);\n  if (proofpointMatch) {\n    const innerUrl = safeDecodeUrl(proofpointMatch[1]);\n\n    match = innerUrl.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n    if (match) return match[0];\n  }\n\n  // Fallback after HTML entity decode\n  const decodedHtml = decodeHtml(raw);\n  match = decodedHtml.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n  if (match) return match[0];\n\n  return null;\n}\n\n// -----------------------------\n// Extract script details\n// -----------------------------\nconst text = htmlToText(html);\nconst scriptUrl = extractScriptUrl(html);\nconst scriptId = scriptUrl ? scriptUrl.split(\"/\").pop() : null;\n\n// Example text:\n// Tap the link to view BV's ePrescription for 5% Minoxidil + 0.25% Finasteride Lotion lotion ...\nconst prescriptionMatch = text.match(\n  /Tap the link to view\\s+(.+?)'s ePrescription for\\s+(.+?)(?:\\s+https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/| Have a question|$)/i\n);\n\nconst patientInitials = prescriptionMatch?.[1]?.trim() || null;\n\nlet productName = prescriptionMatch?.[2]?.trim() || null;\n\nif (productName) {\n  productName = productName\n    .replace(/\\s+/g, \" \")\n    .replace(/\\s+lotion\\s+/i, \" Lotion \")\n    .replace(/(Lotion)\\s+\\1/gi, \"$1\")\n    .trim();\n\n  // Fix duplicated product format from this email template\n  const words = productName.split(\" \");\n  const midpoint = Math.floor(words.length / 2);\n\n  const firstHalf = words.slice(0, midpoint).join(\" \").trim();\n  const secondHalf = words.slice(midpoint).join(\" \").trim();\n\n  if (\n    firstHalf &&\n    secondHalf &&\n    firstHalf.toLowerCase() === secondHalf.toLowerCase()\n  ) {\n    productName = firstHalf;\n  }\n\n  // Specific cleanup for duplicated \"Lotion product again\" style\n  const duplicateProductMatch = productName.match(/^(.+?Lotion)\\s+\\1$/i);\n  if (duplicateProductMatch) {\n    productName = duplicateProductMatch[1];\n  }\n}\n\n// -----------------------------\n// Date and folder names\n// -----------------------------\nconst receivedDate = input.receivedDateTime\n  ? new Date(input.receivedDateTime).toISOString().slice(0, 10)\n  : new Date().toISOString().slice(0, 10);\n\nconst dateFolderName = receivedDate;\nconst clinicFolderName = clinic || \"UNKNOWNCLINIC\";\n\nconst safePatientInitials = patientInitials || \"UnknownInitials\";\nconst safeScriptId = scriptId || \"UnknownScript\";\nconst fileName = `${receivedDate}-${safeScriptId}-${safePatientInitials}.pdf`;\n\n// -----------------------------\n// SharePoint / Graph IDs\n// -----------------------------\nconst DriveID = \"b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU\";\n\nconst AUMedOrderID = \"01Y4DA4OPCXITTGW45PJHZBMOQ2WVAPCD2\";\n\nconst CompletedOrdersID = \"01Y4DA4OMCIC7MC3JRSBG2QB4JYEGHALNK\";\n\n// Correct folder ID for:\n// -=AU Med Orders=- / OrderInProgress\nconst OrderInProgressID = \"01Y4DA4OMQFXPAO6YE25F2FTI3HY3VF4HL\";\n\n// -----------------------------\n// Final output\n// -----------------------------\nreturn {\n  json: {\n    isPrescriptionEmail: !!scriptUrl,\n\n    emailId,\n    originalMessageId: emailId,\n\n    toAddress,\n\n    clinic,\n    clinicFolderName,\n\n    customerCode,\n    pharmacy,\n\n    patientInitials,\n    productName,\n\n    scriptUrl,\n    scriptId,\n\n    receivedDate,\n    dateFolderName,\n\n    fileName,\n\n    DriveID,\n    AUMedOrderID,\n    CompletedOrdersID,\n    OrderInProgressID,\n  },\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1312,
-        -48
+        1696,
+        -256
       ],
       "id": "634ea638-f617-4645-ba4e-f42224595ddf",
       "name": "Email Cleanup"
@@ -846,7 +1101,7 @@
             },
             {
               "name": "filename",
-              "value": "= {{ $('Email Cleanup').item.json.receivedDate }}-{{ $('Email Cleanup').item.json.scriptId }}-{{ $('Email Cleanup').item.json.patientInitials }}.pdf"
+              "value": "= {{ $('Email Cleanup').item.json.receivedDate }}-{{ $('Email Cleanup').item.json.scriptId }}-{{ $('Email Cleanup').item.json.customerCode }}.pdf"
             }
           ]
         },
@@ -861,11 +1116,12 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1776,
-        -48
+        2160,
+        -256
       ],
       "id": "331b3ac6-7c4e-407d-8d35-dcb9b2e0dbf2",
-      "name": "Download Script"
+      "name": "Download Script",
+      "retryOnFail": true
     },
     {
       "parameters": {
@@ -874,8 +1130,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        1072,
-        -64
+        1456,
+        -272
       ],
       "id": "bf53b8aa-49bb-4a22-8d4e-ca0dc8446143",
       "name": "Loop Over Items"
@@ -902,8 +1158,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.3,
       "position": [
-        1520,
-        -48
+        1904,
+        -256
       ],
       "id": "cbaa212d-0a84-4772-ae24-c53032e2cd17",
       "name": "Call 'HelixScript-Data-Clinic-FolderCheck'"
@@ -911,7 +1167,7 @@
     {
       "parameters": {
         "method": "PUT",
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Email Cleanup').first().json.DriveID }}/items/{{ $(\"Call 'HelixScript-Data-Clinic-FolderCheck'\").first().json.ClinicFolderID }}:/{{ $('Email Cleanup').first().json.receivedDate }}-{{ $('Email Cleanup').first().json.scriptId }}-{{ $('Email Cleanup').first().json.patientInitials }}.pdf:/content",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Email Cleanup').first().json.DriveID }}/items/{{ $('Call \\'HelixScript-Data-Clinic-FolderCheck\\'').item.json.PharmacyFolderID }}:/{{ $('Email Cleanup').first().json.receivedDate }}-{{ $('Email Cleanup').first().json.scriptId }}-{{ $('Email Cleanup').item.json.customerCode }}.pdf:/content",
         "authentication": "genericCredentialType",
         "genericAuthType": "oAuth2Api",
         "sendBody": true,
@@ -922,8 +1178,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        2000,
-        -48
+        2384,
+        -256
       ],
       "id": "bfe9bd3c-541e-491e-8387-fdca33393de7",
       "name": "UploadScript",
@@ -947,7 +1203,7 @@
         "filters": {
           "conditions": [
             {
-              "keyName": "name",
+              "keyName": "MailboxFolderName",
               "condition": "ilike",
               "keyValue": "={{ $('Email Cleanup').item.json.clinic }}"
             }
@@ -957,8 +1213,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        2208,
-        -48
+        2592,
+        -256
       ],
       "id": "74b0bb0e-510c-48f7-9e18-c8b737112629",
       "name": "Get row(s)"
@@ -983,8 +1239,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        2416,
-        -48
+        2800,
+        -256
       ],
       "id": "98f1d3a5-20d4-4d8c-be29-ed1d0256c7ee",
       "name": "ArchiveEmailtoFolder",
@@ -1014,6 +1270,122 @@
       ],
       "id": "9d743029-cd8e-4ce6-9b16-437f12f616f6",
       "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a3afa1c5-3b4b-4909-9be1-9f5add5a0403",
+              "leftValue": "={{ $json.toRecipients[0].emailAddress.name }}",
+              "rightValue": "au.pharmacy",
+              "operator": {
+                "type": "string",
+                "operation": "notStartsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1088,
+        -96
+      ],
+      "id": "1f6439a9-faa6-4d91-ab30-ae2d1cabffc6",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code node\n// Email Cleanup\n\nconst input = $json;\n\n// -----------------------------\n// Email basics\n// -----------------------------\nconst emailId = input.id || null;\n\nconst html =\n  input.body?.content ||\n  $input.first().json.body?.content ||\n  \"\";\n\n// Pull email prefix/customer code from first recipient.\n// Example:\n// au.pharmacy+151-EAD@ashleyandmartin.com.au\n//\n// emailPrefix  = au.pharmacy\n// clinic       = AU\n// pharmacy     = PHARMACY\n// customerCode = 151-EAD\n\nconst recipientEmailAddress =\n  input.toRecipients?.[0]?.emailAddress?.address ||\n  $input.first().json.toRecipients?.[0]?.emailAddress?.address ||\n  \"\";\n\nconst recipientEmailName =\n  input.toRecipients?.[0]?.emailAddress?.name ||\n  $input.first().json.toRecipients?.[0]?.emailAddress?.name ||\n  \"\";\n\nconst toAddress = recipientEmailAddress || recipientEmailName || \"\";\n\nlet emailPrefix = null;\nlet customerCode = null;\n\nconst recipientMatch = toAddress.match(/^([^+@]+)\\+([^@]+)@/i);\n\nif (recipientMatch) {\n  emailPrefix = recipientMatch[1]?.trim().toLowerCase() || null;\n  customerCode = recipientMatch[2]?.trim() || null;\n}\n\n// Keep clinic based on the first part before the dot.\n// Example: au.pharmacy -> AU\nconst clinic = emailPrefix\n  ? emailPrefix.split(\".\")[0].trim().toUpperCase()\n  : null;\n\n// Keep pharmacy based on the second part after the dot.\n// Example: au.pharmacy -> PHARMACY\nconst pharmacy = emailPrefix?.includes(\".\")\n  ? emailPrefix.split(\".\")[1].trim().toUpperCase()\n  : null;\n\n// -----------------------------\n// Helpers\n// -----------------------------\nfunction decodeHtml(value) {\n  return String(value || \"\")\n    .replace(/&nbsp;/gi, \" \")\n    .replace(/&amp;/gi, \"&\")\n    .replace(/&quot;/gi, '\"')\n    .replace(/&#39;/gi, \"'\")\n    .replace(/&lt;/gi, \"<\")\n    .replace(/&gt;/gi, \">\");\n}\n\nfunction htmlToText(value) {\n  return decodeHtml(value)\n    .replace(/<style[\\s\\S]*?<\\/style>/gi, \" \")\n    .replace(/<script[\\s\\S]*?<\\/script>/gi, \" \")\n    .replace(/<[^>]+>/g, \" \")\n    .replace(/[\\u200B-\\u200D\\uFEFF\\u200A\\u202F]/g, \"\")\n    .replace(/\\s+/g, \" \")\n    .trim();\n}\n\nfunction safeDecodeUrl(value) {\n  try {\n    return decodeURIComponent(value);\n  } catch (error) {\n    return value;\n  }\n}\n\nfunction extractScriptUrl(value) {\n  const raw = String(value || \"\");\n\n  // Direct clean Ausscripts URL\n  let match = raw.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n  if (match) return match[0];\n\n  // Proofpoint URLDefense wrapped URL\n  const proofpointMatch = raw.match(/https:\\/\\/urldefense\\.com\\/v3\\/__([^;]+)__/i);\n  if (proofpointMatch) {\n    const innerUrl = safeDecodeUrl(proofpointMatch[1]);\n\n    match = innerUrl.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n    if (match) return match[0];\n  }\n\n  // Fallback after HTML entity decode\n  const decodedHtml = decodeHtml(raw);\n  match = decodedHtml.match(/https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/[A-Z0-9]+/i);\n  if (match) return match[0];\n\n  return null;\n}\n\n// -----------------------------\n// Extract script details\n// -----------------------------\nconst text = htmlToText(html);\nconst scriptUrl = extractScriptUrl(html);\nconst scriptId = scriptUrl ? scriptUrl.split(\"/\").pop() : null;\n\n// Example text:\n// Tap the link to view BV's ePrescription for 5% Minoxidil + 0.25% Finasteride Lotion lotion ...\nconst prescriptionMatch = text.match(\n  /Tap the link to view\\s+(.+?)'s ePrescription for\\s+(.+?)(?:\\s+https:\\/\\/ausscripts\\.erx\\.com\\.au\\/scripts\\/| Have a question|$)/i\n);\n\nconst patientInitials = prescriptionMatch?.[1]?.trim() || null;\n\nlet productName = prescriptionMatch?.[2]?.trim() || null;\n\nif (productName) {\n  productName = productName\n    .replace(/\\s+/g, \" \")\n    .replace(/\\s+lotion\\s+/i, \" Lotion \")\n    .replace(/(Lotion)\\s+\\1/gi, \"$1\")\n    .trim();\n\n  // Fix duplicated product format from this email template\n  const words = productName.split(\" \");\n  const midpoint = Math.floor(words.length / 2);\n\n  const firstHalf = words.slice(0, midpoint).join(\" \").trim();\n  const secondHalf = words.slice(midpoint).join(\" \").trim();\n\n  if (\n    firstHalf &&\n    secondHalf &&\n    firstHalf.toLowerCase() === secondHalf.toLowerCase()\n  ) {\n    productName = firstHalf;\n  }\n\n  // Specific cleanup for duplicated \"Lotion product again\" style\n  const duplicateProductMatch = productName.match(/^(.+?Lotion)\\s+\\1$/i);\n  if (duplicateProductMatch) {\n    productName = duplicateProductMatch[1];\n  }\n}\n\n// -----------------------------\n// Date and folder names\n// -----------------------------\nconst receivedDate = input.receivedDateTime\n  ? new Date(input.receivedDateTime).toISOString().slice(0, 10)\n  : new Date().toISOString().slice(0, 10);\n\nconst dateFolderName = receivedDate;\nconst clinicFolderName = clinic || \"UNKNOWNCLINIC\";\n\nconst safePatientInitials = patientInitials || \"UnknownInitials\";\nconst safeScriptId = scriptId || \"UnknownScript\";\nconst fileName = `${receivedDate}-${safeScriptId}-${safePatientInitials}.pdf`;\n\n// -----------------------------\n// SharePoint / Graph IDs\n// -----------------------------\nconst DriveID = \"b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU\";\n\nconst AUMedOrderID = \"01Y4DA4OPCXITTGW45PJHZBMOQ2WVAPCD2\";\n\nconst CompletedOrdersID = \"01Y4DA4OMCIC7MC3JRSBG2QB4JYEGHALNK\";\n\n// Correct folder ID for:\n// -=AU Med Orders=- / OrderInProgress\nconst OrderInProgressID = \"01Y4DA4OMQFXPAO6YE25F2FTI3HY3VF4HL\";\n\n// -----------------------------\n// Final output\n// -----------------------------\nreturn {\n  json: {\n    isPrescriptionEmail: !!scriptUrl,\n\n    emailId,\n    originalMessageId: emailId,\n\n    toAddress,\n\n    emailPrefix,\n\n    clinic,\n    clinicFolderName,\n\n    customerCode,\n    pharmacy,\n\n    patientInitials,\n    productName,\n\n    scriptUrl,\n    scriptId,\n\n    receivedDate,\n    dateFolderName,\n\n    fileName,\n\n    DriveID,\n    AUMedOrderID,\n    CompletedOrdersID,\n    OrderInProgressID,\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1936,
+        48
+      ],
+      "id": "02f9eaf5-bf4b-4ae3-a5bd-a5c1cd4ce066",
+      "name": "NewUserCleanup"
+    },
+    {
+      "parameters": {
+        "toRecipients": "operations@ashleyandmartin.com.au",
+        "subject": "=Automation - Pharmacy Order - {{ $json.customerCode }}",
+        "bodyContent": "=<p>Hi Team,</p>\n\n<p>\n  A new email has been sent to <strong>Au.Pharmacy</strong>, however the user appears to be incorrectly configured.\n</p>\n\n<p>\n  They have been moved to the <strong>New User</strong> folder and you will need to manually process their order.\n</p>\n\n<table style=\"border-collapse: collapse; width: 100%; max-width: 600px;\">\n  <tr>\n    <td style=\"padding: 8px; border: 1px solid #ddd; font-weight: bold;\">Customer Code</td>\n    <td style=\"padding: 8px; border: 1px solid #ddd;\">{{ $json.customerCode }}</td>\n  </tr>\n  <tr>\n    <td style=\"padding: 8px; border: 1px solid #ddd; font-weight: bold;\">Helix Email</td>\n    <td style=\"padding: 8px; border: 1px solid #ddd;\">{{ $json.toAddress }}</td>\n  </tr>\n</table>\n\n<p>Regards,<br>\nAutomation</p>",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        48
+      ],
+      "id": "ab22f13a-eda1-4492-a106-33de194845db",
+      "name": "Send a message",
+      "webhookId": "8fe79f98-0939-4358-b4cc-cd723e1dd558",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/users/au.pharmacy@ashleyandmartin.com.au/messages/{{ $('NewUserCleanup').item.json.emailId }}/move",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOutlookOAuth2Api",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "destinationId",
+              "value": "={{ $('Master Field Set').item.json.NewUserFolderID }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2384,
+        48
+      ],
+      "id": "d08421dd-14f6-4d08-92eb-9c0cc6cf2c6b",
+      "name": "MovetoNEWUser",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "eTjXE2aZrDK0PHJV",
+          "name": "au.pharmacy@ashleyandmartin.com.au"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1520,
+        32
+      ],
+      "id": "bc753493-f292-4e5e-848f-37fdafe2234c",
+      "name": "Loop Over Items1"
     }
   ],
   "origin": "n8n",
@@ -1021,15 +1393,15 @@
     "Schedule Trigger": [
       {
         "json": {
-          "timestamp": "2026-06-24T09:20:00.003+08:00",
-          "Readable date": "June 24th 2026, 9:20:00 am",
-          "Readable time": "9:20:00 am",
-          "Day of week": "Wednesday",
+          "timestamp": "2026-06-30T11:10:00.009+08:00",
+          "Readable date": "June 30th 2026, 11:10:00 am",
+          "Readable time": "11:10:00 am",
+          "Day of week": "Tuesday",
           "Year": "2026",
           "Month": "June",
-          "Day of month": "24",
-          "Hour": "09",
-          "Minute": "20",
+          "Day of month": "30",
+          "Hour": "11",
+          "Minute": "10",
           "Second": "00",
           "Timezone": "Australia/Perth (UTC+08:00)"
         },
@@ -1074,6 +1446,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-06-24T02:29:22.486Z",
-  "versionId": "1dd1c923-87ec-4815-b439-aa1efeab82c6"
+  "updatedAt": "2026-06-30T04:09:00.554Z",
+  "versionId": "5f5f1723-8717-4359-a338-46f9c8d21666"
 }
