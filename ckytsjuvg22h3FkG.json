@@ -1467,25 +1467,7 @@
     }
   ],
   "origin": "n8n",
-  "pinData": {
-    "Start": [
-      {
-        "json": {
-          "DriveID": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
-          "id": "01Y4DA4OPTEUEJBSAO7NA3NVRA2EUDRJPC",
-          "name": "PERTH",
-          "TodaysDate": "2026-06-23",
-          "TodaysDate_firstItem": "2026-06-23",
-          "id_firstItem": "01Y4DA4OLQ2RMPK5Q2VZAJG7D5EHAMHF2N",
-          "name_firstItem": "PERTH",
-          "DateFolderIF_id_1": "01Y4DA4OLQ2RMPK5Q2VZAJG7D5EHAMHF2N"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -1510,6 +1492,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-06-24T05:13:58.415Z",
+  "updatedAt": "2026-06-25T07:21:18.118Z",
   "versionId": "d5a344ac-0cd0-4162-849f-1112941b9d96"
 }
