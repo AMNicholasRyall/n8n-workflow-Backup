@@ -1,0 +1,957 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-07-08T06:11:17.000Z",
+    "createdAt": "2026-07-08T05:31:47.889Z",
+    "versionId": "47e5ab07-284d-4c5d-899c-1913c7aab013",
+    "workflowId": "ZuY7tb116BJ28hOG",
+    "nodes": [
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "id": "aed07d98-8ee1-4efb-af9c-9e5acc82b255",
+        "typeVersion": 1.1,
+        "name": "Start",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "position": [
+          1056,
+          -304
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "4af9f5fa-04ce-4517-9b07-a9e508f64358",
+                "leftValue": "={{ $json.ClinicProgress }}",
+                "rightValue": "UserDoesntExist",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1264,
+          -304
+        ],
+        "id": "c2af0079-95be-42a3-8755-6ff21f8a3f20",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "QA7Qdseg7ehAOWP6",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+            "cachedResultName": "Zenoti-GetAuthToken"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          1472,
+          -400
+        ],
+        "id": "65194fa7-f207-4124-bdc9-07f428dddcc8",
+        "name": "Call 'Zenoti-GetAuthToken'"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "fYcqpV5ToKAsXk2w",
+            "mode": "list",
+            "cachedResultName": "Helix_Auth_Bundle",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/fYcqpV5ToKAsXk2w"
+          },
+          "limit": 1
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          2080,
+          -400
+        ],
+        "id": "cd80111f-2bd3-483b-b8b7-eea2e2e7f11c",
+        "name": "HelixAuth"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/guests/{{ $('If').item.json.ClientID }}",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "expand",
+                "value": "address_info"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1680,
+          -400
+        ],
+        "id": "a2fc6f15-9959-45a9-8769-2746cbb887f6",
+        "name": "GetGuestInfo"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "Mz3NIuZ6Qf7RiRz2",
+            "mode": "list",
+            "cachedResultName": "ZenotiStateLookupAU",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/Mz3NIuZ6Qf7RiRz2"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "state_id",
+                "keyValue": "={{ $json.address_info.state_id }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          1888,
+          -400
+        ],
+        "id": "b0aabb48-b85c-4059-b32d-c9744f3a1971",
+        "name": "Get State"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://aandm.helix.medicaldirector.com/api/patients",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{$json.bearer_token}}"
+              },
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "clienttimezone",
+                "value": "Australia/Perth"
+              },
+              {
+                "name": "usercentreid",
+                "value": "={{$json.usercentreid}}"
+              },
+              {
+                "name": "userworkareaid",
+                "value": "={{$json.userworkareaid}}"
+              },
+              {
+                "name": "x-helix-agent-id",
+                "value": "={{$json.x_helix_agent_id}}"
+              },
+              {
+                "name": "x-helix-perform-as",
+                "value": "={{$json.x_helix_perform_as}}"
+              },
+              {
+                "name": "X-CSRF-TOKEN",
+                "value": "={{$json.csrf_token}}"
+              },
+              {
+                "name": "X-XSRF-TOKEN",
+                "value": "={{$json.csrf_token}}"
+              },
+              {
+                "name": "x-xsrf-token",
+                "value": "={{$json.xsrf_token}}"
+              },
+              {
+                "name": "RequestVerificationToken",
+                "value": "={{$json.csrf_token}}"
+              },
+              {
+                "name": "Cookie",
+                "value": "={{$json.cookie_bundle}}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"FirstName\": \"{{ $('GetGuestInfo').item.json.personal_info.first_name }}\",\n  \"Surname\": \"{{ $('GetGuestInfo').item.json.personal_info.last_name }}\",\n  \"Gender\": {{ $('GetGuestInfo').item.json.personal_info.gender }},\n  \"DateOfBirth\": \"{{ $('GetGuestInfo').item.json.personal_info.date_of_birth }}\",\n  \"Email\": \"{{ $('Start').item.json.HelixEmail }}\",\n  \"OtherEmail\": \"{{ $('Start').item.json.HelixEmail }}\",\n  \"RefusedToGiveEmail\": false,\n  \"MobilePhoneNumber\": {\n    \"Number\": \"{{ $('GetGuestInfo').item.json.personal_info.mobile_phone.phone_code }}{{ $('GetGuestInfo').item.json.personal_info.mobile_phone.number }}\",\n    \"IsMobile\": true\n  },\n  \"RefusedToGiveMobilePhoneNumber\": false,\n  \"RefusedToGivePrimaryPhoneNumber\": true,\n  \"RefusedToGiveMedicareCard\": true,\n  \"RefusedToGiveConcessionCard\": true,\n  \"RefusedToGiveEmergencyContact\": true,\n  \"IsActive\": true,\n  \"Status\": 2,\n  \"PatientIsClaimant\": true,\n  \"RegularCentre\": {{ $('Start').item.json.HelixCenterID }},\n  \"PatientAddress\": {\n    \"Street1\": \"{{ $('GetGuestInfo').item.json.address_info.address_1 }}\",\n    \"Street2\": \"{{ $('GetGuestInfo').item.json.address_info.address_2 }}\",\n    \"Suburb\": \"{{ $('GetGuestInfo').item.json.address_info.city }}\",\n    \"State\": \"{{ $('Get State').item.json.State_abbreviation }}\",\n    \"Postcode\": \"{{ $('GetGuestInfo').item.json.address_info.zip_code }}\",\n    \"Country\": \"Australia\",\n    \"IsAustralian\": true\n  },\n  \"PostalAddress\": {\n    \"Street1\": \"{{ $('GetGuestInfo').item.json.address_info.address_1 }}\",\n    \"Street2\": \"{{ $('GetGuestInfo').item.json.address_info.address_2 }}\",\n    \"Suburb\": \"{{ $('GetGuestInfo').item.json.address_info.city }}\",\n    \"State\": \"{{ $('Get State').item.json.State_abbreviation }}\",\n    \"Postcode\": \"{{ $('GetGuestInfo').item.json.address_info.zip_code }}\",\n    \"Country\": \"Australia\",\n    \"IsAustralian\": true\n  }\n}",
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          2288,
+          -400
+        ],
+        "id": "d43944c5-09e4-4202-afba-70e87df0345f",
+        "name": "CreateUser"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "cbedf044-4761-403f-88d3-da2164921664",
+                "name": "ClinicProgress",
+                "value": "UserCreated",
+                "type": "string"
+              },
+              {
+                "id": "215615c3-79da-4e94-babf-6ac5e87934a6",
+                "name": "ClientID",
+                "value": "={{ $('Start').item.json.ClientID }}",
+                "type": "string"
+              },
+              {
+                "id": "0df49d7e-72c5-4cea-9a55-fa556a905bb6",
+                "name": "ClientCode",
+                "value": "={{ $('Start').item.json.ClientCode }}",
+                "type": "string"
+              },
+              {
+                "id": "4d5f50de-9187-4e96-b20d-7d52520864c4",
+                "name": "ClinicName",
+                "value": "={{ $('Start').item.json.ClinicName }}",
+                "type": "string"
+              },
+              {
+                "id": "daf20718-251a-4fad-8137-8f0d3e92d580",
+                "name": "InitialPharmacy",
+                "value": "={{ $('Start').item.json.InitialPharmacy }}",
+                "type": "string"
+              },
+              {
+                "id": "a89d3eca-ce50-425f-8c81-f9b86a62cb42",
+                "name": "HelixEmail",
+                "value": "={{ $('Start').item.json.HelixEmail }}",
+                "type": "string"
+              },
+              {
+                "id": "39c64556-909c-486f-ad0e-ced2cf1226c2",
+                "name": "HelixCenterID",
+                "value": "={{ $('Start').item.json.HelixCenterID }}",
+                "type": "string"
+              },
+              {
+                "id": "bf2396e9-f0db-4b46-873b-46021de4ac45",
+                "name": "HelixUserId",
+                "value": "={{ $json.Id }}",
+                "type": "number"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2496,
+          -400
+        ],
+        "id": "e67844cd-4c8e-45e7-9394-f3faf1119601",
+        "name": "UserExists"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          2784,
+          -208
+        ],
+        "id": "751c1a6e-d1c4-4edc-b897-838ec125784f",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "toRecipients": "operations@ashleyandmartin.com.au",
+          "subject": "Automation - Helix User Creation",
+          "bodyContent": "=Hi Team,\n\nThere is a potential match for the user {{ $('Start').item.json.ClientCode }} from the {{ $('Start').item.json.ClinicName }} in helix.\n\nCode: {{ $('Start').item.json.ClientCode }}\nEmail: {{ $('Start').item.json.HelixEmail }}\n\nCan you please investigate and resolve if required.\n\nRegards,\nAutomation",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          1472,
+          -192
+        ],
+        "id": "c049f4b8-caf4-491b-8b3f-ff365e8c105a",
+        "name": "Send a message",
+        "webhookId": "dcdbb49e-2826-42dc-90ca-2645e8aa7d40",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Start": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Call 'Zenoti-GetAuthToken'",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'Zenoti-GetAuthToken'": {
+        "main": [
+          [
+            {
+              "node": "GetGuestInfo",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HelixAuth": {
+        "main": [
+          [
+            {
+              "node": "CreateUser",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetGuestInfo": {
+        "main": [
+          [
+            {
+              "node": "Get State",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get State": {
+        "main": [
+          [
+            {
+              "node": "HelixAuth",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CreateUser": {
+        "main": [
+          [
+            {
+              "node": "UserExists",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "UserExists": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send a message": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 47e5ab07",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "47e5ab07-284d-4c5d-899c-1913c7aab013",
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti-GetAuthToken'",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Zenoti-GetAuthToken'": {
+      "main": [
+        [
+          {
+            "node": "GetGuestInfo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HelixAuth": {
+      "main": [
+        [
+          {
+            "node": "CreateUser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetGuestInfo": {
+      "main": [
+        [
+          {
+            "node": "Get State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get State": {
+      "main": [
+        [
+          {
+            "node": "HelixAuth",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CreateUser": {
+      "main": [
+        [
+          {
+            "node": "UserExists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UserExists": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-07-08T00:24:45.841Z",
+  "id": "ZuY7tb116BJ28hOG",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Helix Patient - Create",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "aed07d98-8ee1-4efb-af9c-9e5acc82b255",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        1056,
+        -304
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4af9f5fa-04ce-4517-9b07-a9e508f64358",
+              "leftValue": "={{ $json.ClinicProgress }}",
+              "rightValue": "UserDoesntExist",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1264,
+        -304
+      ],
+      "id": "c2af0079-95be-42a3-8755-6ff21f8a3f20",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "QA7Qdseg7ehAOWP6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+          "cachedResultName": "Zenoti-GetAuthToken"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1472,
+        -400
+      ],
+      "id": "65194fa7-f207-4124-bdc9-07f428dddcc8",
+      "name": "Call 'Zenoti-GetAuthToken'"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "fYcqpV5ToKAsXk2w",
+          "mode": "list",
+          "cachedResultName": "Helix_Auth_Bundle",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/fYcqpV5ToKAsXk2w"
+        },
+        "limit": 1
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2080,
+        -400
+      ],
+      "id": "cd80111f-2bd3-483b-b8b7-eea2e2e7f11c",
+      "name": "HelixAuth"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/guests/{{ $('If').item.json.ClientID }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "expand",
+              "value": "address_info"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1680,
+        -400
+      ],
+      "id": "a2fc6f15-9959-45a9-8769-2746cbb887f6",
+      "name": "GetGuestInfo"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "Mz3NIuZ6Qf7RiRz2",
+          "mode": "list",
+          "cachedResultName": "ZenotiStateLookupAU",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/Mz3NIuZ6Qf7RiRz2"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "state_id",
+              "keyValue": "={{ $json.address_info.state_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1888,
+        -400
+      ],
+      "id": "b0aabb48-b85c-4059-b32d-c9744f3a1971",
+      "name": "Get State"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://aandm.helix.medicaldirector.com/api/patients",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$json.bearer_token}}"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "clienttimezone",
+              "value": "Australia/Perth"
+            },
+            {
+              "name": "usercentreid",
+              "value": "={{$json.usercentreid}}"
+            },
+            {
+              "name": "userworkareaid",
+              "value": "={{$json.userworkareaid}}"
+            },
+            {
+              "name": "x-helix-agent-id",
+              "value": "={{$json.x_helix_agent_id}}"
+            },
+            {
+              "name": "x-helix-perform-as",
+              "value": "={{$json.x_helix_perform_as}}"
+            },
+            {
+              "name": "X-CSRF-TOKEN",
+              "value": "={{$json.csrf_token}}"
+            },
+            {
+              "name": "X-XSRF-TOKEN",
+              "value": "={{$json.csrf_token}}"
+            },
+            {
+              "name": "x-xsrf-token",
+              "value": "={{$json.xsrf_token}}"
+            },
+            {
+              "name": "RequestVerificationToken",
+              "value": "={{$json.csrf_token}}"
+            },
+            {
+              "name": "Cookie",
+              "value": "={{$json.cookie_bundle}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"FirstName\": \"{{ $('GetGuestInfo').item.json.personal_info.first_name }}\",\n  \"Surname\": \"{{ $('GetGuestInfo').item.json.personal_info.last_name }}\",\n  \"Gender\": {{ $('GetGuestInfo').item.json.personal_info.gender }},\n  \"DateOfBirth\": \"{{ $('GetGuestInfo').item.json.personal_info.date_of_birth }}\",\n  \"Email\": \"{{ $('Start').item.json.HelixEmail }}\",\n  \"OtherEmail\": \"{{ $('Start').item.json.HelixEmail }}\",\n  \"RefusedToGiveEmail\": false,\n  \"MobilePhoneNumber\": {\n    \"Number\": \"{{ $('GetGuestInfo').item.json.personal_info.mobile_phone.phone_code }}{{ $('GetGuestInfo').item.json.personal_info.mobile_phone.number }}\",\n    \"IsMobile\": true\n  },\n  \"RefusedToGiveMobilePhoneNumber\": false,\n  \"RefusedToGivePrimaryPhoneNumber\": true,\n  \"RefusedToGiveMedicareCard\": true,\n  \"RefusedToGiveConcessionCard\": true,\n  \"RefusedToGiveEmergencyContact\": true,\n  \"IsActive\": true,\n  \"Status\": 2,\n  \"PatientIsClaimant\": true,\n  \"RegularCentre\": {{ $('Start').item.json.HelixCenterID }},\n  \"PatientAddress\": {\n    \"Street1\": \"{{ $('GetGuestInfo').item.json.address_info.address_1 }}\",\n    \"Street2\": \"{{ $('GetGuestInfo').item.json.address_info.address_2 }}\",\n    \"Suburb\": \"{{ $('GetGuestInfo').item.json.address_info.city }}\",\n    \"State\": \"{{ $('Get State').item.json.State_abbreviation }}\",\n    \"Postcode\": \"{{ $('GetGuestInfo').item.json.address_info.zip_code }}\",\n    \"Country\": \"Australia\",\n    \"IsAustralian\": true\n  },\n  \"PostalAddress\": {\n    \"Street1\": \"{{ $('GetGuestInfo').item.json.address_info.address_1 }}\",\n    \"Street2\": \"{{ $('GetGuestInfo').item.json.address_info.address_2 }}\",\n    \"Suburb\": \"{{ $('GetGuestInfo').item.json.address_info.city }}\",\n    \"State\": \"{{ $('Get State').item.json.State_abbreviation }}\",\n    \"Postcode\": \"{{ $('GetGuestInfo').item.json.address_info.zip_code }}\",\n    \"Country\": \"Australia\",\n    \"IsAustralian\": true\n  }\n}",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2288,
+        -400
+      ],
+      "id": "d43944c5-09e4-4202-afba-70e87df0345f",
+      "name": "CreateUser"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cbedf044-4761-403f-88d3-da2164921664",
+              "name": "ClinicProgress",
+              "value": "UserCreated",
+              "type": "string"
+            },
+            {
+              "id": "215615c3-79da-4e94-babf-6ac5e87934a6",
+              "name": "ClientID",
+              "value": "={{ $('Start').item.json.ClientID }}",
+              "type": "string"
+            },
+            {
+              "id": "0df49d7e-72c5-4cea-9a55-fa556a905bb6",
+              "name": "ClientCode",
+              "value": "={{ $('Start').item.json.ClientCode }}",
+              "type": "string"
+            },
+            {
+              "id": "4d5f50de-9187-4e96-b20d-7d52520864c4",
+              "name": "ClinicName",
+              "value": "={{ $('Start').item.json.ClinicName }}",
+              "type": "string"
+            },
+            {
+              "id": "daf20718-251a-4fad-8137-8f0d3e92d580",
+              "name": "InitialPharmacy",
+              "value": "={{ $('Start').item.json.InitialPharmacy }}",
+              "type": "string"
+            },
+            {
+              "id": "a89d3eca-ce50-425f-8c81-f9b86a62cb42",
+              "name": "HelixEmail",
+              "value": "={{ $('Start').item.json.HelixEmail }}",
+              "type": "string"
+            },
+            {
+              "id": "39c64556-909c-486f-ad0e-ced2cf1226c2",
+              "name": "HelixCenterID",
+              "value": "={{ $('Start').item.json.HelixCenterID }}",
+              "type": "string"
+            },
+            {
+              "id": "bf2396e9-f0db-4b46-873b-46021de4ac45",
+              "name": "HelixUserId",
+              "value": "={{ $json.Id }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2496,
+        -400
+      ],
+      "id": "e67844cd-4c8e-45e7-9394-f3faf1119601",
+      "name": "UserExists"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2784,
+        -208
+      ],
+      "id": "751c1a6e-d1c4-4edc-b897-838ec125784f",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "toRecipients": "operations@ashleyandmartin.com.au",
+        "subject": "Automation - Helix User Creation",
+        "bodyContent": "=Hi Team,\n\nThere is a potential match for the user {{ $('Start').item.json.ClientCode }} from the {{ $('Start').item.json.ClinicName }} in helix.\n\nCode: {{ $('Start').item.json.ClientCode }}\nEmail: {{ $('Start').item.json.HelixEmail }}\n\nCan you please investigate and resolve if required.\n\nRegards,\nAutomation",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1472,
+        -192
+      ],
+      "id": "c049f4b8-caf4-491b-8b3f-ff365e8c105a",
+      "name": "Send a message",
+      "webhookId": "dcdbb49e-2826-42dc-90ca-2645e8aa7d40",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "Start": [
+      {
+        "json": {
+          "ClinicProgress": "UserDoesntExist",
+          "ClientID": "06cc7552-7508-47d3-b64b-872b7cc40e97",
+          "ClientCode": "PTG6367",
+          "ClinicName": "Perth",
+          "InitialPharmacy": "AMD",
+          "HelixEmail": "Perth.pharmacy+PTG6367.AMD@ashleyandmartin.com.au",
+          "HelixCenterID": "14"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "saveDataSuccessExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-07-08T00:24:45.843Z",
+      "createdAt": "2026-07-08T00:24:45.843Z",
+      "role": "workflow:owner",
+      "workflowId": "ZuY7tb116BJ28hOG",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2026-06-23T07:20:53.826Z",
+      "createdAt": "2026-06-23T07:20:53.826Z",
+      "id": "IGQhT6ige0xQKnQ9",
+      "name": "Helix"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-07-08T05:31:47.888Z",
+  "versionId": "47e5ab07-284d-4c5d-899c-1913c7aab013"
+}
