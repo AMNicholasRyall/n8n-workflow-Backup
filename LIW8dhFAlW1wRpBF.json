@@ -1,0 +1,1164 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-07-08T00:25:23.000Z",
+    "createdAt": "2026-07-08T00:20:19.052Z",
+    "versionId": "5488c5de-5cb7-4868-a03d-d4fc2e0187c8",
+    "workflowId": "LIW8dhFAlW1wRpBF",
+    "nodes": [
+      {
+        "parameters": {
+          "inputSource": "passthrough"
+        },
+        "id": "b54ffe55-467d-4f86-92d4-fb8fb84b030d",
+        "typeVersion": 1.1,
+        "name": "Start",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "position": [
+          720,
+          -48
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "fYcqpV5ToKAsXk2w",
+            "mode": "list",
+            "cachedResultName": "Helix_Auth_Bundle",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/fYcqpV5ToKAsXk2w"
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          1168,
+          -48
+        ],
+        "id": "911f384a-5ca3-477e-8bcb-c4606cc4a509",
+        "name": "helixAuth"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "cbedf044-4761-403f-88d3-da2164921664",
+                "name": "ClinicProgress",
+                "value": "UserExists",
+                "type": "string"
+              },
+              {
+                "id": "215615c3-79da-4e94-babf-6ac5e87934a6",
+                "name": "ClientID",
+                "value": "={{ $('Start').item.json.ClientID }}",
+                "type": "string"
+              },
+              {
+                "id": "0df49d7e-72c5-4cea-9a55-fa556a905bb6",
+                "name": "ClientCode",
+                "value": "={{ $('Start').item.json.ClientCode }}",
+                "type": "string"
+              },
+              {
+                "id": "4d5f50de-9187-4e96-b20d-7d52520864c4",
+                "name": "ClinicName",
+                "value": "={{ $('Start').item.json.ClinicName }}",
+                "type": "string"
+              },
+              {
+                "id": "daf20718-251a-4fad-8137-8f0d3e92d580",
+                "name": "InitialPharmacy",
+                "value": "={{ $('Start').item.json.InitialPharmacy }}",
+                "type": "string"
+              },
+              {
+                "id": "a89d3eca-ce50-425f-8c81-f9b86a62cb42",
+                "name": "HelixEmail",
+                "value": "={{ $('Start').item.json.HelixEmail }}",
+                "type": "string"
+              },
+              {
+                "id": "39c64556-909c-486f-ad0e-ced2cf1226c2",
+                "name": "HelixCenterID",
+                "value": "={{ $('Start').item.json.HelixCenterID }}",
+                "type": "string"
+              },
+              {
+                "id": "bf2396e9-f0db-4b46-873b-46021de4ac45",
+                "name": "HelixUserId",
+                "value": "={{ $json.MatchedHelixId }}",
+                "type": "number"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2064,
+          -240
+        ],
+        "id": "ca97fb05-e5b8-4823-891c-83c7f9769bd1",
+        "name": "UserExists"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://aandm.helix.medicaldirector.com/api/patient/search",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{$json.bearer_token}}"
+              },
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "clienttimezone",
+                "value": "Australia/Perth"
+              },
+              {
+                "name": "usercentreid",
+                "value": "={{ $('Start').item.json.HelixCenterID }}"
+              },
+              {
+                "name": "userworkareaid",
+                "value": "=2"
+              },
+              {
+                "name": "x-helix-agent-id",
+                "value": "=84522155-44d9-ccd5-eb9f-c006b3fa075e"
+              },
+              {
+                "name": "x-helix-perform-as",
+                "value": "={{ $json.x_helix_perform_as }}"
+              },
+              {
+                "name": "x-xsrf-token",
+                "value": "={{ $json.xsrf_token }}"
+              },
+              {
+                "name": "Cookie",
+                "value": "=XSRF-TOKEN={{$json.xsrf_token}}; .AspNet.Cookies={{$json.aspnet_cookie}}"
+              },
+              {
+                "name": "cookie",
+                "value": "=XSRF-TOKEN={{$json.xsrf_token}};.AspNet.Cookies={{$json.aspnet_cookie}};"
+              },
+              {
+                "name": "x-helix-perform-as",
+                "value": "={{ $json.x_helix_perform_as }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "Query",
+                "value": "={{ $('WildCardEmail').item.json.HelixSearchEmail }}"
+              },
+              {
+                "name": "Limit",
+                "value": "30"
+              },
+              {
+                "name": "Offset",
+                "value": "0"
+              },
+              {
+                "name": "IncludeInactive",
+                "value": "false"
+              },
+              {
+                "name": "CentreId",
+                "value": "={{ $('Start').item.json.HelixCenterID }}"
+              },
+              {
+                "name": "LocalCentreSearch",
+                "value": "false"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1392,
+          -48
+        ],
+        "id": "7164d561-0e64-40a2-aa43-66421c7445b0",
+        "name": "SearchUser"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "cbedf044-4761-403f-88d3-da2164921664",
+                "name": "ClinicProgress",
+                "value": "UserDoesntExist",
+                "type": "string"
+              },
+              {
+                "id": "215615c3-79da-4e94-babf-6ac5e87934a6",
+                "name": "ClientID",
+                "value": "={{ $('Start').item.json.ClientID }}",
+                "type": "string"
+              },
+              {
+                "id": "0df49d7e-72c5-4cea-9a55-fa556a905bb6",
+                "name": "ClientCode",
+                "value": "={{ $('Start').item.json.ClientCode }}",
+                "type": "string"
+              },
+              {
+                "id": "4d5f50de-9187-4e96-b20d-7d52520864c4",
+                "name": "ClinicName",
+                "value": "={{ $('Start').item.json.ClinicName }}",
+                "type": "string"
+              },
+              {
+                "id": "daf20718-251a-4fad-8137-8f0d3e92d580",
+                "name": "InitialPharmacy",
+                "value": "={{ $('Start').item.json.InitialPharmacy }}",
+                "type": "string"
+              },
+              {
+                "id": "a89d3eca-ce50-425f-8c81-f9b86a62cb42",
+                "name": "HelixEmail",
+                "value": "={{ $('Start').item.json.HelixEmail }}",
+                "type": "string"
+              },
+              {
+                "id": "39c64556-909c-486f-ad0e-ced2cf1226c2",
+                "name": "HelixCenterID",
+                "value": "={{ $('Start').item.json.HelixCenterID }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2064,
+          144
+        ],
+        "id": "da5b563d-6b03-4cbd-88f9-387bce82cc4e",
+        "name": "UserDoesntExist"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          2288,
+          -48
+        ],
+        "id": "7d92b78a-35dd-4de5-969d-ce29fbed6cb3",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "jsCode": "const email = $json.HelixEmail;\n\nconst match = email.match(/^([^+]+)\\+([^.@]+)\\.[^@]+(@.+)$/);\n\nreturn [\n  {\n    json: {\n      HelixSearchEmail: match\n        ? `${match[1]}+${match[2]}.*${match[3]}`\n        : email,\n    },\n  },\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          944,
+          -48
+        ],
+        "id": "c829de93-c2f5-42ac-a067-75bae654ffeb",
+        "name": "WildCardEmail"
+      },
+      {
+        "parameters": {
+          "jsCode": "const originalEmail = $('Start').item.json.HelixEmail.toLowerCase();\nconst data = $json.Data || [];\n\nconst match = originalEmail.match(/^([^+]+\\+[^.]+\\.)[^@]+(@.+)$/);\n\nif (!match) {\n  return [{ json: { MatchStatus: 'doesnt_exist', MatchedHelixId: null } }];\n}\n\nconst routingPrefix = match[1];\nconst domain = match[2];\n\nfunction patientEmails(patient) {\n  return [patient.Email, patient.OtherEmail]\n    .filter(Boolean)\n    .map((email) => email.toLowerCase());\n}\n\nconst exactPatient = data.find((patient) =>\n  patientEmails(patient).some((email) => email === originalEmail)\n);\n\nif (exactPatient) {\n  return [{\n    json: {\n      MatchStatus: 'exists',\n      MatchedHelixId: exactPatient.Id || exactPatient.ID || exactPatient.id || null,\n    },\n  }];\n}\n\nconst highMatchPatient = data.find((patient) =>\n  patientEmails(patient).some((email) =>\n    email.startsWith(routingPrefix) && email.endsWith(domain)\n  )\n);\n\nif (highMatchPatient) {\n  return [{\n    json: {\n      MatchStatus: 'high_match',\n      MatchedHelixId: highMatchPatient.Id || highMatchPatient.ID || highMatchPatient.id || null,\n    },\n  }];\n}\n\nreturn [{ json: { MatchStatus: 'doesnt_exist', MatchedHelixId: null } }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1616,
+          -48
+        ],
+        "id": "feee6b06-96ed-4098-82a5-6404d17e59d3",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.MatchStatus }}",
+                      "rightValue": "=exists",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "6fb8ae12-6ca6-40f3-87c8-1c319e836649"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "e579e7c1-a88b-4f39-97be-16caef3ccdef",
+                      "leftValue": "={{ $json.MatchStatus }}",
+                      "rightValue": "high_match",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "bb02395d-3f42-4253-96fc-5e75300c8364",
+                      "leftValue": "={{ $json.MatchStatus }}",
+                      "rightValue": "doesnt_exist",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          1840,
+          -64
+        ],
+        "id": "cbc4ae69-95c4-460a-8d56-49e189bc03a3",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "cbedf044-4761-403f-88d3-da2164921664",
+                "name": "ClinicProgress",
+                "value": "RequireManualCheck",
+                "type": "string"
+              },
+              {
+                "id": "215615c3-79da-4e94-babf-6ac5e87934a6",
+                "name": "ClientID",
+                "value": "={{ $('Start').item.json.ClientID }}",
+                "type": "string"
+              },
+              {
+                "id": "0df49d7e-72c5-4cea-9a55-fa556a905bb6",
+                "name": "ClientCode",
+                "value": "={{ $('Start').item.json.ClientCode }}",
+                "type": "string"
+              },
+              {
+                "id": "4d5f50de-9187-4e96-b20d-7d52520864c4",
+                "name": "ClinicName",
+                "value": "={{ $('Start').item.json.ClinicName }}",
+                "type": "string"
+              },
+              {
+                "id": "daf20718-251a-4fad-8137-8f0d3e92d580",
+                "name": "InitialPharmacy",
+                "value": "={{ $('Start').item.json.InitialPharmacy }}",
+                "type": "string"
+              },
+              {
+                "id": "a89d3eca-ce50-425f-8c81-f9b86a62cb42",
+                "name": "HelixEmail",
+                "value": "={{ $('Start').item.json.HelixEmail }}",
+                "type": "string"
+              },
+              {
+                "id": "39c64556-909c-486f-ad0e-ced2cf1226c2",
+                "name": "HelixCenterID",
+                "value": "={{ $('Start').item.json.HelixCenterID }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2064,
+          -48
+        ],
+        "id": "2c81be16-8d84-488c-a87f-03af9f90cf4b",
+        "name": "UserManualCheck"
+      }
+    ],
+    "connections": {
+      "Start": {
+        "main": [
+          [
+            {
+              "node": "WildCardEmail",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "helixAuth": {
+        "main": [
+          [
+            {
+              "node": "SearchUser",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SearchUser": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "UserExists": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "UserDoesntExist": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "WildCardEmail": {
+        "main": [
+          [
+            {
+              "node": "helixAuth",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "UserExists",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "UserManualCheck",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "UserDoesntExist",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "UserManualCheck": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 5488c5de",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "5488c5de-5cb7-4868-a03d-d4fc2e0187c8",
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "WildCardEmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "helixAuth": {
+      "main": [
+        [
+          {
+            "node": "SearchUser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchUser": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UserExists": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UserDoesntExist": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WildCardEmail": {
+      "main": [
+        [
+          {
+            "node": "helixAuth",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "UserExists",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "UserManualCheck",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "UserDoesntExist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UserManualCheck": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-07-07T05:37:19.038Z",
+  "id": "LIW8dhFAlW1wRpBF",
+  "isArchived": false,
+  "meta": null,
+  "name": "Helix Patient - Helix Match Check",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "b54ffe55-467d-4f86-92d4-fb8fb84b030d",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        720,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "fYcqpV5ToKAsXk2w",
+          "mode": "list",
+          "cachedResultName": "Helix_Auth_Bundle",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/fYcqpV5ToKAsXk2w"
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1168,
+        -48
+      ],
+      "id": "911f384a-5ca3-477e-8bcb-c4606cc4a509",
+      "name": "helixAuth"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cbedf044-4761-403f-88d3-da2164921664",
+              "name": "ClinicProgress",
+              "value": "UserExists",
+              "type": "string"
+            },
+            {
+              "id": "215615c3-79da-4e94-babf-6ac5e87934a6",
+              "name": "ClientID",
+              "value": "={{ $('Start').item.json.ClientID }}",
+              "type": "string"
+            },
+            {
+              "id": "0df49d7e-72c5-4cea-9a55-fa556a905bb6",
+              "name": "ClientCode",
+              "value": "={{ $('Start').item.json.ClientCode }}",
+              "type": "string"
+            },
+            {
+              "id": "4d5f50de-9187-4e96-b20d-7d52520864c4",
+              "name": "ClinicName",
+              "value": "={{ $('Start').item.json.ClinicName }}",
+              "type": "string"
+            },
+            {
+              "id": "daf20718-251a-4fad-8137-8f0d3e92d580",
+              "name": "InitialPharmacy",
+              "value": "={{ $('Start').item.json.InitialPharmacy }}",
+              "type": "string"
+            },
+            {
+              "id": "a89d3eca-ce50-425f-8c81-f9b86a62cb42",
+              "name": "HelixEmail",
+              "value": "={{ $('Start').item.json.HelixEmail }}",
+              "type": "string"
+            },
+            {
+              "id": "39c64556-909c-486f-ad0e-ced2cf1226c2",
+              "name": "HelixCenterID",
+              "value": "={{ $('Start').item.json.HelixCenterID }}",
+              "type": "string"
+            },
+            {
+              "id": "bf2396e9-f0db-4b46-873b-46021de4ac45",
+              "name": "HelixUserId",
+              "value": "={{ $json.MatchedHelixId }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2064,
+        -240
+      ],
+      "id": "ca97fb05-e5b8-4823-891c-83c7f9769bd1",
+      "name": "UserExists"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://aandm.helix.medicaldirector.com/api/patient/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$json.bearer_token}}"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "clienttimezone",
+              "value": "Australia/Perth"
+            },
+            {
+              "name": "usercentreid",
+              "value": "={{ $('Start').item.json.HelixCenterID }}"
+            },
+            {
+              "name": "userworkareaid",
+              "value": "=2"
+            },
+            {
+              "name": "x-helix-agent-id",
+              "value": "=84522155-44d9-ccd5-eb9f-c006b3fa075e"
+            },
+            {
+              "name": "x-helix-perform-as",
+              "value": "={{ $json.x_helix_perform_as }}"
+            },
+            {
+              "name": "x-xsrf-token",
+              "value": "={{ $json.xsrf_token }}"
+            },
+            {
+              "name": "Cookie",
+              "value": "=XSRF-TOKEN={{$json.xsrf_token}}; .AspNet.Cookies={{$json.aspnet_cookie}}"
+            },
+            {
+              "name": "cookie",
+              "value": "=XSRF-TOKEN={{$json.xsrf_token}};.AspNet.Cookies={{$json.aspnet_cookie}};"
+            },
+            {
+              "name": "x-helix-perform-as",
+              "value": "={{ $json.x_helix_perform_as }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Query",
+              "value": "={{ $('WildCardEmail').item.json.HelixSearchEmail }}"
+            },
+            {
+              "name": "Limit",
+              "value": "30"
+            },
+            {
+              "name": "Offset",
+              "value": "0"
+            },
+            {
+              "name": "IncludeInactive",
+              "value": "false"
+            },
+            {
+              "name": "CentreId",
+              "value": "={{ $('Start').item.json.HelixCenterID }}"
+            },
+            {
+              "name": "LocalCentreSearch",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1392,
+        -48
+      ],
+      "id": "7164d561-0e64-40a2-aa43-66421c7445b0",
+      "name": "SearchUser"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cbedf044-4761-403f-88d3-da2164921664",
+              "name": "ClinicProgress",
+              "value": "UserDoesntExist",
+              "type": "string"
+            },
+            {
+              "id": "215615c3-79da-4e94-babf-6ac5e87934a6",
+              "name": "ClientID",
+              "value": "={{ $('Start').item.json.ClientID }}",
+              "type": "string"
+            },
+            {
+              "id": "0df49d7e-72c5-4cea-9a55-fa556a905bb6",
+              "name": "ClientCode",
+              "value": "={{ $('Start').item.json.ClientCode }}",
+              "type": "string"
+            },
+            {
+              "id": "4d5f50de-9187-4e96-b20d-7d52520864c4",
+              "name": "ClinicName",
+              "value": "={{ $('Start').item.json.ClinicName }}",
+              "type": "string"
+            },
+            {
+              "id": "daf20718-251a-4fad-8137-8f0d3e92d580",
+              "name": "InitialPharmacy",
+              "value": "={{ $('Start').item.json.InitialPharmacy }}",
+              "type": "string"
+            },
+            {
+              "id": "a89d3eca-ce50-425f-8c81-f9b86a62cb42",
+              "name": "HelixEmail",
+              "value": "={{ $('Start').item.json.HelixEmail }}",
+              "type": "string"
+            },
+            {
+              "id": "39c64556-909c-486f-ad0e-ced2cf1226c2",
+              "name": "HelixCenterID",
+              "value": "={{ $('Start').item.json.HelixCenterID }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2064,
+        144
+      ],
+      "id": "da5b563d-6b03-4cbd-88f9-387bce82cc4e",
+      "name": "UserDoesntExist"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2288,
+        -48
+      ],
+      "id": "7d92b78a-35dd-4de5-969d-ce29fbed6cb3",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "jsCode": "const email = $json.HelixEmail;\n\nconst match = email.match(/^([^+]+)\\+([^.@]+)\\.[^@]+(@.+)$/);\n\nreturn [\n  {\n    json: {\n      HelixSearchEmail: match\n        ? `${match[1]}+${match[2]}.*${match[3]}`\n        : email,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        944,
+        -48
+      ],
+      "id": "c829de93-c2f5-42ac-a067-75bae654ffeb",
+      "name": "WildCardEmail"
+    },
+    {
+      "parameters": {
+        "jsCode": "const originalEmail = $('Start').item.json.HelixEmail.toLowerCase();\nconst data = $json.Data || [];\n\nconst match = originalEmail.match(/^([^+]+\\+[^.]+\\.)[^@]+(@.+)$/);\n\nif (!match) {\n  return [{ json: { MatchStatus: 'doesnt_exist', MatchedHelixId: null } }];\n}\n\nconst routingPrefix = match[1];\nconst domain = match[2];\n\nfunction patientEmails(patient) {\n  return [patient.Email, patient.OtherEmail]\n    .filter(Boolean)\n    .map((email) => email.toLowerCase());\n}\n\nconst exactPatient = data.find((patient) =>\n  patientEmails(patient).some((email) => email === originalEmail)\n);\n\nif (exactPatient) {\n  return [{\n    json: {\n      MatchStatus: 'exists',\n      MatchedHelixId: exactPatient.Id || exactPatient.ID || exactPatient.id || null,\n    },\n  }];\n}\n\nconst highMatchPatient = data.find((patient) =>\n  patientEmails(patient).some((email) =>\n    email.startsWith(routingPrefix) && email.endsWith(domain)\n  )\n);\n\nif (highMatchPatient) {\n  return [{\n    json: {\n      MatchStatus: 'high_match',\n      MatchedHelixId: highMatchPatient.Id || highMatchPatient.ID || highMatchPatient.id || null,\n    },\n  }];\n}\n\nreturn [{ json: { MatchStatus: 'doesnt_exist', MatchedHelixId: null } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1616,
+        -48
+      ],
+      "id": "feee6b06-96ed-4098-82a5-6404d17e59d3",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.MatchStatus }}",
+                    "rightValue": "=exists",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "6fb8ae12-6ca6-40f3-87c8-1c319e836649"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "e579e7c1-a88b-4f39-97be-16caef3ccdef",
+                    "leftValue": "={{ $json.MatchStatus }}",
+                    "rightValue": "high_match",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "bb02395d-3f42-4253-96fc-5e75300c8364",
+                    "leftValue": "={{ $json.MatchStatus }}",
+                    "rightValue": "doesnt_exist",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1840,
+        -64
+      ],
+      "id": "cbc4ae69-95c4-460a-8d56-49e189bc03a3",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cbedf044-4761-403f-88d3-da2164921664",
+              "name": "ClinicProgress",
+              "value": "RequireManualCheck",
+              "type": "string"
+            },
+            {
+              "id": "215615c3-79da-4e94-babf-6ac5e87934a6",
+              "name": "ClientID",
+              "value": "={{ $('Start').item.json.ClientID }}",
+              "type": "string"
+            },
+            {
+              "id": "0df49d7e-72c5-4cea-9a55-fa556a905bb6",
+              "name": "ClientCode",
+              "value": "={{ $('Start').item.json.ClientCode }}",
+              "type": "string"
+            },
+            {
+              "id": "4d5f50de-9187-4e96-b20d-7d52520864c4",
+              "name": "ClinicName",
+              "value": "={{ $('Start').item.json.ClinicName }}",
+              "type": "string"
+            },
+            {
+              "id": "daf20718-251a-4fad-8137-8f0d3e92d580",
+              "name": "InitialPharmacy",
+              "value": "={{ $('Start').item.json.InitialPharmacy }}",
+              "type": "string"
+            },
+            {
+              "id": "a89d3eca-ce50-425f-8c81-f9b86a62cb42",
+              "name": "HelixEmail",
+              "value": "={{ $('Start').item.json.HelixEmail }}",
+              "type": "string"
+            },
+            {
+              "id": "39c64556-909c-486f-ad0e-ced2cf1226c2",
+              "name": "HelixCenterID",
+              "value": "={{ $('Start').item.json.HelixCenterID }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2064,
+        -48
+      ],
+      "id": "2c81be16-8d84-488c-a87f-03af9f90cf4b",
+      "name": "UserManualCheck"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "Start": [
+      {
+        "json": {
+          "ClinicProgress": "ContinueFlow",
+          "ClientID": "ccecb836-82db-447a-80bb-2a78af502750",
+          "ClientCode": "BBG6297",
+          "ClinicName": "Brisbane",
+          "InitialPharmacy": "KCP",
+          "HelixEmail": "Brisbane.pharmacy+BBG6297.KCP@ashleyandmartin.com.au",
+          "HelixCenterID": "2"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-07-07T05:37:19.040Z",
+      "createdAt": "2026-07-07T05:37:19.040Z",
+      "role": "workflow:owner",
+      "workflowId": "LIW8dhFAlW1wRpBF",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-07-08T00:25:28.433Z",
+  "versionId": "5488c5de-5cb7-4868-a03d-d4fc2e0187c8"
+}
