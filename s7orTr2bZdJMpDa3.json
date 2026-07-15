@@ -1,7 +1,696 @@
 {
-  "active": false,
-  "activeVersion": null,
-  "activeVersionId": null,
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-07-09T23:49:58.000Z",
+    "createdAt": "2026-07-09T23:49:53.193Z",
+    "versionId": "b4e2060b-a085-4377-a478-4164e34a58f6",
+    "workflowId": "s7orTr2bZdJMpDa3",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 20
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -512,
+          -112
+        ],
+        "id": "77cfec31-5add-4c59-8f21-45672d599395",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "QA7Qdseg7ehAOWP6",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+            "cachedResultName": "Zenoti-GetAuthToken"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          -288,
+          -112
+        ],
+        "id": "8afa115e-0062-4435-bd89-2f0a63068990",
+        "name": "Call 'Zenoti-GetAuthToken'"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lsINP70DmcZtIj4M",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinics",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "table_id",
+                "condition": "isNotEmpty"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          -64,
+          -112
+        ],
+        "id": "4380108a-2fae-491e-b791-30a172c865fd",
+        "name": "Get row(s)"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          384,
+          -112
+        ],
+        "id": "ed8f48e6-139a-4111-afa1-a5ef3be7fd98",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "amount": 3
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          560,
+          64
+        ],
+        "id": "27872bfd-be30-4011-8287-804755b1c964",
+        "name": "Wait",
+        "webhookId": "51f5c7a3-eeea-4c75-a389-ef5f24d4ef96"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "e148e906-acdd-473d-971a-3ac9b7701c91",
+                "name": "ClinicName",
+                "value": "={{ $json.name }}",
+                "type": "string"
+              },
+              {
+                "id": "562f801e-4b68-4754-b57a-a639b57e6f9a",
+                "name": "ClinicID",
+                "value": "={{ $json.Zenoti_ID }}",
+                "type": "string"
+              },
+              {
+                "id": "dfd4724e-cdb0-487b-b365-b45223a53676",
+                "name": "AuthToken",
+                "value": "={{ $('Call \\'Zenoti-GetAuthToken\\'').first().json.TokenSecret }}",
+                "type": "string"
+              },
+              {
+                "id": "ddc2fac3-e5db-495f-8a9c-a008ffd4e6e5",
+                "name": "TomorrowDate",
+                "value": "={{ $today.plus({ days: 1 }).toFormat('yyyy-MM-dd') }}",
+                "type": "string"
+              },
+              {
+                "id": "28788680-1536-4dda-b730-03664de70cf7",
+                "name": "DayAfterTomorrowDate",
+                "value": "={{ $today.plus({ days: 2 }).toFormat('yyyy-MM-dd') }}",
+                "type": "string"
+              },
+              {
+                "id": "d2d1d470-50c9-4ef2-a102-b6643e81564a",
+                "name": "InitialPharma",
+                "value": "={{ $json.InitialPharmacy }}",
+                "type": "string"
+              },
+              {
+                "id": "ee838f3f-58aa-43f2-a992-792ad9818394",
+                "name": "HelixCenterID",
+                "value": "={{ $json.HelixCenterId }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          160,
+          -112
+        ],
+        "id": "98e4f113-4679-4a2a-ab1f-5d93c3010030",
+        "name": "SetDate"
+      },
+      {
+        "parameters": {
+          "url": "https://api.zenoti.com/v1/appointments",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "center_id",
+                "value": "={{ $json.ClinicID }}"
+              },
+              {
+                "name": "start_date",
+                "value": "={{ $json.TomorrowDate }}"
+              },
+              {
+                "name": "end_date",
+                "value": "={{ $json.DayAfterTomorrowDate }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $json.AuthToken }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          784,
+          64
+        ],
+        "id": "d303976b-5232-449e-b96c-146b04868b9f",
+        "name": "CheckDailyAppointments",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a16536dd-dfa7-4449-bbed-bbf98241faad",
+                "leftValue": "={{ $json.parent_service_name }}",
+                "rightValue": "Doctor - First",
+                "operator": {
+                  "type": "string",
+                  "operation": "startsWith"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          1008,
+          64
+        ],
+        "id": "d869d208-ae43-4b0b-8d92-5a41f532770f",
+        "name": "Filter",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "64f64534-7544-4a55-b9d1-af25a9f40da0",
+                "leftValue": "={{ $json.parent_service_name }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1232,
+          64
+        ],
+        "id": "028b570d-11ab-4c7c-a01e-84a81cd94ea3",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "c1d9ed36-91e3-4041-b5d5-902319a545d3",
+                "name": "ClinicProgress",
+                "value": "NoPatients",
+                "type": "string"
+              },
+              {
+                "id": "abf9b11b-1972-49cb-8556-2f0d5a0347e9",
+                "name": "ClinicName",
+                "value": "={{ $('Wait').item.json.ClinicName }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1456,
+          160
+        ],
+        "id": "7a9a854b-b6af-4031-a3fc-6fd4e94eeec2",
+        "name": "SetClinicProcess"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "773b2bce-d25b-4498-9f81-5219ba0e97bd",
+                "name": "ClinicProgress",
+                "value": "ContinueFlow",
+                "type": "string"
+              },
+              {
+                "id": "8d5bb59c-798e-4206-b533-c88fababb1ef",
+                "name": "ClientID",
+                "value": "={{ $json.guest.id }}",
+                "type": "string"
+              },
+              {
+                "id": "ff90d29a-e2ad-4096-9463-43d0591f46d7",
+                "name": "ClientCode",
+                "value": "={{ $json.guest.code }}",
+                "type": "string"
+              },
+              {
+                "id": "d811f5b5-25ae-4d34-8886-987a711c12cb",
+                "name": "ClinicName",
+                "value": "={{ $('Wait').item.json.ClinicName }}",
+                "type": "string"
+              },
+              {
+                "id": "0cdee29a-a860-44a5-bd06-4a3fbc547c80",
+                "name": "InitialPharmacy",
+                "value": "={{ $('Wait').item.json.InitialPharma }}",
+                "type": "string"
+              },
+              {
+                "id": "ecb5bb11-1c79-4b54-be12-734e7e37481a",
+                "name": "HelixEmail",
+                "value": "={{ $('Wait').item.json.ClinicName }}.pharmacy+{{ $json.guest.code }}.{{ $('Wait').item.json.InitialPharma }}@ashleyandmartin.com.au",
+                "type": "string"
+              },
+              {
+                "id": "0a1d151e-e2c0-474b-bf20-c666d4e64404",
+                "name": "HelixCenterID",
+                "value": "={{ $('Wait').item.json.HelixCenterID }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1456,
+          -32
+        ],
+        "id": "53a537ba-1c07-4997-b9a6-ce799f6c7c29",
+        "name": "SetPatient"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "16a40ee8-e4e2-4b66-b9c1-3933006f5aec",
+                "leftValue": "={{ $json.ClinicProgress }}",
+                "rightValue": "=ContinueFlow",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          608,
+          -304
+        ],
+        "id": "6fe08b43-fc65-400f-bfcc-d6a7c6331bfb",
+        "name": "Filter1"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          1680,
+          144
+        ],
+        "id": "7c84c9a1-85ff-4982-98fe-682036628143",
+        "name": "No Operation, do nothing"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "LIW8dhFAlW1wRpBF",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/LIW8dhFAlW1wRpBF",
+            "cachedResultName": "Helix Patient - Helix Match Check"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.2,
+        "position": [
+          832,
+          -304
+        ],
+        "name": "Call Helix Patient - Helix Match Check",
+        "id": "34ed9471-4fcb-4f63-990b-f28dc3f273bb"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "0562d6b6-30d4-4991-8a45-ace1f199cdcb",
+                "leftValue": "={{ $json.ClinicProgress }}",
+                "rightValue": "UserExists",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          1056,
+          -304
+        ],
+        "id": "891ea63a-330a-48aa-8721-b1e60275749f",
+        "name": "Filter2"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "ZuY7tb116BJ28hOG",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/ZuY7tb116BJ28hOG",
+            "cachedResultName": "Helix Patient - Create"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.2,
+        "position": [
+          1280,
+          -304
+        ],
+        "name": "Call Helix Patient - Create",
+        "id": "f90e3c2c-7187-4662-bfc7-1776f2dbf238"
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Call 'Zenoti-GetAuthToken'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'Zenoti-GetAuthToken'": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "SetDate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "Filter1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "CheckDailyAppointments",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SetDate": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CheckDailyAppointments": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "SetPatient",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "SetClinicProcess",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SetPatient": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SetClinicProcess": {
+        "main": [
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "No Operation, do nothing": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter1": {
+        "main": [
+          [
+            {
+              "node": "Call Helix Patient - Helix Match Check",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call Helix Patient - Helix Match Check": {
+        "main": [
+          [
+            {
+              "node": "Filter2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter2": {
+        "main": [
+          [
+            {
+              "node": "Call Helix Patient - Create",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version b4e2060b",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "b4e2060b-a085-4377-a478-4164e34a58f6",
   "connections": {
     "Schedule Trigger": {
       "main": [
@@ -680,7 +1369,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        1344,
+        1280,
         -304
       ],
       "name": "Call Helix Patient - Create",
@@ -696,7 +1385,10 @@
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "callerPolicy": "workflowsFromSameOwner"
   },
   "shared": [
     {
@@ -707,7 +1399,11 @@
       "projectId": "gMwV5v9nxJB6matq"
     }
   ],
-  "staticData": null,
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
   "tags": [
     {
       "updatedAt": "2026-06-23T07:20:53.826Z",
@@ -716,7 +1412,7 @@
       "name": "Helix"
     }
   ],
-  "triggerCount": 0,
-  "updatedAt": "2026-07-08T06:12:43.482Z",
-  "versionId": "ea46b366-616e-4b27-ac11-2dc16a85caf6"
+  "triggerCount": 1,
+  "updatedAt": "2026-07-09T23:49:53.192Z",
+  "versionId": "b4e2060b-a085-4377-a478-4164e34a58f6"
 }
