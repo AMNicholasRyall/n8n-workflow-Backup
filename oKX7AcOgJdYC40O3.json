@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-07-08T22:58:16.000Z",
-    "createdAt": "2026-07-08T22:58:11.678Z",
-    "versionId": "daea4539-781f-4486-8d8a-ae0b800cb3ea",
+    "updatedAt": "2026-07-09T00:30:08.000Z",
+    "createdAt": "2026-07-09T00:30:05.256Z",
+    "versionId": "6460d4e9-3c96-4b50-b3d8-547bc97961c7",
     "workflowId": "oKX7AcOgJdYC40O3",
     "nodes": [
       {
@@ -11,7 +11,7 @@
           "rule": {
             "interval": [
               {
-                "triggerAtHour": 16
+                "triggerAtHour": 20
               }
             ]
           }
@@ -461,11 +461,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version daea4539",
+    "name": "Version 6460d4e9",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "daea4539-781f-4486-8d8a-ae0b800cb3ea",
+  "activeVersionId": "6460d4e9-3c96-4b50-b3d8-547bc97961c7",
   "connections": {
     "Schedule Trigger": {
       "main": [
@@ -609,7 +609,7 @@
         "rule": {
           "interval": [
             {
-              "triggerAtHour": 16
+              "triggerAtHour": 20
             }
           ]
         }
@@ -986,6 +986,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-07-08T22:58:11.677Z",
-  "versionId": "daea4539-781f-4486-8d8a-ae0b800cb3ea"
+  "updatedAt": "2026-07-09T00:30:05.255Z",
+  "versionId": "6460d4e9-3c96-4b50-b3d8-547bc97961c7"
 }
