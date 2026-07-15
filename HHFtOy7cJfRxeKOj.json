@@ -1,0 +1,996 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-07-13T02:20:09.000Z",
+    "createdAt": "2026-07-13T02:20:01.266Z",
+    "versionId": "111ee221-98f7-445a-a1e2-156a444eb9ff",
+    "workflowId": "HHFtOy7cJfRxeKOj",
+    "nodes": [
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          448,
+          176
+        ],
+        "id": "f06ce2f9-781b-4c68-a48b-315349ae08ff",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lsINP70DmcZtIj4M",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinics",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "HelixCenterId",
+                "condition": "isNotEmpty"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          224,
+          96
+        ],
+        "id": "6e5bcb88-3fb2-4e37-bbf8-cc25c38b868f",
+        "name": "GetHElixCLinics"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "fYcqpV5ToKAsXk2w",
+            "mode": "list",
+            "cachedResultName": "Helix_Auth_Bundle",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/fYcqpV5ToKAsXk2w"
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          1072,
+          240
+        ],
+        "id": "a80364ec-1223-4fde-8f2a-844aaec1c66f",
+        "name": "HelixAuth"
+      },
+      {
+        "parameters": {
+          "url": "https://aandm.helix.medicaldirector.com/api/reports/PrescriptionReport",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "fromDate",
+                "value": "={{ $('On form submission').first().json.StartDate.toDateTime().toFormat('MM/dd/yyyy') }}"
+              },
+              {
+                "name": "toDate",
+                "value": "={{ $('On form submission').first().json.EndDate.toDateTime().toFormat('MM/dd/yyyy') }}"
+              },
+              {
+                "name": "providerId",
+                "value": "0"
+              },
+              {
+                "name": "centreId",
+                "value": "={{ $('Edit Fields').item.json.HelixCenterID }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{$json.bearer_token}}"
+              },
+              {
+                "name": "Accept",
+                "value": "blackswan/csv"
+              },
+              {
+                "name": "clienttime",
+                "value": "={{ $now }}"
+              },
+              {
+                "name": "clienttimezone",
+                "value": "Australia/Perth"
+              },
+              {
+                "name": "usercentreid",
+                "value": "={{$json.usercentreid}}"
+              },
+              {
+                "name": "userworkareaid",
+                "value": "={{$json.userworkareaid}}"
+              },
+              {
+                "name": "x-helix-agent-id",
+                "value": "={{$json.x_helix_agent_id}}"
+              },
+              {
+                "name": "x-helix-perform-as",
+                "value": "={{$json.x_helix_perform_as}}"
+              },
+              {
+                "name": "x-xsrf-token",
+                "value": "={{$json.xsrf_token}}"
+              },
+              {
+                "name": "X-XSRF-TOKEN",
+                "value": "={{$json.csrf_token}}"
+              },
+              {
+                "name": "X-CSRF-TOKEN",
+                "value": "={{$json.csrf_token}}"
+              },
+              {
+                "name": "RequestVerificationToken",
+                "value": "={{$json.csrf_token}}"
+              },
+              {
+                "name": "Cookie",
+                "value": "={{$json.cookie_bundle}}"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": true,
+            "timeout": 10000
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1296,
+          240
+        ],
+        "id": "dcecbfdc-9445-4b5b-b023-94e0403544ad",
+        "name": "HTTP Request",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "jsCode": "const raw = $json.data || '';\n\nconst [resultsPart = '', metadataPart = ''] = raw.split(/\\r?\\n\\r?\\nMetadata\\r?\\n/);\n\nconst cleanResultsPart = resultsPart.replace(/^Results\\r?\\n/, '').trim();\nconst metadataCsv = metadataPart.trim();\n\nfunction parseCsvLine(line) {\n  const values = [];\n  let current = '';\n  let inQuotes = false;\n\n  for (let i = 0; i < line.length; i++) {\n    const char = line[i];\n    const next = line[i + 1];\n\n    if (char === '\"' && inQuotes && next === '\"') {\n      current += '\"';\n      i++;\n    } else if (char === '\"') {\n      inQuotes = !inQuotes;\n    } else if (char === ',' && !inQuotes) {\n      values.push(current);\n      current = '';\n    } else {\n      current += char;\n    }\n  }\n\n  values.push(current);\n  return values;\n}\n\nfunction parseCsvBlock(csv) {\n  const lines = csv\n    .split(/\\r?\\n/)\n    .map((line) => line.trim())\n    .filter(Boolean);\n\n  if (lines.length < 2) return [];\n\n  const headers = parseCsvLine(lines[0]);\n\n  return lines.slice(1).map((line) => {\n    const values = parseCsvLine(line);\n    return Object.fromEntries(headers.map((header, i) => [header, values[i] || '']));\n  });\n}\n\nconst results = parseCsvBlock(cleanResultsPart);\nconst metadata = parseCsvBlock(metadataCsv)[0] || {};\n\nreturn [\n  {\n    json: {\n      result_count: results.length,\n      results,\n      metadata,\n    },\n  },\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1520,
+          240
+        ],
+        "id": "fc6f9220-5fc7-4a95-97c7-e96930b32dcc",
+        "name": "ParseOutput",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "74fb91a2-e505-42d6-af45-36ab45ee888f",
+                "name": "HelixCenterID",
+                "value": "={{ $json.HelixCenterId }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          848,
+          240
+        ],
+        "id": "9b960aff-05f0-44db-859c-87098420424d",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "results",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1728,
+          240
+        ],
+        "id": "b9c3d12f-1283-432b-804e-25994e07238e",
+        "name": "Split Out",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "options": {
+            "fileName": "={{ $today.toFormat('yyyyMMdd') }}.csv"
+          }
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          848,
+          64
+        ],
+        "id": "a02fdbd1-dba5-40a1-bd5b-ec3f4b8f0d74",
+        "name": "Convert to File"
+      },
+      {
+        "parameters": {
+          "toRecipients": "Operations@ashleyandmartin.com.au",
+          "subject": "Automation - Helix Prescription Report",
+          "bodyContent": "<p>Hi Team,</p>\n\n<p>Please see attached Prescription Report.</p>\n\n<p>\n  Regards,<br>\n  Automation\n</p>",
+          "additionalFields": {
+            "attachments": {
+              "attachments": [
+                {
+                  "binaryPropertyName": "data"
+                }
+              ]
+            },
+            "bodyContentType": "html"
+          }
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          1072,
+          64
+        ],
+        "id": "d21eae65-f6d1-4dd8-9ea6-da804dfda4c0",
+        "name": "Send a message",
+        "webhookId": "67876ece-4f95-45ec-9226-43247743ff39",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          624,
+          240
+        ],
+        "id": "7e95eb47-1865-4165-81d7-65ce94a98274",
+        "name": "Wait",
+        "webhookId": "7f767de4-50e3-45bd-b3a6-000a16877614"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "12ac8927-5269-474f-8fd7-47215fa36545",
+                "leftValue": "={{ $json.PrescribedOn }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          624,
+          64
+        ],
+        "id": "0b24f782-c546-4479-84ae-c4be095b47f0",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "formTitle": "Prescription Report",
+          "formDescription": "Select the require dates and this will email the operations mailbox.",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "StartDate",
+                "fieldType": "date",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "EndDate",
+                "fieldType": "date",
+                "requiredField": true
+              }
+            ]
+          },
+          "options": {
+            "path": "PrescriptionReport"
+          }
+        },
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.5,
+        "position": [
+          0,
+          96
+        ],
+        "id": "edcaeefb-27ed-4511-8963-62909fa2b968",
+        "name": "On form submission",
+        "webhookId": "5f1d989e-fbab-4acc-8406-1f308d6d547c"
+      }
+    ],
+    "connections": {
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetHElixCLinics": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HelixAuth": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "ParseOutput",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "ParseOutput": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "HelixAuth",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Convert to File": {
+        "main": [
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "Convert to File",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "On form submission": {
+        "main": [
+          [
+            {
+              "node": "GetHElixCLinics",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 111ee221",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "111ee221-98f7-445a-a1e2-156a444eb9ff",
+  "connections": {
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetHElixCLinics": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HelixAuth": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "ParseOutput",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ParseOutput": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HelixAuth",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "GetHElixCLinics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-07-13T02:11:09.322Z",
+  "id": "HHFtOy7cJfRxeKOj",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Helix Prescription Report - Manual Trigger",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        448,
+        176
+      ],
+      "id": "f06ce2f9-781b-4c68-a48b-315349ae08ff",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "HelixCenterId",
+              "condition": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        96
+      ],
+      "id": "6e5bcb88-3fb2-4e37-bbf8-cc25c38b868f",
+      "name": "GetHElixCLinics"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "fYcqpV5ToKAsXk2w",
+          "mode": "list",
+          "cachedResultName": "Helix_Auth_Bundle",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/fYcqpV5ToKAsXk2w"
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1072,
+        240
+      ],
+      "id": "a80364ec-1223-4fde-8f2a-844aaec1c66f",
+      "name": "HelixAuth"
+    },
+    {
+      "parameters": {
+        "url": "https://aandm.helix.medicaldirector.com/api/reports/PrescriptionReport",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "fromDate",
+              "value": "={{ $('On form submission').first().json.StartDate.toDateTime().toFormat('MM/dd/yyyy') }}"
+            },
+            {
+              "name": "toDate",
+              "value": "={{ $('On form submission').first().json.EndDate.toDateTime().toFormat('MM/dd/yyyy') }}"
+            },
+            {
+              "name": "providerId",
+              "value": "0"
+            },
+            {
+              "name": "centreId",
+              "value": "={{ $('Edit Fields').item.json.HelixCenterID }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$json.bearer_token}}"
+            },
+            {
+              "name": "Accept",
+              "value": "blackswan/csv"
+            },
+            {
+              "name": "clienttime",
+              "value": "={{ $now }}"
+            },
+            {
+              "name": "clienttimezone",
+              "value": "Australia/Perth"
+            },
+            {
+              "name": "usercentreid",
+              "value": "={{$json.usercentreid}}"
+            },
+            {
+              "name": "userworkareaid",
+              "value": "={{$json.userworkareaid}}"
+            },
+            {
+              "name": "x-helix-agent-id",
+              "value": "={{$json.x_helix_agent_id}}"
+            },
+            {
+              "name": "x-helix-perform-as",
+              "value": "={{$json.x_helix_perform_as}}"
+            },
+            {
+              "name": "x-xsrf-token",
+              "value": "={{$json.xsrf_token}}"
+            },
+            {
+              "name": "X-XSRF-TOKEN",
+              "value": "={{$json.csrf_token}}"
+            },
+            {
+              "name": "X-CSRF-TOKEN",
+              "value": "={{$json.csrf_token}}"
+            },
+            {
+              "name": "RequestVerificationToken",
+              "value": "={{$json.csrf_token}}"
+            },
+            {
+              "name": "Cookie",
+              "value": "={{$json.cookie_bundle}}"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true,
+          "timeout": 10000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1296,
+        240
+      ],
+      "id": "dcecbfdc-9445-4b5b-b023-94e0403544ad",
+      "name": "HTTP Request",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.data || '';\n\nconst [resultsPart = '', metadataPart = ''] = raw.split(/\\r?\\n\\r?\\nMetadata\\r?\\n/);\n\nconst cleanResultsPart = resultsPart.replace(/^Results\\r?\\n/, '').trim();\nconst metadataCsv = metadataPart.trim();\n\nfunction parseCsvLine(line) {\n  const values = [];\n  let current = '';\n  let inQuotes = false;\n\n  for (let i = 0; i < line.length; i++) {\n    const char = line[i];\n    const next = line[i + 1];\n\n    if (char === '\"' && inQuotes && next === '\"') {\n      current += '\"';\n      i++;\n    } else if (char === '\"') {\n      inQuotes = !inQuotes;\n    } else if (char === ',' && !inQuotes) {\n      values.push(current);\n      current = '';\n    } else {\n      current += char;\n    }\n  }\n\n  values.push(current);\n  return values;\n}\n\nfunction parseCsvBlock(csv) {\n  const lines = csv\n    .split(/\\r?\\n/)\n    .map((line) => line.trim())\n    .filter(Boolean);\n\n  if (lines.length < 2) return [];\n\n  const headers = parseCsvLine(lines[0]);\n\n  return lines.slice(1).map((line) => {\n    const values = parseCsvLine(line);\n    return Object.fromEntries(headers.map((header, i) => [header, values[i] || '']));\n  });\n}\n\nconst results = parseCsvBlock(cleanResultsPart);\nconst metadata = parseCsvBlock(metadataCsv)[0] || {};\n\nreturn [\n  {\n    json: {\n      result_count: results.length,\n      results,\n      metadata,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1520,
+        240
+      ],
+      "id": "fc6f9220-5fc7-4a95-97c7-e96930b32dcc",
+      "name": "ParseOutput",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "74fb91a2-e505-42d6-af45-36ab45ee888f",
+              "name": "HelixCenterID",
+              "value": "={{ $json.HelixCenterId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        848,
+        240
+      ],
+      "id": "9b960aff-05f0-44db-859c-87098420424d",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "results",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        240
+      ],
+      "id": "b9c3d12f-1283-432b-804e-25994e07238e",
+      "name": "Split Out",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "options": {
+          "fileName": "={{ $today.toFormat('yyyyMMdd') }}.csv"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        848,
+        64
+      ],
+      "id": "a02fdbd1-dba5-40a1-bd5b-ec3f4b8f0d74",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "toRecipients": "Operations@ashleyandmartin.com.au",
+        "subject": "Automation - Helix Prescription Report",
+        "bodyContent": "<p>Hi Team,</p>\n\n<p>Please see attached Prescription Report.</p>\n\n<p>\n  Regards,<br>\n  Automation\n</p>",
+        "additionalFields": {
+          "attachments": {
+            "attachments": [
+              {
+                "binaryPropertyName": "data"
+              }
+            ]
+          },
+          "bodyContentType": "html"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        64
+      ],
+      "id": "d21eae65-f6d1-4dd8-9ea6-da804dfda4c0",
+      "name": "Send a message",
+      "webhookId": "67876ece-4f95-45ec-9226-43247743ff39",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        624,
+        240
+      ],
+      "id": "7e95eb47-1865-4165-81d7-65ce94a98274",
+      "name": "Wait",
+      "webhookId": "7f767de4-50e3-45bd-b3a6-000a16877614"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "12ac8927-5269-474f-8fd7-47215fa36545",
+              "leftValue": "={{ $json.PrescribedOn }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        624,
+        64
+      ],
+      "id": "0b24f782-c546-4479-84ae-c4be095b47f0",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "formTitle": "Prescription Report",
+        "formDescription": "Select the require dates and this will email the operations mailbox.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "StartDate",
+              "fieldType": "date",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "EndDate",
+              "fieldType": "date",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "path": "PrescriptionReport"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        96
+      ],
+      "id": "edcaeefb-27ed-4511-8963-62909fa2b968",
+      "name": "On form submission",
+      "webhookId": "5f1d989e-fbab-4acc-8406-1f308d6d547c"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-07-13T02:11:09.324Z",
+      "createdAt": "2026-07-13T02:11:09.324Z",
+      "role": "workflow:owner",
+      "workflowId": "HHFtOy7cJfRxeKOj",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-06-23T07:20:53.826Z",
+      "createdAt": "2026-06-23T07:20:53.826Z",
+      "id": "IGQhT6ige0xQKnQ9",
+      "name": "Helix"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-07-13T02:20:01.265Z",
+  "versionId": "111ee221-98f7-445a-a1e2-156a444eb9ff"
+}
