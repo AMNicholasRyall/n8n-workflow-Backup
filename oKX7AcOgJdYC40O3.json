@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-07-09T00:30:08.000Z",
-    "createdAt": "2026-07-09T00:30:05.256Z",
-    "versionId": "6460d4e9-3c96-4b50-b3d8-547bc97961c7",
+    "updatedAt": "2026-07-21T06:56:49.000Z",
+    "createdAt": "2026-07-21T06:16:21.071Z",
+    "versionId": "b4a7f45f-dcf0-4e06-a79d-44e0af44ccd2",
     "workflowId": "oKX7AcOgJdYC40O3",
     "nodes": [
       {
@@ -33,7 +33,7 @@
         "typeVersion": 3,
         "position": [
           448,
-          176
+          96
         ],
         "id": "f18babac-bbb1-4a54-9da3-2ec3e0397611",
         "name": "Loop Over Items"
@@ -80,8 +80,8 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
-          1072,
-          240
+          1120,
+          96
         ],
         "id": "4e695159-bd06-42cd-a350-9c4402b45632",
         "name": "HelixAuth"
@@ -175,8 +175,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.4,
         "position": [
-          1296,
-          240
+          1344,
+          96
         ],
         "id": "d9a6c973-2485-4bae-ba63-e1416daeed54",
         "name": "HTTP Request",
@@ -189,8 +189,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          1520,
-          240
+          1568,
+          96
         ],
         "id": "e38b3fcd-2726-4192-a1a2-514f61b10366",
         "name": "ParseOutput",
@@ -213,8 +213,8 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          848,
-          240
+          896,
+          96
         ],
         "id": "33c15c91-d2cf-4431-b7b9-7937b8ca0ef6",
         "name": "Edit Fields"
@@ -227,8 +227,8 @@
         "type": "n8n-nodes-base.splitOut",
         "typeVersion": 1,
         "position": [
-          1728,
-          240
+          1792,
+          168
         ],
         "id": "850cf253-ffa7-46fd-84e1-1d428ce16513",
         "name": "Split Out",
@@ -243,8 +243,8 @@
         "type": "n8n-nodes-base.convertToFile",
         "typeVersion": 1.1,
         "position": [
-          848,
-          64
+          1120,
+          -384
         ],
         "id": "6e38b48f-8dcd-490f-9889-31fbb2e0ea66",
         "name": "Convert to File"
@@ -268,8 +268,8 @@
         "type": "n8n-nodes-base.microsoftOutlook",
         "typeVersion": 2,
         "position": [
-          1072,
-          64
+          1344,
+          -384
         ],
         "id": "3e4074ac-468d-456b-ad49-f4bd66a31941",
         "name": "Send a message",
@@ -288,8 +288,8 @@
         "type": "n8n-nodes-base.wait",
         "typeVersion": 1.1,
         "position": [
-          624,
-          240
+          672,
+          96
         ],
         "id": "a9747f0a-9581-4067-9cf7-12ceee2f2554",
         "name": "Wait",
@@ -323,11 +323,339 @@
         "type": "n8n-nodes-base.filter",
         "typeVersion": 2.3,
         "position": [
-          624,
-          64
+          608,
+          -160
         ],
         "id": "d28adb4d-6a98-4d22-a41c-08c83273c003",
         "name": "Filter"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          896,
+          -192
+        ],
+        "id": "3df355cb-d007-4776-88a5-a5bbdb7aa4e1",
+        "name": "Loop Over Items1"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "fYcqpV5ToKAsXk2w",
+            "mode": "list",
+            "cachedResultName": "Helix_Auth_Bundle",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/fYcqpV5ToKAsXk2w"
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          1120,
+          -192
+        ],
+        "id": "11b91899-c757-46e0-9b12-94a75626541a",
+        "name": "helixAuth"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://aandm.helix.medicaldirector.com/api/patient/search",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=Bearer {{$json.bearer_token}}"
+              },
+              {
+                "name": "Accept",
+                "value": "application/json"
+              },
+              {
+                "name": "clienttimezone",
+                "value": "Australia/Perth"
+              },
+              {
+                "name": "usercentreid",
+                "value": "=2"
+              },
+              {
+                "name": "userworkareaid",
+                "value": "=2"
+              },
+              {
+                "name": "x-helix-agent-id",
+                "value": "=84522155-44d9-ccd5-eb9f-c006b3fa075e"
+              },
+              {
+                "name": "x-helix-perform-as",
+                "value": "={{ $json.x_helix_perform_as }}"
+              },
+              {
+                "name": "x-xsrf-token",
+                "value": "={{ $json.xsrf_token }}"
+              },
+              {
+                "name": "Cookie",
+                "value": "=XSRF-TOKEN={{$json.xsrf_token}}; .AspNet.Cookies={{$json.aspnet_cookie}}"
+              },
+              {
+                "name": "cookie",
+                "value": "=XSRF-TOKEN={{$json.xsrf_token}};.AspNet.Cookies={{$json.aspnet_cookie}};"
+              },
+              {
+                "name": "x-helix-perform-as",
+                "value": "={{ $json.x_helix_perform_as }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "Query",
+                "value": "={{ $('Loop Over Items1').item.json.PatientId }}"
+              },
+              {
+                "name": "Limit",
+                "value": "30"
+              },
+              {
+                "name": "Offset",
+                "value": "0"
+              },
+              {
+                "name": "IncludeInactive",
+                "value": "false"
+              },
+              {
+                "name": "LocalCentreSearch",
+                "value": "false"
+              }
+            ]
+          },
+          "options": {
+            "allowUnauthorizedCerts": true
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1344,
+          -192
+        ],
+        "id": "fbea60fc-6f76-4bbe-b4be-31671a0bc737",
+        "name": "SearchUser"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "Data",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1568,
+          -192
+        ],
+        "id": "1ebd7a95-6642-4c78-ba54-f8ecc45f439f",
+        "name": "Split Out1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "c1d2938e-a4fa-4080-ac37-39d3d7c45c03",
+                "leftValue": "={{ $json.Id }}",
+                "rightValue": "={{ $('Loop Over Items1').item.json.PatientId }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          1792,
+          -192
+        ],
+        "id": "7ed6d1e2-df99-43c9-a79e-675461e8966a",
+        "name": "Filter1"
+      },
+      {
+        "parameters": {
+          "jsCode": "const email = $input.first().json.Email;\n\nif (email === 0 || email === '0' || !email) {\n  return [{ json: { code: 0 } }];\n}\n\nconst code = String(email).match(/\\+([^.]+)\\./)?.[1] ?? 0;\n\nreturn [{ json: { code } }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2016,
+          -192
+        ],
+        "id": "c4706c89-42f4-42ec-beb0-49947c418c83",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "906a11df-4627-4c68-b2cf-f40f500125c5",
+                "name": "PrescribedOn",
+                "value": "={{ $('Loop Over Items1').item.json.PrescribedOn }}",
+                "type": "string"
+              },
+              {
+                "id": "d4971641-edb4-4cd8-a636-a84624af2183",
+                "name": "PrescriberSurname",
+                "value": "={{ $('Loop Over Items1').item.json.PrescriberSurname }}",
+                "type": "string"
+              },
+              {
+                "id": "259b2808-1d89-4b69-bdad-c617888effc6",
+                "name": "PrescriberFirstname",
+                "value": "={{ $('Loop Over Items1').item.json.PrescriberFirstname }}",
+                "type": "string"
+              },
+              {
+                "id": "fbcc4681-b70f-4bac-8b24-05393ea346b9",
+                "name": "DoctorId",
+                "value": "={{ $('Loop Over Items1').item.json.DoctorId }}",
+                "type": "string"
+              },
+              {
+                "id": "0abc51f8-8f34-4e07-9e4b-7e7e21837e53",
+                "name": "CentreName",
+                "value": "={{ $('Loop Over Items1').item.json.CentreName }}",
+                "type": "string"
+              },
+              {
+                "id": "8e491b9b-51e5-4e6a-9ab4-c2306e794ac0",
+                "name": "PrescriptionType",
+                "value": "={{ $('Loop Over Items1').item.json.PrescriptionType }}",
+                "type": "string"
+              },
+              {
+                "id": "4a65f5d5-bd61-46b5-8df6-d0bd2be71b29",
+                "name": "TransmittedTo",
+                "value": "={{ $('Loop Over Items1').item.json.TransmittedTo }}",
+                "type": "string"
+              },
+              {
+                "id": "9f5cf9e4-e401-4741-b93d-511ff9ec180e",
+                "name": "ScriptId",
+                "value": "={{ $('Loop Over Items1').item.json.ScriptId }}",
+                "type": "string"
+              },
+              {
+                "id": "0c41b8ee-cd7e-4458-b6a3-eff587ddfab8",
+                "name": "DrugName",
+                "value": "={{ $('Loop Over Items1').item.json.DrugName }}",
+                "type": "string"
+              },
+              {
+                "id": "79caaee1-788e-4c7c-8203-b3e1676e8f8f",
+                "name": "Form",
+                "value": "={{ $('Loop Over Items1').item.json.Form }}",
+                "type": "string"
+              },
+              {
+                "id": "9b8fd141-4e11-4d3a-baf0-1b4e0fa3d0bb",
+                "name": "Strength",
+                "value": "={{ $('Loop Over Items1').item.json.Strength }}",
+                "type": "string"
+              },
+              {
+                "id": "a7fddce7-33ff-4ba8-a66c-91623994346a",
+                "name": "Dose",
+                "value": "={{ $('Loop Over Items1').item.json.Dose }}",
+                "type": "string"
+              },
+              {
+                "id": "6c01cce2-60b2-422d-9cfa-4accb9ca651f",
+                "name": "Route",
+                "value": "={{ $('Loop Over Items1').item.json.Route }}",
+                "type": "string"
+              },
+              {
+                "id": "c90b0fd4-3e2c-4049-8ccc-79bc481d8b41",
+                "name": "Repeats",
+                "value": "={{ $('Loop Over Items1').item.json.Repeats }}",
+                "type": "string"
+              },
+              {
+                "id": "3cc19f42-cca0-45e8-98bf-4bd635334f42",
+                "name": "RepeatInterval",
+                "value": "={{ $('Loop Over Items1').item.json.RepeatInterval }}",
+                "type": "string"
+              },
+              {
+                "id": "d9194281-7638-4541-bfc6-c330622a6eb5",
+                "name": "PatientId",
+                "value": "={{ $('Loop Over Items1').item.json.PatientId }}",
+                "type": "string"
+              },
+              {
+                "id": "6ea2589a-ffb7-4555-a117-33ed73251d6e",
+                "name": "PatientSurname",
+                "value": "={{ $('Loop Over Items1').item.json.PatientSurname }}",
+                "type": "string"
+              },
+              {
+                "id": "5b103bfe-b9d9-42cb-a70b-97fa906ee634",
+                "name": "PatientFirstName",
+                "value": "={{ $('Loop Over Items1').item.json.PatientFirstName }}",
+                "type": "string"
+              },
+              {
+                "id": "a319054f-7db9-4dc0-8129-4db10686ff13",
+                "name": "PatientDateOfBirth",
+                "value": "={{ $('Loop Over Items1').item.json.PatientDateOfBirth }}",
+                "type": "string"
+              },
+              {
+                "id": "19eb4ebc-7485-42f7-9560-d4b12758ce47",
+                "name": "PhoneNumbers",
+                "value": "={{ $('Loop Over Items1').item.json.PhoneNumbers }}",
+                "type": "string"
+              },
+              {
+                "id": "4b194278-6c55-4bc5-9271-bd34c0edb5b0",
+                "name": "ZenotiCode",
+                "value": "={{ $json.code }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2240,
+          -144
+        ],
+        "id": "6f569e68-9e10-48ba-8898-d4da0c79c544",
+        "name": "AddZenotiCode"
       }
     ],
     "connections": {
@@ -452,7 +780,91 @@
         "main": [
           [
             {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items1": {
+        "main": [
+          [
+            {
               "node": "Convert to File",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "helixAuth",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "helixAuth": {
+        "main": [
+          [
+            {
+              "node": "SearchUser",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SearchUser": {
+        "main": [
+          [
+            {
+              "node": "Split Out1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out1": {
+        "main": [
+          [
+            {
+              "node": "Filter1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter1": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "AddZenotiCode",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AddZenotiCode": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items1",
               "type": "main",
               "index": 0
             }
@@ -461,11 +873,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 6460d4e9",
+    "name": "Version b4a7f45f",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "6460d4e9-3c96-4b50-b3d8-547bc97961c7",
+  "activeVersionId": "b4a7f45f-dcf0-4e06-a79d-44e0af44ccd2",
   "connections": {
     "Schedule Trigger": {
       "main": [
@@ -588,7 +1000,91 @@
       "main": [
         [
           {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
             "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "helixAuth",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "helixAuth": {
+      "main": [
+        [
+          {
+            "node": "SearchUser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchUser": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "AddZenotiCode",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AddZenotiCode": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
             "type": "main",
             "index": 0
           }
@@ -631,7 +1127,7 @@
       "typeVersion": 3,
       "position": [
         448,
-        176
+        96
       ],
       "id": "f18babac-bbb1-4a54-9da3-2ec3e0397611",
       "name": "Loop Over Items"
@@ -678,8 +1174,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        1072,
-        240
+        1120,
+        96
       ],
       "id": "4e695159-bd06-42cd-a350-9c4402b45632",
       "name": "HelixAuth"
@@ -773,8 +1269,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1296,
-        240
+        1344,
+        96
       ],
       "id": "d9a6c973-2485-4bae-ba63-e1416daeed54",
       "name": "HTTP Request",
@@ -787,8 +1283,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1520,
-        240
+        1568,
+        96
       ],
       "id": "e38b3fcd-2726-4192-a1a2-514f61b10366",
       "name": "ParseOutput",
@@ -811,8 +1307,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        848,
-        240
+        896,
+        96
       ],
       "id": "33c15c91-d2cf-4431-b7b9-7937b8ca0ef6",
       "name": "Edit Fields"
@@ -825,8 +1321,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        1728,
-        240
+        1792,
+        168
       ],
       "id": "850cf253-ffa7-46fd-84e1-1d428ce16513",
       "name": "Split Out",
@@ -841,8 +1337,8 @@
       "type": "n8n-nodes-base.convertToFile",
       "typeVersion": 1.1,
       "position": [
-        848,
-        64
+        1120,
+        -384
       ],
       "id": "6e38b48f-8dcd-490f-9889-31fbb2e0ea66",
       "name": "Convert to File"
@@ -866,8 +1362,8 @@
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [
-        1072,
-        64
+        1344,
+        -384
       ],
       "id": "3e4074ac-468d-456b-ad49-f4bd66a31941",
       "name": "Send a message",
@@ -886,8 +1382,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        624,
-        240
+        672,
+        96
       ],
       "id": "a9747f0a-9581-4067-9cf7-12ceee2f2554",
       "name": "Wait",
@@ -921,11 +1417,339 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        624,
-        64
+        608,
+        -160
       ],
       "id": "d28adb4d-6a98-4d22-a41c-08c83273c003",
       "name": "Filter"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        896,
+        -192
+      ],
+      "id": "3df355cb-d007-4776-88a5-a5bbdb7aa4e1",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "fYcqpV5ToKAsXk2w",
+          "mode": "list",
+          "cachedResultName": "Helix_Auth_Bundle",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/fYcqpV5ToKAsXk2w"
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1120,
+        -192
+      ],
+      "id": "11b91899-c757-46e0-9b12-94a75626541a",
+      "name": "helixAuth"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://aandm.helix.medicaldirector.com/api/patient/search",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$json.bearer_token}}"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "clienttimezone",
+              "value": "Australia/Perth"
+            },
+            {
+              "name": "usercentreid",
+              "value": "=2"
+            },
+            {
+              "name": "userworkareaid",
+              "value": "=2"
+            },
+            {
+              "name": "x-helix-agent-id",
+              "value": "=84522155-44d9-ccd5-eb9f-c006b3fa075e"
+            },
+            {
+              "name": "x-helix-perform-as",
+              "value": "={{ $json.x_helix_perform_as }}"
+            },
+            {
+              "name": "x-xsrf-token",
+              "value": "={{ $json.xsrf_token }}"
+            },
+            {
+              "name": "Cookie",
+              "value": "=XSRF-TOKEN={{$json.xsrf_token}}; .AspNet.Cookies={{$json.aspnet_cookie}}"
+            },
+            {
+              "name": "cookie",
+              "value": "=XSRF-TOKEN={{$json.xsrf_token}};.AspNet.Cookies={{$json.aspnet_cookie}};"
+            },
+            {
+              "name": "x-helix-perform-as",
+              "value": "={{ $json.x_helix_perform_as }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Query",
+              "value": "={{ $('Loop Over Items1').item.json.PatientId }}"
+            },
+            {
+              "name": "Limit",
+              "value": "30"
+            },
+            {
+              "name": "Offset",
+              "value": "0"
+            },
+            {
+              "name": "IncludeInactive",
+              "value": "false"
+            },
+            {
+              "name": "LocalCentreSearch",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1344,
+        -192
+      ],
+      "id": "fbea60fc-6f76-4bbe-b4be-31671a0bc737",
+      "name": "SearchUser"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "Data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        -192
+      ],
+      "id": "1ebd7a95-6642-4c78-ba54-f8ecc45f439f",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c1d2938e-a4fa-4080-ac37-39d3d7c45c03",
+              "leftValue": "={{ $json.Id }}",
+              "rightValue": "={{ $('Loop Over Items1').item.json.PatientId }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1792,
+        -192
+      ],
+      "id": "7ed6d1e2-df99-43c9-a79e-675461e8966a",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const email = $input.first().json.Email;\n\nif (email === 0 || email === '0' || !email) {\n  return [{ json: { code: 0 } }];\n}\n\nconst code = String(email).match(/\\+([^.]+)\\./)?.[1] ?? 0;\n\nreturn [{ json: { code } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2016,
+        -192
+      ],
+      "id": "c4706c89-42f4-42ec-beb0-49947c418c83",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "906a11df-4627-4c68-b2cf-f40f500125c5",
+              "name": "PrescribedOn",
+              "value": "={{ $('Loop Over Items1').item.json.PrescribedOn }}",
+              "type": "string"
+            },
+            {
+              "id": "d4971641-edb4-4cd8-a636-a84624af2183",
+              "name": "PrescriberSurname",
+              "value": "={{ $('Loop Over Items1').item.json.PrescriberSurname }}",
+              "type": "string"
+            },
+            {
+              "id": "259b2808-1d89-4b69-bdad-c617888effc6",
+              "name": "PrescriberFirstname",
+              "value": "={{ $('Loop Over Items1').item.json.PrescriberFirstname }}",
+              "type": "string"
+            },
+            {
+              "id": "fbcc4681-b70f-4bac-8b24-05393ea346b9",
+              "name": "DoctorId",
+              "value": "={{ $('Loop Over Items1').item.json.DoctorId }}",
+              "type": "string"
+            },
+            {
+              "id": "0abc51f8-8f34-4e07-9e4b-7e7e21837e53",
+              "name": "CentreName",
+              "value": "={{ $('Loop Over Items1').item.json.CentreName }}",
+              "type": "string"
+            },
+            {
+              "id": "8e491b9b-51e5-4e6a-9ab4-c2306e794ac0",
+              "name": "PrescriptionType",
+              "value": "={{ $('Loop Over Items1').item.json.PrescriptionType }}",
+              "type": "string"
+            },
+            {
+              "id": "4a65f5d5-bd61-46b5-8df6-d0bd2be71b29",
+              "name": "TransmittedTo",
+              "value": "={{ $('Loop Over Items1').item.json.TransmittedTo }}",
+              "type": "string"
+            },
+            {
+              "id": "9f5cf9e4-e401-4741-b93d-511ff9ec180e",
+              "name": "ScriptId",
+              "value": "={{ $('Loop Over Items1').item.json.ScriptId }}",
+              "type": "string"
+            },
+            {
+              "id": "0c41b8ee-cd7e-4458-b6a3-eff587ddfab8",
+              "name": "DrugName",
+              "value": "={{ $('Loop Over Items1').item.json.DrugName }}",
+              "type": "string"
+            },
+            {
+              "id": "79caaee1-788e-4c7c-8203-b3e1676e8f8f",
+              "name": "Form",
+              "value": "={{ $('Loop Over Items1').item.json.Form }}",
+              "type": "string"
+            },
+            {
+              "id": "9b8fd141-4e11-4d3a-baf0-1b4e0fa3d0bb",
+              "name": "Strength",
+              "value": "={{ $('Loop Over Items1').item.json.Strength }}",
+              "type": "string"
+            },
+            {
+              "id": "a7fddce7-33ff-4ba8-a66c-91623994346a",
+              "name": "Dose",
+              "value": "={{ $('Loop Over Items1').item.json.Dose }}",
+              "type": "string"
+            },
+            {
+              "id": "6c01cce2-60b2-422d-9cfa-4accb9ca651f",
+              "name": "Route",
+              "value": "={{ $('Loop Over Items1').item.json.Route }}",
+              "type": "string"
+            },
+            {
+              "id": "c90b0fd4-3e2c-4049-8ccc-79bc481d8b41",
+              "name": "Repeats",
+              "value": "={{ $('Loop Over Items1').item.json.Repeats }}",
+              "type": "string"
+            },
+            {
+              "id": "3cc19f42-cca0-45e8-98bf-4bd635334f42",
+              "name": "RepeatInterval",
+              "value": "={{ $('Loop Over Items1').item.json.RepeatInterval }}",
+              "type": "string"
+            },
+            {
+              "id": "d9194281-7638-4541-bfc6-c330622a6eb5",
+              "name": "PatientId",
+              "value": "={{ $('Loop Over Items1').item.json.PatientId }}",
+              "type": "string"
+            },
+            {
+              "id": "6ea2589a-ffb7-4555-a117-33ed73251d6e",
+              "name": "PatientSurname",
+              "value": "={{ $('Loop Over Items1').item.json.PatientSurname }}",
+              "type": "string"
+            },
+            {
+              "id": "5b103bfe-b9d9-42cb-a70b-97fa906ee634",
+              "name": "PatientFirstName",
+              "value": "={{ $('Loop Over Items1').item.json.PatientFirstName }}",
+              "type": "string"
+            },
+            {
+              "id": "a319054f-7db9-4dc0-8129-4db10686ff13",
+              "name": "PatientDateOfBirth",
+              "value": "={{ $('Loop Over Items1').item.json.PatientDateOfBirth }}",
+              "type": "string"
+            },
+            {
+              "id": "19eb4ebc-7485-42f7-9560-d4b12758ce47",
+              "name": "PhoneNumbers",
+              "value": "={{ $('Loop Over Items1').item.json.PhoneNumbers }}",
+              "type": "string"
+            },
+            {
+              "id": "4b194278-6c55-4bc5-9271-bd34c0edb5b0",
+              "name": "ZenotiCode",
+              "value": "={{ $json.code }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2240,
+        -144
+      ],
+      "id": "6f569e68-9e10-48ba-8898-d4da0c79c544",
+      "name": "AddZenotiCode"
     }
   ],
   "origin": "n8n",
@@ -986,6 +1810,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-07-09T00:30:05.255Z",
-  "versionId": "6460d4e9-3c96-4b50-b3d8-547bc97961c7"
+  "updatedAt": "2026-07-21T06:16:21.070Z",
+  "versionId": "b4a7f45f-dcf0-4e06-a79d-44e0af44ccd2"
 }
