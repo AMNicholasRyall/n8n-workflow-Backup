@@ -1086,11 +1086,11 @@
             },
             {
               "name": "usercentreid",
-              "value": "={{$json.usercentreid}}"
+              "value": "={{ $('Start').item.json.HelixCenterID }}"
             },
             {
               "name": "userworkareaid",
-              "value": "={{$json.userworkareaid}}"
+              "value": "={{ $('Start').item.json.HelixCenterID }}"
             },
             {
               "name": "x-helix-agent-id",
@@ -1436,12 +1436,12 @@
       {
         "json": {
           "ClinicProgress": "UserDoesntExist",
-          "ClientID": "CC80FE5E-1B35-420B-A0E3-64B33D135366",
-          "ClientCode": "DNG6281",
-          "ClinicName": "Dandenong",
+          "ClientID": "EE75368D-3C67-44D5-82D5-AD19A17CFA7B",
+          "ClientCode": "GSG5385",
+          "ClinicName": "GladstonePark",
           "InitialPharmacy": "KCP",
-          "HelixEmail": "Dandenong.pharmacy+DNG6281.KCP@ashleyandmartin.com.au",
-          "HelixCenterID": "8"
+          "HelixEmail": "GladstonePark.pharmacy+GSG5385.KCP@ashleyandmartin.com.au",
+          "HelixCenterID": "5"
         },
         "pairedItem": {
           "item": 0
@@ -1480,6 +1480,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-07-13T06:35:15.276Z",
-  "versionId": "de5ffb76-b045-49c7-9ccc-b853191f6e26"
+  "updatedAt": "2026-07-16T02:35:16.495Z",
+  "versionId": "0ce4dc70-380c-4a30-9f08-677616d1e570"
 }
