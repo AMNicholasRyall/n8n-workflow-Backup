@@ -1421,7 +1421,8 @@
     "availableInMCP": false,
     "timeSavedMode": "fixed",
     "errorWorkflow": "J83Enw8ArDSqhMCL",
-    "callerPolicy": "workflowsFromSameOwner"
+    "callerPolicy": "workflowsFromSameOwner",
+    "saveDataSuccessExecution": "all"
   },
   "shared": [
     {
@@ -1446,6 +1447,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-07-15T01:45:18.488Z",
+  "updatedAt": "2026-07-21T23:47:17.837Z",
   "versionId": "5f5f1723-8717-4359-a338-46f9c8d21666"
 }
