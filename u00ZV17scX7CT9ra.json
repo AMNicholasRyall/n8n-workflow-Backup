@@ -1,0 +1,81 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-07-15T23:50:50.239Z",
+  "id": "u00ZV17scX7CT9ra",
+  "isArchived": true,
+  "meta": null,
+  "name": "My workflow 7",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "5240d5a3-a807-46d9-8d0c-327487c4d88b",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "fYcqpV5ToKAsXk2w",
+          "mode": "list",
+          "cachedResultName": "Helix_Auth_Bundle",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/fYcqpV5ToKAsXk2w"
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "9ea1ecfa-0851-4637-b311-649fd27646f5",
+      "name": "Get row(s)"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-07-15T23:50:50.241Z",
+      "createdAt": "2026-07-15T23:50:50.241Z",
+      "role": "workflow:owner",
+      "workflowId": "u00ZV17scX7CT9ra",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-07-15T23:54:41.000Z",
+  "versionId": "5fb94e40-e570-43be-9a35-e819abf04df0"
+}
