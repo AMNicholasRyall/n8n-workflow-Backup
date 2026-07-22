@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-07-08T00:25:23.000Z",
-    "createdAt": "2026-07-08T00:20:19.052Z",
-    "versionId": "5488c5de-5cb7-4868-a03d-d4fc2e0187c8",
+    "updatedAt": "2026-07-22T02:39:42.000Z",
+    "createdAt": "2026-07-22T02:39:39.680Z",
+    "versionId": "2e1e903d-ff9a-4e0f-860d-eba910253310",
     "workflowId": "LIW8dhFAlW1wRpBF",
     "nodes": [
       {
@@ -425,6 +425,12 @@
                 "name": "HelixCenterID",
                 "value": "={{ $('Start').item.json.HelixCenterID }}",
                 "type": "string"
+              },
+              {
+                "id": "490b4483-4a4b-492b-8a3a-fe7caae05071",
+                "name": "HelixUserID",
+                "value": "={{ $json.MatchedHelixId }}",
+                "type": "number"
               }
             ]
           },
@@ -556,11 +562,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 5488c5de",
+    "name": "Version 2e1e903d",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "5488c5de-5cb7-4868-a03d-d4fc2e0187c8",
+  "activeVersionId": "2e1e903d-ff9a-4e0f-860d-eba910253310",
   "connections": {
     "Start": {
       "main": [
@@ -1101,6 +1107,12 @@
               "name": "HelixCenterID",
               "value": "={{ $('Start').item.json.HelixCenterID }}",
               "type": "string"
+            },
+            {
+              "id": "490b4483-4a4b-492b-8a3a-fe7caae05071",
+              "name": "HelixUserID",
+              "value": "={{ $json.MatchedHelixId }}",
+              "type": "number"
             }
           ]
         },
@@ -1122,12 +1134,12 @@
       {
         "json": {
           "ClinicProgress": "ContinueFlow",
-          "ClientID": "ccecb836-82db-447a-80bb-2a78af502750",
-          "ClientCode": "BBG6297",
-          "ClinicName": "Brisbane",
+          "ClientID": "53C7A96F-B06E-49FA-B506-1C8DAE79E9B5",
+          "ClientCode": "GSG3868",
+          "ClinicName": "GladstonePark",
           "InitialPharmacy": "KCP",
-          "HelixEmail": "Brisbane.pharmacy+BBG6297.KCP@ashleyandmartin.com.au",
-          "HelixCenterID": "2"
+          "HelixEmail": "GladstonePark.pharmacy+GSG3868.KCP@ashleyandmartin.com.au",
+          "HelixCenterID": "7"
         },
         "pairedItem": {
           "item": 0
@@ -1145,7 +1157,8 @@
     "timeSavedMode": "fixed",
     "errorWorkflow": "J83Enw8ArDSqhMCL",
     "callerPolicy": "workflowsFromSameOwner",
-    "binaryMode": "separate"
+    "binaryMode": "separate",
+    "saveDataSuccessExecution": "all"
   },
   "shared": [
     {
@@ -1157,8 +1170,15 @@
     }
   ],
   "staticData": null,
-  "tags": [],
+  "tags": [
+    {
+      "updatedAt": "2026-06-23T07:20:53.826Z",
+      "createdAt": "2026-06-23T07:20:53.826Z",
+      "id": "IGQhT6ige0xQKnQ9",
+      "name": "Helix"
+    }
+  ],
   "triggerCount": 0,
-  "updatedAt": "2026-07-08T00:25:28.433Z",
-  "versionId": "5488c5de-5cb7-4868-a03d-d4fc2e0187c8"
+  "updatedAt": "2026-07-22T03:54:42.403Z",
+  "versionId": "2e1e903d-ff9a-4e0f-860d-eba910253310"
 }
