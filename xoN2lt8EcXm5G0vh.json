@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-06-30T03:02:24.000Z",
-    "createdAt": "2026-06-30T03:02:07.722Z",
-    "versionId": "76ef02fb-cc75-4ce1-999b-76d065c58429",
+    "updatedAt": "2026-07-22T02:30:56.000Z",
+    "createdAt": "2026-06-30T04:11:01.884Z",
+    "versionId": "cd2d664c-da36-488e-9718-a99f7b60e063",
     "workflowId": "xoN2lt8EcXm5G0vh",
     "nodes": [
       {
@@ -410,7 +410,8 @@
                 "rightValue": "={{ $('Prep Folder Names').item.json.pharmacy }}",
                 "operator": {
                   "type": "string",
-                  "operation": "equals"
+                  "operation": "exists",
+                  "singleValue": true
                 }
               }
             ],
@@ -1015,11 +1016,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 76ef02fb",
+    "name": "Version cd2d664c",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "76ef02fb-cc75-4ce1-999b-76d065c58429",
+  "activeVersionId": "cd2d664c-da36-488e-9718-a99f7b60e063",
   "connections": {
     "Prep Folder Names": {
       "main": [
@@ -2041,20 +2042,20 @@
       {
         "json": {
           "isPrescriptionEmail": true,
-          "emailId": "AAMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1OABGAAAAAAClrM7JrALpR5gWZ2M2MX76BwDXiFn9j2FwSaxBKrApLY6NAAAAAAEMAADXiFn9j2FwSaxBKrApLY6NAAAW2RUvAAA=",
-          "originalMessageId": "AAMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1OABGAAAAAAClrM7JrALpR5gWZ2M2MX76BwDXiFn9j2FwSaxBKrApLY6NAAAAAAEMAADXiFn9j2FwSaxBKrApLY6NAAAW2RUvAAA=",
-          "toAddress": "hurstville.pharmacy+hvg3748.kcp@ashleyandmartin.com.au",
-          "clinic": "HURSTVILLE",
-          "clinicFolderName": "HURSTVILLE",
-          "customerCode": "hvg3748",
+          "emailId": "AAMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1OABGAAAAAAClrM7JrALpR5gWZ2M2MX76BwDXiFn9j2FwSaxBKrApLY6NAAAAAAEMAADXiFn9j2FwSaxBKrApLY6NAAAanSsoAAA=",
+          "originalMessageId": "AAMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1OABGAAAAAAClrM7JrALpR5gWZ2M2MX76BwDXiFn9j2FwSaxBKrApLY6NAAAAAAEMAADXiFn9j2FwSaxBKrApLY6NAAAanSsoAAA=",
+          "toAddress": "Parramatta.pharmacy+PMG6494.KCP@ashleyandmartin.com.au",
+          "clinic": "PARRAMATTA",
+          "clinicFolderName": "PARRAMATTA",
+          "customerCode": "PMG6494",
           "pharmacy": "KCP",
-          "patientInitials": "NV",
-          "productName": "KCP: 7% Min + 0.01% RA + 0.25% Fin Lotion 7% Minoxidil + 0.01% Retinoic Acid + 0.25% Finasteride",
-          "scriptUrl": "https://ausscripts.erx.com.au/scripts/2R3VTY43H48C6BDV86",
-          "scriptId": "2R3VTY43H48C6BDV86",
-          "receivedDate": "2026-07-15",
-          "dateFolderName": "2026-07-15",
-          "fileName": "2026-07-15-2R3VTY43H48C6BDV86-NV.pdf",
+          "patientInitials": "BP",
+          "productName": "KCP: 5% Min + 0.01% RA Lotion 5% Minoxidil + 0.01% Retinoic Acid",
+          "scriptUrl": "https://ausscripts.erx.com.au/scripts/2WT5GWJXW1M9089D09",
+          "scriptId": "2WT5GWJXW1M9089D09",
+          "receivedDate": "2026-07-21",
+          "dateFolderName": "2026-07-21",
+          "fileName": "2026-07-21-2WT5GWJXW1M9089D09-BP.pdf",
           "DriveID": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
           "AUMedOrderID": "01Y4DA4OPCXITTGW45PJHZBMOQ2WVAPCD2",
           "CompletedOrdersID": "01Y4DA4OMCIC7MC3JRSBG2QB4JYEGHALNK",
@@ -2098,6 +2099,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-07-15T01:41:47.255Z",
+  "updatedAt": "2026-07-22T02:31:47.649Z",
   "versionId": "cd2d664c-da36-488e-9718-a99f7b60e063"
 }
