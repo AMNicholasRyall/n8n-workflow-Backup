@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-07-09T23:49:58.000Z",
-    "createdAt": "2026-07-09T23:49:53.193Z",
-    "versionId": "b4e2060b-a085-4377-a478-4164e34a58f6",
+    "updatedAt": "2026-07-20T23:59:13.000Z",
+    "createdAt": "2026-07-20T23:59:09.488Z",
+    "versionId": "9e664d0f-064e-4da1-a232-ddf23c90898c",
     "workflowId": "s7orTr2bZdJMpDa3",
     "nodes": [
       {
@@ -502,6 +502,92 @@
         ],
         "name": "Call Helix Patient - Create",
         "id": "f90e3c2c-7187-4662-bfc7-1776f2dbf238"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "3f9d8641-5d62-4a0c-95ca-f3f77eb05e05",
+                "leftValue": "={{ $json.ClinicProgress }}",
+                "rightValue": "CreationError",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          1488,
+          -304
+        ],
+        "id": "cb4525b8-8753-47e2-b540-f9b14d9d0b2e",
+        "name": "Filter3"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lsINP70DmcZtIj4M",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinics",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "name",
+                "keyValue": "={{ $json.ClinicName }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          1696,
+          -304
+        ],
+        "id": "12b5407a-f041-4642-b7b0-693a104d6da7",
+        "name": "Get row(s)1"
+      },
+      {
+        "parameters": {
+          "toRecipients": "={{ $json.email }}",
+          "subject": "=Helix Automation - {{ $('Filter3').item.json.ClientCode }}",
+          "bodyContent": "=<html>\n  <body style=\"font-family: Arial, sans-serif; color: #333333; line-height: 1.5;\">\n    <p>Hi Team,</p>\n\n<p>Automation was unable to create the user below.</p>\n\n<p>Please review and correct the issue, then create the user manually using the link below:</p>\n\n<p>\n  <a href=\"https://n8n.ashleyandmartin.local/form/Helix-Manual-Creation\"\n     style=\"display: inline-block; padding: 10px 16px; background-color: #0078d4; color: #ffffff; text-decoration: none; border-radius: 4px;\">\n    Create User Manually\n  </a>\n</p>\n\n<table style=\"border-collapse: collapse; margin: 16px 0;\">\n  <tr>\n    <td style=\"padding: 6px 12px 6px 0;\"><strong>User:</strong></td>\n    <td style=\"padding: 6px 0;\">{{ $('Filter3').item.json.ClientCode }}</td>\n  </tr>\n  <tr>\n    <td style=\"padding: 6px 12px 6px 0; vertical-align: top;\"><strong>Error:</strong></td>\n    <td style=\"padding: 6px 0;\">{{ $('Filter3').item.json.ErrorMessage }}</td>\n  </tr>\n</table>\n\n<p>Regards,<br>Automation</p>\n\n  </body>\n</html>\n",
+          "additionalFields": {
+            "bodyContentType": "html"
+          }
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          1904,
+          -304
+        ],
+        "id": "1b041b76-546f-429d-ac66-901d0c906571",
+        "name": "Send a message",
+        "webhookId": "8b39a90e-6d0e-44c4-ab1c-f561527619c5",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
       }
     ],
     "connections": {
@@ -683,14 +769,47 @@
             }
           ]
         ]
+      },
+      "Call Helix Patient - Create": {
+        "main": [
+          [
+            {
+              "node": "Filter3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter3": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)1": {
+        "main": [
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version b4e2060b",
+    "name": "Version 9e664d0f",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "b4e2060b-a085-4377-a478-4164e34a58f6",
+  "activeVersionId": "9e664d0f-064e-4da1-a232-ddf23c90898c",
   "connections": {
     "Schedule Trigger": {
       "main": [
@@ -870,12 +989,47 @@
           }
         ]
       ]
+    },
+    "Call Helix Patient - Create": {
+      "main": [
+        [
+          {
+            "node": "Filter3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter3": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2026-07-06T07:28:08.205Z",
   "id": "s7orTr2bZdJMpDa3",
   "isArchived": false,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "name": "Helix Patient - Zenoti Appointment Find",
   "nodes": [
     {
@@ -1374,6 +1528,92 @@
       ],
       "name": "Call Helix Patient - Create",
       "id": "f90e3c2c-7187-4662-bfc7-1776f2dbf238"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3f9d8641-5d62-4a0c-95ca-f3f77eb05e05",
+              "leftValue": "={{ $json.ClinicProgress }}",
+              "rightValue": "CreationError",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1488,
+        -304
+      ],
+      "id": "cb4525b8-8753-47e2-b540-f9b14d9d0b2e",
+      "name": "Filter3"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "name",
+              "keyValue": "={{ $json.ClinicName }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1696,
+        -304
+      ],
+      "id": "12b5407a-f041-4642-b7b0-693a104d6da7",
+      "name": "Get row(s)1"
+    },
+    {
+      "parameters": {
+        "toRecipients": "={{ $json.email }}",
+        "subject": "=Helix Automation - {{ $('Filter3').item.json.ClientCode }}",
+        "bodyContent": "=<html>\n  <body style=\"font-family: Arial, sans-serif; color: #333333; line-height: 1.5;\">\n    <p>Hi Team,</p>\n\n<p>Automation was unable to create the user below.</p>\n\n<p>Please review and correct the issue, then create the user manually using the link below:</p>\n\n<p>\n  <a href=\"https://n8n.ashleyandmartin.local/form/Helix-Manual-Creation\"\n     style=\"display: inline-block; padding: 10px 16px; background-color: #0078d4; color: #ffffff; text-decoration: none; border-radius: 4px;\">\n    Create User Manually\n  </a>\n</p>\n\n<table style=\"border-collapse: collapse; margin: 16px 0;\">\n  <tr>\n    <td style=\"padding: 6px 12px 6px 0;\"><strong>User:</strong></td>\n    <td style=\"padding: 6px 0;\">{{ $('Filter3').item.json.ClientCode }}</td>\n  </tr>\n  <tr>\n    <td style=\"padding: 6px 12px 6px 0; vertical-align: top;\"><strong>Error:</strong></td>\n    <td style=\"padding: 6px 0;\">{{ $('Filter3').item.json.ErrorMessage }}</td>\n  </tr>\n</table>\n\n<p>Regards,<br>Automation</p>\n\n  </body>\n</html>\n",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1904,
+        -304
+      ],
+      "id": "1b041b76-546f-429d-ac66-901d0c906571",
+      "name": "Send a message",
+      "webhookId": "8b39a90e-6d0e-44c4-ab1c-f561527619c5",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
     }
   ],
   "origin": "n8n",
@@ -1388,7 +1628,8 @@
     "availableInMCP": false,
     "timeSavedMode": "fixed",
     "errorWorkflow": "J83Enw8ArDSqhMCL",
-    "callerPolicy": "workflowsFromSameOwner"
+    "callerPolicy": "workflowsFromSameOwner",
+    "saveDataSuccessExecution": "all"
   },
   "shared": [
     {
@@ -1413,6 +1654,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-07-09T23:49:53.192Z",
-  "versionId": "b4e2060b-a085-4377-a478-4164e34a58f6"
+  "updatedAt": "2026-07-20T23:59:09.487Z",
+  "versionId": "9e664d0f-064e-4da1-a232-ddf23c90898c"
 }
