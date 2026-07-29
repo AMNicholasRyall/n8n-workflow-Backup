@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-07-22T02:30:56.000Z",
-    "createdAt": "2026-06-30T04:11:01.884Z",
-    "versionId": "cd2d664c-da36-488e-9718-a99f7b60e063",
+    "updatedAt": "2026-07-27T06:11:11.000Z",
+    "createdAt": "2026-07-27T06:09:56.659Z",
+    "versionId": "d31b1c7a-d1bc-409a-bc9e-07e95791762c",
     "workflowId": "xoN2lt8EcXm5G0vh",
     "nodes": [
       {
@@ -81,8 +81,8 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          3472,
-          -16
+          3408,
+          -704
         ],
         "id": "a08f84a7-4a5e-4442-9e6f-ed6b568d8ad9",
         "name": "Edit Fields2"
@@ -110,8 +110,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.4,
         "position": [
-          3248,
-          -16
+          3184,
+          -704
         ],
         "id": "961f0d8e-8e62-46bb-9cb3-fc7b285bc537",
         "name": "CreateClinicFolder",
@@ -196,8 +196,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          2992,
-          -112
+          2928,
+          -800
         ],
         "id": "c7ba92e7-9490-425f-b2f0-06f69e924354",
         "name": "If2"
@@ -224,8 +224,8 @@
         "type": "n8n-nodes-base.aggregate",
         "typeVersion": 1,
         "position": [
-          3696,
-          -112
+          3632,
+          -800
         ],
         "id": "274e62b1-83e7-49ad-8f58-fb9dcf57e960",
         "name": "ClinicFolderID"
@@ -270,8 +270,8 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          3472,
-          -208
+          3408,
+          -896
         ],
         "id": "aace599b-3ba1-431e-b34d-ee89e202af8c",
         "name": "Edit Fields3"
@@ -347,8 +347,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.4,
         "position": [
-          2304,
-          -112
+          2240,
+          -800
         ],
         "id": "c0d3b1f9-5f49-4c7f-975e-cf30be5040ff",
         "name": "CheckForClinicFolder",
@@ -361,7 +361,7 @@
       },
       {
         "parameters": {
-          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names').item.json.DriveID }}/items/{{ $json.data[0].ClinicFolderID }}/children",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names').item.json.DriveID }}/items/{{ $json.data[0].DateFolderID }}/children",
           "authentication": "genericCredentialType",
           "genericAuthType": "oAuth2Api",
           "sendQuery": true,
@@ -382,7 +382,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.4,
         "position": [
-          3920,
+          2320,
           -112
         ],
         "id": "e32bf271-1e78-432b-ae0b-e82fcc7149b2",
@@ -422,7 +422,7 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          4592,
+          2944,
           -112
         ],
         "id": "8fe4f907-687e-49d5-b562-c255caf11008",
@@ -445,7 +445,7 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          5040,
+          3392,
           -16
         ],
         "id": "d6bdd337-a0f7-44b7-9e6c-f86988dc4530",
@@ -454,7 +454,7 @@
       {
         "parameters": {
           "method": "POST",
-          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names').item.json.DriveID }}/items/{{ $('ClinicFolderID').item.json.data[0].ClinicFolderID }}/children",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names').item.json.DriveID }}/items/{{ $('DateFolderID').item.json.data[0].DateFolderID }}/children",
           "authentication": "genericCredentialType",
           "genericAuthType": "oAuth2Api",
           "sendHeaders": true,
@@ -474,7 +474,7 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.4,
         "position": [
-          4816,
+          3168,
           -16
         ],
         "id": "e094a0b2-4b5c-47e7-a836-2b37b55e3696",
@@ -503,7 +503,7 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          5040,
+          3392,
           -208
         ],
         "id": "26a4b404-8dff-446e-ad5c-0b9fa8c0d555",
@@ -517,46 +517,11 @@
         "type": "n8n-nodes-base.aggregate",
         "typeVersion": 1,
         "position": [
-          5264,
+          3616,
           -112
         ],
         "id": "4a6c9fd5-8e69-4442-847e-1be8155d2459",
         "name": "PharmacyFolderID"
-      },
-      {
-        "parameters": {
-          "assignments": {
-            "assignments": [
-              {
-                "id": "b2bc3c16-7564-4c84-849e-afefbbd8f954",
-                "name": "ClinicFolderID",
-                "value": "={{ $('ClinicFolderID').item.json.data[0].ClinicFolderID }}",
-                "type": "string"
-              },
-              {
-                "id": "1f291578-bcdb-4a86-a7a4-adce6b69f8e2",
-                "name": "DateFolderID",
-                "value": "={{ $('DateFolderID').item.json.data[0].DateFolderID }}",
-                "type": "string"
-              },
-              {
-                "id": "82af370f-9567-4ac5-ba8d-5b7cc80c8606",
-                "name": "PharmacyFolderID",
-                "value": "={{ $json.data[0].PharmacyFolderID }}",
-                "type": "string"
-              }
-            ]
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.set",
-        "typeVersion": 3.4,
-        "position": [
-          5488,
-          -112
-        ],
-        "id": "7671f655-b798-4bfe-88c0-84ddd1e9e335",
-        "name": "PharmacyFolderID1"
       },
       {
         "parameters": {
@@ -588,7 +553,7 @@
                 "leftValue": "={{ $json.name }}",
                 "rightValue": "={{ $('Start').item.json.receivedDate }}",
                 "operator": {
-                  "type": "dateTime",
+                  "type": "string",
                   "operation": "equals"
                 }
               }
@@ -615,8 +580,8 @@
         "type": "n8n-nodes-base.splitOut",
         "typeVersion": 1,
         "position": [
-          2512,
-          -112
+          2448,
+          -800
         ],
         "id": "9d2aaafb-a881-4602-9581-af4abb1c65a7",
         "name": "Split Out1",
@@ -649,8 +614,8 @@
         "type": "n8n-nodes-base.filter",
         "typeVersion": 2.3,
         "position": [
-          2720,
-          -112
+          2656,
+          -800
         ],
         "id": "241a5e06-5d76-4315-8239-00698e53189f",
         "name": "Filter1",
@@ -664,7 +629,7 @@
         "type": "n8n-nodes-base.splitOut",
         "typeVersion": 1,
         "position": [
-          4128,
+          2528,
           -112
         ],
         "id": "9a89af98-9591-4877-bda6-918b895994a2",
@@ -698,12 +663,727 @@
         "type": "n8n-nodes-base.filter",
         "typeVersion": 2.3,
         "position": [
-          4336,
+          2736,
           -112
         ],
         "id": "ad21f780-013a-4278-ac89-3c05b009d42f",
         "name": "Filter2",
         "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names1').item.json.DriveID }}/items/{{ $('Prep Folder Names1').item.json.OrderInProgressID }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"name\": \"{{ $('Prep Folder Names1').item.json.dateFolderName }}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"fail\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1216,
+          -1312
+        ],
+        "id": "f70c2521-cd00-4831-b751-e73780008376",
+        "name": "CreateDateFolder1",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "8a2f23f9-ba9b-4ce1-aa62-f9c0142702a0",
+                "name": "DateFolderID",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1440,
+          -1312
+        ],
+        "id": "ade0dc41-34d5-4cac-9299-22d57ee15cf3",
+        "name": "Edit Fields6"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "8a2f23f9-ba9b-4ce1-aa62-f9c0142702a0",
+                "name": "ClinicFolderID",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          3056,
+          -1312
+        ],
+        "id": "e2625b32-9ca5-48da-8560-290a922cf0c8",
+        "name": "Edit Fields7"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names1').item.json.DriveID }}/items/{{ $('DateFolderID1').item.json.data[0].DateFolderID }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"name\": \"{{ $('Prep Folder Names1').item.json.clinic }}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"fail\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          2832,
+          -1312
+        ],
+        "id": "5a8c94e8-4efb-4582-b022-a7fc2615d364",
+        "name": "CreateClinicFolder1",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const email = $json;\n\nconst dateFolderName = email.dateFolderName || email.receivedDate;\nconst clinicFolderName = email.clinicFolderName || email.clinic;\n\nconst safeDate = dateFolderName || new Date().toISOString().slice(0, 10);\nconst safeScriptId = email.scriptId || \"UnknownScript\";\nconst safePatientInitials = email.patientInitials || \"UnknownInitials\";\n\nconst fileName =\n  email.fileName ||\n  `${safeDate}-${safeScriptId}-${safePatientInitials}.pdf`;\n\nreturn {\n  json: {\n    ...email,\n\n    dateFolderName,\n    clinicFolderName,\n    fileName,\n\n    // Keep these flat so every node after this can use $json directly\n    DriveID: email.DriveID,\n    AUMedOrderID: email.AUMedOrderID,\n    CompletedOrdersID: email.CompletedOrdersID,\n    OrderInProgressID: email.OrderInProgressID,\n  }\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          112,
+          -1408
+        ],
+        "id": "cc3ca39b-34a8-4e9d-bc56-a9455736e134",
+        "name": "Prep Folder Names1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "3c6ca86e-637c-480b-89cd-3f18b1a4f04b",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "dateTime",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          992,
+          -1408
+        ],
+        "id": "a918cde9-0846-45dc-80a4-ac1639ccfcbe",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "3c6ca86e-637c-480b-89cd-3f18b1a4f04b",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('Prep Folder Names1').item.json.clinic }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          2576,
+          -1408
+        ],
+        "id": "2ee5a9ac-d8e3-4e1d-b5bb-a97d418ecc6c",
+        "name": "If3"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          1664,
+          -1408
+        ],
+        "id": "6212b9a1-2ac8-4324-9863-9f7dc6e014a7",
+        "name": "DateFolderID1"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          3280,
+          -1408
+        ],
+        "id": "6274d8fa-055d-43bf-9c2c-9d4e4049a283",
+        "name": "ClinicFolderID1"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "c3bc6f63-19d0-4d5c-b0eb-a882a22766d4",
+                "name": "DateFolderID",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1440,
+          -1504
+        ],
+        "id": "c7ddc489-c3db-4172-973e-c1edde944cc2",
+        "name": "Edit Fields8"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "8a2f23f9-ba9b-4ce1-aa62-f9c0142702a0",
+                "name": "ClinicFolderID",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          3056,
+          -1504
+        ],
+        "id": "dae08258-9278-45c2-983c-8d5c799379eb",
+        "name": "Edit Fields9"
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.OrderInProgressID }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          320,
+          -1408
+        ],
+        "id": "e4344971-5864-431b-968f-00a8000b67d6",
+        "name": "CheckForDateFolder1",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names1').item.json.DriveID }}/items/{{ $json.data[0].DateFolderID }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1888,
+          -1408
+        ],
+        "id": "4925bdcd-5801-4ae4-b46a-324190578e15",
+        "name": "CheckForClinicFolder1",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names1').item.json.DriveID }}/items/{{ $json.data[0].ClinicFolderID }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "$top",
+                "value": "200"
+              },
+              {
+                "name": "$select",
+                "value": "id,name,folder"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          3504,
+          -1408
+        ],
+        "id": "2f7f05c3-8aa5-42c5-93e0-007e6300cfb9",
+        "name": "CheckClinicPharmacy1",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "3c6ca86e-637c-480b-89cd-3f18b1a4f04b",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('Prep Folder Names1').item.json.pharmacy }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          4176,
+          -1408
+        ],
+        "id": "a62bd64c-dc59-45b5-8dbb-0dd1295bda90",
+        "name": "IfNoPharmacy1"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "8a2f23f9-ba9b-4ce1-aa62-f9c0142702a0",
+                "name": "PharmacyFolderID",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          4624,
+          -1312
+        ],
+        "id": "b98a6d99-f0d9-4873-8c0e-40bef6391908",
+        "name": "Edit Fields10"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names1').item.json.DriveID }}/items/{{ $('ClinicFolderID1').item.json.data[0].ClinicFolderID }}/children",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "oAuth2Api",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"name\": \"{{ $('Prep Folder Names1').item.json.pharmacy }}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"fail\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          4400,
+          -1312
+        ],
+        "id": "49404875-6d8e-4119-80fa-569fd68cecc6",
+        "name": "CreatePharmacyFolder1",
+        "credentials": {
+          "oAuth2Api": {
+            "id": "j30zGPdAyzTUMgGs",
+            "name": "MS graph"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "8a2f23f9-ba9b-4ce1-aa62-f9c0142702a0",
+                "name": "PharmacyFolderID",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          4624,
+          -1504
+        ],
+        "id": "bb852c35-f56d-4389-ab34-fa03c19dbe3b",
+        "name": "Edit Fields11"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          4848,
+          -1408
+        ],
+        "id": "70b819c8-60b5-471d-88d4-41fe156bb203",
+        "name": "PharmacyFolderID2"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "b2bc3c16-7564-4c84-849e-afefbbd8f954",
+                "name": "ClinicFolderID",
+                "value": "={{ $('ClinicFolderID1').item.json.data[0].ClinicFolderID }}",
+                "type": "string"
+              },
+              {
+                "id": "1f291578-bcdb-4a86-a7a4-adce6b69f8e2",
+                "name": "DateFolderID",
+                "value": "={{ $('DateFolderID1').item.json.data[0].DateFolderID }}",
+                "type": "string"
+              },
+              {
+                "id": "82af370f-9567-4ac5-ba8d-5b7cc80c8606",
+                "name": "PharmacyFolderID",
+                "value": "={{ $json.data[0].PharmacyFolderID }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          5072,
+          -1408
+        ],
+        "id": "b3aa7c6d-df78-47f3-94e0-a41af6185642",
+        "name": "PharmacyFolderID3"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          528,
+          -1408
+        ],
+        "id": "30424e74-d838-4fd0-898b-63111cd09d80",
+        "name": "Split Out3",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "41f8ab5c-6939-4145-ae65-b46c4ab72d48",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('Start').item.json.receivedDate }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          736,
+          -1408
+        ],
+        "id": "059a0cbd-36bd-458a-a1ff-d2ade469df4b",
+        "name": "Filter3",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          2096,
+          -1408
+        ],
+        "id": "ab16237e-0ece-400a-a770-4b769e2a4cff",
+        "name": "Split Out4",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "ce19e89d-5a71-4553-a62a-e13ec484d3d6",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('Prep Folder Names1').item.json.clinic }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          2304,
+          -1408
+        ],
+        "id": "4db72231-2964-4dd1-bd0a-4c8518ac6f72",
+        "name": "Filter4",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "value",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          3712,
+          -1408
+        ],
+        "id": "08667016-f840-43b9-bad9-ed061410ee79",
+        "name": "Split Out5",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "e04ddabd-b219-4842-9916-e0b9a570d623",
+                "leftValue": "={{ $json.name }}",
+                "rightValue": "={{ $('Prep Folder Names1').item.json.pharmacy }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          3920,
+          -1408
+        ],
+        "id": "7b1f76c7-6314-4182-affa-0f23ee2c7353",
+        "name": "Filter5",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "1f291578-bcdb-4a86-a7a4-adce6b69f8e2",
+                "name": "DateFolderID",
+                "value": "={{ $('DateFolderID').item.json.data[0].DateFolderID }}",
+                "type": "string"
+              },
+              {
+                "id": "82af370f-9567-4ac5-ba8d-5b7cc80c8606",
+                "name": "PharmacyFolderID",
+                "value": "={{ $json.data[0].PharmacyFolderID }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          3840,
+          -112
+        ],
+        "id": "7671f655-b798-4bfe-88c0-84ddd1e9e335",
+        "name": "SetFolderIDs"
       }
     ],
     "connections": {
@@ -824,7 +1504,7 @@
         "main": [
           [
             {
-              "node": "CheckForClinicFolder",
+              "node": "CheckClinicPharmacy",
               "type": "main",
               "index": 0
             }
@@ -833,13 +1513,7 @@
       },
       "ClinicFolderID": {
         "main": [
-          [
-            {
-              "node": "CheckClinicPharmacy",
-              "type": "main",
-              "index": 0
-            }
-          ]
+          []
         ]
       },
       "Start": {
@@ -941,7 +1615,7 @@
         "main": [
           [
             {
-              "node": "PharmacyFolderID1",
+              "node": "SetFolderIDs",
               "type": "main",
               "index": 0
             }
@@ -1013,14 +1687,310 @@
             }
           ]
         ]
+      },
+      "CreateDateFolder1": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields6",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields6": {
+        "main": [
+          [
+            {
+              "node": "DateFolderID1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields7": {
+        "main": [
+          [
+            {
+              "node": "ClinicFolderID1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CreateClinicFolder1": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields7",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Prep Folder Names1": {
+        "main": [
+          [
+            {
+              "node": "CheckForDateFolder1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields8",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "CreateDateFolder1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If3": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields9",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "CreateClinicFolder1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "DateFolderID1": {
+        "main": [
+          [
+            {
+              "node": "CheckForClinicFolder1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "ClinicFolderID1": {
+        "main": [
+          [
+            {
+              "node": "CheckClinicPharmacy1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields8": {
+        "main": [
+          [
+            {
+              "node": "DateFolderID1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields9": {
+        "main": [
+          [
+            {
+              "node": "ClinicFolderID1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CheckForDateFolder1": {
+        "main": [
+          [
+            {
+              "node": "Split Out3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CheckForClinicFolder1": {
+        "main": [
+          [
+            {
+              "node": "Split Out4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CheckClinicPharmacy1": {
+        "main": [
+          [
+            {
+              "node": "Split Out5",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "IfNoPharmacy1": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields11",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "CreatePharmacyFolder1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields10": {
+        "main": [
+          [
+            {
+              "node": "PharmacyFolderID2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CreatePharmacyFolder1": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields10",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields11": {
+        "main": [
+          [
+            {
+              "node": "PharmacyFolderID2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "PharmacyFolderID2": {
+        "main": [
+          [
+            {
+              "node": "PharmacyFolderID3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out3": {
+        "main": [
+          [
+            {
+              "node": "Filter3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter3": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out4": {
+        "main": [
+          [
+            {
+              "node": "Filter4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter4": {
+        "main": [
+          [
+            {
+              "node": "If3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out5": {
+        "main": [
+          [
+            {
+              "node": "Filter5",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter5": {
+        "main": [
+          [
+            {
+              "node": "IfNoPharmacy1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version cd2d664c",
+    "name": "Version d31b1c7a",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "cd2d664c-da36-488e-9718-a99f7b60e063",
+  "activeVersionId": "d31b1c7a-d1bc-409a-bc9e-07e95791762c",
   "connections": {
     "Prep Folder Names": {
       "main": [
@@ -1139,7 +2109,7 @@
       "main": [
         [
           {
-            "node": "CheckForClinicFolder",
+            "node": "CheckClinicPharmacy",
             "type": "main",
             "index": 0
           }
@@ -1148,13 +2118,7 @@
     },
     "ClinicFolderID": {
       "main": [
-        [
-          {
-            "node": "CheckClinicPharmacy",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Start": {
@@ -1256,7 +2220,7 @@
       "main": [
         [
           {
-            "node": "PharmacyFolderID1",
+            "node": "SetFolderIDs",
             "type": "main",
             "index": 0
           }
@@ -1323,6 +2287,302 @@
         [
           {
             "node": "IfNoPharmacy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CreateDateFolder1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "DateFolderID1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "ClinicFolderID1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CreateClinicFolder1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prep Folder Names1": {
+      "main": [
+        [
+          {
+            "node": "CheckForDateFolder1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields8",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CreateDateFolder1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields9",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CreateClinicFolder1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DateFolderID1": {
+      "main": [
+        [
+          {
+            "node": "CheckForClinicFolder1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ClinicFolderID1": {
+      "main": [
+        [
+          {
+            "node": "CheckClinicPharmacy1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields8": {
+      "main": [
+        [
+          {
+            "node": "DateFolderID1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields9": {
+      "main": [
+        [
+          {
+            "node": "ClinicFolderID1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CheckForDateFolder1": {
+      "main": [
+        [
+          {
+            "node": "Split Out3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CheckForClinicFolder1": {
+      "main": [
+        [
+          {
+            "node": "Split Out4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CheckClinicPharmacy1": {
+      "main": [
+        [
+          {
+            "node": "Split Out5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IfNoPharmacy1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields11",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CreatePharmacyFolder1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields10": {
+      "main": [
+        [
+          {
+            "node": "PharmacyFolderID2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CreatePharmacyFolder1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields11": {
+      "main": [
+        [
+          {
+            "node": "PharmacyFolderID2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PharmacyFolderID2": {
+      "main": [
+        [
+          {
+            "node": "PharmacyFolderID3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out3": {
+      "main": [
+        [
+          {
+            "node": "Filter3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter3": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out4": {
+      "main": [
+        [
+          {
+            "node": "Filter4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter4": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out5": {
+      "main": [
+        [
+          {
+            "node": "Filter5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter5": {
+      "main": [
+        [
+          {
+            "node": "IfNoPharmacy1",
             "type": "main",
             "index": 0
           }
@@ -1411,8 +2671,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3472,
-        -16
+        3408,
+        -704
       ],
       "id": "a08f84a7-4a5e-4442-9e6f-ed6b568d8ad9",
       "name": "Edit Fields2"
@@ -1440,8 +2700,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        3248,
-        -16
+        3184,
+        -704
       ],
       "id": "961f0d8e-8e62-46bb-9cb3-fc7b285bc537",
       "name": "CreateClinicFolder",
@@ -1526,8 +2786,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        2992,
-        -112
+        2928,
+        -800
       ],
       "id": "c7ba92e7-9490-425f-b2f0-06f69e924354",
       "name": "If2"
@@ -1554,8 +2814,8 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        3696,
-        -112
+        3632,
+        -800
       ],
       "id": "274e62b1-83e7-49ad-8f58-fb9dcf57e960",
       "name": "ClinicFolderID"
@@ -1600,8 +2860,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3472,
-        -208
+        3408,
+        -896
       ],
       "id": "aace599b-3ba1-431e-b34d-ee89e202af8c",
       "name": "Edit Fields3"
@@ -1677,8 +2937,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        2304,
-        -112
+        2240,
+        -800
       ],
       "id": "c0d3b1f9-5f49-4c7f-975e-cf30be5040ff",
       "name": "CheckForClinicFolder",
@@ -1691,7 +2951,7 @@
     },
     {
       "parameters": {
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names').item.json.DriveID }}/items/{{ $json.data[0].ClinicFolderID }}/children",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names').item.json.DriveID }}/items/{{ $json.data[0].DateFolderID }}/children",
         "authentication": "genericCredentialType",
         "genericAuthType": "oAuth2Api",
         "sendQuery": true,
@@ -1712,7 +2972,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        3920,
+        2320,
         -112
       ],
       "id": "e32bf271-1e78-432b-ae0b-e82fcc7149b2",
@@ -1752,7 +3012,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        4592,
+        2944,
         -112
       ],
       "id": "8fe4f907-687e-49d5-b562-c255caf11008",
@@ -1775,7 +3035,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        5040,
+        3392,
         -16
       ],
       "id": "d6bdd337-a0f7-44b7-9e6c-f86988dc4530",
@@ -1784,7 +3044,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names').item.json.DriveID }}/items/{{ $('ClinicFolderID').item.json.data[0].ClinicFolderID }}/children",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names').item.json.DriveID }}/items/{{ $('DateFolderID').item.json.data[0].DateFolderID }}/children",
         "authentication": "genericCredentialType",
         "genericAuthType": "oAuth2Api",
         "sendHeaders": true,
@@ -1804,7 +3064,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        4816,
+        3168,
         -16
       ],
       "id": "e094a0b2-4b5c-47e7-a836-2b37b55e3696",
@@ -1833,7 +3093,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        5040,
+        3392,
         -208
       ],
       "id": "26a4b404-8dff-446e-ad5c-0b9fa8c0d555",
@@ -1847,46 +3107,11 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        5264,
+        3616,
         -112
       ],
       "id": "4a6c9fd5-8e69-4442-847e-1be8155d2459",
       "name": "PharmacyFolderID"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "b2bc3c16-7564-4c84-849e-afefbbd8f954",
-              "name": "ClinicFolderID",
-              "value": "={{ $('ClinicFolderID').item.json.data[0].ClinicFolderID }}",
-              "type": "string"
-            },
-            {
-              "id": "1f291578-bcdb-4a86-a7a4-adce6b69f8e2",
-              "name": "DateFolderID",
-              "value": "={{ $('DateFolderID').item.json.data[0].DateFolderID }}",
-              "type": "string"
-            },
-            {
-              "id": "82af370f-9567-4ac5-ba8d-5b7cc80c8606",
-              "name": "PharmacyFolderID",
-              "value": "={{ $json.data[0].PharmacyFolderID }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        5488,
-        -112
-      ],
-      "id": "7671f655-b798-4bfe-88c0-84ddd1e9e335",
-      "name": "PharmacyFolderID1"
     },
     {
       "parameters": {
@@ -1918,7 +3143,7 @@
               "leftValue": "={{ $json.name }}",
               "rightValue": "={{ $('Start').item.json.receivedDate }}",
               "operator": {
-                "type": "dateTime",
+                "type": "string",
                 "operation": "equals"
               }
             }
@@ -1945,8 +3170,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        2512,
-        -112
+        2448,
+        -800
       ],
       "id": "9d2aaafb-a881-4602-9581-af4abb1c65a7",
       "name": "Split Out1",
@@ -1979,8 +3204,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        2720,
-        -112
+        2656,
+        -800
       ],
       "id": "241a5e06-5d76-4315-8239-00698e53189f",
       "name": "Filter1",
@@ -1994,7 +3219,7 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        4128,
+        2528,
         -112
       ],
       "id": "9a89af98-9591-4877-bda6-918b895994a2",
@@ -2028,12 +3253,727 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        4336,
+        2736,
         -112
       ],
       "id": "ad21f780-013a-4278-ac89-3c05b009d42f",
       "name": "Filter2",
       "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names1').item.json.DriveID }}/items/{{ $('Prep Folder Names1').item.json.OrderInProgressID }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $('Prep Folder Names1').item.json.dateFolderName }}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"fail\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1216,
+        -1312
+      ],
+      "id": "f70c2521-cd00-4831-b751-e73780008376",
+      "name": "CreateDateFolder1",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8a2f23f9-ba9b-4ce1-aa62-f9c0142702a0",
+              "name": "DateFolderID",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1440,
+        -1312
+      ],
+      "id": "ade0dc41-34d5-4cac-9299-22d57ee15cf3",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8a2f23f9-ba9b-4ce1-aa62-f9c0142702a0",
+              "name": "ClinicFolderID",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3056,
+        -1312
+      ],
+      "id": "e2625b32-9ca5-48da-8560-290a922cf0c8",
+      "name": "Edit Fields7"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names1').item.json.DriveID }}/items/{{ $('DateFolderID1').item.json.data[0].DateFolderID }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $('Prep Folder Names1').item.json.clinic }}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"fail\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2832,
+        -1312
+      ],
+      "id": "5a8c94e8-4efb-4582-b022-a7fc2615d364",
+      "name": "CreateClinicFolder1",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const email = $json;\n\nconst dateFolderName = email.dateFolderName || email.receivedDate;\nconst clinicFolderName = email.clinicFolderName || email.clinic;\n\nconst safeDate = dateFolderName || new Date().toISOString().slice(0, 10);\nconst safeScriptId = email.scriptId || \"UnknownScript\";\nconst safePatientInitials = email.patientInitials || \"UnknownInitials\";\n\nconst fileName =\n  email.fileName ||\n  `${safeDate}-${safeScriptId}-${safePatientInitials}.pdf`;\n\nreturn {\n  json: {\n    ...email,\n\n    dateFolderName,\n    clinicFolderName,\n    fileName,\n\n    // Keep these flat so every node after this can use $json directly\n    DriveID: email.DriveID,\n    AUMedOrderID: email.AUMedOrderID,\n    CompletedOrdersID: email.CompletedOrdersID,\n    OrderInProgressID: email.OrderInProgressID,\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        112,
+        -1408
+      ],
+      "id": "cc3ca39b-34a8-4e9d-bc56-a9455736e134",
+      "name": "Prep Folder Names1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3c6ca86e-637c-480b-89cd-3f18b1a4f04b",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "dateTime",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        992,
+        -1408
+      ],
+      "id": "a918cde9-0846-45dc-80a4-ac1639ccfcbe",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3c6ca86e-637c-480b-89cd-3f18b1a4f04b",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('Prep Folder Names1').item.json.clinic }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2576,
+        -1408
+      ],
+      "id": "2ee5a9ac-d8e3-4e1d-b5bb-a97d418ecc6c",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1664,
+        -1408
+      ],
+      "id": "6212b9a1-2ac8-4324-9863-9f7dc6e014a7",
+      "name": "DateFolderID1"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        3280,
+        -1408
+      ],
+      "id": "6274d8fa-055d-43bf-9c2c-9d4e4049a283",
+      "name": "ClinicFolderID1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c3bc6f63-19d0-4d5c-b0eb-a882a22766d4",
+              "name": "DateFolderID",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1440,
+        -1504
+      ],
+      "id": "c7ddc489-c3db-4172-973e-c1edde944cc2",
+      "name": "Edit Fields8"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8a2f23f9-ba9b-4ce1-aa62-f9c0142702a0",
+              "name": "ClinicFolderID",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3056,
+        -1504
+      ],
+      "id": "dae08258-9278-45c2-983c-8d5c799379eb",
+      "name": "Edit Fields9"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.DriveID }}/items/{{ $json.OrderInProgressID }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        320,
+        -1408
+      ],
+      "id": "e4344971-5864-431b-968f-00a8000b67d6",
+      "name": "CheckForDateFolder1",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names1').item.json.DriveID }}/items/{{ $json.data[0].DateFolderID }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1888,
+        -1408
+      ],
+      "id": "4925bdcd-5801-4ae4-b46a-324190578e15",
+      "name": "CheckForClinicFolder1",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names1').item.json.DriveID }}/items/{{ $json.data[0].ClinicFolderID }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "$top",
+              "value": "200"
+            },
+            {
+              "name": "$select",
+              "value": "id,name,folder"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3504,
+        -1408
+      ],
+      "id": "2f7f05c3-8aa5-42c5-93e0-007e6300cfb9",
+      "name": "CheckClinicPharmacy1",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3c6ca86e-637c-480b-89cd-3f18b1a4f04b",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('Prep Folder Names1').item.json.pharmacy }}",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4176,
+        -1408
+      ],
+      "id": "a62bd64c-dc59-45b5-8dbb-0dd1295bda90",
+      "name": "IfNoPharmacy1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8a2f23f9-ba9b-4ce1-aa62-f9c0142702a0",
+              "name": "PharmacyFolderID",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4624,
+        -1312
+      ],
+      "id": "b98a6d99-f0d9-4873-8c0e-40bef6391908",
+      "name": "Edit Fields10"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Prep Folder Names1').item.json.DriveID }}/items/{{ $('ClinicFolderID1').item.json.data[0].ClinicFolderID }}/children",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $('Prep Folder Names1').item.json.pharmacy }}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"fail\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4400,
+        -1312
+      ],
+      "id": "49404875-6d8e-4119-80fa-569fd68cecc6",
+      "name": "CreatePharmacyFolder1",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "j30zGPdAyzTUMgGs",
+          "name": "MS graph"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8a2f23f9-ba9b-4ce1-aa62-f9c0142702a0",
+              "name": "PharmacyFolderID",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4624,
+        -1504
+      ],
+      "id": "bb852c35-f56d-4389-ab34-fa03c19dbe3b",
+      "name": "Edit Fields11"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        4848,
+        -1408
+      ],
+      "id": "70b819c8-60b5-471d-88d4-41fe156bb203",
+      "name": "PharmacyFolderID2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b2bc3c16-7564-4c84-849e-afefbbd8f954",
+              "name": "ClinicFolderID",
+              "value": "={{ $('ClinicFolderID1').item.json.data[0].ClinicFolderID }}",
+              "type": "string"
+            },
+            {
+              "id": "1f291578-bcdb-4a86-a7a4-adce6b69f8e2",
+              "name": "DateFolderID",
+              "value": "={{ $('DateFolderID1').item.json.data[0].DateFolderID }}",
+              "type": "string"
+            },
+            {
+              "id": "82af370f-9567-4ac5-ba8d-5b7cc80c8606",
+              "name": "PharmacyFolderID",
+              "value": "={{ $json.data[0].PharmacyFolderID }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5072,
+        -1408
+      ],
+      "id": "b3aa7c6d-df78-47f3-94e0-a41af6185642",
+      "name": "PharmacyFolderID3"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        528,
+        -1408
+      ],
+      "id": "30424e74-d838-4fd0-898b-63111cd09d80",
+      "name": "Split Out3",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "41f8ab5c-6939-4145-ae65-b46c4ab72d48",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('Start').item.json.receivedDate }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        736,
+        -1408
+      ],
+      "id": "059a0cbd-36bd-458a-a1ff-d2ade469df4b",
+      "name": "Filter3",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2096,
+        -1408
+      ],
+      "id": "ab16237e-0ece-400a-a770-4b769e2a4cff",
+      "name": "Split Out4",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ce19e89d-5a71-4553-a62a-e13ec484d3d6",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('Prep Folder Names1').item.json.clinic }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        2304,
+        -1408
+      ],
+      "id": "4db72231-2964-4dd1-bd0a-4c8518ac6f72",
+      "name": "Filter4",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        3712,
+        -1408
+      ],
+      "id": "08667016-f840-43b9-bad9-ed061410ee79",
+      "name": "Split Out5",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e04ddabd-b219-4842-9916-e0b9a570d623",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $('Prep Folder Names1').item.json.pharmacy }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        3920,
+        -1408
+      ],
+      "id": "7b1f76c7-6314-4182-affa-0f23ee2c7353",
+      "name": "Filter5",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1f291578-bcdb-4a86-a7a4-adce6b69f8e2",
+              "name": "DateFolderID",
+              "value": "={{ $('DateFolderID').item.json.data[0].DateFolderID }}",
+              "type": "string"
+            },
+            {
+              "id": "82af370f-9567-4ac5-ba8d-5b7cc80c8606",
+              "name": "PharmacyFolderID",
+              "value": "={{ $json.data[0].PharmacyFolderID }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3840,
+        -112
+      ],
+      "id": "7671f655-b798-4bfe-88c0-84ddd1e9e335",
+      "name": "SetFolderIDs"
     }
   ],
   "origin": "n8n",
@@ -2042,24 +3982,44 @@
       {
         "json": {
           "isPrescriptionEmail": true,
-          "emailId": "AAMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1OABGAAAAAAClrM7JrALpR5gWZ2M2MX76BwDXiFn9j2FwSaxBKrApLY6NAAAAAAEMAADXiFn9j2FwSaxBKrApLY6NAAAanSsoAAA=",
-          "originalMessageId": "AAMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1OABGAAAAAAClrM7JrALpR5gWZ2M2MX76BwDXiFn9j2FwSaxBKrApLY6NAAAAAAEMAADXiFn9j2FwSaxBKrApLY6NAAAanSsoAAA=",
-          "toAddress": "Parramatta.pharmacy+PMG6494.KCP@ashleyandmartin.com.au",
-          "clinic": "PARRAMATTA",
-          "clinicFolderName": "PARRAMATTA",
-          "customerCode": "PMG6494",
+          "emailId": "AAMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1OABGAAAAAAClrM7JrALpR5gWZ2M2MX76BwDXiFn9j2FwSaxBKrApLY6NAAAAAAEMAADXiFn9j2FwSaxBKrApLY6NAAAed0KzAAA=",
+          "originalMessageId": "AAMkAGIwOTBkYTNiLTcyMTAtNDc5Yy1hMzA3LWU3YWY4MWFiYTU1OABGAAAAAAClrM7JrALpR5gWZ2M2MX76BwDXiFn9j2FwSaxBKrApLY6NAAAAAAEMAADXiFn9j2FwSaxBKrApLY6NAAAed0KzAAA=",
+          "toAddress": "GladstonePark.pharmacy+GSG5409.KCP@ashleyandmartin.com.au",
+          "clinic": "GLADSTONEPARK",
+          "clinicFolderName": "GLADSTONEPARK",
+          "customerCode": "GSG5409",
           "pharmacy": "KCP",
-          "patientInitials": "BP",
-          "productName": "KCP: 5% Min + 0.01% RA Lotion 5% Minoxidil + 0.01% Retinoic Acid",
-          "scriptUrl": "https://ausscripts.erx.com.au/scripts/2WT5GWJXW1M9089D09",
-          "scriptId": "2WT5GWJXW1M9089D09",
-          "receivedDate": "2026-07-21",
-          "dateFolderName": "2026-07-21",
-          "fileName": "2026-07-21-2WT5GWJXW1M9089D09-BP.pdf",
+          "patientInitials": "SE",
+          "productName": "KCP: 7% Min + 0.01% RA + 0.25% Fin Lotion 7% Minoxidil + 0.01% Retinoic Acid + 0.25% Finasteride",
+          "scriptUrl": "https://ausscripts.erx.com.au/scripts/2R8G8BY31M88X3MP03",
+          "scriptId": "2R8G8BY31M88X3MP03",
+          "receivedDate": "2026-07-27",
+          "dateFolderName": "2026-07-27",
+          "fileName": "2026-07-27-2R8G8BY31M88X3MP03-SE.pdf",
           "DriveID": "b!keZy0EVJt0ydRozgmmR1eQMBvSWtB5hGktxakZsBcZvoqANme--qSo6QvDZ3hdgU",
           "AUMedOrderID": "01Y4DA4OPCXITTGW45PJHZBMOQ2WVAPCD2",
           "CompletedOrdersID": "01Y4DA4OMCIC7MC3JRSBG2QB4JYEGHALNK",
           "OrderInProgressID": "01Y4DA4OMQFXPAO6YE25F2FTI3HY3VF4HL"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "CheckForClinicFolder": [
+      {
+        "json": {
+          "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#Collection(driveItem)",
+          "value": [
+            {
+              "@odata.etag": "\"{E61A84D6-5AEC-499A-A4A5-817A223BA36F},4\"",
+              "id": "01Y4DA4OOWQQNON3C2TJE2JJMBPIRDXI3P",
+              "name": "GLADSTONEPARK",
+              "folder": {
+                "childCount": 2
+              }
+            }
+          ]
         },
         "pairedItem": {
           "item": 0
@@ -2099,6 +4059,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-07-22T02:31:47.649Z",
-  "versionId": "cd2d664c-da36-488e-9718-a99f7b60e063"
+  "updatedAt": "2026-07-27T06:09:56.658Z",
+  "versionId": "d31b1c7a-d1bc-409a-bc9e-07e95791762c"
 }
