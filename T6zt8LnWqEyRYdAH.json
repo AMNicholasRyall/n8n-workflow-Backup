@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-07-22T07:13:15.000Z",
-    "createdAt": "2026-07-22T07:12:59.582Z",
-    "versionId": "daf4b5f7-5479-4ace-8c53-4365a853fe29",
+    "updatedAt": "2026-07-28T07:13:02.000Z",
+    "createdAt": "2026-07-28T07:12:57.134Z",
+    "versionId": "86d90a49-11b4-442b-b15c-5cde811c8baf",
     "workflowId": "T6zt8LnWqEyRYdAH",
     "nodes": [
       {
@@ -149,13 +149,13 @@
               {
                 "id": "0cdee29a-a860-44a5-bd06-4a3fbc547c80",
                 "name": "InitialPharmacy",
-                "value": "={{ $json.InitialPharmacy }}",
+                "value": "={{ $('On form submission').item.json.Pharmacy }}",
                 "type": "string"
               },
               {
                 "id": "ecb5bb11-1c79-4b54-be12-734e7e37481a",
                 "name": "HelixEmail",
-                "value": "={{ $json.name.replaceAll(' ', '') }}.pharmacy+{{ $('If').item.json.code }}.{{ $json.InitialPharmacy }}@ashleyandmartin.com.au",
+                "value": "={{ $json.name.replaceAll(' ', '') }}.pharmacy+{{ $('If').item.json.code }}.{{ $('On form submission').item.json.Pharmacy }}@ashleyandmartin.com.au",
                 "type": "string"
               },
               {
@@ -867,11 +867,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version daf4b5f7",
+    "name": "Version 86d90a49",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "daf4b5f7-5479-4ace-8c53-4365a853fe29",
+  "activeVersionId": "86d90a49-11b4-442b-b15c-5cde811c8baf",
   "connections": {
     "On form submission": {
       "main": [
@@ -1241,13 +1241,13 @@
             {
               "id": "0cdee29a-a860-44a5-bd06-4a3fbc547c80",
               "name": "InitialPharmacy",
-              "value": "={{ $json.InitialPharmacy }}",
+              "value": "={{ $('On form submission').item.json.Pharmacy }}",
               "type": "string"
             },
             {
               "id": "ecb5bb11-1c79-4b54-be12-734e7e37481a",
               "name": "HelixEmail",
-              "value": "={{ $json.name.replaceAll(' ', '') }}.pharmacy+{{ $('If').item.json.code }}.{{ $json.InitialPharmacy }}@ashleyandmartin.com.au",
+              "value": "={{ $json.name.replaceAll(' ', '') }}.pharmacy+{{ $('If').item.json.code }}.{{ $('On form submission').item.json.Pharmacy }}@ashleyandmartin.com.au",
               "type": "string"
             },
             {
@@ -1744,8 +1744,8 @@
       {
         "json": {
           "Pharmacy": "AMD",
-          "Zenoti Code": "1144002-GHV",
-          "submittedAt": "2026-07-22T14:57:50.726+08:00",
+          "Zenoti Code": "2140-GCW",
+          "submittedAt": "2026-07-28T14:17:06.691+08:00",
           "formMode": "production"
         },
         "pairedItem": {
@@ -1787,6 +1787,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-07-22T07:13:28.624Z",
-  "versionId": "daf4b5f7-5479-4ace-8c53-4365a853fe29"
+  "updatedAt": "2026-07-28T07:12:57.134Z",
+  "versionId": "86d90a49-11b4-442b-b15c-5cde811c8baf"
 }
