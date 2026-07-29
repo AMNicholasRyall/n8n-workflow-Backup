@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-06-30T04:13:15.000Z",
-    "createdAt": "2026-06-30T04:09:00.555Z",
-    "versionId": "5f5f1723-8717-4359-a338-46f9c8d21666",
+    "updatedAt": "2026-07-27T06:54:42.000Z",
+    "createdAt": "2026-07-27T06:12:53.771Z",
+    "versionId": "1133be01-618f-4960-b796-6183a0769678",
     "workflowId": "L0hoSKxaW3ccB61f",
     "nodes": [
       {
@@ -264,7 +264,7 @@
       {
         "parameters": {
           "method": "PUT",
-          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Email Cleanup').first().json.DriveID }}/items/{{ $('Call \\'HelixScript-Data-Clinic-FolderCheck\\'').item.json.PharmacyFolderID }}:/{{ $('Email Cleanup').first().json.receivedDate }}-{{ $('Email Cleanup').first().json.scriptId }}-{{ $('Email Cleanup').item.json.customerCode }}.pdf:/content",
+          "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Email Cleanup').first().json.DriveID }}/items/{{ $('Call \\'HelixScript-Data-Clinic-FolderCheck\\'').item.json.PharmacyFolderID }}:/{{ $('Email Cleanup').first().json.receivedDate }}-{{ $('Email Cleanup').item.json.clinic }}-{{ $('Email Cleanup').first().json.scriptId }}-{{ $('Email Cleanup').item.json.customerCode }}.pdf:/content",
           "authentication": "genericCredentialType",
           "genericAuthType": "oAuth2Api",
           "sendBody": true,
@@ -691,11 +691,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 5f5f1723",
+    "name": "Version 1133be01",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "5f5f1723-8717-4359-a338-46f9c8d21666",
+  "activeVersionId": "1133be01-618f-4960-b796-6183a0769678",
   "connections": {
     "Split Out": {
       "main": [
@@ -1167,7 +1167,7 @@
     {
       "parameters": {
         "method": "PUT",
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Email Cleanup').first().json.DriveID }}/items/{{ $('Call \\'HelixScript-Data-Clinic-FolderCheck\\'').item.json.PharmacyFolderID }}:/{{ $('Email Cleanup').first().json.receivedDate }}-{{ $('Email Cleanup').first().json.scriptId }}-{{ $('Email Cleanup').item.json.customerCode }}.pdf:/content",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('Email Cleanup').first().json.DriveID }}/items/{{ $('Call \\'HelixScript-Data-Clinic-FolderCheck\\'').item.json.PharmacyFolderID }}:/{{ $('Email Cleanup').first().json.receivedDate }}-{{ $('Email Cleanup').item.json.clinic }}-{{ $('Email Cleanup').first().json.scriptId }}-{{ $('Email Cleanup').item.json.customerCode }}.pdf:/content",
         "authentication": "genericCredentialType",
         "genericAuthType": "oAuth2Api",
         "sendBody": true,
@@ -1393,15 +1393,15 @@
     "Schedule Trigger": [
       {
         "json": {
-          "timestamp": "2026-07-15T09:40:00.001+08:00",
-          "Readable date": "July 15th 2026, 9:40:00 am",
-          "Readable time": "9:40:00 am",
-          "Day of week": "Wednesday",
+          "timestamp": "2026-07-28T10:10:00.002+08:00",
+          "Readable date": "July 28th 2026, 10:10:00 am",
+          "Readable time": "10:10:00 am",
+          "Day of week": "Tuesday",
           "Year": "2026",
           "Month": "July",
-          "Day of month": "15",
-          "Hour": "09",
-          "Minute": "40",
+          "Day of month": "28",
+          "Hour": "10",
+          "Minute": "10",
           "Second": "00",
           "Timezone": "Australia/Perth (UTC+08:00)"
         },
@@ -1447,6 +1447,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-07-21T23:47:17.837Z",
-  "versionId": "5f5f1723-8717-4359-a338-46f9c8d21666"
+  "updatedAt": "2026-07-28T02:24:51.288Z",
+  "versionId": "1133be01-618f-4960-b796-6183a0769678"
 }
