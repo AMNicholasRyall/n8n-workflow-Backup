@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-07-20T23:59:13.000Z",
-    "createdAt": "2026-07-20T23:59:09.488Z",
-    "versionId": "9e664d0f-064e-4da1-a232-ddf23c90898c",
+    "updatedAt": "2026-07-28T05:05:30.000Z",
+    "createdAt": "2026-07-28T05:02:43.386Z",
+    "versionId": "677fce7c-2c02-449a-aeab-c286b49e1529",
     "workflowId": "s7orTr2bZdJMpDa3",
     "nodes": [
       {
@@ -68,6 +68,10 @@
               {
                 "keyName": "table_id",
                 "condition": "isNotEmpty"
+              },
+              {
+                "keyName": "code",
+                "keyValue": "TH"
               }
             ]
           }
@@ -805,11 +809,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 9e664d0f",
+    "name": "Version 677fce7c",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "9e664d0f-064e-4da1-a232-ddf23c90898c",
+  "activeVersionId": "677fce7c-2c02-449a-aeab-c286b49e1529",
   "connections": {
     "Schedule Trigger": {
       "main": [
@@ -1094,6 +1098,10 @@
             {
               "keyName": "table_id",
               "condition": "isNotEmpty"
+            },
+            {
+              "keyName": "code",
+              "keyValue": "TH"
             }
           ]
         }
@@ -1617,7 +1625,28 @@
     }
   ],
   "origin": "n8n",
-  "pinData": {},
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-07-27T20:00:37.002+08:00",
+          "Readable date": "July 27th 2026, 8:00:37 pm",
+          "Readable time": "8:00:37 pm",
+          "Day of week": "Monday",
+          "Year": "2026",
+          "Month": "July",
+          "Day of month": "27",
+          "Hour": "20",
+          "Minute": "00",
+          "Second": "37",
+          "Timezone": "Australia/Perth (UTC+08:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -1654,6 +1683,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-07-20T23:59:09.487Z",
-  "versionId": "9e664d0f-064e-4da1-a232-ddf23c90898c"
+  "updatedAt": "2026-07-28T05:02:43.386Z",
+  "versionId": "677fce7c-2c02-449a-aeab-c286b49e1529"
 }
