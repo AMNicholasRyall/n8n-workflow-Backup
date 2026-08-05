@@ -1,0 +1,570 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-07-30T04:09:13.000Z",
+    "createdAt": "2026-07-30T04:09:02.888Z",
+    "versionId": "38e74e30-27ff-446d-8ebb-f2d4673dd17c",
+    "workflowId": "VFwHznzbrgQELmDV",
+    "nodes": [
+      {
+        "parameters": {
+          "formTitle": "Helix Auth Bundle",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "Auth Bunble",
+                "fieldType": "textarea"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.5,
+        "position": [
+          0,
+          0
+        ],
+        "id": "30e03592-b498-489f-bbce-5230aa1667ce",
+        "name": "On form submission",
+        "webhookId": "9afdd713-903e-4785-9971-d6836aea1c9d"
+      },
+      {
+        "parameters": {
+          "jsCode": "const raw = String(\n  $input.first().json['Auth Bunble'] || ''\n).trim();\n\nif (!raw) {\n  throw new Error('Auth Bunble is empty.');\n}\n\nconst names = [\n  'authorization',\n  'cookie',\n  'x-xsrf-token',\n  'usercentreid',\n  'userworkareaid',\n  'x-helix-agent-id',\n  'x-helix-perform-as'\n];\n\nconst lines = raw\n  .split(/\\r?\\n/)\n  .map(line => line.trim())\n  .filter(Boolean);\n\nconst headers = {};\n\nfor (let i = 0; i < lines.length; i++) {\n  const name = lines[i].toLowerCase();\n\n  if (names.includes(name) && lines[i + 1]) {\n    headers[name] = lines[i + 1];\n    i++;\n  }\n}\n\nfunction getCookie(name) {\n  const prefix = name + '=';\n\n  const part = (headers.cookie || '')\n    .split(';')\n    .map(value => value.trim())\n    .find(value => value.startsWith(prefix));\n\n  return part ? part.slice(prefix.length) : null;\n}\n\nconst xsrfToken =\n  headers['x-xsrf-token'] ||\n  getCookie('XSRF-TOKEN');\n\nconst now = new Date().toISOString();\n\nreturn [\n  {\n    json: {\n      name: 'helix_live',\n      bearer_token: (headers.authorization || '')\n        .replace(/^Bearer\\s+/i, '')\n        .trim(),\n      cookie_bundle: headers.cookie || null,\n      csrf_token: xsrfToken,\n      status: 'ok',\n      last_checked_at: null,\n      last_success_at: null,\n      last_failure_at: null,\n      last_error: null,\n      xsrf_token: xsrfToken,\n      aspnet_cookie: getCookie('.AspNet.Cookies'),\n      userworkareaid: headers.userworkareaid || null,\n      usercentreid: headers.usercentreid || null,\n      x_helix_agent_id:\n        headers['x-helix-agent-id'] || null,\n      x_helix_perform_as:\n        headers['x-helix-perform-as'] || null,\n      id: 1,\n      createdAt: now,\n      updatedAt: now\n    }\n  }\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          208,
+          0
+        ],
+        "id": "1cd06d8d-d47d-441b-b719-f5d5fb752f07",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "dataTableId": {
+            "__rl": true,
+            "value": "fYcqpV5ToKAsXk2w",
+            "mode": "list",
+            "cachedResultName": "Helix_Auth_Bundle",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/fYcqpV5ToKAsXk2w"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "name",
+                "keyValue": "helix_live"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "bearer_token": "={{ $json.bearer_token }}",
+              "cookie_bundle": "={{ $json.cookie_bundle }}",
+              "csrf_token": "={{ $json.csrf_token }}",
+              "xsrf_token": "={{ $json.xsrf_token }}",
+              "aspnet_cookie": "={{ $json.aspnet_cookie }}",
+              "x_helix_agent_id": "={{ $json.x_helix_agent_id }}",
+              "x_helix_perform_as": "={{ $json.x_helix_perform_as }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "name",
+                "displayName": "name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "bearer_token",
+                "displayName": "bearer_token",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "cookie_bundle",
+                "displayName": "cookie_bundle",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "csrf_token",
+                "displayName": "csrf_token",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "last_checked_at",
+                "displayName": "last_checked_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "last_success_at",
+                "displayName": "last_success_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "last_failure_at",
+                "displayName": "last_failure_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "last_error",
+                "displayName": "last_error",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "xsrf_token",
+                "displayName": "xsrf_token",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "aspnet_cookie",
+                "displayName": "aspnet_cookie",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "userworkareaid",
+                "displayName": "userworkareaid",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "usercentreid",
+                "displayName": "usercentreid",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "x_helix_agent_id",
+                "displayName": "x_helix_agent_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "x_helix_perform_as",
+                "displayName": "x_helix_perform_as",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          416,
+          0
+        ],
+        "id": "e459eb5f-b25b-4fb9-a792-3e27f2d4c2b3",
+        "name": "Upsert row(s)"
+      }
+    ],
+    "connections": {
+      "On form submission": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Upsert row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 38e74e30",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "38e74e30-27ff-446d-8ebb-f2d4673dd17c",
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Upsert row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-07-30T02:56:07.552Z",
+  "id": "VFwHznzbrgQELmDV",
+  "isArchived": false,
+  "meta": null,
+  "name": "Helix - Token Update",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Helix Auth Bundle",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Auth Bunble",
+              "fieldType": "textarea"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "30e03592-b498-489f-bbce-5230aa1667ce",
+      "name": "On form submission",
+      "webhookId": "9afdd713-903e-4785-9971-d6836aea1c9d"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = String(\n  $input.first().json['Auth Bunble'] || ''\n).trim();\n\nif (!raw) {\n  throw new Error('Auth Bunble is empty.');\n}\n\nconst names = [\n  'authorization',\n  'cookie',\n  'x-xsrf-token',\n  'usercentreid',\n  'userworkareaid',\n  'x-helix-agent-id',\n  'x-helix-perform-as'\n];\n\nconst lines = raw\n  .split(/\\r?\\n/)\n  .map(line => line.trim())\n  .filter(Boolean);\n\nconst headers = {};\n\nfor (let i = 0; i < lines.length; i++) {\n  const name = lines[i].toLowerCase();\n\n  if (names.includes(name) && lines[i + 1]) {\n    headers[name] = lines[i + 1];\n    i++;\n  }\n}\n\nfunction getCookie(name) {\n  const prefix = name + '=';\n\n  const part = (headers.cookie || '')\n    .split(';')\n    .map(value => value.trim())\n    .find(value => value.startsWith(prefix));\n\n  return part ? part.slice(prefix.length) : null;\n}\n\nconst xsrfToken =\n  headers['x-xsrf-token'] ||\n  getCookie('XSRF-TOKEN');\n\nconst now = new Date().toISOString();\n\nreturn [\n  {\n    json: {\n      name: 'helix_live',\n      bearer_token: (headers.authorization || '')\n        .replace(/^Bearer\\s+/i, '')\n        .trim(),\n      cookie_bundle: headers.cookie || null,\n      csrf_token: xsrfToken,\n      status: 'ok',\n      last_checked_at: null,\n      last_success_at: null,\n      last_failure_at: null,\n      last_error: null,\n      xsrf_token: xsrfToken,\n      aspnet_cookie: getCookie('.AspNet.Cookies'),\n      userworkareaid: headers.userworkareaid || null,\n      usercentreid: headers.usercentreid || null,\n      x_helix_agent_id:\n        headers['x-helix-agent-id'] || null,\n      x_helix_perform_as:\n        headers['x-helix-perform-as'] || null,\n      id: 1,\n      createdAt: now,\n      updatedAt: now\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "1cd06d8d-d47d-441b-b719-f5d5fb752f07",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "fYcqpV5ToKAsXk2w",
+          "mode": "list",
+          "cachedResultName": "Helix_Auth_Bundle",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/fYcqpV5ToKAsXk2w"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "name",
+              "keyValue": "helix_live"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "bearer_token": "={{ $json.bearer_token }}",
+            "cookie_bundle": "={{ $json.cookie_bundle }}",
+            "csrf_token": "={{ $json.csrf_token }}",
+            "xsrf_token": "={{ $json.xsrf_token }}",
+            "aspnet_cookie": "={{ $json.aspnet_cookie }}",
+            "x_helix_agent_id": "={{ $json.x_helix_agent_id }}",
+            "x_helix_perform_as": "={{ $json.x_helix_perform_as }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "bearer_token",
+              "displayName": "bearer_token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "cookie_bundle",
+              "displayName": "cookie_bundle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "csrf_token",
+              "displayName": "csrf_token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "last_checked_at",
+              "displayName": "last_checked_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "last_success_at",
+              "displayName": "last_success_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "last_failure_at",
+              "displayName": "last_failure_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "last_error",
+              "displayName": "last_error",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "xsrf_token",
+              "displayName": "xsrf_token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "aspnet_cookie",
+              "displayName": "aspnet_cookie",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "userworkareaid",
+              "displayName": "userworkareaid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "usercentreid",
+              "displayName": "usercentreid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "x_helix_agent_id",
+              "displayName": "x_helix_agent_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "x_helix_perform_as",
+              "displayName": "x_helix_perform_as",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "e459eb5f-b25b-4fb9-a792-3e27f2d4c2b3",
+      "name": "Upsert row(s)"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-07-30T02:56:07.554Z",
+      "createdAt": "2026-07-30T02:56:07.554Z",
+      "role": "workflow:owner",
+      "workflowId": "VFwHznzbrgQELmDV",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2026-06-23T07:20:53.826Z",
+      "createdAt": "2026-06-23T07:20:53.826Z",
+      "id": "IGQhT6ige0xQKnQ9",
+      "name": "Helix"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-07-30T23:28:24.857Z",
+  "versionId": "38e74e30-27ff-446d-8ebb-f2d4673dd17c"
+}
