@@ -1854,26 +1854,6 @@
   ],
   "origin": "n8n",
   "pinData": {
-    "Monday-Thursday": [
-      {
-        "json": {
-          "timestamp": "2026-06-25T09:45:00.002+08:00",
-          "Readable date": "June 25th 2026, 9:45:00 am",
-          "Readable time": "9:45:00 am",
-          "Day of week": "Thursday",
-          "Year": "2026",
-          "Month": "June",
-          "Day of month": "25",
-          "Hour": "09",
-          "Minute": "45",
-          "Second": "00",
-          "Timezone": "Australia/Perth (UTC+08:00)"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ],
     "Friday": [
       {
         "json": {
@@ -1886,6 +1866,26 @@
           "Day of month": "03",
           "Hour": "07",
           "Minute": "45",
+          "Second": "00",
+          "Timezone": "Australia/Perth (UTC+08:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Monday-Thursday": [
+      {
+        "json": {
+          "timestamp": "2026-07-30T10:15:00.001+08:00",
+          "Readable date": "July 30th 2026, 10:15:00 am",
+          "Readable time": "10:15:00 am",
+          "Day of week": "Thursday",
+          "Year": "2026",
+          "Month": "July",
+          "Day of month": "30",
+          "Hour": "10",
+          "Minute": "15",
           "Second": "00",
           "Timezone": "Australia/Perth (UTC+08:00)"
         },
@@ -1949,6 +1949,6 @@
     }
   ],
   "triggerCount": 3,
-  "updatedAt": "2026-07-02T23:52:11.837Z",
+  "updatedAt": "2026-07-30T02:22:39.888Z",
   "versionId": "186e08fd-5078-4d4e-a36f-32d1a2992c63"
 }
