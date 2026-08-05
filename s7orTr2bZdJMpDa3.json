@@ -1264,9 +1264,18 @@
                 "type": "string",
                 "operation": "startsWith"
               }
+            },
+            {
+              "id": "459d3df0-86c5-4b33-a2b2-e42ecf4f7edf",
+              "leftValue": "={{ $json.parent_service_name }}",
+              "rightValue": "Telehealth - First",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
             }
           ],
-          "combinator": "and"
+          "combinator": "or"
         },
         "options": {}
       },
@@ -1625,28 +1634,7 @@
     }
   ],
   "origin": "n8n",
-  "pinData": {
-    "Schedule Trigger": [
-      {
-        "json": {
-          "timestamp": "2026-07-27T20:00:37.002+08:00",
-          "Readable date": "July 27th 2026, 8:00:37 pm",
-          "Readable time": "8:00:37 pm",
-          "Day of week": "Monday",
-          "Year": "2026",
-          "Month": "July",
-          "Day of month": "27",
-          "Hour": "20",
-          "Minute": "00",
-          "Second": "37",
-          "Timezone": "Australia/Perth (UTC+08:00)"
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -1683,6 +1671,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-07-28T05:02:43.386Z",
-  "versionId": "677fce7c-2c02-449a-aeab-c286b49e1529"
+  "updatedAt": "2026-07-30T02:32:11.679Z",
+  "versionId": "1f3b9463-875d-49f8-8649-cf3d5524440e"
 }
