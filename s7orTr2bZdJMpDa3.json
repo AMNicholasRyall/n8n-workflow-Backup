@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-07-28T05:05:30.000Z",
-    "createdAt": "2026-07-28T05:02:43.386Z",
-    "versionId": "677fce7c-2c02-449a-aeab-c286b49e1529",
+    "updatedAt": "2026-08-18T02:29:53.000Z",
+    "createdAt": "2026-07-30T02:28:49.624Z",
+    "versionId": "1f3b9463-875d-49f8-8649-cf3d5524440e",
     "workflowId": "s7orTr2bZdJMpDa3",
     "nodes": [
       {
@@ -234,9 +234,18 @@
                   "type": "string",
                   "operation": "startsWith"
                 }
+              },
+              {
+                "id": "459d3df0-86c5-4b33-a2b2-e42ecf4f7edf",
+                "leftValue": "={{ $json.parent_service_name }}",
+                "rightValue": "Telehealth - First",
+                "operator": {
+                  "type": "string",
+                  "operation": "startsWith"
+                }
               }
             ],
-            "combinator": "and"
+            "combinator": "or"
           },
           "options": {}
         },
@@ -809,11 +818,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 677fce7c",
+    "name": "Version 1f3b9463",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "677fce7c-2c02-449a-aeab-c286b49e1529",
+  "activeVersionId": "1f3b9463-875d-49f8-8649-cf3d5524440e",
   "connections": {
     "Schedule Trigger": {
       "main": [
@@ -1634,7 +1643,28 @@
     }
   ],
   "origin": "n8n",
-  "pinData": {},
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-08-17T20:00:59.002+08:00",
+          "Readable date": "August 17th 2026, 8:00:59 pm",
+          "Readable time": "8:00:59 pm",
+          "Day of week": "Monday",
+          "Year": "2026",
+          "Month": "August",
+          "Day of month": "17",
+          "Hour": "20",
+          "Minute": "00",
+          "Second": "59",
+          "Timezone": "Australia/Perth (UTC+08:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -1671,6 +1701,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-07-30T02:32:11.679Z",
+  "updatedAt": "2026-08-18T01:42:09.550Z",
   "versionId": "1f3b9463-875d-49f8-8649-cf3d5524440e"
 }
