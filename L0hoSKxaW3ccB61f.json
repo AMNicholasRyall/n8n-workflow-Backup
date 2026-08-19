@@ -1393,15 +1393,15 @@
     "Schedule Trigger": [
       {
         "json": {
-          "timestamp": "2026-07-28T10:10:00.002+08:00",
-          "Readable date": "July 28th 2026, 10:10:00 am",
-          "Readable time": "10:10:00 am",
-          "Day of week": "Tuesday",
+          "timestamp": "2026-08-17T08:00:00.002+08:00",
+          "Readable date": "August 17th 2026, 8:00:00 am",
+          "Readable time": "8:00:00 am",
+          "Day of week": "Monday",
           "Year": "2026",
-          "Month": "July",
-          "Day of month": "28",
-          "Hour": "10",
-          "Minute": "10",
+          "Month": "August",
+          "Day of month": "17",
+          "Hour": "08",
+          "Minute": "00",
           "Second": "00",
           "Timezone": "Australia/Perth (UTC+08:00)"
         },
@@ -1447,6 +1447,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-07-28T02:24:51.288Z",
+  "updatedAt": "2026-08-17T00:07:35.027Z",
   "versionId": "1133be01-618f-4960-b796-6183a0769678"
 }
