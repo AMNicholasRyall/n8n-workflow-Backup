@@ -1388,7 +1388,7 @@
   },
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": false,
+    "availableInMCP": true,
     "timeSavedMode": "fixed",
     "callerPolicy": "workflowsFromSameOwner",
     "timeSavedPerExecution": 15,
@@ -1419,6 +1419,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-03-10T05:36:07.172Z",
+  "updatedAt": "2026-08-26T23:58:58.913Z",
   "versionId": "554a73cc-fdf6-4488-bd49-391a70aea441"
 }
