@@ -635,7 +635,7 @@
   "settings": {
     "executionOrder": "v1",
     "callerPolicy": "workflowsFromSameOwner",
-    "availableInMCP": false,
+    "availableInMCP": true,
     "errorWorkflow": "J83Enw8ArDSqhMCL",
     "timeSavedPerExecution": 1
   },
@@ -662,6 +662,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2025-12-09T00:23:59.000Z",
+  "updatedAt": "2026-08-26T23:55:34.622Z",
   "versionId": "8c734b53-c949-49c1-bcf4-4156520c6cb7"
 }
