@@ -1,0 +1,796 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Collect No Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect No Email": {
+      "main": [
+        [
+          {
+            "node": "Set To Processing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set To Processing": {
+      "main": [
+        [
+          {
+            "node": "Call KCP - Missing Email Resolution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-09-01T06:45:40.673Z",
+  "id": "qMmAKYUNmx6zPxKq",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "KCP - Missing Email Queue Processor",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "50f0f398-5a63-4561-9e6e-3d888d30427a",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "AvEFhjvlkb7knN0c",
+          "mode": "list",
+          "cachedResultName": "ausMedOrderExceptions",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/AvEFhjvlkb7knN0c"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Patient_ID",
+              "keyValue": "={{ $json.Patient_ID }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "processing_email"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Quantity",
+              "displayName": "Quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Containers",
+              "displayName": "Containers",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date_Dispensed",
+              "displayName": "Date_Dispensed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Price",
+              "displayName": "Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date_Created",
+              "displayName": "Date_Created",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Name",
+              "displayName": "Patient_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_ID",
+              "displayName": "Patient_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Email",
+              "displayName": "Patient_Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Mobile",
+              "displayName": "Patient_Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Phone",
+              "displayName": "Patient_Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Date_Of_Birth",
+              "displayName": "Patient_Date_Of_Birth",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Address",
+              "displayName": "Patient_Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date_Prescribed",
+              "displayName": "Date_Prescribed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Prescriber_ID",
+              "displayName": "Prescriber_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Prescriber_Name",
+              "displayName": "Prescriber_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Order_Total_Price",
+              "displayName": "Order_Total_Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Order_Account_ID",
+              "displayName": "Order_Account_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "5f8786d4-4d4b-455d-8032-65be1c3afa49",
+      "name": "Set To Processing"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "AvEFhjvlkb7knN0c",
+          "mode": "list",
+          "cachedResultName": "ausMedOrderExceptions",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/AvEFhjvlkb7knN0c"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "keyValue": "missing_email"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "d2b8a1fa-97aa-445b-87aa-25149642227c",
+      "name": "Collect No Email"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "T3ZrbPUkqjn5VSLw",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/T3ZrbPUkqjn5VSLw",
+          "cachedResultName": "KCP - Missing Email Resolution"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Patient_Date_Of_Birth": "={{ $json.Patient_Date_Of_Birth }}",
+            "Prescriber_Name": "={{ $json.Prescriber_Name }}",
+            "Date_Dispensed": "={{ $json.Date_Dispensed }}",
+            "Patient_Name": "={{ $json.Patient_Name }}",
+            "Quantity": "={{ $json.Quantity }}",
+            "Containers": "={{ $json.Containers }}",
+            "Name": "={{ $json.Name }}",
+            "Price": "={{ $json.Price }}",
+            "Date_Created": "={{ $json.Date_Created }}",
+            "Patient_ID": "={{ $json.Patient_ID }}",
+            "Patient_Email": "={{ $json.Patient_Email }}",
+            "Patient_Mobile": "={{ $json.Patient_Mobile }}",
+            "Patient_Phone": "={{ $json.Patient_Phone }}",
+            "Patient_Address": "={{ $json.Patient_Address }}",
+            "Date_Prescribed": "={{ $json.Date_Prescribed }}",
+            "Prescriber_ID": "={{ $json.Prescriber_ID }}",
+            "Order_Total_Price": "={{ $json.Order_Total_Price }}",
+            "Order_Account_ID": "={{ $json.Order_Account_ID }}",
+            "status": "={{ $json.status }}",
+            "Zenoti_ID": "={{ $json.Zenoti_ID }}",
+            "UserCode": "={{ $json.UserCode }}",
+            "Package_Id": "={{ $json.Package_Id }}",
+            "Product_ID": "={{ $json.Product_ID }}",
+            "Clinic_ID": "={{ $json.Clinic_ID }}"
+          },
+          "matchingColumns": [
+            "Patient_Date_Of_Birth",
+            "Prescriber_Name",
+            "Date_Dispensed",
+            "Patient_Name"
+          ],
+          "schema": [
+            {
+              "id": "Quantity",
+              "displayName": "Quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Containers",
+              "displayName": "Containers",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Date_Dispensed",
+              "displayName": "Date_Dispensed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Price",
+              "displayName": "Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Date_Created",
+              "displayName": "Date_Created",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Patient_Name",
+              "displayName": "Patient_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Patient_ID",
+              "displayName": "Patient_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Patient_Email",
+              "displayName": "Patient_Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Patient_Mobile",
+              "displayName": "Patient_Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Patient_Phone",
+              "displayName": "Patient_Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Patient_Date_Of_Birth",
+              "displayName": "Patient_Date_Of_Birth",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Patient_Address",
+              "displayName": "Patient_Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Date_Prescribed",
+              "displayName": "Date_Prescribed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Prescriber_ID",
+              "displayName": "Prescriber_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Prescriber_Name",
+              "displayName": "Prescriber_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Order_Total_Price",
+              "displayName": "Order_Total_Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Order_Account_ID",
+              "displayName": "Order_Account_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Zenoti_ID",
+              "displayName": "Zenoti_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "UserCode",
+              "displayName": "UserCode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Package_Id",
+              "displayName": "Package_Id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Product_ID",
+              "displayName": "Product_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Clinic_ID",
+              "displayName": "Clinic_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        640,
+        0
+      ],
+      "name": "Call KCP - Missing Email Resolution",
+      "id": "402d2574-f652-4196-a7a1-446d291c5d87"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "Collect No Email": [
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 5% /TRETINOIN 0.01% TOPICAL SOLUTION  ",
+          "Date_Dispensed": "2026-08-10T16:00:00.000+10:00",
+          "Price": "66",
+          "Date_Created": "2026-08-10T06:00:00.000+10:00",
+          "Patient_Name": "Roja Lakshmipathi",
+          "Patient_ID": "86825",
+          "Patient_Email": "",
+          "Patient_Mobile": "",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1986-04-05T10:00:00.000+10:00",
+          "Patient_Address": "4 Weatherburn Place",
+          "Date_Prescribed": "2026-08-06T10:00:00.000+10:00",
+          "Prescriber_ID": "4737",
+          "Prescriber_Name": "Mark Liu",
+          "Order_Total_Price": "398.2",
+          "Order_Account_ID": "590",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 10,
+          "createdAt": "2026-08-31T05:06:07.529Z",
+          "updatedAt": "2026-09-01T04:31:33.528Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-08-10T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-08-10T06:00:00.000+10:00",
+          "Patient_Name": "Jason Rolander",
+          "Patient_ID": "86817",
+          "Patient_Email": "",
+          "Patient_Mobile": "",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "",
+          "Patient_Address": "123/97 Bonar Street",
+          "Date_Prescribed": "2026-08-06T10:00:00.000+10:00",
+          "Prescriber_ID": "4757",
+          "Prescriber_Name": "Michael Tjoa",
+          "Order_Total_Price": "162.8",
+          "Order_Account_ID": "595",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 22,
+          "createdAt": "2026-08-31T05:06:08.172Z",
+          "updatedAt": "2026-09-01T04:31:33.580Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-08-10T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-08-10T06:00:00.000+10:00",
+          "Patient_Name": "Manoj Kumar",
+          "Patient_ID": "86820",
+          "Patient_Email": "",
+          "Patient_Mobile": "",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1996-10-08T10:00:00.000+10:00",
+          "Patient_Address": "2501/420 Macquarie Street",
+          "Date_Prescribed": "2026-08-06T10:00:00.000+10:00",
+          "Prescriber_ID": "4757",
+          "Prescriber_Name": "Michael Tjoa",
+          "Order_Total_Price": "162.8",
+          "Order_Account_ID": "595",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 23,
+          "createdAt": "2026-08-31T05:06:08.224Z",
+          "updatedAt": "2026-09-01T04:31:33.632Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 5% /TRETINOIN 0.01% TOPICAL SOLUTION  ",
+          "Date_Dispensed": "2026-08-10T16:00:00.000+10:00",
+          "Price": "66",
+          "Date_Created": "2026-08-10T06:00:00.000+10:00",
+          "Patient_Name": "Archana Raviyappan",
+          "Patient_ID": "86816",
+          "Patient_Email": "",
+          "Patient_Mobile": "",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "",
+          "Patient_Address": "3 Pilgrim Street",
+          "Date_Prescribed": "2026-08-06T10:00:00.000+10:00",
+          "Prescriber_ID": "4749",
+          "Prescriber_Name": "Karen Schwartz",
+          "Order_Total_Price": "239.8",
+          "Order_Account_ID": "599",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 31,
+          "createdAt": "2026-08-31T05:06:08.648Z",
+          "updatedAt": "2026-09-01T04:31:33.700Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-09-01T06:45:40.675Z",
+      "createdAt": "2026-09-01T06:45:40.675Z",
+      "role": "workflow:owner",
+      "workflowId": "qMmAKYUNmx6zPxKq",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2026-08-31T05:04:35.378Z",
+      "createdAt": "2026-08-31T05:04:35.378Z",
+      "id": "yiQDDYkINJVRH87h",
+      "name": "KCP"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-09-01T07:47:43.732Z",
+  "versionId": "4f1328da-a54d-49b4-9781-7a4f9c985d8d"
+}
