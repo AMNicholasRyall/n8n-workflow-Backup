@@ -1175,7 +1175,7 @@
     "timeSavedMode": "fixed",
     "saveDataSuccessExecution": "all",
     "callerPolicy": "workflowsFromSameOwner",
-    "availableInMCP": false,
+    "availableInMCP": true,
     "timeSavedPerExecution": 0,
     "binaryMode": "separate",
     "errorWorkflow": "J83Enw8ArDSqhMCL"
@@ -1215,6 +1215,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-07-26T22:58:20.058Z",
+  "updatedAt": "2026-08-26T23:59:20.055Z",
   "versionId": "c80b62e3-d4b0-4943-a640-acfb1aa4bc72"
 }
