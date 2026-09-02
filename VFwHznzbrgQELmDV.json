@@ -533,7 +533,20 @@
     }
   ],
   "origin": "n8n",
-  "pinData": {},
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Auth Bunble": ":authority\r\naandm.helix.medicaldirector.com\r\n:method\r\nPOST\r\n:path\r\n/api/patient/suggestions\r\n:scheme\r\nhttps\r\naccept\r\n*/*\r\naccept-encoding\r\ngzip, deflate, br, zstd\r\naccept-language\r\nen-GB,en-US;q=0.9,en;q=0.8\r\nauthorization\r\nBearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImF3TmpIdjEwenMwN1FCdG8wWXRXaCJ9.eyJodHRwOi8vaGVsaXgubWVkaWNhbGRpcmVjdG9yLmNvbS9jbGFpbXMvdGVuYW50IjoiYWFuZG0uaGVsaXgubWVkaWNhbGRpcmVjdG9yLmNvbSIsImh0dHA6Ly9oZWxpeC5tZWRpY2FsZGlyZWN0b3IuY29tL2NsYWltcy91c2VycyI6WzU0XSwiaHR0cDovL2hlbGl4Lm1lZGljYWxkaXJlY3Rvci5jb20vY2xhaW1zL2NlbnRyZXMiOiI1NDoyLDU0OjEsNTQ6Myw1NDo0LDU0OjgsNTQ6Nyw1NDo5LDU0OjEwLDU0OjExLDU0OjEyLDU0OjEzLDU0OjE0LDU0OjE1LDU0OjE2IiwiaHR0cDovL2hlbGl4Lm1lZGljYWxkaXJlY3Rvci5jb20vY2xhaW1zL3JvbGVzIjoiNTQ6MjQiLCJodHRwOi8vaGVsaXgubWVkaWNhbGRpcmVjdG9yLmNvbS9jbGFpbXMvdXNlcm5hbWVzIjoiNTQ6QU0tQXV0b21hdGlvbiIsImlzcyI6Imh0dHBzOi8vbG9naW4uaGVsaXgubWVkaWNhbGRpcmVjdG9yLmNvbS8iLCJzdWIiOiJhdXRoMHw1M2M5NWVmMS1mY2ZiLTRmMmEtYWQwYS1hZGRiYzE2NDExODAiLCJhdWQiOlsiaHR0cHM6Ly9hYW5kbS5oZWxpeC5tZWRpY2FsZGlyZWN0b3IuY29tL2FwaSIsImh0dHBzOi8vbWQtaGVsaXgtcHJvZC5hdS5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzg3ODA3ODQwLCJleHAiOjE3ODc4MTE0NDAsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJhenAiOiJhc0tMWVpwQmd3S29LeDEwVXFZR2l0VXQ2aTREeXdTRiJ9.tDKSX9HTrFrzPr32e3xZH4_ry13Jt41TIhZn2o-9fp9YcnEpAlo-rASsQXc00_0S6jk9J9f7sP1ONBkBxzAe1rmgRR67llNY7QXpMWpLGHh26PSdt-yzJ18wB36X15s7twu1FORVP-kanX7JkvaexMCtUbDKv0uWwbzW2p5p4rBw1T54uMdv2Auc5s8mHSD1uZeOc4vrY9oeh9RZP7RXPD7HfKw6SUZ52of-t3hLVsGooibWthk7ySOhdOSTVvoqV0DcK3z459Pg9O4wzyuSUuxaEWKcj36FiZPZ4LzTxiIdSywqsfUNko1y6ow1F8UmFoH3mtYUUBxtXjQnqmukeQ\r\ncontent-length\r\n12\r\ncontent-type\r\napplication/json\r\ncookie\r\n_legacy_auth0.asKLYZpBgwKoKx10UqYGitUt6i4DywSF.is.authenticated=true; auth0.asKLYZpBgwKoKx10UqYGitUt6i4DywSF.is.authenticated=true; XSRF-TOKEN=9qWlrnZ4Z9DZghFvx5pgaKbCGwDMKhTLy1b9l7vCUV81; .AspNet.Cookies=0qqhBgADywyODB-NRknIcbAhurD04bBhL8e-bSvPOHHZE7kSMRNoDhTtgubFAfuda3sF_Q8l_0cBvAlSlEQt7eVdClu9cG9FgDIn-5DL54f8V8-ViOIfqVfyRWDUQ99Ub_FQYGcICLHeLNKYPbDRNUhJxcsCeHTWLttoER_oWqMv2IPMBIrXOnxlfb66TWNxyopDVKTusAJpASXVEEC-PsiaVb5qVngSev3F-mvlCXOnWnQghniXH5m1q9XJtdECiC2YLbihEvLADWmnQPRwE2chDaEmXITOQQ2P8ebSWl0TybJwq4sLzE73gJpI5jIXcOJguor1JviUGWryf9GAxkBy-hle-wu-PBIkr1dEaQ0wwsPVJyXWJUjS37a4iikl7eEpiavwuojjeQGX8kOzNKs_DZId6J8MbtLTb_6bxJ7UIafKXWIHptf1Oh1wxm4-wfqhtLw2WIcmEdPd7LcGJF51cuwQHmR-Vug2sg8-CwTQofipRjQj0w7LTBUh0B36z3d2CUAP2-g_RCecA8-zzg; _ga=GA1.1.669196065.1787807842; _ga_EKLES10TVC=GS2.1.s1787807842$o1$g1$t1787807850$j52$l0$h0\r\norigin\r\nhttps://aandm.helix.medicaldirector.com\r\npriority\r\nu=1, i\r\nsec-ch-ua\r\n\"Not=A?Brand\";v=\"99\", \"Google Chrome\";v=\"151\", \"Chromium\";v=\"151\"\r\nsec-ch-ua-mobile\r\n?0\r\nsec-ch-ua-platform\r\n\"Windows\"\r\nsec-fetch-dest\r\nempty\r\nsec-fetch-mode\r\ncors\r\nsec-fetch-site\r\nsame-origin\r\nuser-agent\r\nMozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36\r\nusercentreid\r\n1\r\nuserworkareaid\r\n1\r\nx-helix-agent-id\r\n0b412c00-9228-8eb8-bf5d-e883768346ea\r\nx-helix-perform-as\r\n54\r\nx-xsrf-token\r\n9qWlrnZ4Z9DZghFvx5pgaKbCGwDMKhTLy1b9l7vCUV81",
+          "submittedAt": "2026-08-27T13:17:58.659+08:00",
+          "formMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -541,7 +554,7 @@
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": false,
+    "availableInMCP": true,
     "timeSavedMode": "fixed",
     "errorWorkflow": "J83Enw8ArDSqhMCL",
     "callerPolicy": "workflowsFromSameOwner",
@@ -566,6 +579,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-08-13T05:14:12.695Z",
+  "updatedAt": "2026-08-28T01:19:52.742Z",
   "versionId": "38e74e30-27ff-446d-8ebb-f2d4673dd17c"
 }
