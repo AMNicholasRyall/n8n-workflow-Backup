@@ -1,0 +1,834 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Call 'Zenoti-GetAuthToken'": {
+      "main": [
+        [
+          {
+            "node": "ready_for_med_check collector",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti-GetAuthToken'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ready_for_med_check collector": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Invoice With Meds": {
+      "main": [
+        [
+          {
+            "node": "Check Invoice Exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Invoice Exists": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Close Med Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Generate Invoice With Meds",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "missing_drugs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "missing_drugs": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate MedTracking": {
+      "main": [
+        [
+          {
+            "node": "Close Med tracking",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Close Med Invoice": {
+      "main": [
+        [
+          {
+            "node": "Generate MedTracking",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Close Med tracking": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-08-31T23:49:06.409Z",
+  "id": "vxhZjuRXs8r8goHg",
+  "isArchived": false,
+  "meta": null,
+  "name": "KCP - Zenoti Check out Meds",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        336
+      ],
+      "id": "154ed272-2c0e-4f89-8bca-fc054f522072",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "QA7Qdseg7ehAOWP6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+          "cachedResultName": "Zenoti-GetAuthToken"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        336
+      ],
+      "id": "8a0b31f1-8f86-49c3-90ec-a5b368ee4f37",
+      "name": "Call 'Zenoti-GetAuthToken'"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "AvEFhjvlkb7knN0c",
+          "mode": "list",
+          "cachedResultName": "ausMedOrderExceptions",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/AvEFhjvlkb7knN0c"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "keyValue": "ready_for_med_check"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        336
+      ],
+      "id": "e7890ce1-9f00-4e1f-9500-78de30f2267e",
+      "name": "ready_for_med_check collector"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        672,
+        336
+      ],
+      "id": "4c4d81eb-c44e-4a74-accb-79e78fd5bdd7",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.zenoti.com/v1/invoices/products",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "application_name",
+              "value": "AMn8n"
+            },
+            {
+              "name": "application_version",
+              "value": "1"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"guest_id\": \"{{ $('Loop Over Items').item.json.Zenoti_ID }}\",\n  \"center_id\": \"{{ $('Loop Over Items').item.json.Clinic_ID }}\",\n  \"created_by_id\": \"83de2399-ca55-455b-a812-0336d956188d\",\n  \"notes\": \"remaining medication ordered on {{ $today.toFormat('dd/MM/yyyy') }}\",\n  \"products\": [\n    {\n      \"id\": \"{{ $('Get row(s)').item.json.Zenoti_ID }}\",\n      \"quantity\": {{ $('Loop Over Items').item.json.Containers }},\n      \"sale_by_id\": \"83de2399-ca55-455b-a812-0336d956188d\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1344,
+        0
+      ],
+      "id": "5951bb43-d775-4c4a-bd2b-3379919ce7fe",
+      "name": "Generate Invoice With Meds",
+      "executeOnce": true,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/invoices/{{ $json.invoice_id }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "expand",
+              "value": "InvoiceItems,Transactions"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1568,
+        0
+      ],
+      "id": "3de0cc17-1f00-41a0-8f8c-bc24d0d9bec0",
+      "name": "Check Invoice Exists",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3f8fc2ac-ef57-410d-978e-ae3fef52ebf3",
+              "leftValue": "={{ $json.invoice.total_price.sum_total }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1792,
+        0
+      ],
+      "id": "47cee37a-ae7a-4da0-8266-019428456d0c",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "RWgdlj6Q8A85Kq6v",
+          "mode": "list",
+          "cachedResultName": "Helix Meds",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/RWgdlj6Q8A85Kq6v"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "KCP_Name",
+              "keyValue": "={{ $json.Name.trimEnd() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        896,
+        96
+      ],
+      "id": "7be1a7e4-d0e5-4a12-9680-01f714886cb7",
+      "name": "Get row(s)",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "31596cee-f3ea-4338-88dd-b2a87f5af9c9",
+              "leftValue": "={{ Object.keys($json).length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1120,
+        96
+      ],
+      "id": "1858ee97-2e07-44ed-8a86-4d27f5cffd34",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "AvEFhjvlkb7knN0c",
+          "mode": "list",
+          "cachedResultName": "ausMedOrderExceptions",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/AvEFhjvlkb7knN0c"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Patient_ID",
+              "keyValue": "={{ $('Loop Over Items').item.json.Patient_ID }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "missing_drugs"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Quantity",
+              "displayName": "Quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Containers",
+              "displayName": "Containers",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date_Dispensed",
+              "displayName": "Date_Dispensed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Price",
+              "displayName": "Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date_Created",
+              "displayName": "Date_Created",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Name",
+              "displayName": "Patient_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_ID",
+              "displayName": "Patient_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Email",
+              "displayName": "Patient_Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Mobile",
+              "displayName": "Patient_Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Phone",
+              "displayName": "Patient_Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Date_Of_Birth",
+              "displayName": "Patient_Date_Of_Birth",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Address",
+              "displayName": "Patient_Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date_Prescribed",
+              "displayName": "Date_Prescribed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Prescriber_ID",
+              "displayName": "Prescriber_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Prescriber_Name",
+              "displayName": "Prescriber_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Order_Total_Price",
+              "displayName": "Order_Total_Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Order_Account_ID",
+              "displayName": "Order_Account_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Zenoti_ID",
+              "displayName": "Zenoti_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "UserCode",
+              "displayName": "UserCode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Package_Id",
+              "displayName": "Package_Id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Product_ID",
+              "displayName": "Product_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Clinic_ID",
+              "displayName": "Clinic_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1392,
+        432
+      ],
+      "id": "f6090363-57d0-4b57-8c21-80d669aa15de",
+      "name": "missing_drugs"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.zenoti.com/v1/invoices/products",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "application_name",
+              "value": "AMn8n"
+            },
+            {
+              "name": "application_version",
+              "value": "1"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"guest_id\": \"{{ $('Loop Over Items').item.json.Zenoti_ID }}\",\n  \"center_id\": \"{{ $('Loop Over Items').item.json.Clinic_ID }}\",\n  \"created_by_id\": \"83de2399-ca55-455b-a812-0336d956188d\",\n  \"notes\": \"AutomationGenerated\",\n  \"products\": [\n    {\n      \"id\": \"f4d64efb-d50f-481a-95c9-f547604a48d5\",\n      \"quantity\": 1,\n      \"sale_by_id\": \"83de2399-ca55-455b-a812-0336d956188d\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2240,
+        0
+      ],
+      "id": "36bcf461-d7fc-4bd9-a98c-f1ee9e532d17",
+      "name": "Generate MedTracking",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.zenoti.com/v1/invoices/{{ $('Generate Invoice With Meds').item.json.invoice_id }}/close",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2016,
+        0
+      ],
+      "id": "1ef9ac49-f4e8-4736-9d70-bc48e9616ca8",
+      "name": "Close Med Invoice"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.zenoti.com/v1/invoices/{{ $('Generate Invoice With Meds').item.json.invoice_id }}/close",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'ZenotiNZ-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2480,
+        432
+      ],
+      "id": "bdfae051-8f8a-4532-818b-311076b577b1",
+      "name": "Close Med tracking"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-08-31T23:49:06.411Z",
+      "createdAt": "2026-08-31T23:49:06.411Z",
+      "role": "workflow:owner",
+      "workflowId": "vxhZjuRXs8r8goHg",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2026-08-31T05:04:35.378Z",
+      "createdAt": "2026-08-31T05:04:35.378Z",
+      "id": "yiQDDYkINJVRH87h",
+      "name": "KCP"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-09-02T05:50:12.375Z",
+  "versionId": "9fdf64a7-39e5-42ed-b3c3-eef6e5f678cd"
+}
