@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-08-18T02:29:53.000Z",
-    "createdAt": "2026-07-30T02:28:49.624Z",
-    "versionId": "1f3b9463-875d-49f8-8649-cf3d5524440e",
+    "updatedAt": "2026-09-02T22:50:17.000Z",
+    "createdAt": "2026-09-02T22:50:09.120Z",
+    "versionId": "c2f5d249-9510-447c-8307-a0280a77ac77",
     "workflowId": "s7orTr2bZdJMpDa3",
     "nodes": [
       {
@@ -408,8 +408,8 @@
         "type": "n8n-nodes-base.filter",
         "typeVersion": 2.3,
         "position": [
-          608,
-          -304
+          624,
+          -288
         ],
         "id": "6fe08b43-fc65-400f-bfcc-d6a7c6331bfb",
         "name": "Filter1"
@@ -448,8 +448,8 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.2,
         "position": [
-          832,
-          -304
+          1200,
+          -704
         ],
         "name": "Call Helix Patient - Helix Match Check",
         "id": "34ed9471-4fcb-4f63-990b-f28dc3f273bb"
@@ -481,8 +481,8 @@
         "type": "n8n-nodes-base.filter",
         "typeVersion": 2.3,
         "position": [
-          1056,
-          -304
+          1424,
+          -704
         ],
         "id": "891ea63a-330a-48aa-8721-b1e60275749f",
         "name": "Filter2"
@@ -510,8 +510,8 @@
         "type": "n8n-nodes-base.executeWorkflow",
         "typeVersion": 1.2,
         "position": [
-          1280,
-          -304
+          1648,
+          -704
         ],
         "name": "Call Helix Patient - Create",
         "id": "f90e3c2c-7187-4662-bfc7-1776f2dbf238"
@@ -543,8 +543,8 @@
         "type": "n8n-nodes-base.filter",
         "typeVersion": 2.3,
         "position": [
-          1488,
-          -304
+          1856,
+          -704
         ],
         "id": "cb4525b8-8753-47e2-b540-f9b14d9d0b2e",
         "name": "Filter3"
@@ -571,8 +571,8 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
-          1696,
-          -304
+          2064,
+          -704
         ],
         "id": "12b5407a-f041-4642-b7b0-693a104d6da7",
         "name": "Get row(s)1"
@@ -589,11 +589,410 @@
         "type": "n8n-nodes-base.microsoftOutlook",
         "typeVersion": 2,
         "position": [
-          1904,
-          -304
+          2272,
+          -704
         ],
         "id": "1b041b76-546f-429d-ac66-901d0c906571",
         "name": "Send a message",
+        "webhookId": "8b39a90e-6d0e-44c4-ab1c-f561527619c5",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.ClinicName }}",
+                      "rightValue": "Telehealth",
+                      "operator": {
+                        "type": "string",
+                        "operation": "notEquals"
+                      },
+                      "id": "d24b0986-9ffb-4eb4-8652-c1be15228a4e"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "e539d2cc-0031-47ea-8338-b6d23a0a214b",
+                      "leftValue": "={{ $json.ClinicName }}",
+                      "rightValue": "Telehealth",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          848,
+          -288
+        ],
+        "id": "6dacc514-1028-4e0a-b3a7-f2d08bf84de6",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          1120,
+          -288
+        ],
+        "id": "4f1ce4c5-aac4-4055-a2d2-e989d755d6b1",
+        "name": "Loop Over Items1"
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1360,
+          -272
+        ],
+        "id": "39aec4ad-3fb4-403b-9310-072f78386fc2",
+        "name": "Wait1",
+        "webhookId": "1edc2742-9223-4f00-bcfd-5329bb974854"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/guests/{{ $json.ClientID }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').first().json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {}
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1568,
+          -272
+        ],
+        "id": "2c7524f9-a954-41fa-b745-46193251e4e3",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "773b2bce-d25b-4498-9f81-5219ba0e97bd",
+                "name": "ClinicProgress",
+                "value": "ContinueFlow",
+                "type": "string"
+              },
+              {
+                "id": "8d5bb59c-798e-4206-b533-c88fababb1ef",
+                "name": "ClientID",
+                "value": "={{ $('HTTP Request').item.json.id }}",
+                "type": "string"
+              },
+              {
+                "id": "ff90d29a-e2ad-4096-9463-43d0591f46d7",
+                "name": "ClientCode",
+                "value": "={{ $('HTTP Request').item.json.code }}",
+                "type": "string"
+              },
+              {
+                "id": "d811f5b5-25ae-4d34-8886-987a711c12cb",
+                "name": "ClinicName",
+                "value": "={{ $json.name }}",
+                "type": "string"
+              },
+              {
+                "id": "0cdee29a-a860-44a5-bd06-4a3fbc547c80",
+                "name": "InitialPharmacy",
+                "value": "={{ $json.InitialPharmacy }}",
+                "type": "string"
+              },
+              {
+                "id": "ecb5bb11-1c79-4b54-be12-734e7e37481a",
+                "name": "HelixEmail",
+                "value": "={{ $json.name }}.Pharmacy+{{ $('HTTP Request').item.json.code }}.{{ $json.InitialPharmacy }}@ashleyandmartin.com.au",
+                "type": "string"
+              },
+              {
+                "id": "0a1d151e-e2c0-474b-bf20-c666d4e64404",
+                "name": "HelixCenterID",
+                "value": "={{ $json.HelixCenterId }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1968,
+          -272
+        ],
+        "id": "1c544143-9b4c-4688-adb1-10d231ea5e0a",
+        "name": "SetPatient1"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lsINP70DmcZtIj4M",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinics",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "table_id",
+                "condition": "isNotEmpty"
+              },
+              {
+                "keyName": "name",
+                "keyValue": "={{ $json.center_name }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          1776,
+          -272
+        ],
+        "id": "02a55ab2-158a-4dc3-b4ed-cb3a57fb20ac",
+        "name": "Get row(s)2"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "LIW8dhFAlW1wRpBF",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/LIW8dhFAlW1wRpBF",
+            "cachedResultName": "Helix Patient - Helix Match Check"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.2,
+        "position": [
+          2192,
+          -272
+        ],
+        "name": "Call Helix Patient - Helix Match Check1",
+        "id": "b179696a-a399-4031-9ddd-a2c2b4e60db0"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "ZuY7tb116BJ28hOG",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/ZuY7tb116BJ28hOG",
+            "cachedResultName": "Helix Patient - Create"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.2,
+        "position": [
+          2736,
+          -256
+        ],
+        "name": "Call Helix Patient - Create1",
+        "id": "9513cd5b-0752-41c3-8480-9e7c4c63b84c"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.ClinicProgress }}",
+                      "rightValue": "UserExists",
+                      "operator": {
+                        "type": "string",
+                        "operation": "notEquals"
+                      },
+                      "id": "d24b0986-9ffb-4eb4-8652-c1be15228a4e"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {
+            "fallbackOutput": "extra"
+          }
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          2416,
+          -272
+        ],
+        "id": "6b01578c-293f-4160-9b89-6e8e2862d060",
+        "name": "Switch1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "3f9d8641-5d62-4a0c-95ca-f3f77eb05e05",
+                "leftValue": "={{ $json.ClinicProgress }}",
+                "rightValue": "CreationError",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          1360,
+          -432
+        ],
+        "id": "a282a71c-9b01-443e-ab3a-97bb3294364e",
+        "name": "Filter4"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lsINP70DmcZtIj4M",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinics",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "name",
+                "keyValue": "={{ $json.ClinicName }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          1568,
+          -432
+        ],
+        "id": "d45c27b4-9eae-45fa-973e-d62ae461b1c0",
+        "name": "Get row(s)3"
+      },
+      {
+        "parameters": {
+          "toRecipients": "={{ $json.email }}",
+          "subject": "=Helix Automation - {{ $('Filter4').item.json.ClientCode }}",
+          "bodyContent": "=<html>\n  <body style=\"font-family: Arial, sans-serif; color: #333333; line-height: 1.5;\">\n    <p>Hi Team,</p>\n\n<p>Automation was unable to create the user below.</p>\n\n<p>Please review and correct the issue, then create the user manually using the link below:</p>\n\n<p>\n  <a href=\"https://n8n.ashleyandmartin.local/form/Helix-Manual-Creation\"\n     style=\"display: inline-block; padding: 10px 16px; background-color: #0078d4; color: #ffffff; text-decoration: none; border-radius: 4px;\">\n    Create User Manually\n  </a>\n</p>\n\n<table style=\"border-collapse: collapse; margin: 16px 0;\">\n  <tr>\n    <td style=\"padding: 6px 12px 6px 0;\"><strong>User:</strong></td>\n    <td style=\"padding: 6px 0;\">{{ $('Filter4').item.json.ClientCode }}</td>\n  </tr>\n  <tr>\n    <td style=\"padding: 6px 12px 6px 0; vertical-align: top;\"><strong>Error:</strong></td>\n    <td style=\"padding: 6px 0;\">{{ $('Filter4').item.json.ErrorMessage }}</td>\n  </tr>\n</table>\n\n<p>Regards,<br>Automation</p>\n\n  </body>\n</html>\n",
+          "additionalFields": {
+            "bodyContentType": "html"
+          }
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          1776,
+          -432
+        ],
+        "id": "e9163eeb-14a0-4f72-a543-39690e56faa1",
+        "name": "Send a message2",
         "webhookId": "8b39a90e-6d0e-44c4-ab1c-f561527619c5",
         "credentials": {
           "microsoftOutlookOAuth2Api": {
@@ -754,7 +1153,7 @@
         "main": [
           [
             {
-              "node": "Call Helix Patient - Helix Match Check",
+              "node": "Switch",
               "type": "main",
               "index": 0
             }
@@ -815,14 +1214,156 @@
             }
           ]
         ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Call Helix Patient - Helix Match Check",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items1": {
+        "main": [
+          [
+            {
+              "node": "Filter4",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait1": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)2": {
+        "main": [
+          [
+            {
+              "node": "SetPatient1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call Helix Patient - Helix Match Check1": {
+        "main": [
+          [
+            {
+              "node": "Switch1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SetPatient1": {
+        "main": [
+          [
+            {
+              "node": "Call Helix Patient - Helix Match Check1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call Helix Patient - Create1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch1": {
+        "main": [
+          [
+            {
+              "node": "Call Helix Patient - Create1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Loop Over Items1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)3": {
+        "main": [
+          [
+            {
+              "node": "Send a message2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter4": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 1f3b9463",
+    "name": "Version c2f5d249",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "1f3b9463-875d-49f8-8649-cf3d5524440e",
+  "activeVersionId": "c2f5d249-9510-447c-8307-a0280a77ac77",
   "connections": {
     "Schedule Trigger": {
       "main": [
@@ -974,7 +1515,7 @@
       "main": [
         [
           {
-            "node": "Call Helix Patient - Helix Match Check",
+            "node": "Switch",
             "type": "main",
             "index": 0
           }
@@ -1030,6 +1571,148 @@
         [
           {
             "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Call Helix Patient - Helix Match Check",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Filter4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)2": {
+      "main": [
+        [
+          {
+            "node": "SetPatient1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Helix Patient - Helix Match Check1": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SetPatient1": {
+      "main": [
+        [
+          {
+            "node": "Call Helix Patient - Helix Match Check1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Helix Patient - Create1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Call Helix Patient - Create1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)3": {
+      "main": [
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter4": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)3",
             "type": "main",
             "index": 0
           }
@@ -1447,8 +2130,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        608,
-        -304
+        624,
+        -288
       ],
       "id": "6fe08b43-fc65-400f-bfcc-d6a7c6331bfb",
       "name": "Filter1"
@@ -1487,8 +2170,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        832,
-        -304
+        1200,
+        -704
       ],
       "name": "Call Helix Patient - Helix Match Check",
       "id": "34ed9471-4fcb-4f63-990b-f28dc3f273bb"
@@ -1520,8 +2203,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        1056,
-        -304
+        1424,
+        -704
       ],
       "id": "891ea63a-330a-48aa-8721-b1e60275749f",
       "name": "Filter2"
@@ -1549,8 +2232,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        1280,
-        -304
+        1648,
+        -704
       ],
       "name": "Call Helix Patient - Create",
       "id": "f90e3c2c-7187-4662-bfc7-1776f2dbf238"
@@ -1582,8 +2265,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        1488,
-        -304
+        1856,
+        -704
       ],
       "id": "cb4525b8-8753-47e2-b540-f9b14d9d0b2e",
       "name": "Filter3"
@@ -1610,8 +2293,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        1696,
-        -304
+        2064,
+        -704
       ],
       "id": "12b5407a-f041-4642-b7b0-693a104d6da7",
       "name": "Get row(s)1"
@@ -1628,11 +2311,410 @@
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [
-        1904,
-        -304
+        2272,
+        -704
       ],
       "id": "1b041b76-546f-429d-ac66-901d0c906571",
       "name": "Send a message",
+      "webhookId": "8b39a90e-6d0e-44c4-ab1c-f561527619c5",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.ClinicName }}",
+                    "rightValue": "Telehealth",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEquals"
+                    },
+                    "id": "d24b0986-9ffb-4eb4-8652-c1be15228a4e"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "e539d2cc-0031-47ea-8338-b6d23a0a214b",
+                    "leftValue": "={{ $json.ClinicName }}",
+                    "rightValue": "Telehealth",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        848,
+        -288
+      ],
+      "id": "6dacc514-1028-4e0a-b3a7-f2d08bf84de6",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1120,
+        -288
+      ],
+      "id": "4f1ce4c5-aac4-4055-a2d2-e989d755d6b1",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1360,
+        -272
+      ],
+      "id": "39aec4ad-3fb4-403b-9310-072f78386fc2",
+      "name": "Wait1",
+      "webhookId": "1edc2742-9223-4f00-bcfd-5329bb974854"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/guests/{{ $json.ClientID }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').first().json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1568,
+        -272
+      ],
+      "id": "2c7524f9-a954-41fa-b745-46193251e4e3",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "773b2bce-d25b-4498-9f81-5219ba0e97bd",
+              "name": "ClinicProgress",
+              "value": "ContinueFlow",
+              "type": "string"
+            },
+            {
+              "id": "8d5bb59c-798e-4206-b533-c88fababb1ef",
+              "name": "ClientID",
+              "value": "={{ $('HTTP Request').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "ff90d29a-e2ad-4096-9463-43d0591f46d7",
+              "name": "ClientCode",
+              "value": "={{ $('HTTP Request').item.json.code }}",
+              "type": "string"
+            },
+            {
+              "id": "d811f5b5-25ae-4d34-8886-987a711c12cb",
+              "name": "ClinicName",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "0cdee29a-a860-44a5-bd06-4a3fbc547c80",
+              "name": "InitialPharmacy",
+              "value": "={{ $json.InitialPharmacy }}",
+              "type": "string"
+            },
+            {
+              "id": "ecb5bb11-1c79-4b54-be12-734e7e37481a",
+              "name": "HelixEmail",
+              "value": "={{ $json.name }}.Pharmacy+{{ $('HTTP Request').item.json.code }}.{{ $json.InitialPharmacy }}@ashleyandmartin.com.au",
+              "type": "string"
+            },
+            {
+              "id": "0a1d151e-e2c0-474b-bf20-c666d4e64404",
+              "name": "HelixCenterID",
+              "value": "={{ $json.HelixCenterId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1968,
+        -272
+      ],
+      "id": "1c544143-9b4c-4688-adb1-10d231ea5e0a",
+      "name": "SetPatient1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "table_id",
+              "condition": "isNotEmpty"
+            },
+            {
+              "keyName": "name",
+              "keyValue": "={{ $json.center_name }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1776,
+        -272
+      ],
+      "id": "02a55ab2-158a-4dc3-b4ed-cb3a57fb20ac",
+      "name": "Get row(s)2"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "LIW8dhFAlW1wRpBF",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/LIW8dhFAlW1wRpBF",
+          "cachedResultName": "Helix Patient - Helix Match Check"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        2192,
+        -272
+      ],
+      "name": "Call Helix Patient - Helix Match Check1",
+      "id": "b179696a-a399-4031-9ddd-a2c2b4e60db0"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "ZuY7tb116BJ28hOG",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/ZuY7tb116BJ28hOG",
+          "cachedResultName": "Helix Patient - Create"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        2736,
+        -256
+      ],
+      "name": "Call Helix Patient - Create1",
+      "id": "9513cd5b-0752-41c3-8480-9e7c4c63b84c"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.ClinicProgress }}",
+                    "rightValue": "UserExists",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEquals"
+                    },
+                    "id": "d24b0986-9ffb-4eb4-8652-c1be15228a4e"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        2416,
+        -272
+      ],
+      "id": "6b01578c-293f-4160-9b89-6e8e2862d060",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3f9d8641-5d62-4a0c-95ca-f3f77eb05e05",
+              "leftValue": "={{ $json.ClinicProgress }}",
+              "rightValue": "CreationError",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1360,
+        -432
+      ],
+      "id": "a282a71c-9b01-443e-ab3a-97bb3294364e",
+      "name": "Filter4"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "name",
+              "keyValue": "={{ $json.ClinicName }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1568,
+        -432
+      ],
+      "id": "d45c27b4-9eae-45fa-973e-d62ae461b1c0",
+      "name": "Get row(s)3"
+    },
+    {
+      "parameters": {
+        "toRecipients": "={{ $json.email }}",
+        "subject": "=Helix Automation - {{ $('Filter4').item.json.ClientCode }}",
+        "bodyContent": "=<html>\n  <body style=\"font-family: Arial, sans-serif; color: #333333; line-height: 1.5;\">\n    <p>Hi Team,</p>\n\n<p>Automation was unable to create the user below.</p>\n\n<p>Please review and correct the issue, then create the user manually using the link below:</p>\n\n<p>\n  <a href=\"https://n8n.ashleyandmartin.local/form/Helix-Manual-Creation\"\n     style=\"display: inline-block; padding: 10px 16px; background-color: #0078d4; color: #ffffff; text-decoration: none; border-radius: 4px;\">\n    Create User Manually\n  </a>\n</p>\n\n<table style=\"border-collapse: collapse; margin: 16px 0;\">\n  <tr>\n    <td style=\"padding: 6px 12px 6px 0;\"><strong>User:</strong></td>\n    <td style=\"padding: 6px 0;\">{{ $('Filter4').item.json.ClientCode }}</td>\n  </tr>\n  <tr>\n    <td style=\"padding: 6px 12px 6px 0; vertical-align: top;\"><strong>Error:</strong></td>\n    <td style=\"padding: 6px 0;\">{{ $('Filter4').item.json.ErrorMessage }}</td>\n  </tr>\n</table>\n\n<p>Regards,<br>Automation</p>\n\n  </body>\n</html>\n",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1776,
+        -432
+      ],
+      "id": "e9163eeb-14a0-4f72-a543-39690e56faa1",
+      "name": "Send a message2",
       "webhookId": "8b39a90e-6d0e-44c4-ab1c-f561527619c5",
       "credentials": {
         "microsoftOutlookOAuth2Api": {
@@ -1647,16 +2729,16 @@
     "Schedule Trigger": [
       {
         "json": {
-          "timestamp": "2026-08-17T20:00:59.002+08:00",
-          "Readable date": "August 17th 2026, 8:00:59 pm",
-          "Readable time": "8:00:59 pm",
-          "Day of week": "Monday",
+          "timestamp": "2026-09-02T20:00:13.003+08:00",
+          "Readable date": "September 2nd 2026, 8:00:13 pm",
+          "Readable time": "8:00:13 pm",
+          "Day of week": "Wednesday",
           "Year": "2026",
-          "Month": "August",
-          "Day of month": "17",
+          "Month": "September",
+          "Day of month": "02",
           "Hour": "20",
           "Minute": "00",
-          "Second": "59",
+          "Second": "13",
           "Timezone": "Australia/Perth (UTC+08:00)"
         },
         "pairedItem": {
@@ -1672,7 +2754,7 @@
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": false,
+    "availableInMCP": true,
     "timeSavedMode": "fixed",
     "errorWorkflow": "J83Enw8ArDSqhMCL",
     "callerPolicy": "workflowsFromSameOwner",
@@ -1701,6 +2783,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-08-18T01:42:09.550Z",
-  "versionId": "1f3b9463-875d-49f8-8649-cf3d5524440e"
+  "updatedAt": "2026-09-02T22:50:09.120Z",
+  "versionId": "c2f5d249-9510-447c-8307-a0280a77ac77"
 }
