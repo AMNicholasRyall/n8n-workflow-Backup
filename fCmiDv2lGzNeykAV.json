@@ -1902,7 +1902,7 @@
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": false,
+    "availableInMCP": true,
     "timeSavedMode": "fixed",
     "errorWorkflow": "J83Enw8ArDSqhMCL",
     "callerPolicy": "workflowsFromSameOwner",
@@ -1949,6 +1949,6 @@
     }
   ],
   "triggerCount": 3,
-  "updatedAt": "2026-07-30T02:22:39.888Z",
+  "updatedAt": "2026-08-26T23:59:25.314Z",
   "versionId": "186e08fd-5078-4d4e-a36f-32d1a2992c63"
 }
