@@ -1,0 +1,1090 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-09-02T06:49:43.000Z",
+    "createdAt": "2026-09-02T06:49:41.411Z",
+    "versionId": "ffa459bf-0749-41a4-9575-1fdc446deaf1",
+    "workflowId": "T3ZrbPUkqjn5VSLw",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "sendAndWait",
+          "toRecipients": "operations@ashleyandmartin.com.au",
+          "subject": "Automation - KCP Snooze - Missing Email",
+          "message": "=Hi Team,\n\nIn the latest snooze report there was no email for the below user.\n\nPatient Name: {{ $json.Patient_Name }}\nDOB: {{ DateTime.fromISO($json.Patient_Date_Of_Birth).toFormat('dd/MM/yyyy') }}\nDespensed Date: {{ DateTime.fromISO($json.Date_Dispensed).toFormat('dd/MM/yyyy') }}\n\nDr Name: {{ $json.Prescriber_Name }}\n\nRegards,\nAutomation",
+          "responseType": "customForm",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "Does this Patient Require Meds Checked out?",
+                "fieldType": "checkbox",
+                "defaultValue": "Yes",
+                "fieldOptions": {
+                  "values": [
+                    {
+                      "option": "Yes"
+                    },
+                    {
+                      "option": "No"
+                    }
+                  ]
+                },
+                "limitSelection": "exact",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "Patient User Code"
+              }
+            ]
+          },
+          "options": {
+            "limitWaitTime": {
+              "values": {
+                "resumeAmount": 8
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.microsoftOutlook",
+        "typeVersion": 2,
+        "position": [
+          656,
+          0
+        ],
+        "id": "4a5021b8-6b21-4d40-95f7-7661cbae22c0",
+        "name": "Send message and wait for response",
+        "webhookId": "acc3640b-3720-4aa0-a058-9cbf10d0ae01",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "82fb2943-be2d-4c4d-bbee-9f4b8a2e3a4a",
+                "leftValue": "={{ $json.data[\"Does this Patient Require Meds Checked out?\"] }}",
+                "rightValue": "Yes",
+                "operator": {
+                  "type": "array",
+                  "operation": "contains",
+                  "rightType": "any"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1088,
+          -80
+        ],
+        "id": "47e51848-f533-43dc-9e2f-f353f7c10d25",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "inputSource": "jsonExample",
+          "jsonExample": "{\n\"Quantity\": \"380\",\n\"Containers\": \"4\",\n\"Name\": \"A&M MINOXIDIL 5% /TRETINOIN 0.01% TOPICAL SOLUTION  \",\n\"Date_Dispensed\": \"2026-08-10T16:00:00.000+10:00\",\n\"Price\": \"66\",\n\"Date_Created\": \"2026-08-10T06:00:00.000+10:00\",\n\"Patient_Name\": \"Roja Lakshmipathi\",\n\"Patient_ID\": \"86825\",\n\"Patient_Email\": \"\",\n\"Patient_Mobile\": \"\",\n\"Patient_Phone\": \"\",\n\"Patient_Date_Of_Birth\": \"1986-04-05T10:00:00.000+10:00\",\n\"Patient_Address\": \"4 Weatherburn Place\",\n\"Date_Prescribed\": \"2026-08-06T10:00:00.000+10:00\",\n\"Prescriber_ID\": \"4737\",\n\"Prescriber_Name\": \"Mark Liu\",\n\"Order_Total_Price\": \"398.2\",\n\"Order_Account_ID\": \"590\",\n\"status\": \"processing_email\",\n\"Zenoti_ID\": null,\n\"UserCode\": null,\n\"Package_Id\": null,\n\"Product_ID\": null,\n\"Clinic_ID\": null\n}"
+        },
+        "id": "3d7f3ecf-9fea-41cf-b161-a00deb7fed2a",
+        "typeVersion": 1.1,
+        "name": "Start",
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "position": [
+          448,
+          0
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "deleteRows",
+          "dataTableId": {
+            "__rl": true,
+            "value": "AvEFhjvlkb7knN0c",
+            "mode": "list",
+            "cachedResultName": "ausMedOrderExceptions",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/AvEFhjvlkb7knN0c"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Patient_ID",
+                "keyValue": "={{ $('Start').item.json.Patient_ID }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          1312,
+          64
+        ],
+        "id": "cbbdc41b-3d3d-4f2d-aace-51530b8659f5",
+        "name": "Delete row(s)",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "09c373e0-7f5b-4d06-a324-425d9f54e6ff",
+                "leftValue": "={{ $json.data }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "object",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          864,
+          0
+        ],
+        "id": "b2a123c3-364e-4930-9172-81458076300d",
+        "name": "If1"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "dataTableId": {
+            "__rl": true,
+            "value": "AvEFhjvlkb7knN0c",
+            "mode": "list",
+            "cachedResultName": "ausMedOrderExceptions",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/AvEFhjvlkb7knN0c"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Patient_ID",
+                "keyValue": "={{ $json.Patient_ID }}"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "missing_email"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Quantity",
+                "displayName": "Quantity",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Containers",
+                "displayName": "Containers",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Name",
+                "displayName": "Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Date_Dispensed",
+                "displayName": "Date_Dispensed",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Price",
+                "displayName": "Price",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Date_Created",
+                "displayName": "Date_Created",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Patient_Name",
+                "displayName": "Patient_Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Patient_ID",
+                "displayName": "Patient_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Patient_Email",
+                "displayName": "Patient_Email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Patient_Mobile",
+                "displayName": "Patient_Mobile",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Patient_Phone",
+                "displayName": "Patient_Phone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Patient_Date_Of_Birth",
+                "displayName": "Patient_Date_Of_Birth",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Patient_Address",
+                "displayName": "Patient_Address",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Date_Prescribed",
+                "displayName": "Date_Prescribed",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Prescriber_ID",
+                "displayName": "Prescriber_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Prescriber_Name",
+                "displayName": "Prescriber_Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Order_Total_Price",
+                "displayName": "Order_Total_Price",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Order_Account_ID",
+                "displayName": "Order_Account_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          1168,
+          256
+        ],
+        "id": "254bf67e-c697-4ac3-a459-66c03d359f7f",
+        "name": "Missing Email",
+        "disabled": true
+      }
+    ],
+    "connections": {
+      "Send message and wait for response": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Delete row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Start": {
+        "main": [
+          [
+            {
+              "node": "Send message and wait for response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Missing Email",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version ffa459bf",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "ffa459bf-0749-41a4-9575-1fdc446deaf1",
+  "connections": {
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti-GetAuthToken'",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Delete row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Missing Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Zenoti-GetAuthToken'": {
+      "main": [
+        [
+          {
+            "node": "Get Guest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-09-01T07:40:14.426Z",
+  "id": "T3ZrbPUkqjn5VSLw",
+  "isArchived": false,
+  "meta": null,
+  "name": "KCP - Missing Email Resolution",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "toRecipients": "operations@ashleyandmartin.com.au",
+        "subject": "Automation - KCP Snooze - Missing Email",
+        "message": "=Hi Team,\n\nIn the latest snooze report there was no email for the below user.\n\nPatient Name: {{ $json.Patient_Name }}\nDOB: {{ DateTime.fromISO($json.Patient_Date_Of_Birth).toFormat('dd/MM/yyyy') }}\nDespensed Date: {{ DateTime.fromISO($json.Date_Dispensed).toFormat('dd/MM/yyyy') }}\n\nDr Name: {{ $json.Prescriber_Name }}\n\nRegards,\nAutomation",
+        "responseType": "customForm",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Does this Patient Require Meds Checked out?",
+              "fieldType": "checkbox",
+              "defaultValue": "Yes",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Yes"
+                  },
+                  {
+                    "option": "No"
+                  }
+                ]
+              },
+              "limitSelection": "exact",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Patient Guest Code"
+            }
+          ]
+        },
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeAmount": 8
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        656,
+        0
+      ],
+      "id": "4a5021b8-6b21-4d40-95f7-7661cbae22c0",
+      "name": "Send message and wait for response",
+      "webhookId": "acc3640b-3720-4aa0-a058-9cbf10d0ae01",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "82fb2943-be2d-4c4d-bbee-9f4b8a2e3a4a",
+              "leftValue": "={{ $json.data[\"Does this Patient Require Meds Checked out?\"] }}",
+              "rightValue": "Yes",
+              "operator": {
+                "type": "array",
+                "operation": "contains",
+                "rightType": "any"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1088,
+        -80
+      ],
+      "id": "47e51848-f533-43dc-9e2f-f353f7c10d25",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "{\n\"Quantity\": \"380\",\n\"Containers\": \"4\",\n\"Name\": \"A&M MINOXIDIL 5% /TRETINOIN 0.01% TOPICAL SOLUTION  \",\n\"Date_Dispensed\": \"2026-08-10T16:00:00.000+10:00\",\n\"Price\": \"66\",\n\"Date_Created\": \"2026-08-10T06:00:00.000+10:00\",\n\"Patient_Name\": \"Roja Lakshmipathi\",\n\"Patient_ID\": \"86825\",\n\"Patient_Email\": \"\",\n\"Patient_Mobile\": \"\",\n\"Patient_Phone\": \"\",\n\"Patient_Date_Of_Birth\": \"1986-04-05T10:00:00.000+10:00\",\n\"Patient_Address\": \"4 Weatherburn Place\",\n\"Date_Prescribed\": \"2026-08-06T10:00:00.000+10:00\",\n\"Prescriber_ID\": \"4737\",\n\"Prescriber_Name\": \"Mark Liu\",\n\"Order_Total_Price\": \"398.2\",\n\"Order_Account_ID\": \"590\",\n\"status\": \"processing_email\",\n\"Zenoti_ID\": null,\n\"UserCode\": null,\n\"Package_Id\": null,\n\"Product_ID\": null,\n\"Clinic_ID\": null\n}"
+      },
+      "id": "3d7f3ecf-9fea-41cf-b161-a00deb7fed2a",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        448,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "deleteRows",
+        "dataTableId": {
+          "__rl": true,
+          "value": "AvEFhjvlkb7knN0c",
+          "mode": "list",
+          "cachedResultName": "ausMedOrderExceptions",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/AvEFhjvlkb7knN0c"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Patient_ID",
+              "keyValue": "={{ $('Start').item.json.Patient_ID }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1312,
+        64
+      ],
+      "id": "cbbdc41b-3d3d-4f2d-aace-51530b8659f5",
+      "name": "Delete row(s)",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "09c373e0-7f5b-4d06-a324-425d9f54e6ff",
+              "leftValue": "={{ $json.data }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        864,
+        0
+      ],
+      "id": "b2a123c3-364e-4930-9172-81458076300d",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "AvEFhjvlkb7knN0c",
+          "mode": "list",
+          "cachedResultName": "ausMedOrderExceptions",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/AvEFhjvlkb7knN0c"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Patient_ID",
+              "keyValue": "={{ $json.Patient_ID }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "missing_email"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Quantity",
+              "displayName": "Quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Containers",
+              "displayName": "Containers",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date_Dispensed",
+              "displayName": "Date_Dispensed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Price",
+              "displayName": "Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date_Created",
+              "displayName": "Date_Created",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Name",
+              "displayName": "Patient_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_ID",
+              "displayName": "Patient_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Email",
+              "displayName": "Patient_Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Mobile",
+              "displayName": "Patient_Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Phone",
+              "displayName": "Patient_Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Date_Of_Birth",
+              "displayName": "Patient_Date_Of_Birth",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Address",
+              "displayName": "Patient_Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date_Prescribed",
+              "displayName": "Date_Prescribed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Prescriber_ID",
+              "displayName": "Prescriber_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Prescriber_Name",
+              "displayName": "Prescriber_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Order_Total_Price",
+              "displayName": "Order_Total_Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Order_Account_ID",
+              "displayName": "Order_Account_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1168,
+        256
+      ],
+      "id": "254bf67e-c697-4ac3-a459-66c03d359f7f",
+      "name": "Missing Email",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "QA7Qdseg7ehAOWP6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+          "cachedResultName": "Zenoti-GetAuthToken"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1296,
+        -176
+      ],
+      "id": "67b5e5f1-3a87-4073-97a2-b2efd9d60818",
+      "name": "Call 'Zenoti-GetAuthToken'"
+    },
+    {
+      "parameters": {
+        "url": "https://api.zenoti.com/v1/guests/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "user_code",
+              "value": "={{ $json.UserCode }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1552,
+        -176
+      ],
+      "id": "ffa8a3d1-caf3-4673-8cf3-b6b31252903d",
+      "name": "Get Guest"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "Start": [
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 5% /TRETINOIN 0.01% TOPICAL SOLUTION  ",
+          "Date_Dispensed": "2026-08-10T16:00:00.000+10:00",
+          "Price": "66",
+          "Date_Created": "2026-08-10T06:00:00.000+10:00",
+          "Patient_Name": "Roja Lakshmipathi",
+          "Patient_ID": "86825",
+          "Patient_Email": "",
+          "Patient_Mobile": "",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1986-04-05T10:00:00.000+10:00",
+          "Patient_Address": "4 Weatherburn Place",
+          "Date_Prescribed": "2026-08-06T10:00:00.000+10:00",
+          "Prescriber_ID": "4737",
+          "Prescriber_Name": "Mark Liu",
+          "Order_Total_Price": "398.2",
+          "Order_Account_ID": "590",
+          "status": "processing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Send message and wait for response": [
+      {
+        "json": {
+          "data": {
+            "Does this Patient Require Meds Checked out?": [
+              "Yes"
+            ],
+            "Patient User Code": "CBG2927"
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate",
+    "saveDataSuccessExecution": "all"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-09-01T07:40:14.428Z",
+      "createdAt": "2026-09-01T07:40:14.428Z",
+      "role": "workflow:owner",
+      "workflowId": "T3ZrbPUkqjn5VSLw",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-09-02T22:58:36.488Z",
+  "versionId": "b85b925a-081e-4d22-b892-ab9429e66e51"
+}
