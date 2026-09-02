@@ -235,7 +235,7 @@
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": false,
+    "availableInMCP": true,
     "timeSavedMode": "fixed",
     "saveDataSuccessExecution": "all",
     "callerPolicy": "workflowsFromSameOwner"
@@ -252,6 +252,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-06-29T07:02:51.741Z",
+  "updatedAt": "2026-08-26T23:59:05.521Z",
   "versionId": "668cf82f-7bb8-4806-8a79-7a0b05758787"
 }
