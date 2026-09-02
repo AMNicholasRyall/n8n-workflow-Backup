@@ -2213,7 +2213,7 @@
   },
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": false
+    "availableInMCP": true
   },
   "shared": [
     {
@@ -2227,12 +2227,12 @@
   "staticData": {
     "node:Schedule Trigger": {
       "recurrenceRules": [
-        239
+        246
       ]
     }
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-01-08T06:27:10.287Z",
+  "updatedAt": "2026-08-26T23:58:45.376Z",
   "versionId": "6253889b-75c0-476e-944c-c8f25c0efa7a"
 }
