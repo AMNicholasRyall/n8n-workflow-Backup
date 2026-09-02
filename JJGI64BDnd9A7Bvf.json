@@ -1,0 +1,395 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Set to Queued",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set to Queued": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2026-08-31T04:08:45.004Z",
+  "id": "JJGI64BDnd9A7Bvf",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "KCP - Snooze Report Import",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Snooze Report",
+        "formDescription": "Please upload the most recent Snooze report",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Snooze Report",
+              "fieldType": "file"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        -48
+      ],
+      "id": "ba935104-7e00-437f-9080-223907642302",
+      "name": "On form submission",
+      "webhookId": "cd7a9f6d-122b-4233-934f-6abc3e540063"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "binaryPropertyName": "Snooze_Report",
+        "options": {
+          "headerRow": true
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        -48
+      ],
+      "id": "3d04ce2d-18e5-41c2-bddc-62903561de81",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "AvEFhjvlkb7knN0c",
+          "mode": "list",
+          "cachedResultName": "ausMedOrderExceptions",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/AvEFhjvlkb7knN0c"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Patient_ID",
+              "keyValue": "={{ $json['Patient ID'] }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Quantity": "={{ $json.Quantity }}",
+            "Containers": "={{ $json.Containers }}",
+            "Name": "={{ $json.Name }}",
+            "Date_Dispensed": "={{ $json['Date Dispensed'] }}",
+            "Price": "={{ $json.Price }}",
+            "Date_Created": "={{ $json['Date Created'] }}",
+            "Patient_Name": "={{ $json['Patient Name'] }}",
+            "Patient_ID": "={{ $json['Patient ID'] }}",
+            "Patient_Email": "={{ $json['Patient Email'] }}",
+            "Patient_Mobile": "={{ $json['Patient Mobile'] }}",
+            "Patient_Phone": "={{ $json['Patient Phone'] }}",
+            "Patient_Date_Of_Birth": "={{ $json['Patient Date Of Birth'] }}",
+            "Patient_Address": "={{ $json['Patient Address'] }}",
+            "Date_Prescribed": "={{ $json['Date Prescribed'] }}",
+            "Prescriber_ID": "={{ $json['Prescriber ID'] }}",
+            "Prescriber_Name": "={{ $json['Prescriber Name'] }}",
+            "Order_Total_Price": "={{ $json['Order Total Price'] }}",
+            "Order_Account_ID": "={{ $json['Order Account ID'] }}",
+            "status": "queued"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Quantity",
+              "displayName": "Quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Containers",
+              "displayName": "Containers",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Date_Dispensed",
+              "displayName": "Date_Dispensed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Price",
+              "displayName": "Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Date_Created",
+              "displayName": "Date_Created",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Patient_Name",
+              "displayName": "Patient_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Patient_ID",
+              "displayName": "Patient_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Patient_Email",
+              "displayName": "Patient_Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Patient_Mobile",
+              "displayName": "Patient_Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Patient_Phone",
+              "displayName": "Patient_Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Patient_Date_Of_Birth",
+              "displayName": "Patient_Date_Of_Birth",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Patient_Address",
+              "displayName": "Patient_Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Date_Prescribed",
+              "displayName": "Date_Prescribed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Prescriber_ID",
+              "displayName": "Prescriber_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Prescriber_Name",
+              "displayName": "Prescriber_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Order_Total_Price",
+              "displayName": "Order_Total_Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Order_Account_ID",
+              "displayName": "Order_Account_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        -48
+      ],
+      "id": "5871d479-8852-4860-a05c-845438336c64",
+      "name": "Set to Queued"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Snooze Report": [
+            {
+              "filename": "SNOOZE_Export_10_Aug_2026 1.xlsx",
+              "mimetype": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+              "size": 15431
+            }
+          ],
+          "submittedAt": "2026-08-31T12:10:40.618+08:00",
+          "formMode": "test"
+        },
+        "binary": {
+          "Snooze_Report": {
+            "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "fileExtension": "xlsx",
+            "data": "filesystem-v2",
+            "fileName": "SNOOZE_Export_10_Aug_2026 1.xlsx",
+            "id": "filesystem-v2:workflows/JJGI64BDnd9A7Bvf/executions/temp/binary_data/0cd19e3a-1bd8-4535-8e63-5fe795ae91b0",
+            "fileSize": "15.4 kB",
+            "bytes": 15431
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-08-31T04:08:45.005Z",
+      "createdAt": "2026-08-31T04:08:45.005Z",
+      "role": "workflow:owner",
+      "workflowId": "JJGI64BDnd9A7Bvf",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2026-08-31T05:04:35.378Z",
+      "createdAt": "2026-08-31T05:04:35.378Z",
+      "id": "yiQDDYkINJVRH87h",
+      "name": "KCP"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-09-02T01:00:27.474Z",
+  "versionId": "3683fc7e-8352-4853-9b64-844b99376a4c"
+}
