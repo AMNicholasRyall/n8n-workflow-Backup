@@ -275,7 +275,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"guest_id\": \"{{ $('Loop Over Items').item.json.Zenoti_ID }}\",\n  \"center_id\": \"{{ $('Loop Over Items').item.json.Clinic_ID }}\",\n  \"created_by_id\": \"83de2399-ca55-455b-a812-0336d956188d\",\n  \"notes\": \"remaining medication ordered on {{ $today.toFormat('dd/MM/yyyy') }}\",\n  \"products\": [\n    {\n      \"id\": \"{{ $('Get row(s)').item.json.Zenoti_ID }}\",\n      \"quantity\": {{ $('Loop Over Items').item.json.Containers }},\n      \"sale_by_id\": \"83de2399-ca55-455b-a812-0336d956188d\"\n    }\n  ]\n}",
+        "jsonBody": "={\n  \"guest_id\": \"{{ $('Loop Over Items').item.json.Zenoti_ID }}\",\n  \"center_id\": \"{{ $('Loop Over Items').item.json.Clinic_ID }}\",\n  \"created_by_id\": \"51d833a0-5195-464c-8caa-cc620625177f\",\n  \"notes\": \"remaining medication ordered on {{ $today.toFormat('dd/MM/yyyy') }}\",\n  \"products\": [\n    {\n      \"id\": \"{{ $('Get row(s)').item.json.Zenoti_ID }}\",\n      \"quantity\": {{ $('Loop Over Items').item.json.Containers }},\n      \"sale_by_id\": \"51d833a0-5195-464c-8caa-cc620625177f\"\n    }\n  ]\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -729,7 +729,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"guest_id\": \"{{ $('Loop Over Items').item.json.Zenoti_ID }}\",\n  \"center_id\": \"{{ $('Loop Over Items').item.json.Clinic_ID }}\",\n  \"created_by_id\": \"83de2399-ca55-455b-a812-0336d956188d\",\n  \"notes\": \"AutomationGenerated\",\n  \"products\": [\n    {\n      \"id\": \"f4d64efb-d50f-481a-95c9-f547604a48d5\",\n      \"quantity\": 1,\n      \"sale_by_id\": \"83de2399-ca55-455b-a812-0336d956188d\"\n    }\n  ]\n}",
+        "jsonBody": "={\n  \"guest_id\": \"{{ $('Loop Over Items').item.json.Zenoti_ID }}\",\n  \"center_id\": \"{{ $('Loop Over Items').item.json.Clinic_ID }}\",\n  \"created_by_id\": \"51d833a0-5195-464c-8caa-cc620625177f\",\n  \"notes\": \"AutomationGenerated\",\n  \"products\": [\n    {\n      \"id\": \"f4d64efb-d50f-481a-95c9-f547604a48d5\",\n      \"quantity\": 1,\n      \"sale_by_id\": \"51d833a0-5195-464c-8caa-cc620625177f\"\n    }\n  ]\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -829,6 +829,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-09-02T05:50:12.375Z",
-  "versionId": "9fdf64a7-39e5-42ed-b3c3-eef6e5f678cd"
+  "updatedAt": "2026-09-03T01:56:50.214Z",
+  "versionId": "d834107c-da4f-4c0c-b21a-3b3548166fcb"
 }
