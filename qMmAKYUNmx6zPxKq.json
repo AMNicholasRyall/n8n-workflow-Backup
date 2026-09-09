@@ -29,7 +29,41 @@
       "main": [
         [
           {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
             "node": "Call KCP - Missing Email Resolution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call KCP - Missing Email Resolution": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
@@ -50,8 +84,8 @@
         "rule": {
           "interval": [
             {
-              "field": "minutes",
-              "minutesInterval": 30
+              "field": "cronExpression",
+              "expression": "15 7-15 * * 1-5"
             }
           ]
         }
@@ -615,11 +649,36 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        640,
-        0
+        1072,
+        96
       ],
       "name": "Call KCP - Missing Email Resolution",
       "id": "402d2574-f652-4196-a7a1-446d291c5d87"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        624,
+        0
+      ],
+      "id": "9437b7e0-15da-4417-8007-e55c25899996",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        832,
+        32
+      ],
+      "id": "7abcea73-d5d2-4cd2-9e3d-04314c34f70e",
+      "name": "Wait",
+      "webhookId": "cd4a2f2d-310d-4b21-8945-0f1f25c8874e"
     }
   ],
   "origin": "n8n",
@@ -629,22 +688,192 @@
         "json": {
           "Quantity": "380",
           "Containers": "4",
-          "Name": "A&M MINOXIDIL 5% /TRETINOIN 0.01% TOPICAL SOLUTION  ",
-          "Date_Dispensed": "2026-08-10T16:00:00.000+10:00",
-          "Price": "66",
-          "Date_Created": "2026-08-10T06:00:00.000+10:00",
-          "Patient_Name": "Roja Lakshmipathi",
-          "Patient_ID": "86825",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-08T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-08T06:00:00.000+10:00",
+          "Patient_Name": "Jahrome Stott",
+          "Patient_ID": "85592",
           "Patient_Email": "",
-          "Patient_Mobile": "",
+          "Patient_Mobile": "422786753",
           "Patient_Phone": "",
-          "Patient_Date_Of_Birth": "1986-04-05T10:00:00.000+10:00",
-          "Patient_Address": "4 Weatherburn Place",
-          "Date_Prescribed": "2026-08-06T10:00:00.000+10:00",
-          "Prescriber_ID": "4737",
-          "Prescriber_Name": "Mark Liu",
-          "Order_Total_Price": "398.2",
-          "Order_Account_ID": "590",
+          "Patient_Date_Of_Birth": "2007-08-10T10:00:00.000+10:00",
+          "Patient_Address": "12 Lullworth St",
+          "Date_Prescribed": "2026-07-08",
+          "Prescriber_ID": "3471",
+          "Prescriber_Name": "Karen Schwartz",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 5,
+          "createdAt": "2026-09-06T23:29:55.696Z",
+          "updatedAt": "2026-09-06T23:39:32.120Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-08T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-08T06:00:00.000+10:00",
+          "Patient_Name": "Stefan Litinakis",
+          "Patient_ID": "85591",
+          "Patient_Email": "",
+          "Patient_Mobile": "402548492",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1984-05-09T10:00:00.000+10:00",
+          "Patient_Address": "",
+          "Date_Prescribed": "2026-07-08",
+          "Prescriber_ID": "4722",
+          "Prescriber_Name": "Elissa Stafford",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 6,
+          "createdAt": "2026-09-06T23:29:55.753Z",
+          "updatedAt": "2026-09-06T23:39:32.171Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-08T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-08T06:00:00.000+10:00",
+          "Patient_Name": "Michael Barrett-Berg",
+          "Patient_ID": "85590",
+          "Patient_Email": "",
+          "Patient_Mobile": "421838857",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1983-01-02T10:00:00.000+10:00",
+          "Patient_Address": "126a Abbott St",
+          "Date_Prescribed": "2026-07-08",
+          "Prescriber_ID": "4722",
+          "Prescriber_Name": "Elissa Stafford",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 7,
+          "createdAt": "2026-09-06T23:29:55.808Z",
+          "updatedAt": "2026-09-06T23:39:32.221Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-08T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-08T06:00:00.000+10:00",
+          "Patient_Name": "Khalide Ahmed",
+          "Patient_ID": "85589",
+          "Patient_Email": "",
+          "Patient_Mobile": "405349298",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "2003-12-07T10:00:00.000+10:00",
+          "Patient_Address": "205/60 Victoria St",
+          "Date_Prescribed": "2026-07-08",
+          "Prescriber_ID": "4722",
+          "Prescriber_Name": "Elissa Stafford",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 8,
+          "createdAt": "2026-09-06T23:29:55.864Z",
+          "updatedAt": "2026-09-06T23:39:32.274Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-08T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-08T06:00:00.000+10:00",
+          "Patient_Name": "Quintin Eves",
+          "Patient_ID": "85588",
+          "Patient_Email": "",
+          "Patient_Mobile": "420800738",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1998-07-31T10:00:00.000+10:00",
+          "Patient_Address": "103/33 Thornton Street",
+          "Date_Prescribed": "2026-07-08",
+          "Prescriber_ID": "4721",
+          "Prescriber_Name": "Matthew Gibson",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 9,
+          "createdAt": "2026-09-06T23:29:55.927Z",
+          "updatedAt": "2026-09-06T23:39:32.326Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 5% /TRETINOIN 0.01% TOPICAL SOLUTION  ",
+          "Date_Dispensed": "2026-12-08T16:00:00.000+10:00",
+          "Price": "66",
+          "Date_Created": "2026-12-08T06:00:00.000+10:00",
+          "Patient_Name": "Lisa Krusvar",
+          "Patient_ID": "85587",
+          "Patient_Email": "",
+          "Patient_Mobile": "402349607",
+          "Patient_Phone": "402349607",
+          "Patient_Date_Of_Birth": "1970-11-09T10:00:00.000+10:00",
+          "Patient_Address": "14 Samoa Court",
+          "Date_Prescribed": "2026-07-08",
+          "Prescriber_ID": "4721",
+          "Prescriber_Name": "Matthew Gibson",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
           "status": "missing_email",
           "Zenoti_ID": null,
           "UserCode": null,
@@ -652,8 +881,8 @@
           "Product_ID": null,
           "Clinic_ID": null,
           "id": 10,
-          "createdAt": "2026-08-31T05:06:07.529Z",
-          "updatedAt": "2026-09-01T04:31:33.528Z"
+          "createdAt": "2026-09-06T23:29:55.982Z",
+          "updatedAt": "2026-09-06T23:39:32.377Z"
         },
         "pairedItem": {
           "item": 0
@@ -664,21 +893,361 @@
           "Quantity": "380",
           "Containers": "4",
           "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
-          "Date_Dispensed": "2026-08-10T16:00:00.000+10:00",
+          "Date_Dispensed": "2026-12-08T16:00:00.000+10:00",
           "Price": "74",
-          "Date_Created": "2026-08-10T06:00:00.000+10:00",
-          "Patient_Name": "Jason Rolander",
-          "Patient_ID": "86817",
+          "Date_Created": "2026-12-08T06:00:00.000+10:00",
+          "Patient_Name": "Chris Paul",
+          "Patient_ID": "85586",
+          "Patient_Email": "",
+          "Patient_Mobile": "423675679",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1991-02-10T11:00:00.000+11:00",
+          "Patient_Address": "1/4 Karri Court",
+          "Date_Prescribed": "2026-07-08",
+          "Prescriber_ID": "4721",
+          "Prescriber_Name": "Matthew Gibson",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 11,
+          "createdAt": "2026-09-06T23:29:56.038Z",
+          "updatedAt": "2026-09-06T23:39:32.427Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Mohammad Rezaee",
+          "Patient_ID": "85769",
+          "Patient_Email": "",
+          "Patient_Mobile": "421448109",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1980-01-01T10:00:00.000+10:00",
+          "Patient_Address": "87 Isabella Street North Parramatta 2151",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4718",
+          "Prescriber_Name": "Cynthia Boudeville",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 12,
+          "createdAt": "2026-09-06T23:29:56.093Z",
+          "updatedAt": "2026-09-06T23:39:32.481Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Osman Korkmazlar",
+          "Patient_ID": "85768",
+          "Patient_Email": "",
+          "Patient_Mobile": "404181522",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "2003-01-10T10:00:00.000+10:00",
+          "Patient_Address": "88a Mary Street",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "3471",
+          "Prescriber_Name": "Karen Schwartz",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 13,
+          "createdAt": "2026-09-06T23:29:56.157Z",
+          "updatedAt": "2026-09-06T23:39:32.532Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Jack Ritchie",
+          "Patient_ID": "85766",
+          "Patient_Email": "",
+          "Patient_Mobile": "448332044",
+          "Patient_Phone": "448332044",
+          "Patient_Date_Of_Birth": "1998-12-08T10:00:00.000+10:00",
+          "Patient_Address": "",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4718",
+          "Prescriber_Name": "Cynthia Boudeville",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 15,
+          "createdAt": "2026-09-06T23:29:56.274Z",
+          "updatedAt": "2026-09-06T23:39:32.584Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Warren Miranda",
+          "Patient_ID": "85765",
+          "Patient_Email": "",
+          "Patient_Mobile": "414014162",
+          "Patient_Phone": "414014162",
+          "Patient_Date_Of_Birth": "1978-07-02T10:00:00.000+10:00",
+          "Patient_Address": "",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4718",
+          "Prescriber_Name": "Cynthia Boudeville",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 16,
+          "createdAt": "2026-09-06T23:29:56.346Z",
+          "updatedAt": "2026-09-06T23:39:32.636Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Naser Naser",
+          "Patient_ID": "85764",
           "Patient_Email": "",
           "Patient_Mobile": "",
           "Patient_Phone": "",
-          "Patient_Date_Of_Birth": "",
-          "Patient_Address": "123/97 Bonar Street",
-          "Date_Prescribed": "2026-08-06T10:00:00.000+10:00",
-          "Prescriber_ID": "4757",
-          "Prescriber_Name": "Michael Tjoa",
-          "Order_Total_Price": "162.8",
-          "Order_Account_ID": "595",
+          "Patient_Date_Of_Birth": "2000-02-10T10:00:00.000+10:00",
+          "Patient_Address": "",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4718",
+          "Prescriber_Name": "Cynthia Boudeville",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 17,
+          "createdAt": "2026-09-06T23:29:56.418Z",
+          "updatedAt": "2026-09-06T23:39:32.690Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Sahil Desai",
+          "Patient_ID": "85763",
+          "Patient_Email": "",
+          "Patient_Mobile": "469305286",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "2006-05-20T10:00:00.000+10:00",
+          "Patient_Address": "20 Mosley Crescent",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4718",
+          "Prescriber_Name": "Cynthia Boudeville",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 18,
+          "createdAt": "2026-09-06T23:29:56.480Z",
+          "updatedAt": "2026-09-06T23:39:32.743Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Daniel Abbasszadeh",
+          "Patient_ID": "85762",
+          "Patient_Email": "",
+          "Patient_Mobile": "466593926",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "2002-12-18T10:00:00.000+10:00",
+          "Patient_Address": "37 Garrisson Drive",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4718",
+          "Prescriber_Name": "Cynthia Boudeville",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 19,
+          "createdAt": "2026-09-06T23:29:56.536Z",
+          "updatedAt": "2026-09-06T23:39:32.798Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Mohammad Shah Zahidi",
+          "Patient_ID": "85761",
+          "Patient_Email": "",
+          "Patient_Mobile": "450986480",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "2006-03-21T10:00:00.000+10:00",
+          "Patient_Address": "40 De Villiers Drive",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4718",
+          "Prescriber_Name": "Cynthia Boudeville",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 20,
+          "createdAt": "2026-09-06T23:29:56.594Z",
+          "updatedAt": "2026-09-06T23:39:32.849Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Konstantinos Tsetsos",
+          "Patient_ID": "85760",
+          "Patient_Email": "",
+          "Patient_Mobile": "416034176",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1986-03-13T10:00:00.000+10:00",
+          "Patient_Address": "5 Melba Ct",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4718",
+          "Prescriber_Name": "Cynthia Boudeville",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 21,
+          "createdAt": "2026-09-06T23:29:56.648Z",
+          "updatedAt": "2026-09-06T23:39:32.900Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Jason Smedley",
+          "Patient_ID": "85759",
+          "Patient_Email": "",
+          "Patient_Mobile": "422228909",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1994-06-16T10:00:00.000+10:00",
+          "Patient_Address": "11 Peppermint Court",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4718",
+          "Prescriber_Name": "Cynthia Boudeville",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
           "status": "missing_email",
           "Zenoti_ID": null,
           "UserCode": null,
@@ -686,8 +1255,8 @@
           "Product_ID": null,
           "Clinic_ID": null,
           "id": 22,
-          "createdAt": "2026-08-31T05:06:08.172Z",
-          "updatedAt": "2026-09-01T04:31:33.580Z"
+          "createdAt": "2026-09-06T23:29:56.706Z",
+          "updatedAt": "2026-09-06T23:39:32.949Z"
         },
         "pairedItem": {
           "item": 0
@@ -698,21 +1267,21 @@
           "Quantity": "380",
           "Containers": "4",
           "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
-          "Date_Dispensed": "2026-08-10T16:00:00.000+10:00",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
           "Price": "74",
-          "Date_Created": "2026-08-10T06:00:00.000+10:00",
-          "Patient_Name": "Manoj Kumar",
-          "Patient_ID": "86820",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Zach Rogers",
+          "Patient_ID": "85758",
           "Patient_Email": "",
-          "Patient_Mobile": "",
+          "Patient_Mobile": "434258523",
           "Patient_Phone": "",
-          "Patient_Date_Of_Birth": "1996-10-08T10:00:00.000+10:00",
-          "Patient_Address": "2501/420 Macquarie Street",
-          "Date_Prescribed": "2026-08-06T10:00:00.000+10:00",
-          "Prescriber_ID": "4757",
-          "Prescriber_Name": "Michael Tjoa",
-          "Order_Total_Price": "162.8",
-          "Order_Account_ID": "595",
+          "Patient_Date_Of_Birth": "1996-07-08T10:00:00.000+10:00",
+          "Patient_Address": "2 / 167 Lyrebird Dr",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4718",
+          "Prescriber_Name": "Cynthia Boudeville",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
           "status": "missing_email",
           "Zenoti_ID": null,
           "UserCode": null,
@@ -720,8 +1289,42 @@
           "Product_ID": null,
           "Clinic_ID": null,
           "id": 23,
-          "createdAt": "2026-08-31T05:06:08.224Z",
-          "updatedAt": "2026-09-01T04:31:33.632Z"
+          "createdAt": "2026-09-06T23:29:56.760Z",
+          "updatedAt": "2026-09-06T23:39:33.001Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Tony Giorgio",
+          "Patient_ID": "85756",
+          "Patient_Email": "",
+          "Patient_Mobile": "",
+          "Patient_Phone": "404001628",
+          "Patient_Date_Of_Birth": "1979-03-17T10:00:00.000+10:00",
+          "Patient_Address": "Gmr Automative, Unit 2/44 Aerodrome Road,",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4737",
+          "Prescriber_Name": "Mark Liu",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 24,
+          "createdAt": "2026-09-06T23:29:56.818Z",
+          "updatedAt": "2026-09-06T23:39:33.054Z"
         },
         "pairedItem": {
           "item": 0
@@ -732,21 +1335,225 @@
           "Quantity": "380",
           "Containers": "4",
           "Name": "A&M MINOXIDIL 5% /TRETINOIN 0.01% TOPICAL SOLUTION  ",
-          "Date_Dispensed": "2026-08-10T16:00:00.000+10:00",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
           "Price": "66",
-          "Date_Created": "2026-08-10T06:00:00.000+10:00",
-          "Patient_Name": "Archana Raviyappan",
-          "Patient_ID": "86816",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Namratha Ganapathi",
+          "Patient_ID": "85755",
           "Patient_Email": "",
           "Patient_Mobile": "",
           "Patient_Phone": "",
-          "Patient_Date_Of_Birth": "",
-          "Patient_Address": "3 Pilgrim Street",
-          "Date_Prescribed": "2026-08-06T10:00:00.000+10:00",
-          "Prescriber_ID": "4749",
-          "Prescriber_Name": "Karen Schwartz",
-          "Order_Total_Price": "239.8",
-          "Order_Account_ID": "599",
+          "Patient_Date_Of_Birth": "1997-05-22T10:00:00.000+10:00",
+          "Patient_Address": "43/78 Merivale Street",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4737",
+          "Prescriber_Name": "Mark Liu",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 25,
+          "createdAt": "2026-09-06T23:29:56.875Z",
+          "updatedAt": "2026-09-06T23:39:33.104Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Marty McGrath",
+          "Patient_ID": "85754",
+          "Patient_Email": "",
+          "Patient_Mobile": "",
+          "Patient_Phone": "436320006",
+          "Patient_Date_Of_Birth": "2003-03-13T10:00:00.000+10:00",
+          "Patient_Address": "3052 Lachlan Valley Way, Boorowa 2586",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4737",
+          "Prescriber_Name": "Mark Liu",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 26,
+          "createdAt": "2026-09-06T23:29:56.930Z",
+          "updatedAt": "2026-09-06T23:39:33.155Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Jeremy Bechtel",
+          "Patient_ID": "85753",
+          "Patient_Email": "",
+          "Patient_Mobile": "413379631",
+          "Patient_Phone": "413379631",
+          "Patient_Date_Of_Birth": "1983-08-31T10:00:00.000+10:00",
+          "Patient_Address": "33 Freebury St",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4737",
+          "Prescriber_Name": "Mark Liu",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 27,
+          "createdAt": "2026-09-06T23:29:56.989Z",
+          "updatedAt": "2026-09-06T23:39:33.208Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Harrison Ashley",
+          "Patient_ID": "85752",
+          "Patient_Email": "",
+          "Patient_Mobile": "431494312",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "2000-04-24T10:00:00.000+10:00",
+          "Patient_Address": "5/1 Jubilee Street",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4737",
+          "Prescriber_Name": "Mark Liu",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 28,
+          "createdAt": "2026-09-06T23:29:57.051Z",
+          "updatedAt": "2026-09-06T23:39:33.260Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Dharmit Upadhyaya",
+          "Patient_ID": "85751",
+          "Patient_Email": "",
+          "Patient_Mobile": "433468490",
+          "Patient_Phone": "433468490",
+          "Patient_Date_Of_Birth": "1980-09-19T10:00:00.000+10:00",
+          "Patient_Address": "26 Crone Terrace",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4737",
+          "Prescriber_Name": "Mark Liu",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 29,
+          "createdAt": "2026-09-06T23:29:57.111Z",
+          "updatedAt": "2026-09-06T23:39:33.315Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Ashley Byers",
+          "Patient_ID": "85749",
+          "Patient_Email": "",
+          "Patient_Mobile": "",
+          "Patient_Phone": "488291195",
+          "Patient_Date_Of_Birth": "1993-12-15T10:00:00.000+10:00",
+          "Patient_Address": "5003/43 Hershel Street",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4737",
+          "Prescriber_Name": "Mark Liu",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 30,
+          "createdAt": "2026-09-06T23:29:57.169Z",
+          "updatedAt": "2026-09-06T23:39:33.368Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Juan Rozo",
+          "Patient_ID": "85748",
+          "Patient_Email": "",
+          "Patient_Mobile": "",
+          "Patient_Phone": "426081319",
+          "Patient_Date_Of_Birth": "1989-12-14T11:00:00.000+11:00",
+          "Patient_Address": "63 Douglas Street",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4737",
+          "Prescriber_Name": "Mark Liu",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
           "status": "missing_email",
           "Zenoti_ID": null,
           "UserCode": null,
@@ -754,8 +1561,586 @@
           "Product_ID": null,
           "Clinic_ID": null,
           "id": 31,
-          "createdAt": "2026-08-31T05:06:08.648Z",
-          "updatedAt": "2026-09-01T04:31:33.700Z"
+          "createdAt": "2026-09-06T23:29:57.230Z",
+          "updatedAt": "2026-09-06T23:39:33.419Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Alex Ricks",
+          "Patient_ID": "85747",
+          "Patient_Email": "",
+          "Patient_Mobile": "",
+          "Patient_Phone": "416856788",
+          "Patient_Date_Of_Birth": "2004-10-29T10:00:00.000+10:00",
+          "Patient_Address": "15 Dennis Place",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4737",
+          "Prescriber_Name": "Mark Liu",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 32,
+          "createdAt": "2026-09-06T23:29:57.284Z",
+          "updatedAt": "2026-09-06T23:39:33.470Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Ridmikav Mallawarachchi",
+          "Patient_ID": "85745",
+          "Patient_Email": "",
+          "Patient_Mobile": "433600019",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1980-10-08T10:00:00.000+10:00",
+          "Patient_Address": "706,112 South Terrace",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4723",
+          "Prescriber_Name": "Caroline Phegan",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 33,
+          "createdAt": "2026-09-06T23:29:57.339Z",
+          "updatedAt": "2026-09-06T23:39:33.520Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Peter Terminello",
+          "Patient_ID": "85743",
+          "Patient_Email": "",
+          "Patient_Mobile": "423053937",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1995-10-21T10:00:00.000+10:00",
+          "Patient_Address": "13 Chaliapin Street",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4723",
+          "Prescriber_Name": "Caroline Phegan",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 34,
+          "createdAt": "2026-09-06T23:29:57.395Z",
+          "updatedAt": "2026-09-06T23:39:33.574Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% /TRETINOIN 0.01% TOPICAL SOLUTION  ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "70",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Jonathan Dimian",
+          "Patient_ID": "85744",
+          "Patient_Email": "",
+          "Patient_Mobile": "416713296",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "2000-12-26T10:00:00.000+10:00",
+          "Patient_Address": "1 Salisbury Avenue",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4723",
+          "Prescriber_Name": "Caroline Phegan",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 35,
+          "createdAt": "2026-09-06T23:29:57.450Z",
+          "updatedAt": "2026-09-06T23:39:33.625Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% /TRETINOIN 0.01% TOPICAL SOLUTION  ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "70",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Jack Harris",
+          "Patient_ID": "85593",
+          "Patient_Email": "",
+          "Patient_Mobile": "417889572",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "2004-10-08T10:00:00.000+10:00",
+          "Patient_Address": "753 Church Road",
+          "Date_Prescribed": "2026-07-08",
+          "Prescriber_ID": "4723",
+          "Prescriber_Name": "Caroline Phegan",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 36,
+          "createdAt": "2026-09-06T23:29:57.510Z",
+          "updatedAt": "2026-09-06T23:39:33.677Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% /TRETINOIN 0.01% TOPICAL SOLUTION  ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "70",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Brandon Lee",
+          "Patient_ID": "85750",
+          "Patient_Email": "",
+          "Patient_Mobile": "481999789",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1994-03-26T10:00:00.000+10:00",
+          "Patient_Address": "30 Radius St",
+          "Date_Prescribed": "2026-07-13",
+          "Prescriber_ID": "4737",
+          "Prescriber_Name": "Mark Liu",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 37,
+          "createdAt": "2026-09-06T23:29:57.566Z",
+          "updatedAt": "2026-09-06T23:39:33.728Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "95",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-15T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-15T06:00:00.000+10:00",
+          "Patient_Name": "Liam Pirie",
+          "Patient_ID": "85861",
+          "Patient_Email": "",
+          "Patient_Mobile": "491249677",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "2001-07-10T10:00:00.000+10:00",
+          "Patient_Address": "2/8 Waldheim Road",
+          "Date_Prescribed": "2026-07-15",
+          "Prescriber_ID": "4718",
+          "Prescriber_Name": "Cynthia Boudeville",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 38,
+          "createdAt": "2026-09-06T23:29:57.621Z",
+          "updatedAt": "2026-09-06T23:39:33.781Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-15T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-15T06:00:00.000+10:00",
+          "Patient_Name": "Malcolm Cooper",
+          "Patient_ID": "85863",
+          "Patient_Email": "",
+          "Patient_Mobile": "478522350",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1977-04-28T10:00:00.000+10:00",
+          "Patient_Address": "12 Waterside Dr",
+          "Date_Prescribed": "2026-07-15",
+          "Prescriber_ID": "4718",
+          "Prescriber_Name": "Cynthia Boudeville",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 39,
+          "createdAt": "2026-09-06T23:29:57.674Z",
+          "updatedAt": "2026-09-06T23:39:33.838Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-15T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-15T06:00:00.000+10:00",
+          "Patient_Name": "Ezra De Smit",
+          "Patient_ID": "85864",
+          "Patient_Email": "",
+          "Patient_Mobile": "466879503",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1999-12-12T10:00:00.000+10:00",
+          "Patient_Address": "5 Middlesex Court",
+          "Date_Prescribed": "2026-07-15",
+          "Prescriber_ID": "4718",
+          "Prescriber_Name": "Cynthia Boudeville",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 40,
+          "createdAt": "2026-09-06T23:29:57.733Z",
+          "updatedAt": "2026-09-06T23:39:33.891Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-15T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-15T06:00:00.000+10:00",
+          "Patient_Name": "Sampath Prasad Adhikari Adhikari Arachchige",
+          "Patient_ID": "85866",
+          "Patient_Email": "",
+          "Patient_Mobile": "449995275",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1992-09-11T10:00:00.000+10:00",
+          "Patient_Address": "57 Carbeen Drive",
+          "Date_Prescribed": "2026-07-15",
+          "Prescriber_ID": "4718",
+          "Prescriber_Name": "Cynthia Boudeville",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 41,
+          "createdAt": "2026-09-06T23:29:57.796Z",
+          "updatedAt": "2026-09-06T23:39:33.939Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-15T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-15T06:00:00.000+10:00",
+          "Patient_Name": "Bahnam Habash",
+          "Patient_ID": "85867",
+          "Patient_Email": "",
+          "Patient_Mobile": "492950260",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "2004-07-22T10:00:00.000+10:00",
+          "Patient_Address": "Unit 2",
+          "Date_Prescribed": "2026-07-15",
+          "Prescriber_ID": "4718",
+          "Prescriber_Name": "Cynthia Boudeville",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 42,
+          "createdAt": "2026-09-06T23:29:57.854Z",
+          "updatedAt": "2026-09-06T23:39:33.989Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-15T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-15T06:00:00.000+10:00",
+          "Patient_Name": "Marcus Georgilopoulos",
+          "Patient_ID": "85871",
+          "Patient_Email": "",
+          "Patient_Mobile": "",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "2006-12-14T10:00:00.000+10:00",
+          "Patient_Address": "267 Monaco Street",
+          "Date_Prescribed": "2026-07-15",
+          "Prescriber_ID": "4721",
+          "Prescriber_Name": "Matthew Gibson",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 43,
+          "createdAt": "2026-09-06T23:29:57.909Z",
+          "updatedAt": "2026-09-06T23:39:34.041Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-15T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-15T06:00:00.000+10:00",
+          "Patient_Name": "Nicholas Vasta",
+          "Patient_ID": "85937",
+          "Patient_Email": "",
+          "Patient_Mobile": "490662518",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "2002-12-18T10:00:00.000+10:00",
+          "Patient_Address": "205 Mulhollands Road",
+          "Date_Prescribed": "2026-07-16",
+          "Prescriber_ID": "3471",
+          "Prescriber_Name": "Karen Schwartz",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 44,
+          "createdAt": "2026-09-06T23:29:57.967Z",
+          "updatedAt": "2026-09-06T23:39:34.090Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M (PG FREE)  MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION  ",
+          "Date_Dispensed": "2026-12-15T16:00:00.000+10:00",
+          "Price": "78",
+          "Date_Created": "2026-12-15T06:00:00.000+10:00",
+          "Patient_Name": "Yusuf Demir",
+          "Patient_ID": "85938",
+          "Patient_Email": "",
+          "Patient_Mobile": "494304651",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "2000-02-02T10:00:00.000+10:00",
+          "Patient_Address": "Unit 110/1-9 Marian St",
+          "Date_Prescribed": "2026-07-16",
+          "Prescriber_ID": "4749",
+          "Prescriber_Name": "Karen Schwartz",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 45,
+          "createdAt": "2026-09-06T23:29:58.027Z",
+          "updatedAt": "2026-09-06T23:39:34.140Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-15T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-15T06:00:00.000+10:00",
+          "Patient_Name": "Todd Greenland",
+          "Patient_ID": "85939",
+          "Patient_Email": "",
+          "Patient_Mobile": "411554146",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "1979-10-25T10:00:00.000+10:00",
+          "Patient_Address": "59 Tristania Street",
+          "Date_Prescribed": "2026-07-16",
+          "Prescriber_ID": "3471",
+          "Prescriber_Name": "Karen Schwartz",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 46,
+          "createdAt": "2026-09-06T23:29:58.084Z",
+          "updatedAt": "2026-09-06T23:39:34.190Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% /TRETINOIN 0.01% TOPICAL SOLUTION  ",
+          "Date_Dispensed": "2026-12-15T16:00:00.000+10:00",
+          "Price": "70",
+          "Date_Created": "2026-12-15T06:00:00.000+10:00",
+          "Patient_Name": "Nathan Lust",
+          "Patient_ID": "85870",
+          "Patient_Email": "",
+          "Patient_Mobile": "468832213",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "2001-02-10T10:00:00.000+10:00",
+          "Patient_Address": "41405/2 Capital Court",
+          "Date_Prescribed": "2026-07-15",
+          "Prescriber_ID": "4721",
+          "Prescriber_Name": "Matthew Gibson",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 47,
+          "createdAt": "2026-09-06T23:29:58.140Z",
+          "updatedAt": "2026-09-06T23:39:34.243Z"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "Quantity": "380",
+          "Containers": "4",
+          "Name": "A&M MINOXIDIL 7% / FINASTERIDE 0.25% / TRETINOIN 0.01% TOPICAL SOLUTION ",
+          "Date_Dispensed": "2026-12-13T16:00:00.000+10:00",
+          "Price": "74",
+          "Date_Created": "2026-12-13T06:00:00.000+10:00",
+          "Patient_Name": "Asad Nadeem",
+          "Patient_ID": "85865",
+          "Patient_Email": "",
+          "Patient_Mobile": "432075771",
+          "Patient_Phone": "",
+          "Patient_Date_Of_Birth": "2003-07-11T10:00:00.000+10:00",
+          "Patient_Address": "44 Brighton Ave",
+          "Date_Prescribed": "2026-07-15",
+          "Prescriber_ID": "4718",
+          "Prescriber_Name": "Cynthia Boudeville",
+          "Order_Total_Price": "",
+          "Order_Account_ID": "",
+          "status": "missing_email",
+          "Zenoti_ID": null,
+          "UserCode": null,
+          "Package_Id": null,
+          "Product_ID": null,
+          "Clinic_ID": null,
+          "id": 48,
+          "createdAt": "2026-09-06T23:29:58.201Z",
+          "updatedAt": "2026-09-06T23:39:34.293Z"
         },
         "pairedItem": {
           "item": 0
@@ -770,7 +2155,10 @@
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "callerPolicy": "workflowsFromSameOwner"
   },
   "shared": [
     {
@@ -781,7 +2169,11 @@
       "projectId": "gMwV5v9nxJB6matq"
     }
   ],
-  "staticData": null,
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
   "tags": [
     {
       "updatedAt": "2026-08-31T05:04:35.378Z",
@@ -790,7 +2182,7 @@
       "name": "KCP"
     }
   ],
-  "triggerCount": 0,
-  "updatedAt": "2026-09-01T07:47:43.732Z",
-  "versionId": "4f1328da-a54d-49b4-9781-7a4f9c985d8d"
+  "triggerCount": 1,
+  "updatedAt": "2026-09-07T02:25:59.000Z",
+  "versionId": "9982509d-7d37-4fdb-a074-4d2f5b7189b0"
 }
