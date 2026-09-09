@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-09-02T06:49:43.000Z",
-    "createdAt": "2026-09-02T06:49:41.411Z",
-    "versionId": "ffa459bf-0749-41a4-9575-1fdc446deaf1",
+    "updatedAt": "2026-09-02T23:21:39.000Z",
+    "createdAt": "2026-09-02T23:21:38.506Z",
+    "versionId": "2c0526c9-c255-477a-91ce-a50382693b9b",
     "workflowId": "T3ZrbPUkqjn5VSLw",
     "nodes": [
       {
@@ -33,7 +33,7 @@
                 "requiredField": true
               },
               {
-                "fieldLabel": "Patient User Code"
+                "fieldLabel": "Patient Guest Code"
               }
             ]
           },
@@ -138,8 +138,7 @@
           64
         ],
         "id": "cbbdc41b-3d3d-4f2d-aace-51530b8659f5",
-        "name": "Delete row(s)",
-        "disabled": true
+        "name": "Delete row(s)"
       },
       {
         "parameters": {
@@ -403,8 +402,450 @@
           256
         ],
         "id": "254bf67e-c697-4ac3-a459-66c03d359f7f",
-        "name": "Missing Email",
-        "disabled": true
+        "name": "Missing Email"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "QA7Qdseg7ehAOWP6",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+            "cachedResultName": "Zenoti-GetAuthToken"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          1296,
+          -176
+        ],
+        "id": "67b5e5f1-3a87-4073-97a2-b2efd9d60818",
+        "name": "Call 'Zenoti-GetAuthToken'"
+      },
+      {
+        "parameters": {
+          "url": "https://api.zenoti.com/v1/guests/search",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "user_code",
+                "value": "={{ $('If').item.json.data[\"Patient User Code\"] }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1520,
+          -176
+        ],
+        "id": "ffa8a3d1-caf3-4673-8cf3-b6b31252903d",
+        "name": "Get Guest"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "guests",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1728,
+          -176
+        ],
+        "id": "3b3746f1-f98d-49bb-b381-779ea4b61dec",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "23a67fa3-4a89-4fed-bf0d-e7d6fd074650",
+                "leftValue": "={{ $json.code }}",
+                "rightValue": "={{ $('If').item.json.data[\"Patient User Code\"] }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          1936,
+          -176
+        ],
+        "id": "6c0f875e-6415-42ad-90e0-085acd2cfc61",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "f26f4404-5376-4fbd-8712-b81d369a2c55",
+                "name": "Patient_Email",
+                "value": "={{ $json.name }}.pharmacy+{{ $('If').item.json.data['Patient User Code'] }}.{{ $json.InitialPharmacy }}@ashleyandmartin.com.au",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2352,
+          -176
+        ],
+        "id": "cd81d82e-55af-4760-b1b9-783032a09186",
+        "name": "Set Email"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lsINP70DmcZtIj4M",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinics",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Zenoti_ID",
+                "keyValue": "={{ $json.center_id }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          2144,
+          -176
+        ],
+        "id": "599c669f-a1a7-4435-aa8e-1ef5543458a3",
+        "name": "Find Clinic"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "dataTableId": {
+            "__rl": true,
+            "value": "AvEFhjvlkb7knN0c",
+            "mode": "list",
+            "cachedResultName": "ausMedOrderExceptions",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/AvEFhjvlkb7knN0c"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Patient_ID",
+                "keyValue": "={{ $('Start').first().json.Patient_ID }}"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Patient_Email": "={{ $json.Patient_Email }}",
+              "status": "queued"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Quantity",
+                "displayName": "Quantity",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Containers",
+                "displayName": "Containers",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Name",
+                "displayName": "Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Date_Dispensed",
+                "displayName": "Date_Dispensed",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Price",
+                "displayName": "Price",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Date_Created",
+                "displayName": "Date_Created",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Patient_Name",
+                "displayName": "Patient_Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Patient_ID",
+                "displayName": "Patient_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Patient_Email",
+                "displayName": "Patient_Email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "Patient_Mobile",
+                "displayName": "Patient_Mobile",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Patient_Phone",
+                "displayName": "Patient_Phone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Patient_Date_Of_Birth",
+                "displayName": "Patient_Date_Of_Birth",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Patient_Address",
+                "displayName": "Patient_Address",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Date_Prescribed",
+                "displayName": "Date_Prescribed",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Prescriber_ID",
+                "displayName": "Prescriber_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Prescriber_Name",
+                "displayName": "Prescriber_Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Order_Total_Price",
+                "displayName": "Order_Total_Price",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Order_Account_ID",
+                "displayName": "Order_Account_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "Zenoti_ID",
+                "displayName": "Zenoti_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "UserCode",
+                "displayName": "UserCode",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Package_Id",
+                "displayName": "Package_Id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Product_ID",
+                "displayName": "Product_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "Clinic_ID",
+                "displayName": "Clinic_ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          2560,
+          -176
+        ],
+        "id": "9d2e5626-680c-4a26-8f3b-6573a476ad6f",
+        "name": "Add Email"
       }
     ],
     "connections": {
@@ -421,7 +862,13 @@
       },
       "If": {
         "main": [
-          [],
+          [
+            {
+              "node": "Call 'Zenoti-GetAuthToken'",
+              "type": "main",
+              "index": 0
+            }
+          ],
           [
             {
               "node": "Delete row(s)",
@@ -459,14 +906,80 @@
             }
           ]
         ]
+      },
+      "Call 'Zenoti-GetAuthToken'": {
+        "main": [
+          [
+            {
+              "node": "Get Guest",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Guest": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "Find Clinic",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set Email": {
+        "main": [
+          [
+            {
+              "node": "Add Email",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Find Clinic": {
+        "main": [
+          [
+            {
+              "node": "Set Email",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version ffa459bf",
+    "name": "Version 2c0526c9",
     "description": "",
     "autosaved": true
   },
-  "activeVersionId": "ffa459bf-0749-41a4-9575-1fdc446deaf1",
+  "activeVersionId": "2c0526c9-c255-477a-91ce-a50382693b9b",
   "connections": {
     "Send message and wait for response": {
       "main": [
@@ -531,6 +1044,61 @@
         [
           {
             "node": "Get Guest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Guest": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Find Clinic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Email": {
+      "main": [
+        [
+          {
+            "node": "Add Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Clinic": {
+      "main": [
+        [
+          {
+            "node": "Set Email",
             "type": "main",
             "index": 0
           }
@@ -676,8 +1244,7 @@
         64
       ],
       "id": "cbbdc41b-3d3d-4f2d-aace-51530b8659f5",
-      "name": "Delete row(s)",
-      "disabled": true
+      "name": "Delete row(s)"
     },
     {
       "parameters": {
@@ -941,8 +1508,7 @@
         256
       ],
       "id": "254bf67e-c697-4ac3-a459-66c03d359f7f",
-      "name": "Missing Email",
-      "disabled": true
+      "name": "Missing Email"
     },
     {
       "parameters": {
@@ -980,7 +1546,7 @@
           "parameters": [
             {
               "name": "user_code",
-              "value": "={{ $json.UserCode }}"
+              "value": "={{ $('If').item.json.data[\"Patient User Code\"] }}"
             }
           ]
         },
@@ -1002,11 +1568,390 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1552,
+        1520,
         -176
       ],
       "id": "ffa8a3d1-caf3-4673-8cf3-b6b31252903d",
       "name": "Get Guest"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "guests",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        -176
+      ],
+      "id": "3b3746f1-f98d-49bb-b381-779ea4b61dec",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "23a67fa3-4a89-4fed-bf0d-e7d6fd074650",
+              "leftValue": "={{ $json.code }}",
+              "rightValue": "={{ $('If').item.json.data[\"Patient User Code\"] }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1936,
+        -176
+      ],
+      "id": "6c0f875e-6415-42ad-90e0-085acd2cfc61",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f26f4404-5376-4fbd-8712-b81d369a2c55",
+              "name": "Patient_Email",
+              "value": "={{ $json.name }}.pharmacy+{{ $('If').item.json.data['Patient User Code'] }}.{{ $json.InitialPharmacy }}@ashleyandmartin.com.au",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2352,
+        -176
+      ],
+      "id": "cd81d82e-55af-4760-b1b9-783032a09186",
+      "name": "Set Email"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Zenoti_ID",
+              "keyValue": "={{ $json.center_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2144,
+        -176
+      ],
+      "id": "599c669f-a1a7-4435-aa8e-1ef5543458a3",
+      "name": "Find Clinic"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "AvEFhjvlkb7knN0c",
+          "mode": "list",
+          "cachedResultName": "ausMedOrderExceptions",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/AvEFhjvlkb7knN0c"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Patient_ID",
+              "keyValue": "={{ $('Start').first().json.Patient_ID }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Patient_Email": "={{ $json.Patient_Email }}",
+            "status": "queued"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Quantity",
+              "displayName": "Quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Containers",
+              "displayName": "Containers",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date_Dispensed",
+              "displayName": "Date_Dispensed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Price",
+              "displayName": "Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date_Created",
+              "displayName": "Date_Created",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Name",
+              "displayName": "Patient_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_ID",
+              "displayName": "Patient_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Email",
+              "displayName": "Patient_Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Patient_Mobile",
+              "displayName": "Patient_Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Phone",
+              "displayName": "Patient_Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Date_Of_Birth",
+              "displayName": "Patient_Date_Of_Birth",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Patient_Address",
+              "displayName": "Patient_Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Date_Prescribed",
+              "displayName": "Date_Prescribed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Prescriber_ID",
+              "displayName": "Prescriber_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Prescriber_Name",
+              "displayName": "Prescriber_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Order_Total_Price",
+              "displayName": "Order_Total_Price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Order_Account_ID",
+              "displayName": "Order_Account_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Zenoti_ID",
+              "displayName": "Zenoti_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "UserCode",
+              "displayName": "UserCode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Package_Id",
+              "displayName": "Package_Id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Product_ID",
+              "displayName": "Product_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Clinic_ID",
+              "displayName": "Clinic_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2560,
+        -176
+      ],
+      "id": "9d2e5626-680c-4a26-8f3b-6573a476ad6f",
+      "name": "Add Email"
     }
   ],
   "origin": "n8n",
@@ -1020,18 +1965,18 @@
           "Date_Dispensed": "2026-08-10T16:00:00.000+10:00",
           "Price": "66",
           "Date_Created": "2026-08-10T06:00:00.000+10:00",
-          "Patient_Name": "Roja Lakshmipathi",
-          "Patient_ID": "86825",
+          "Patient_Name": "Archana Raviyappan",
+          "Patient_ID": "86816",
           "Patient_Email": "",
           "Patient_Mobile": "",
           "Patient_Phone": "",
-          "Patient_Date_Of_Birth": "1986-04-05T10:00:00.000+10:00",
-          "Patient_Address": "4 Weatherburn Place",
+          "Patient_Date_Of_Birth": "",
+          "Patient_Address": "3 Pilgrim Street",
           "Date_Prescribed": "2026-08-06T10:00:00.000+10:00",
-          "Prescriber_ID": "4737",
-          "Prescriber_Name": "Mark Liu",
-          "Order_Total_Price": "398.2",
-          "Order_Account_ID": "590",
+          "Prescriber_ID": "4749",
+          "Prescriber_Name": "Karen Schwartz",
+          "Order_Total_Price": "239.8",
+          "Order_Account_ID": "599",
           "status": "processing_email",
           "Zenoti_ID": null,
           "UserCode": null,
@@ -1051,7 +1996,7 @@
             "Does this Patient Require Meds Checked out?": [
               "Yes"
             ],
-            "Patient User Code": "CBG2927"
+            "Patient User Code": "BBG7138"
           }
         },
         "pairedItem": {
@@ -1085,6 +2030,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-09-02T22:58:36.488Z",
-  "versionId": "b85b925a-081e-4d22-b892-ab9429e66e51"
+  "updatedAt": "2026-09-02T23:26:58.315Z",
+  "versionId": "2c0526c9-c255-477a-91ce-a50382693b9b"
 }
