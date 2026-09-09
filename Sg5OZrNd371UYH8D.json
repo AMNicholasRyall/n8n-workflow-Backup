@@ -1,0 +1,1407 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-09-03T04:39:00.000Z",
+    "createdAt": "2026-09-03T04:31:29.022Z",
+    "versionId": "ec040cf1-68b9-4404-9c8f-f8626ecd0acc",
+    "workflowId": "Sg5OZrNd371UYH8D",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "O7QvEberheUcDwMp",
+            "mode": "list",
+            "cachedResultName": "ZenotiTokens",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "TokenName",
+                "keyValue": "access_token"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          -480,
+          -224
+        ],
+        "id": "9b41a06d-9c3d-43db-8056-6f7f0bdf913a",
+        "name": "AU Auth"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "O7QvEberheUcDwMp",
+            "mode": "list",
+            "cachedResultName": "ZenotiTokens",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "TokenName",
+                "keyValue": "nz_access_token"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          -480,
+          160
+        ],
+        "id": "c84ae762-cf89-4344-9177-7b324799bfef",
+        "name": "NZ Auth"
+      },
+      {
+        "parameters": {
+          "url": "https://api.zenoti.com/v1/centers",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "expand",
+                "value": "working_hours"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -256,
+          -224
+        ],
+        "id": "5b035edc-740c-4c16-b428-7c793dad624f",
+        "name": "Check Auth AU",
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "url": "https://api.zenoti.com/v1/centers",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "expand",
+                "value": "working_hours"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -256,
+          160
+        ],
+        "id": "9bbeb2af-f94f-472c-a303-714bfcc13dd6",
+        "name": "Check Auth NZ",
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.zenoti.com/v1/tokens",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept-Encoding",
+                "value": "gzip, deflate, br"
+              },
+              {
+                "name": "Connection",
+                "value": "keep-alive"
+              },
+              {
+                "name": "User-Agent",
+                "value": "EchoapiRuntime/1.1.0"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "account_name",
+                "value": "ashleymartinau"
+              },
+              {
+                "name": "user_name",
+                "value": "monitoring@ashleyandmartin.com.au"
+              },
+              {
+                "name": "password",
+                "value": "{2Y9ZzA:S9[4"
+              },
+              {
+                "name": "grant_type",
+                "value": "password"
+              },
+              {
+                "name": "app_id",
+                "value": "3BC24E21-D6A1-4E40-956E-F877A9E4B535"
+              },
+              {
+                "name": "app_secret",
+                "value": "b025437d004c463c820ba2918f67aa1011caeeedd1d6480886fd0824f5641675"
+              },
+              {
+                "name": "device_id",
+                "value": "Exploritory"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -32,
+          -224
+        ],
+        "id": "22f25e0d-47ea-44a8-9748-44372d86dba9",
+        "name": "Refresh AU Auth"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.zenoti.com/v1/tokens",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Accept-Encoding",
+                "value": "gzip, deflate, br"
+              },
+              {
+                "name": "Authorization",
+                "value": "Bearer AN:ashleymartinau|$ARD#VeBhoTY9kPOxG2F4xfuuMXWXkPCKt39QKncSxXkluM2i9DC8Op68czE9RgSY5WUnnXuBN4oID5mRmBr2k9L1mW8sRtrSPw0zUXHBlnimZ+HZmenVV7pdSGkKR+u4EzgC7C5pQwdxBulDFeq/QWUU62MynnJwa5U0SjuAMJnFdQmXNbbDuyf26Sl9n+zgq/iDovMa2Yg2fATzIh57MS5ZeM5MfMfC7f9uMfCCS5AtsdmZwI87RPqA3RY5sCP74Wd//y2IPk28mUIocIaqI1u2LMLMWfaiDTwt/XxcF/JeECLWQ9T5vekKCtmshF7ll/8cI6idy9snucXSelqZJq2xw/uR4RK8hBORdIxhfEDqA7OlEWdLjqfj1zQy2mrwDPeq7kQECrhJxTNLL+pm2a/8LaNp80hKK/dGcKfb1aRDt+MxdDE1VM4bNAnAL0Zcp9epi8Gd8BGiapPuGJo2NItH6Der3lkX2q3VwX21DT/I4yGsaYkMUVR3U0eiMI/4k/eMLqHJfdPd+RHMF5RIgyZ/md9uA7I7zQ7aTV0p30uYnQIkNoAkUdgx6kxlbwlQJIVW2oQ49CXmmg1abBfGHiNsaImQC/R38vTEL0VUwivNy3m+fidGaM0pKy7tZyxuca+Z1WYGIu2uSZnlZa50IjbTPoR7IWe0HUpOpwV4EeD0Lsag+UmO1UM1MIW1NmWGFsItJ39xrYTBk/xtKl5wXgqruT8vqjBhBBJOncv4bFM5R2TtBQSJve4SipParm8xMWA0JWAHYmkWpmP0fGNDxXCphiSbl1V3eDwY7r4UyTpJraG5OBYDSA9lAjaRprSSTL5D4eZ1EKgJHttRN8GBF/+SyPUOe3sQSbyT8XeD2gZ9HysmjGsZ1qLepnCiXrcD+AOmGGwYoGAylxkaKcQ4ljGvEwxbHogrH+lY+IkczeJb4f8bJxZv8k+Vn3MmEaIsG6SgcfnVgxrhyveSdnaZZv7FzMBc/tsubMF0Ij1CvkheJJpmP6KSBH9IV7rN"
+              },
+              {
+                "name": "Connection",
+                "value": "keep-alive"
+              },
+              {
+                "name": "User-Agent",
+                "value": "EchoapiRuntime/1.1.0"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "account_name",
+                "value": "ashleymartinnz"
+              },
+              {
+                "name": "user_name",
+                "value": "monitoring@ashleyandmartin.com.au"
+              },
+              {
+                "name": "password",
+                "value": "{2Y9ZzA:S9[4"
+              },
+              {
+                "name": "grant_type",
+                "value": "password"
+              },
+              {
+                "name": "app_id",
+                "value": "9E29CF5D-471E-44CC-B959-18724C3B139B"
+              },
+              {
+                "name": "app_secret",
+                "value": "77d3b7575b1845d7bc90e2b1ca0d05ffed489a277861475789d594b20566165b"
+              },
+              {
+                "name": "device_id",
+                "value": "Exploritory"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -32,
+          160
+        ],
+        "id": "42a36d26-99d6-4edc-bd92-bffc87984390",
+        "name": "Refresh NZ Auth"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "dataTableId": {
+            "__rl": true,
+            "value": "O7QvEberheUcDwMp",
+            "mode": "list",
+            "cachedResultName": "ZenotiTokens",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "TokenName",
+                "keyValue": "access_token"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "TokenSecret": "={{ $json.credentials.access_token }}",
+              "Token_Expiry": "={{ $json.credentials.access_token_expiry }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "TokenName",
+                "displayName": "TokenName",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "TokenSecret",
+                "displayName": "TokenSecret",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "Token_Expiry",
+                "displayName": "Token_Expiry",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          192,
+          -320
+        ],
+        "id": "6012d16c-6328-462f-b7b7-55913f778e11",
+        "name": "Update AU Token"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "dataTableId": {
+            "__rl": true,
+            "value": "O7QvEberheUcDwMp",
+            "mode": "list",
+            "cachedResultName": "ZenotiTokens",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "TokenName",
+                "keyValue": "refresh_token"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "TokenSecret": "={{ $json.credentials.access_token_expiry }}",
+              "Token_Expiry": "={{ $json.credentials.refresh_token }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "TokenName",
+                "displayName": "TokenName",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "TokenSecret",
+                "displayName": "TokenSecret",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "Token_Expiry",
+                "displayName": "Token_Expiry",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          192,
+          -128
+        ],
+        "id": "82ecd506-8660-444d-86c9-524b7d2ed0a2",
+        "name": "Update AU Refresh Token"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "dataTableId": {
+            "__rl": true,
+            "value": "O7QvEberheUcDwMp",
+            "mode": "list",
+            "cachedResultName": "ZenotiTokens",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "TokenName",
+                "keyValue": "nz_access_token"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "TokenSecret": "={{ $json.credentials.access_token }}",
+              "Token_Expiry": "={{ $json.credentials.access_token_expiry }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "TokenName",
+                "displayName": "TokenName",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "TokenSecret",
+                "displayName": "TokenSecret",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "Token_Expiry",
+                "displayName": "Token_Expiry",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          192,
+          64
+        ],
+        "id": "208d8491-4042-4e5b-b341-aab0ac70bc3c",
+        "name": "Update NZ Token"
+      },
+      {
+        "parameters": {
+          "operation": "upsert",
+          "dataTableId": {
+            "__rl": true,
+            "value": "O7QvEberheUcDwMp",
+            "mode": "list",
+            "cachedResultName": "ZenotiTokens",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "TokenName",
+                "keyValue": "nz_refresh_token"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "TokenSecret": "={{ $json.credentials.access_token_expiry }}",
+              "Token_Expiry": "={{ $json.credentials.refresh_token }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "TokenName",
+                "displayName": "TokenName",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "TokenSecret",
+                "displayName": "TokenSecret",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "Token_Expiry",
+                "displayName": "Token_Expiry",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          192,
+          256
+        ],
+        "id": "90b30085-a37d-47c3-8b40-b8a247b4664e",
+        "name": "Update NZ Refresh Token"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "hours",
+                "hoursInterval": 2
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -704,
+          -32
+        ],
+        "id": "55b8e38e-9de9-4f07-be4f-e244d8cba903",
+        "name": "Schedule Trigger"
+      }
+    ],
+    "connections": {
+      "AU Auth": {
+        "main": [
+          [
+            {
+              "node": "Check Auth AU",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "NZ Auth": {
+        "main": [
+          [
+            {
+              "node": "Check Auth NZ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check Auth AU": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Refresh AU Auth",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check Auth NZ": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Refresh NZ Auth",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Refresh AU Auth": {
+        "main": [
+          [
+            {
+              "node": "Update AU Token",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Update AU Refresh Token",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Refresh NZ Auth": {
+        "main": [
+          [
+            {
+              "node": "Update NZ Token",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Update NZ Refresh Token",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "AU Auth",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "NZ Auth",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version ec040cf1",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "ec040cf1-68b9-4404-9c8f-f8626ecd0acc",
+  "connections": {
+    "AU Auth": {
+      "main": [
+        [
+          {
+            "node": "Check Auth AU",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NZ Auth": {
+      "main": [
+        [
+          {
+            "node": "Check Auth NZ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Auth AU": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Refresh AU Auth",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Auth NZ": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Refresh NZ Auth",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Refresh AU Auth": {
+      "main": [
+        [
+          {
+            "node": "Update AU Token",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update AU Refresh Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Refresh NZ Auth": {
+      "main": [
+        [
+          {
+            "node": "Update NZ Token",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update NZ Refresh Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "AU Auth",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "NZ Auth",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-09-03T01:36:24.257Z",
+  "id": "Sg5OZrNd371UYH8D",
+  "isArchived": false,
+  "meta": null,
+  "name": "Zenoti API Self Heal",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "O7QvEberheUcDwMp",
+          "mode": "list",
+          "cachedResultName": "ZenotiTokens",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "TokenName",
+              "keyValue": "access_token"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -480,
+        -224
+      ],
+      "id": "9b41a06d-9c3d-43db-8056-6f7f0bdf913a",
+      "name": "AU Auth"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "O7QvEberheUcDwMp",
+          "mode": "list",
+          "cachedResultName": "ZenotiTokens",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "TokenName",
+              "keyValue": "nz_access_token"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -480,
+        160
+      ],
+      "id": "c84ae762-cf89-4344-9177-7b324799bfef",
+      "name": "NZ Auth"
+    },
+    {
+      "parameters": {
+        "url": "https://api.zenoti.com/v1/centers",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "expand",
+              "value": "working_hours"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -256,
+        -224
+      ],
+      "id": "5b035edc-740c-4c16-b428-7c793dad624f",
+      "name": "Check Auth AU",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://api.zenoti.com/v1/centers",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "expand",
+              "value": "working_hours"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -256,
+        160
+      ],
+      "id": "9bbeb2af-f94f-472c-a303-714bfcc13dd6",
+      "name": "Check Auth NZ",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.zenoti.com/v1/tokens",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Encoding",
+              "value": "gzip, deflate, br"
+            },
+            {
+              "name": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "name": "User-Agent",
+              "value": "EchoapiRuntime/1.1.0"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "account_name",
+              "value": "ashleymartinau"
+            },
+            {
+              "name": "user_name",
+              "value": "monitoring@ashleyandmartin.com.au"
+            },
+            {
+              "name": "password",
+              "value": "{2Y9ZzA:S9[4"
+            },
+            {
+              "name": "grant_type",
+              "value": "password"
+            },
+            {
+              "name": "app_id",
+              "value": "3BC24E21-D6A1-4E40-956E-F877A9E4B535"
+            },
+            {
+              "name": "app_secret",
+              "value": "b025437d004c463c820ba2918f67aa1011caeeedd1d6480886fd0824f5641675"
+            },
+            {
+              "name": "device_id",
+              "value": "Exploritory"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -32,
+        -224
+      ],
+      "id": "22f25e0d-47ea-44a8-9748-44372d86dba9",
+      "name": "Refresh AU Auth"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.zenoti.com/v1/tokens",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Encoding",
+              "value": "gzip, deflate, br"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer AN:ashleymartinau|$ARD#VeBhoTY9kPOxG2F4xfuuMXWXkPCKt39QKncSxXkluM2i9DC8Op68czE9RgSY5WUnnXuBN4oID5mRmBr2k9L1mW8sRtrSPw0zUXHBlnimZ+HZmenVV7pdSGkKR+u4EzgC7C5pQwdxBulDFeq/QWUU62MynnJwa5U0SjuAMJnFdQmXNbbDuyf26Sl9n+zgq/iDovMa2Yg2fATzIh57MS5ZeM5MfMfC7f9uMfCCS5AtsdmZwI87RPqA3RY5sCP74Wd//y2IPk28mUIocIaqI1u2LMLMWfaiDTwt/XxcF/JeECLWQ9T5vekKCtmshF7ll/8cI6idy9snucXSelqZJq2xw/uR4RK8hBORdIxhfEDqA7OlEWdLjqfj1zQy2mrwDPeq7kQECrhJxTNLL+pm2a/8LaNp80hKK/dGcKfb1aRDt+MxdDE1VM4bNAnAL0Zcp9epi8Gd8BGiapPuGJo2NItH6Der3lkX2q3VwX21DT/I4yGsaYkMUVR3U0eiMI/4k/eMLqHJfdPd+RHMF5RIgyZ/md9uA7I7zQ7aTV0p30uYnQIkNoAkUdgx6kxlbwlQJIVW2oQ49CXmmg1abBfGHiNsaImQC/R38vTEL0VUwivNy3m+fidGaM0pKy7tZyxuca+Z1WYGIu2uSZnlZa50IjbTPoR7IWe0HUpOpwV4EeD0Lsag+UmO1UM1MIW1NmWGFsItJ39xrYTBk/xtKl5wXgqruT8vqjBhBBJOncv4bFM5R2TtBQSJve4SipParm8xMWA0JWAHYmkWpmP0fGNDxXCphiSbl1V3eDwY7r4UyTpJraG5OBYDSA9lAjaRprSSTL5D4eZ1EKgJHttRN8GBF/+SyPUOe3sQSbyT8XeD2gZ9HysmjGsZ1qLepnCiXrcD+AOmGGwYoGAylxkaKcQ4ljGvEwxbHogrH+lY+IkczeJb4f8bJxZv8k+Vn3MmEaIsG6SgcfnVgxrhyveSdnaZZv7FzMBc/tsubMF0Ij1CvkheJJpmP6KSBH9IV7rN"
+            },
+            {
+              "name": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "name": "User-Agent",
+              "value": "EchoapiRuntime/1.1.0"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "account_name",
+              "value": "ashleymartinnz"
+            },
+            {
+              "name": "user_name",
+              "value": "monitoring@ashleyandmartin.com.au"
+            },
+            {
+              "name": "password",
+              "value": "{2Y9ZzA:S9[4"
+            },
+            {
+              "name": "grant_type",
+              "value": "password"
+            },
+            {
+              "name": "app_id",
+              "value": "9E29CF5D-471E-44CC-B959-18724C3B139B"
+            },
+            {
+              "name": "app_secret",
+              "value": "77d3b7575b1845d7bc90e2b1ca0d05ffed489a277861475789d594b20566165b"
+            },
+            {
+              "name": "device_id",
+              "value": "Exploritory"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -32,
+        160
+      ],
+      "id": "42a36d26-99d6-4edc-bd92-bffc87984390",
+      "name": "Refresh NZ Auth"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "O7QvEberheUcDwMp",
+          "mode": "list",
+          "cachedResultName": "ZenotiTokens",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "TokenName",
+              "keyValue": "access_token"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "TokenSecret": "={{ $json.credentials.access_token }}",
+            "Token_Expiry": "={{ $json.credentials.access_token_expiry }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "TokenName",
+              "displayName": "TokenName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "TokenSecret",
+              "displayName": "TokenSecret",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Token_Expiry",
+              "displayName": "Token_Expiry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        192,
+        -320
+      ],
+      "id": "6012d16c-6328-462f-b7b7-55913f778e11",
+      "name": "Update AU Token"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "O7QvEberheUcDwMp",
+          "mode": "list",
+          "cachedResultName": "ZenotiTokens",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "TokenName",
+              "keyValue": "refresh_token"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "TokenSecret": "={{ $json.credentials.refresh_token }}",
+            "Token_Expiry": "={{ $json.credentials.refresh_token_expiry }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "TokenName",
+              "displayName": "TokenName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "TokenSecret",
+              "displayName": "TokenSecret",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Token_Expiry",
+              "displayName": "Token_Expiry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        192,
+        -128
+      ],
+      "id": "82ecd506-8660-444d-86c9-524b7d2ed0a2",
+      "name": "Update AU Refresh Token"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "O7QvEberheUcDwMp",
+          "mode": "list",
+          "cachedResultName": "ZenotiTokens",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "TokenName",
+              "keyValue": "nz_access_token"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "TokenSecret": "={{ $json.credentials.access_token }}",
+            "Token_Expiry": "={{ $json.credentials.access_token_expiry }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "TokenName",
+              "displayName": "TokenName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "TokenSecret",
+              "displayName": "TokenSecret",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Token_Expiry",
+              "displayName": "Token_Expiry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        192,
+        64
+      ],
+      "id": "208d8491-4042-4e5b-b341-aab0ac70bc3c",
+      "name": "Update NZ Token"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "O7QvEberheUcDwMp",
+          "mode": "list",
+          "cachedResultName": "ZenotiTokens",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "TokenName",
+              "keyValue": "nz_refresh_token"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "TokenSecret": "={{ $json.credentials.refresh_token }}",
+            "Token_Expiry": "={{ $json.credentials.refresh_token_expiry }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "TokenName",
+              "displayName": "TokenName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "TokenSecret",
+              "displayName": "TokenSecret",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Token_Expiry",
+              "displayName": "Token_Expiry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        192,
+        256
+      ],
+      "id": "90b30085-a37d-47c3-8b40-b8a247b4664e",
+      "name": "Update NZ Refresh Token"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -704,
+        -32
+      ],
+      "id": "55b8e38e-9de9-4f07-be4f-e244d8cba903",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-09-03T01:36:24.260Z",
+      "createdAt": "2026-09-03T01:36:24.260Z",
+      "role": "workflow:owner",
+      "workflowId": "Sg5OZrNd371UYH8D",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        6
+      ]
+    }
+  },
+  "tags": [
+    {
+      "updatedAt": "2025-11-07T01:33:39.006Z",
+      "createdAt": "2025-11-07T01:33:39.006Z",
+      "id": "WIsNIXL4vR1ZWj36",
+      "name": "Zenoti"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-09-07T06:19:33.137Z",
+  "versionId": "63c1a561-82f1-48c3-afef-9d51cf23e62d"
+}
