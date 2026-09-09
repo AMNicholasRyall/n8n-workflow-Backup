@@ -51,7 +51,9 @@
             }
           ]
         },
-        "options": {}
+        "options": {
+          "path": "snoozereport"
+        }
       },
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.5,
@@ -331,37 +333,7 @@
     }
   ],
   "origin": "n8n",
-  "pinData": {
-    "On form submission": [
-      {
-        "json": {
-          "Snooze Report": [
-            {
-              "filename": "SNOOZE_Export_10_Aug_2026 1.xlsx",
-              "mimetype": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-              "size": 15431
-            }
-          ],
-          "submittedAt": "2026-08-31T12:10:40.618+08:00",
-          "formMode": "test"
-        },
-        "binary": {
-          "Snooze_Report": {
-            "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "fileExtension": "xlsx",
-            "data": "filesystem-v2",
-            "fileName": "SNOOZE_Export_10_Aug_2026 1.xlsx",
-            "id": "filesystem-v2:workflows/JJGI64BDnd9A7Bvf/executions/temp/binary_data/0cd19e3a-1bd8-4535-8e63-5fe795ae91b0",
-            "fileSize": "15.4 kB",
-            "bytes": 15431
-          }
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -369,7 +341,10 @@
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "J83Enw8ArDSqhMCL",
+    "callerPolicy": "workflowsFromSameOwner"
   },
   "shared": [
     {
@@ -389,7 +364,7 @@
       "name": "KCP"
     }
   ],
-  "triggerCount": 0,
-  "updatedAt": "2026-09-02T01:00:27.474Z",
-  "versionId": "3683fc7e-8352-4853-9b64-844b99376a4c"
+  "triggerCount": 1,
+  "updatedAt": "2026-09-06T23:29:40.914Z",
+  "versionId": "c6d9152c-641f-469a-830f-bba930f8b2f8"
 }
