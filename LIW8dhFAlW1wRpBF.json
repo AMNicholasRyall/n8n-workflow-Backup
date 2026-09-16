@@ -1134,12 +1134,12 @@
       {
         "json": {
           "ClinicProgress": "ContinueFlow",
-          "ClientID": "53C7A96F-B06E-49FA-B506-1C8DAE79E9B5",
-          "ClientCode": "GSG3868",
-          "ClinicName": "GladstonePark",
+          "ClientID": "af2989a6-194b-4470-80fb-12ecaa0b773c",
+          "ClientCode": "GCG6545",
+          "ClinicName": "Brisbane",
           "InitialPharmacy": "KCP",
-          "HelixEmail": "GladstonePark.pharmacy+GSG3868.KCP@ashleyandmartin.com.au",
-          "HelixCenterID": "7"
+          "HelixEmail": "Brisbane.pharmacy+GCG6545.KCP@ashleyandmartin.com.au",
+          "HelixCenterID": "2"
         },
         "pairedItem": {
           "item": 0
@@ -1179,6 +1179,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-07-22T03:54:42.403Z",
+  "updatedAt": "2026-09-15T22:53:11.334Z",
   "versionId": "2e1e903d-ff9a-4e0f-860d-eba910253310"
 }
