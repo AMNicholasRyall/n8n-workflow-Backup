@@ -1239,7 +1239,9 @@
   "createdAt": "2026-05-06T01:19:13.808Z",
   "id": "fCmiDv2lGzNeykAV",
   "isArchived": false,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "name": "AUNZ-Zenoti-NewOpportunity",
   "nodes": [
     {
@@ -1502,7 +1504,7 @@
     },
     {
       "parameters": {
-        "toRecipients": "=AM-CC-Staff@ashleyandmartin.com.au",
+        "toRecipients": "=  cesar.herrera@ashleyandmartin.com.au",
         "subject": "=Automation - New Opportunities",
         "bodyContent": "=<div style=\"font-family: Arial, sans-serif; font-size: 14px; color: #333333; line-height: 1.5;\">\n\n  <p>Hi Team,</p>\n\n  <p>\n    Please see below for the recent Zenoti opportunities.\n  </p>\n\n  <div style=\"margin-top: 12px; margin-bottom: 18px;\">\n    {{ $json.htmlTable }}\n  </div>\n\n  <p>\n    Regards,<br>\n    Automation\n  </p>\n\n</div>",
         "additionalFields": {
@@ -1949,6 +1951,6 @@
     }
   ],
   "triggerCount": 3,
-  "updatedAt": "2026-09-07T06:19:42.440Z",
-  "versionId": "186e08fd-5078-4d4e-a36f-32d1a2992c63"
+  "updatedAt": "2026-09-23T07:55:50.371Z",
+  "versionId": "8183de7a-f116-4734-aa0e-42cbbd9eb6bd"
 }
