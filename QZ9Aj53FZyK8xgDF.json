@@ -311,7 +311,11 @@
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
-          "value": {}
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
         },
         "options": {}
       },
@@ -366,6 +370,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-12-30T01:31:18.914Z",
-  "versionId": "9b40f804-222c-4d1c-bca1-0619eed9051e"
+  "updatedAt": "2026-09-23T02:35:35.813Z",
+  "versionId": "8a6821a6-2142-4d73-b449-ad3d2ca9e812"
 }
