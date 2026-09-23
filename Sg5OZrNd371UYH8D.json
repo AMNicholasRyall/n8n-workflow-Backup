@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-09-03T04:39:00.000Z",
-    "createdAt": "2026-09-03T04:31:29.022Z",
-    "versionId": "ec040cf1-68b9-4404-9c8f-f8626ecd0acc",
+    "updatedAt": "2026-09-17T23:51:54.000Z",
+    "createdAt": "2026-09-17T23:51:53.732Z",
+    "versionId": "9339151b-1eb9-4e3c-ad83-9caacd80b97f",
     "workflowId": "Sg5OZrNd371UYH8D",
     "nodes": [
       {
@@ -370,8 +370,8 @@
           "columns": {
             "mappingMode": "defineBelow",
             "value": {
-              "TokenSecret": "={{ $json.credentials.access_token_expiry }}",
-              "Token_Expiry": "={{ $json.credentials.refresh_token }}"
+              "TokenSecret": "={{ $json.credentials.refresh_token }}",
+              "Token_Expiry": "={{ $json.credentials.refresh_token_expiry }}"
             },
             "matchingColumns": [],
             "schema": [
@@ -512,8 +512,8 @@
           "columns": {
             "mappingMode": "defineBelow",
             "value": {
-              "TokenSecret": "={{ $json.credentials.access_token_expiry }}",
-              "Token_Expiry": "={{ $json.credentials.refresh_token }}"
+              "TokenSecret": "={{ $json.credentials.refresh_token }}",
+              "Token_Expiry": "={{ $json.credentials.refresh_token_expiry }}"
             },
             "matchingColumns": [],
             "schema": [
@@ -680,11 +680,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version ec040cf1",
+    "name": "Version 9339151b",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
-  "activeVersionId": "ec040cf1-68b9-4404-9c8f-f8626ecd0acc",
+  "activeVersionId": "9339151b-1eb9-4e3c-ad83-9caacd80b97f",
   "connections": {
     "AU Auth": {
       "main": [
@@ -1402,6 +1402,6 @@
     }
   ],
   "triggerCount": 1,
-  "updatedAt": "2026-09-07T06:19:33.137Z",
-  "versionId": "63c1a561-82f1-48c3-afef-9d51cf23e62d"
+  "updatedAt": "2026-09-17T23:51:53.731Z",
+  "versionId": "9339151b-1eb9-4e3c-ad83-9caacd80b97f"
 }
