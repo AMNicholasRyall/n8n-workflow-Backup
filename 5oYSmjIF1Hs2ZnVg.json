@@ -609,7 +609,22 @@
     }
   ],
   "origin": "n8n",
-  "pinData": {},
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "now": "2026-09-17T17:00:21.080Z",
+          "expiry": "2026-09-17T16:00:28.832Z",
+          "msLeft": -3592248,
+          "minutesLeft": -60,
+          "needsRefresh": true
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -636,6 +651,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2025-12-30T01:09:58.263Z",
+  "updatedAt": "2026-09-17T23:49:52.293Z",
   "versionId": "002d7575-2bc7-437a-bc7e-ffc563054829"
 }
