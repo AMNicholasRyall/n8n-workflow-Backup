@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-08-31T00:44:05.000Z",
-    "createdAt": "2026-08-31T00:43:13.461Z",
-    "versionId": "8c23c7b5-47b9-494f-a54f-519133847be4",
+    "updatedAt": "2026-09-24T07:11:34.000Z",
+    "createdAt": "2026-09-24T04:21:56.611Z",
+    "versionId": "a3c64fe0-a996-41da-b02a-fb9aad289f44",
     "workflowId": "bZui2rxL8u75kkcb",
     "nodes": [
       {
@@ -31,12 +31,6 @@
           "url": "https://graph.microsoft.com/v1.0/users/SharePointUploader@ashleyandmartin.com.au/mailFolders/inbox/messages",
           "authentication": "predefinedCredentialType",
           "nodeCredentialType": "microsoftOutlookOAuth2Api",
-          "sendQuery": true,
-          "queryParameters": {
-            "parameters": [
-              {}
-            ]
-          },
           "options": {}
         },
         "type": "n8n-nodes-base.httpRequest",
@@ -715,11 +709,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 8c23c7b5",
-    "description": "",
+    "name": "Unpinned create file",
+    "description": "Unpinned create file and change permissions on Microsoft Exchange Server to add me as a Manage and Edit user",
     "autosaved": true
   },
-  "activeVersionId": "8c23c7b5-47b9-494f-a54f-519133847be4",
+  "activeVersionId": "a3c64fe0-a996-41da-b02a-fb9aad289f44",
   "connections": {
     "Schedule Trigger": {
       "main": [
@@ -954,12 +948,6 @@
         "url": "https://graph.microsoft.com/v1.0/users/SharePointUploader@ashleyandmartin.com.au/mailFolders/inbox/messages",
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "microsoftOutlookOAuth2Api",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {}
-          ]
-        },
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -1457,26 +1445,6 @@
           "item": 0
         }
       }
-    ],
-    "Convert to File": [
-      {
-        "json": {},
-        "binary": {
-          "data": {
-            "mimeType": "application/pdf",
-            "fileType": "pdf",
-            "fileExtension": "pdf",
-            "data": "filesystem-v2",
-            "fileName": "Scan 154943.pdf",
-            "id": "filesystem-v2:workflows/bZui2rxL8u75kkcb/executions/96163/binary_data/279a8a25-2f81-45d3-9d41-f1264119c93b",
-            "fileSize": "1.88 MB",
-            "bytes": 1878621
-          }
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
     ]
   },
   "repo": {
@@ -1486,7 +1454,7 @@
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": true,
+    "availableInMCP": false,
     "timeSavedMode": "fixed",
     "errorWorkflow": "J83Enw8ArDSqhMCL",
     "callerPolicy": "workflowsFromSameOwner",
@@ -1508,6 +1476,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-09-23T01:53:53.025Z",
-  "versionId": "5684bbda-82a1-4e7c-a430-4dfd6199789a"
+  "updatedAt": "2026-09-24T07:01:22.725Z",
+  "versionId": "a3c64fe0-a996-41da-b02a-fb9aad289f44"
 }
