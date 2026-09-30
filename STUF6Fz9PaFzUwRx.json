@@ -1172,7 +1172,7 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "name": "Zenoti - Order Meds",
+  "name": "Zenoti - Order Meds - Outlook",
   "nodes": [
     {
       "parameters": {
@@ -1938,6 +1938,6 @@
     }
   ],
   "triggerCount": 0,
-  "updatedAt": "2026-06-23T22:56:41.746Z",
-  "versionId": "846ffd7d-98c8-457d-96df-9dcea5f4e573"
+  "updatedAt": "2026-09-25T01:18:29.633Z",
+  "versionId": "630a6870-485d-432b-addf-a8c5d6d6744b"
 }
