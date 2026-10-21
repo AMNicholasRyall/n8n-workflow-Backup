@@ -1359,38 +1359,7 @@
     }
   ],
   "origin": "n8n",
-  "pinData": {
-    "On form submission": [
-      {
-        "json": {
-          "HeadCountForm": [
-            {
-              "filename": "Report Export - 2026-05-27 08-17-59-000.csv",
-              "mimetype": "text/csv",
-              "size": 6990
-            }
-          ],
-          "submittedAt": "2026-05-27T08:21:15.020+08:00",
-          "formMode": "production"
-        },
-        "binary": {
-          "HeadCountForm": {
-            "mimeType": "text/csv",
-            "fileType": "text",
-            "fileExtension": "csv",
-            "data": "filesystem-v2",
-            "fileName": "Report Export - 2026-05-27 08-17-59-000.csv",
-            "id": "filesystem-v2:workflows/5FFGnvOjhJ6RzJQd/executions/temp/binary_data/54d23e2e-d5af-46fc-b40a-9b251a1b0f03",
-            "fileSize": "6.99 kB",
-            "bytes": 6990
-          }
-        },
-        "pairedItem": {
-          "item": 0
-        }
-      }
-    ]
-  },
+  "pinData": {},
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -1415,6 +1384,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-08-26T23:58:55.566Z",
+  "updatedAt": "2026-10-15T07:32:31.892Z",
   "versionId": "effffe46-2f74-4859-b9b9-a60ad7065ed5"
 }
