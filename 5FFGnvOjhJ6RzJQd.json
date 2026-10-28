@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-05-27T01:45:02.000Z",
-    "createdAt": "2026-05-27T01:45:00.959Z",
-    "versionId": "effffe46-2f74-4859-b9b9-a60ad7065ed5",
+    "updatedAt": "2026-10-23T04:09:25.000Z",
+    "createdAt": "2026-10-23T04:04:55.747Z",
+    "versionId": "a19ecfda-7ce0-4d4d-8bc8-3a92490d8d7f",
     "workflowId": "5FFGnvOjhJ6RzJQd",
     "nodes": [
       {
@@ -271,7 +271,7 @@
             "conditions": [
               {
                 "id": "14f988a1-6fdd-4cb4-84da-0dbb27abb463",
-                "leftValue": "={{ $json['Manager / Full Name'] }}",
+                "leftValue": "={{ $json['Manager / Preferred Full Name'] }}",
                 "rightValue": "",
                 "operator": {
                   "type": "string",
@@ -442,8 +442,8 @@
         "type": "n8n-nodes-base.microsoftOutlook",
         "typeVersion": 2,
         "position": [
-          -688,
-          448
+          -976,
+          736
         ],
         "id": "d197ac2b-32be-4a69-a642-18437cf91fe9",
         "name": "Send message and wait for response",
@@ -465,6 +465,36 @@
         ],
         "id": "d74042fd-7d8a-4d0c-9176-9664c2ff743f",
         "name": "Merge1"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://graph.microsoft.com/v1.0/me/sendMail",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "microsoftOutlookOAuth2Api",
+          "sendBody": true,
+          "specifyBody": "=json",
+          "bodyParameters": {
+            "parameters": [
+              {}
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -688,
+          720
+        ],
+        "id": "ddf22974-8062-4726-b1db-4c694701dee3",
+        "name": "HTTP Request",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
       }
     ],
     "connections": {
@@ -623,7 +653,7 @@
         "main": [
           [
             {
-              "node": "Send message and wait for response",
+              "node": "Extract from File",
               "type": "main",
               "index": 0
             }
@@ -656,7 +686,7 @@
         "main": [
           [
             {
-              "node": "Extract from File",
+              "node": "HTTP Request",
               "type": "main",
               "index": 0
             }
@@ -676,11 +706,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version effffe46",
-    "description": "",
-    "autosaved": false
+    "name": "Version a19ecfda",
+    "description": "Remove email need and addeed Preferred on Manager Name field",
+    "autosaved": true
   },
-  "activeVersionId": "effffe46-2f74-4859-b9b9-a60ad7065ed5",
+  "activeVersionId": "a19ecfda-7ce0-4d4d-8bc8-3a92490d8d7f",
   "connections": {
     "Extract from File": {
       "main": [
@@ -837,7 +867,7 @@
       "main": [
         [
           {
-            "node": "Send message and wait for response",
+            "node": "Extract from File",
             "type": "main",
             "index": 0
           }
@@ -870,7 +900,7 @@
       "main": [
         [
           {
-            "node": "Extract from File",
+            "node": "HTTP Request",
             "type": "main",
             "index": 0
           }
@@ -956,7 +986,7 @@
         "baseDN": "OU=AMUsers,DC=AshleyandMartin,DC=local",
         "searchFor": "(objectclass=user)",
         "attribute": "name",
-        "searchText": "={{ $json['Manager / Full Name'] }}",
+        "searchText": "={{ $json['Manager / Preferred Full Name'] }}",
         "options": {}
       },
       "type": "n8n-nodes-base.ldap",
@@ -1162,7 +1192,7 @@
           "conditions": [
             {
               "id": "14f988a1-6fdd-4cb4-84da-0dbb27abb463",
-              "leftValue": "={{ $json['Manager / Full Name'] }}",
+              "leftValue": "={{ $json['Manager / Preferred Full Name'] }}",
               "rightValue": "",
               "operator": {
                 "type": "string",
@@ -1236,7 +1266,7 @@
             {
               "fieldLabel": "HeadCountForm",
               "fieldType": "file",
-              "acceptFileTypes": ".xlsx",
+              "acceptFileTypes": ".xls,.xlsx",
               "requiredField": true
             }
           ]
@@ -1333,8 +1363,8 @@
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [
-        -688,
-        448
+        -976,
+        736
       ],
       "id": "d197ac2b-32be-4a69-a642-18437cf91fe9",
       "name": "Send message and wait for response",
@@ -1356,6 +1386,36 @@
       ],
       "id": "d74042fd-7d8a-4d0c-9176-9664c2ff743f",
       "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.microsoft.com/v1.0/me/sendMail",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOutlookOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "=json",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -688,
+        720
+      ],
+      "id": "ddf22974-8062-4726-b1db-4c694701dee3",
+      "name": "HTTP Request",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
     }
   ],
   "origin": "n8n",
@@ -1384,6 +1444,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-10-15T07:32:31.892Z",
-  "versionId": "effffe46-2f74-4859-b9b9-a60ad7065ed5"
+  "updatedAt": "2026-10-26T00:30:33.361Z",
+  "versionId": "3064d37c-296b-40a4-9842-4a0d59983e81"
 }
