@@ -1,0 +1,80 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Microsoft SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-11-09T23:06:17.664Z",
+  "id": "DGT8uGPgcMbjRmtt",
+  "isArchived": false,
+  "meta": null,
+  "name": "SQL token retrieve",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "913f7df4-135c-409f-b1d3-be0043fbaffd",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery"
+      },
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "e3bf6271-856a-42fe-a35f-95fbf8788162",
+      "name": "Microsoft SQL"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-11-09T23:06:17.666Z",
+      "createdAt": "2026-11-09T23:06:17.666Z",
+      "role": "workflow:owner",
+      "workflowId": "DGT8uGPgcMbjRmtt",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-11-10T00:22:50.499Z",
+  "versionId": "d4fdbdd4-86c9-4f68-a55a-4aaed3600df1"
+}
