@@ -1,0 +1,981 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-11-10T07:56:13.000Z",
+    "createdAt": "2026-11-10T07:55:53.089Z",
+    "versionId": "954eec23-5572-4ef4-bd15-c4bb73c6d941",
+    "workflowId": "cwNzqQf5Zzt53KbD",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "deleteMessage"
+        },
+        "type": "n8n-nodes-base.rabbitmq",
+        "typeVersion": 1.1,
+        "position": [
+          1728,
+          16
+        ],
+        "id": "de8ee788-ab55-48fd-97bc-0feaa935eae7",
+        "name": "RabbitMQ",
+        "executeOnce": true,
+        "credentials": {
+          "rabbitmq": {
+            "id": "yV61RlUAH8DmNI5J",
+            "name": "RabbitMQ account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const raw = $json.content;\nconst parsed = JSON.parse(raw);\n\nreturn [{ json: parsed }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -288,
+          16
+        ],
+        "id": "20881425-22a0-4dfc-b88b-5d6bb18eef5d",
+        "name": "CleanUpHeaders"
+      },
+      {
+        "parameters": {
+          "queue": "au.zenoti.webhooks.NoShow",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rabbitmqTrigger",
+        "typeVersion": 1,
+        "position": [
+          -512,
+          16
+        ],
+        "id": "49744f40-c3b5-4a10-aeed-8074a01d9208",
+        "name": "RabbitMQ Trigger",
+        "credentials": {
+          "rabbitmq": {
+            "id": "bvkL7iLaXZK2TER1",
+            "name": "au-receiver"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.body.data.appointment_group_status }}",
+                      "rightValue": -2,
+                      "operator": {
+                        "type": "number",
+                        "operation": "equals"
+                      },
+                      "id": "6a2d5ad3-e0c6-44c4-8f5f-029727432fcf"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {
+            "fallbackOutput": "extra"
+          }
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          -64,
+          16
+        ],
+        "id": "f3175c8b-3c06-46dc-a94f-1eab36bff305",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "QA7Qdseg7ehAOWP6",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+            "cachedResultName": "Zenoti-GetAuthToken"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          160,
+          -64
+        ],
+        "id": "033f287e-0747-4d1c-a8ee-2c651a365ec3",
+        "name": "Call 'Zenoti-GetAuthToken'"
+      },
+      {
+        "parameters": {
+          "url": "=https://api.zenoti.com/v1/guests/{{ $('CleanUpHeaders').item.json.body.data.guest.id }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {}
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          384,
+          -64
+        ],
+        "id": "2f40e675-9322-43da-8acd-ecdf56a9d2da",
+        "name": "Get guest Details",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "url": "https://api.zenoti.com/v1/appointments",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "center_id",
+                "value": "={{ $json.Zenoti_ID }}"
+              },
+              {
+                "name": "start_date",
+                "value": "={{ $today }}"
+              },
+              {
+                "name": "include_no_show_cancel",
+                "value": "true"
+              },
+              {
+                "name": "end_date",
+                "value": "={{ $now.plus({ days: 1 }) }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          832,
+          -64
+        ],
+        "id": "84a526f3-5d8b-424a-96bd-509c28cf846c",
+        "name": "Get Appoitment"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.parent_service_name }}",
+                      "rightValue": "Telehealth",
+                      "operator": {
+                        "type": "string",
+                        "operation": "startsWith"
+                      },
+                      "id": "fe18f83e-1356-4976-94ec-00f50543c8a1"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {
+            "fallbackOutput": "extra"
+          }
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          1280,
+          -64
+        ],
+        "id": "940fd98f-7f88-4a9b-9ed3-414561b73ddb",
+        "name": "Switch1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "734f0f5b-e83e-49cb-b839-5fcb644b1a77",
+                "leftValue": "={{ $json.appointment_group_id }}",
+                "rightValue": "={{ $('CleanUpHeaders').item.json.body.data.appointment_group_id }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          1056,
+          -64
+        ],
+        "id": "7884206c-ba33-45d5-a433-5d891deb8ada",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lsINP70DmcZtIj4M",
+            "mode": "list",
+            "cachedResultName": "ZenotiClinics",
+            "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "Zenoti_ID",
+                "keyValue": "={{ $json.center_id }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          608,
+          -64
+        ],
+        "id": "d15a7b4d-6e72-40b7-b017-a15d633260a9",
+        "name": "Get Home Clinic"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://graph.microsoft.com/v1.0/me/sendMail",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "microsoftOutlookOAuth2Api",
+          "sendBody": true,
+          "specifyBody": "=\n{{ {\n  \"message\": {\n    \"subject\": \"Automation - NoShow - \" +\n      $('Get guest Details').item.json.code,\n\n    \"body\": {\n      \"contentType\": \"HTML\",\n      \"content\":\n        \"<p>Hi Team,</p>\" +\n\n        \"<p>The scheduled telehealth appointment for \" +\n        $('CleanUpHeaders').item.json.body.data.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.guest.last_name +\n        \" was not attended. Please follow up with the patient to reschedule at the earliest convenience and update the booking accordingly.</p>\" +\n\n        \"<p>\" +\n        \"<strong>Name:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.guest.last_name + \"<br>\" +\n\n        \"<strong>Code:</strong> \" +\n        $('Get guest Details').item.json.code + \"<br>\" +\n\n        \"<strong>Profile URL:</strong> \" +\n        \"<a href='https://ashleymartinau.zenoti.com/Guests/GuestProfileV2/GuestProfileV2Wrapper.aspx?Display=True&UserId=\" +\n        $('Get guest Details').item.json.id +\n        \"'>Client Profile</a><br>\" +\n\n        \"<strong>Clinic:</strong> \" +\n        $('Get Home Clinic').item.json.name +\n        \"</p>\" +\n\n        \"<p>Regards,<br>Automation.</p>\"\n    },\n\n    \"toRecipients\": [\n      {\n        \"emailAddress\": {\n          \"address\": $('Get Home Clinic').item.json.email\n        }\n      }\n    ]\n  },\n\n  \"saveToSentItems\": true\n} }}",
+          "bodyParameters": {
+            "parameters": [
+              {}
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1536,
+          -128
+        ],
+        "id": "b209550e-146e-4cfd-8732-179af5c1f828",
+        "name": "HTTP Request",
+        "credentials": {
+          "microsoftOutlookOAuth2Api": {
+            "id": "T2XkoM8OENRnrVIu",
+            "name": "spu@ash"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "CleanUpHeaders": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "RabbitMQ Trigger": {
+        "main": [
+          [
+            {
+              "node": "CleanUpHeaders",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Call 'Zenoti-GetAuthToken'",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "RabbitMQ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'Zenoti-GetAuthToken'": {
+        "main": [
+          [
+            {
+              "node": "Get guest Details",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get guest Details": {
+        "main": [
+          [
+            {
+              "node": "Get Home Clinic",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Appoitment": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch1": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "RabbitMQ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "Switch1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Home Clinic": {
+        "main": [
+          [
+            {
+              "node": "Get Appoitment",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "RabbitMQ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicholas Ryall",
+    "name": "Version 954eec23",
+    "description": "Replace Email with httpRequest",
+    "autosaved": true
+  },
+  "activeVersionId": "954eec23-5572-4ef4-bd15-c4bb73c6d941",
+  "connections": {
+    "CleanUpHeaders": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RabbitMQ Trigger": {
+      "main": [
+        [
+          {
+            "node": "CleanUpHeaders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Call 'Zenoti-GetAuthToken'",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "RabbitMQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Zenoti-GetAuthToken'": {
+      "main": [
+        [
+          {
+            "node": "Get guest Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get guest Details": {
+      "main": [
+        [
+          {
+            "node": "Get Home Clinic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Appoitment": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "RabbitMQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Home Clinic": {
+      "main": [
+        [
+          {
+            "node": "Get Appoitment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "RabbitMQ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-11-10T07:52:03.891Z",
+  "id": "cwNzqQf5Zzt53KbD",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "AU-Zenoti-NoShow httpRequest",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "deleteMessage"
+      },
+      "type": "n8n-nodes-base.rabbitmq",
+      "typeVersion": 1.1,
+      "position": [
+        1728,
+        16
+      ],
+      "id": "de8ee788-ab55-48fd-97bc-0feaa935eae7",
+      "name": "RabbitMQ",
+      "executeOnce": true,
+      "credentials": {
+        "rabbitmq": {
+          "id": "yV61RlUAH8DmNI5J",
+          "name": "RabbitMQ account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.content;\nconst parsed = JSON.parse(raw);\n\nreturn [{ json: parsed }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -288,
+        16
+      ],
+      "id": "20881425-22a0-4dfc-b88b-5d6bb18eef5d",
+      "name": "CleanUpHeaders"
+    },
+    {
+      "parameters": {
+        "queue": "au.zenoti.webhooks.NoShow",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rabbitmqTrigger",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        16
+      ],
+      "id": "49744f40-c3b5-4a10-aeed-8074a01d9208",
+      "name": "RabbitMQ Trigger",
+      "credentials": {
+        "rabbitmq": {
+          "id": "bvkL7iLaXZK2TER1",
+          "name": "au-receiver"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.data.appointment_group_status }}",
+                    "rightValue": -2,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    },
+                    "id": "6a2d5ad3-e0c6-44c4-8f5f-029727432fcf"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -64,
+        16
+      ],
+      "id": "f3175c8b-3c06-46dc-a94f-1eab36bff305",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "QA7Qdseg7ehAOWP6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/QA7Qdseg7ehAOWP6",
+          "cachedResultName": "Zenoti-GetAuthToken"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        160,
+        -64
+      ],
+      "id": "033f287e-0747-4d1c-a8ee-2c651a365ec3",
+      "name": "Call 'Zenoti-GetAuthToken'"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.zenoti.com/v1/guests/{{ $('CleanUpHeaders').item.json.body.data.guest.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        384,
+        -64
+      ],
+      "id": "2f40e675-9322-43da-8acd-ecdf56a9d2da",
+      "name": "Get guest Details",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "url": "https://api.zenoti.com/v1/appointments",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "center_id",
+              "value": "={{ $json.Zenoti_ID }}"
+            },
+            {
+              "name": "start_date",
+              "value": "={{ $today }}"
+            },
+            {
+              "name": "include_no_show_cancel",
+              "value": "true"
+            },
+            {
+              "name": "end_date",
+              "value": "={{ $now.plus({ days: 1 }) }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=bearer {{ $('Call \\'Zenoti-GetAuthToken\\'').item.json.TokenSecret }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        832,
+        -64
+      ],
+      "id": "84a526f3-5d8b-424a-96bd-509c28cf846c",
+      "name": "Get Appoitment"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.parent_service_name }}",
+                    "rightValue": "Telehealth",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    },
+                    "id": "fe18f83e-1356-4976-94ec-00f50543c8a1"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1280,
+        -64
+      ],
+      "id": "940fd98f-7f88-4a9b-9ed3-414561b73ddb",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "734f0f5b-e83e-49cb-b839-5fcb644b1a77",
+              "leftValue": "={{ $json.appointment_group_id }}",
+              "rightValue": "={{ $('CleanUpHeaders').item.json.body.data.appointment_group_id }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1056,
+        -64
+      ],
+      "id": "7884206c-ba33-45d5-a433-5d891deb8ada",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lsINP70DmcZtIj4M",
+          "mode": "list",
+          "cachedResultName": "ZenotiClinics",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/lsINP70DmcZtIj4M"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "Zenoti_ID",
+              "keyValue": "={{ $json.center_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        608,
+        -64
+      ],
+      "id": "d15a7b4d-6e72-40b7-b017-a15d633260a9",
+      "name": "Get Home Clinic"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.microsoft.com/v1.0/me/sendMail",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOutlookOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "=\n{{ {\n  \"message\": {\n    \"subject\": \"Automation - NoShow - \" +\n      $('Get guest Details').item.json.code,\n\n    \"body\": {\n      \"contentType\": \"HTML\",\n      \"content\":\n        \"<p>Hi Team,</p>\" +\n\n        \"<p>The scheduled telehealth appointment for \" +\n        $('CleanUpHeaders').item.json.body.data.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.guest.last_name +\n        \" was not attended. Please follow up with the patient to reschedule at the earliest convenience and update the booking accordingly.</p>\" +\n\n        \"<p>\" +\n        \"<strong>Name:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.guest.last_name + \"<br>\" +\n\n        \"<strong>Code:</strong> \" +\n        $('Get guest Details').item.json.code + \"<br>\" +\n\n        \"<strong>Profile URL:</strong> \" +\n        \"<a href='https://ashleymartinau.zenoti.com/Guests/GuestProfileV2/GuestProfileV2Wrapper.aspx?Display=True&UserId=\" +\n        $('Get guest Details').item.json.id +\n        \"'>Client Profile</a><br>\" +\n\n        \"<strong>Clinic:</strong> \" +\n        $('Get Home Clinic').item.json.name +\n        \"</p>\" +\n\n        \"<p>Regards,<br>Automation.</p>\"\n    },\n\n    \"toRecipients\": [\n      {\n        \"emailAddress\": {\n          \"address\": $('Get Home Clinic').item.json.email\n        }\n      }\n    ]\n  },\n\n  \"saveToSentItems\": true\n} }}",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1536,
+        -128
+      ],
+      "id": "b209550e-146e-4cfd-8732-179af5c1f828",
+      "name": "HTTP Request",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "T2XkoM8OENRnrVIu",
+          "name": "spu@ash"
+        }
+      }
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "AMNicholasRyall",
+    "name": "n8n-workflow-Backup"
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "J83Enw8ArDSqhMCL"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-11-10T07:52:03.893Z",
+      "createdAt": "2026-11-10T07:52:03.893Z",
+      "role": "workflow:owner",
+      "workflowId": "cwNzqQf5Zzt53KbD",
+      "projectId": "gMwV5v9nxJB6matq"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-11-10T07:56:33.947Z",
+  "versionId": "954eec23-5572-4ef4-bd15-c4bb73c6d941"
+}
