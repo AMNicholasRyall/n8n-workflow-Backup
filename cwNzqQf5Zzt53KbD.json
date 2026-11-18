@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-11-10T07:56:13.000Z",
-    "createdAt": "2026-11-10T07:55:53.089Z",
-    "versionId": "954eec23-5572-4ef4-bd15-c4bb73c6d941",
+    "updatedAt": "2026-11-12T03:49:26.000Z",
+    "createdAt": "2026-11-12T03:49:07.588Z",
+    "versionId": "10a3203b-1b05-425e-82c1-ddf39742b068",
     "workflowId": "cwNzqQf5Zzt53KbD",
     "nodes": [
       {
@@ -321,7 +321,7 @@
           "authentication": "predefinedCredentialType",
           "nodeCredentialType": "microsoftOutlookOAuth2Api",
           "sendBody": true,
-          "specifyBody": "=\n{{ {\n  \"message\": {\n    \"subject\": \"Automation - NoShow - \" +\n      $('Get guest Details').item.json.code,\n\n    \"body\": {\n      \"contentType\": \"HTML\",\n      \"content\":\n        \"<p>Hi Team,</p>\" +\n\n        \"<p>The scheduled telehealth appointment for \" +\n        $('CleanUpHeaders').item.json.body.data.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.guest.last_name +\n        \" was not attended. Please follow up with the patient to reschedule at the earliest convenience and update the booking accordingly.</p>\" +\n\n        \"<p>\" +\n        \"<strong>Name:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.guest.last_name + \"<br>\" +\n\n        \"<strong>Code:</strong> \" +\n        $('Get guest Details').item.json.code + \"<br>\" +\n\n        \"<strong>Profile URL:</strong> \" +\n        \"<a href='https://ashleymartinau.zenoti.com/Guests/GuestProfileV2/GuestProfileV2Wrapper.aspx?Display=True&UserId=\" +\n        $('Get guest Details').item.json.id +\n        \"'>Client Profile</a><br>\" +\n\n        \"<strong>Clinic:</strong> \" +\n        $('Get Home Clinic').item.json.name +\n        \"</p>\" +\n\n        \"<p>Regards,<br>Automation.</p>\"\n    },\n\n    \"toRecipients\": [\n      {\n        \"emailAddress\": {\n          \"address\": $('Get Home Clinic').item.json.email\n        }\n      }\n    ]\n  },\n\n  \"saveToSentItems\": true\n} }}",
+          "specifyBody": "={{ ({\n  \"message\": {\n    \"subject\": \"Automation - NoShow - \" +\n      $('Get guest Details').item.json.code,\n\n    \"body\": {\n      \"contentType\": \"HTML\",\n      \"content\":\n        \"<p>Hi Team,</p>\" +\n\n        \"<p>The scheduled telehealth appointment for \" +\n        $('CleanUpHeaders').item.json.body.data.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.guest.last_name +\n        \" was not attended. Please follow up with the patient to reschedule at the earliest convenience and update the booking accordingly.</p>\" +\n\n        \"<p>\" +\n        \"<strong>Name:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.guest.last_name + \"<br>\" +\n\n        \"<strong>Code:</strong> \" +\n        $('Get guest Details').item.json.code + \"<br>\" +\n\n        \"<strong>Profile URL:</strong> \" +\n        \"<a href='https://ashleymartinau.zenoti.com/Guests/GuestProfileV2/GuestProfileV2Wrapper.aspx?Display=True&UserId=\" +\n        $('Get guest Details').item.json.id +\n        \"'>Client Profile</a><br>\" +\n\n        \"<strong>Clinic:</strong> \" +\n        $('Get Home Clinic').item.json.name +\n        \"</p>\" +\n\n        \"<p>Regards,<br>Automation.</p>\"\n    },\n\n    \"toRecipients\": [\n      {\n        \"emailAddress\": {\n          \"address\": $('Get Home Clinic').item.json.email\n        }\n      }\n    ]\n  },\n\n  \"saveToSentItems\": true\n}) }}",
           "bodyParameters": {
             "parameters": [
               {}
@@ -472,11 +472,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version 954eec23",
-    "description": "Replace Email with httpRequest",
+    "name": "Version 10a3203b",
+    "description": "Remove Stringify",
     "autosaved": true
   },
-  "activeVersionId": "954eec23-5572-4ef4-bd15-c4bb73c6d941",
+  "activeVersionId": "10a3203b-1b05-425e-82c1-ddf39742b068",
   "connections": {
     "CleanUpHeaders": {
       "main": [
@@ -926,7 +926,7 @@
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "microsoftOutlookOAuth2Api",
         "sendBody": true,
-        "specifyBody": "=\n{{ {\n  \"message\": {\n    \"subject\": \"Automation - NoShow - \" +\n      $('Get guest Details').item.json.code,\n\n    \"body\": {\n      \"contentType\": \"HTML\",\n      \"content\":\n        \"<p>Hi Team,</p>\" +\n\n        \"<p>The scheduled telehealth appointment for \" +\n        $('CleanUpHeaders').item.json.body.data.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.guest.last_name +\n        \" was not attended. Please follow up with the patient to reschedule at the earliest convenience and update the booking accordingly.</p>\" +\n\n        \"<p>\" +\n        \"<strong>Name:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.guest.last_name + \"<br>\" +\n\n        \"<strong>Code:</strong> \" +\n        $('Get guest Details').item.json.code + \"<br>\" +\n\n        \"<strong>Profile URL:</strong> \" +\n        \"<a href='https://ashleymartinau.zenoti.com/Guests/GuestProfileV2/GuestProfileV2Wrapper.aspx?Display=True&UserId=\" +\n        $('Get guest Details').item.json.id +\n        \"'>Client Profile</a><br>\" +\n\n        \"<strong>Clinic:</strong> \" +\n        $('Get Home Clinic').item.json.name +\n        \"</p>\" +\n\n        \"<p>Regards,<br>Automation.</p>\"\n    },\n\n    \"toRecipients\": [\n      {\n        \"emailAddress\": {\n          \"address\": $('Get Home Clinic').item.json.email\n        }\n      }\n    ]\n  },\n\n  \"saveToSentItems\": true\n} }}",
+        "specifyBody": "={{ ({\n  \"message\": {\n    \"subject\": \"Automation - NoShow - \" +\n      $('Get guest Details').item.json.code,\n\n    \"body\": {\n      \"contentType\": \"HTML\",\n      \"content\":\n        \"<p>Hi Team,</p>\" +\n\n        \"<p>The scheduled telehealth appointment for \" +\n        $('CleanUpHeaders').item.json.body.data.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.guest.last_name +\n        \" was not attended. Please follow up with the patient to reschedule at the earliest convenience and update the booking accordingly.</p>\" +\n\n        \"<p>\" +\n        \"<strong>Name:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.guest.last_name + \"<br>\" +\n\n        \"<strong>Code:</strong> \" +\n        $('Get guest Details').item.json.code + \"<br>\" +\n\n        \"<strong>Profile URL:</strong> \" +\n        \"<a href='https://ashleymartinau.zenoti.com/Guests/GuestProfileV2/GuestProfileV2Wrapper.aspx?Display=True&UserId=\" +\n        $('Get guest Details').item.json.id +\n        \"'>Client Profile</a><br>\" +\n\n        \"<strong>Clinic:</strong> \" +\n        $('Get Home Clinic').item.json.name +\n        \"</p>\" +\n\n        \"<p>Regards,<br>Automation.</p>\"\n    },\n\n    \"toRecipients\": [\n      {\n        \"emailAddress\": {\n          \"address\": $('Get Home Clinic').item.json.email\n        }\n      }\n    ]\n  },\n\n  \"saveToSentItems\": true\n}) }}",
         "bodyParameters": {
           "parameters": [
             {}
@@ -976,6 +976,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-11-10T07:56:33.947Z",
-  "versionId": "954eec23-5572-4ef4-bd15-c4bb73c6d941"
+  "updatedAt": "2026-11-12T03:49:07.587Z",
+  "versionId": "10a3203b-1b05-425e-82c1-ddf39742b068"
 }
