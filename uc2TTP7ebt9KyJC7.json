@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-11-10T07:49:46.000Z",
-    "createdAt": "2026-11-10T07:48:45.953Z",
-    "versionId": "5a45fd1d-9f05-4f2b-85ba-535c9a2ad686",
+    "updatedAt": "2026-11-12T03:48:31.000Z",
+    "createdAt": "2026-11-12T03:48:11.427Z",
+    "versionId": "f0670f2d-0771-4433-8b4b-13a90bd524b2",
     "workflowId": "uc2TTP7ebt9KyJC7",
     "nodes": [
       {
@@ -242,7 +242,7 @@
           "authentication": "predefinedCredentialType",
           "nodeCredentialType": "microsoftOutlookOAuth2Api",
           "sendBody": true,
-          "specifyBody": "=\n{{ {\n  \"message\": {\n    \"subject\": \"Telehealth Appointment - \" + $('CleanUpHeaders').item.json.body.data.invoice.guest.code,\n\n    \"body\": {\n      \"contentType\": \"HTML\",\n      \"content\":\n        \"<p>Hi \" + $json.name + \",</p>\" +\n\n        \"<p>Appointment for the following client has been completed.</p>\" +\n\n        \"<p>\" +\n        \"  <strong>Name:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.last_name + \"<br>\" +\n        \"  <strong>Customer Code:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.code +\n        \"</p>\" +\n\n        \"<p>\" +\n        \"  <strong>Appointment Type:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].name + \"<br>\" +\n        \"  <strong>Doctor:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].therapist_name +\n        \"</p>\" +\n\n        \"<p>\" +\n        \"  <strong>Profile URL:</strong> \" +\n        \"  <a href='https://ashleymartinau.zenoti.com/Guests/GuestProfile.aspx?UserId=\" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.id + \"'>\" +\n        \"    Client Profile\" +\n        \"  </a>\" +\n        \"</p>\" +\n\n        \"<p>Regards,<br>Automation.</p>\"\n    },\n\n    \"toRecipients\": [\n      {\n        \"emailAddress\": {\n          \"address\": $json.email\n        }\n      }\n    ]\n  },\n\n  \"saveToSentItems\": true\n  } }}",
+          "specifyBody": "={{ ({\n  \"message\": {\n    \"subject\": \"Telehealth Appointment - \" + $('CleanUpHeaders').item.json.body.data.invoice.guest.code,\n\n    \"body\": {\n      \"contentType\": \"HTML\",\n      \"content\":\n        \"<p>Hi \" + $json.name + \",</p>\" +\n\n        \"<p>Appointment for the following client has been completed.</p>\" +\n\n        \"<p>\" +\n        \"<strong>Name:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.last_name + \"<br>\" +\n        \"<strong>Customer Code:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.code +\n        \"</p>\" +\n\n        \"<p>\" +\n        \"<strong>Appointment Type:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].name + \"<br>\" +\n        \"<strong>Doctor:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].therapist_name +\n        \"</p>\" +\n\n        \"<p>\" +\n        \"<strong>Profile URL:</strong> \" +\n        \"<a href='https://ashleymartinau.zenoti.com/Guests/GuestProfile.aspx?UserId=\" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.id + \"'>\" +\n        \"Client Profile</a>\" +\n        \"</p>\" +\n\n        \"<p>Regards,<br>Automation.</p>\"\n    },\n\n    \"toRecipients\": [\n      {\n        \"emailAddress\": {\n          \"address\": $json.email\n        }\n      }\n    ]\n  },\n\n  \"saveToSentItems\": true\n}) }}",
           "bodyParameters": {
             "parameters": [
               {}
@@ -272,7 +272,7 @@
           "authentication": "predefinedCredentialType",
           "nodeCredentialType": "microsoftOutlookOAuth2Api",
           "sendBody": true,
-          "specifyBody": "=\n{{ {\n  \"message\": {\n    \"subject\": \"Telehealth Appointment - \" + $('CleanUpHeaders').item.json.body.data.invoice.guest.code,\n\n    \"body\": {\n      \"contentType\": \"HTML\",\n      \"content\":\n        \"<p>Hi \" + $json.name + \",</p>\" +\n\n        \"<p>Appointment for the following client has been completed.</p>\" +\n\n        \"<p>\" +\n        \"  <strong>Name:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.last_name + \"<br>\" +\n        \"  <strong>Customer Code:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.code +\n        \"</p>\" +\n\n        \"<p>\" +\n        \"  <strong>Appointment Type:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].name + \"<br>\" +\n        \"  <strong>Doctor:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].therapist_name +\n        \"</p>\" +\n\n        \"<p>\" +\n        \"  <strong>Profile URL:</strong> \" +\n        \"  <a href='https://ashleymartinau.zenoti.com/Guests/GuestProfile.aspx?UserId=\" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.id + \"'>\" +\n        \"    Client Profile\" +\n        \"  </a>\" +\n        \"</p>\" +\n\n        \"<p>Regards,<br>Automation.</p>\"\n    },\n\n    \"toRecipients\": [\n      {\n        \"emailAddress\": {\n          \"address\": $json.email\n        }\n      }\n    ]\n  },\n\n  \"saveToSentItems\": true\n  } }}",
+          "specifyBody": "={{ ({\n  \"message\": {\n    \"subject\": \"Telehealth Appointment - \" + $('CleanUpHeaders').item.json.body.data.invoice.guest.code,\n\n    \"body\": {\n      \"contentType\": \"HTML\",\n      \"content\":\n        \"<p>Hi \" + $json.name + \",</p>\" +\n\n        \"<p>Appointment for the following client has been completed.</p>\" +\n\n        \"<p>\" +\n        \"<strong>Name:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.last_name + \"<br>\" +\n        \"<strong>Customer Code:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.code +\n        \"</p>\" +\n\n        \"<p>\" +\n        \"<strong>Appointment Type:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].name + \"<br>\" +\n        \"<strong>Doctor:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].therapist_name +\n        \"</p>\" +\n\n        \"<p>\" +\n        \"<strong>Profile URL:</strong> \" +\n        \"<a href='https://ashleymartinau.zenoti.com/Guests/GuestProfile.aspx?UserId=\" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.id + \"'>\" +\n        \"Client Profile</a>\" +\n        \"</p>\" +\n\n        \"<p>Regards,<br>Automation.</p>\"\n    },\n\n    \"toRecipients\": [\n      {\n        \"emailAddress\": {\n          \"address\": $json.email\n        }\n      }\n    ]\n  },\n\n  \"saveToSentItems\": true\n}) }}",
           "bodyParameters": {
             "parameters": [
               {}
@@ -405,11 +405,11 @@
       }
     },
     "authors": "Nicholas Ryall",
-    "name": "Version httpRequest",
-    "description": "Replace SendEmail with HttpRequest",
+    "name": "Version f0670f2d",
+    "description": "Remove Stringify",
     "autosaved": true
   },
-  "activeVersionId": "5a45fd1d-9f05-4f2b-85ba-535c9a2ad686",
+  "activeVersionId": "f0670f2d-0771-4433-8b4b-13a90bd524b2",
   "connections": {
     "RabbitMQ Trigger": {
       "main": [
@@ -762,7 +762,7 @@
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "microsoftOutlookOAuth2Api",
         "sendBody": true,
-        "specifyBody": "=\n{{ {\n  \"message\": {\n    \"subject\": \"Telehealth Appointment - \" + $('CleanUpHeaders').item.json.body.data.invoice.guest.code,\n\n    \"body\": {\n      \"contentType\": \"HTML\",\n      \"content\":\n        \"<p>Hi \" + $json.name + \",</p>\" +\n\n        \"<p>Appointment for the following client has been completed.</p>\" +\n\n        \"<p>\" +\n        \"  <strong>Name:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.last_name + \"<br>\" +\n        \"  <strong>Customer Code:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.code +\n        \"</p>\" +\n\n        \"<p>\" +\n        \"  <strong>Appointment Type:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].name + \"<br>\" +\n        \"  <strong>Doctor:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].therapist_name +\n        \"</p>\" +\n\n        \"<p>\" +\n        \"  <strong>Profile URL:</strong> \" +\n        \"  <a href='https://ashleymartinau.zenoti.com/Guests/GuestProfile.aspx?UserId=\" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.id + \"'>\" +\n        \"    Client Profile\" +\n        \"  </a>\" +\n        \"</p>\" +\n\n        \"<p>Regards,<br>Automation.</p>\"\n    },\n\n    \"toRecipients\": [\n      {\n        \"emailAddress\": {\n          \"address\": $json.email\n        }\n      }\n    ]\n  },\n\n  \"saveToSentItems\": true\n  } }}",
+        "specifyBody": "=json",
         "bodyParameters": {
           "parameters": [
             {}
@@ -792,7 +792,7 @@
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "microsoftOutlookOAuth2Api",
         "sendBody": true,
-        "specifyBody": "=\n{{ {\n  \"message\": {\n    \"subject\": \"Telehealth Appointment - \" + $('CleanUpHeaders').item.json.body.data.invoice.guest.code,\n\n    \"body\": {\n      \"contentType\": \"HTML\",\n      \"content\":\n        \"<p>Hi \" + $json.name + \",</p>\" +\n\n        \"<p>Appointment for the following client has been completed.</p>\" +\n\n        \"<p>\" +\n        \"  <strong>Name:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.last_name + \"<br>\" +\n        \"  <strong>Customer Code:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.code +\n        \"</p>\" +\n\n        \"<p>\" +\n        \"  <strong>Appointment Type:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].name + \"<br>\" +\n        \"  <strong>Doctor:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].therapist_name +\n        \"</p>\" +\n\n        \"<p>\" +\n        \"  <strong>Profile URL:</strong> \" +\n        \"  <a href='https://ashleymartinau.zenoti.com/Guests/GuestProfile.aspx?UserId=\" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.id + \"'>\" +\n        \"    Client Profile\" +\n        \"  </a>\" +\n        \"</p>\" +\n\n        \"<p>Regards,<br>Automation.</p>\"\n    },\n\n    \"toRecipients\": [\n      {\n        \"emailAddress\": {\n          \"address\": $json.email\n        }\n      }\n    ]\n  },\n\n  \"saveToSentItems\": true\n  } }}",
+        "specifyBody": "={{ ({\n  \"message\": {\n    \"subject\": \"Telehealth Appointment - \" + $('CleanUpHeaders').item.json.body.data.invoice.guest.code,\n\n    \"body\": {\n      \"contentType\": \"HTML\",\n      \"content\":\n        \"<p>Hi \" + $json.name + \",</p>\" +\n\n        \"<p>Appointment for the following client has been completed.</p>\" +\n\n        \"<p>\" +\n        \"<strong>Name:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.first_name + \" \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.last_name + \"<br>\" +\n        \"<strong>Customer Code:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.code +\n        \"</p>\" +\n\n        \"<p>\" +\n        \"<strong>Appointment Type:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].name + \"<br>\" +\n        \"<strong>Doctor:</strong> \" +\n        $('CleanUpHeaders').item.json.body.data.invoice.invoice_items[0].therapist_name +\n        \"</p>\" +\n\n        \"<p>\" +\n        \"<strong>Profile URL:</strong> \" +\n        \"<a href='https://ashleymartinau.zenoti.com/Guests/GuestProfile.aspx?UserId=\" +\n        $('CleanUpHeaders').item.json.body.data.invoice.guest.id + \"'>\" +\n        \"Client Profile</a>\" +\n        \"</p>\" +\n\n        \"<p>Regards,<br>Automation.</p>\"\n    },\n\n    \"toRecipients\": [\n      {\n        \"emailAddress\": {\n          \"address\": $json.email\n        }\n      }\n    ]\n  },\n\n  \"saveToSentItems\": true\n}) }}",
         "bodyParameters": {
           "parameters": [
             {}
@@ -817,7 +817,25 @@
     }
   ],
   "origin": "n8n",
-  "pinData": {},
+  "pinData": {
+    "RabbitMQ Trigger": [
+      {
+        "json": {
+          "fields": {
+            "consumerTag": "amq.ctag-KpkiE0kmUW4Fx4Z0qxyG9g",
+            "deliveryTag": 69,
+            "redelivered": false,
+            "exchange": "",
+            "routingKey": "au.zenoti.webhooks.closedinvoice"
+          },
+          "properties": {
+            "headers": {}
+          },
+          "content": "{\"headers\":{\"host\":\"webhook.ashleyandmartin.com.au\",\"x-forwarded-scheme\":\"https\",\"x-forwarded-proto\":\"https\",\"x-forwarded-for\":\"20.11.81.234\",\"x-real-ip\":\"20.11.81.234\",\"content-length\":\"1854\",\"au-zenoti-completedapp\":\"7hTFTg7hCM3i\",\"content-type\":\"application/json; charset=utf-8\"},\"params\":{},\"query\":{},\"body\":{\"id\":\"6afbfc8ff90209550eb0768c\",\"event_id\":\"6afbfc8ff90209550eb07689\",\"event_schema\":\"v1\",\"event_resource\":null,\"event_type\":\"Invoice.Closed\",\"event_timestamp\":\"2026-11-17T07:04:47.962879Z\",\"data\":{\"invoice\":{\"id\":\"c99a9bed-1788-4ef2-a355-d8441597715e\",\"invoice_number\":\"74882\",\"invoice_number_prefix\":\"BB\",\"receipt_number\":\"BBR47697\",\"appointment_group_id\":\"c5f8e1c4-d0cb-41b5-9c4b-aa9d0c275d60\",\"lock\":false,\"is_closed\":true,\"is_refund\":false,\"invoice_date\":\"2026-11-17T16:30:00\",\"center_id\":\"d95173f6-2bee-4b8c-bee4-79c839ad3a1f\",\"total_price\":{\"currency_id\":0,\"net_price\":0,\"tax\":0,\"rounding_adjustment\":0,\"sum_total\":0},\"guest\":{\"id\":\"69a92454-aacf-46b9-ae89-12c9a80ba0a9\",\"first_name\":\"Izaiah\",\"last_name\":\"Scollen-Smith\",\"gender\":1,\"code\":\"CBG2008\",\"mobile_phone\":\"+61 424744324\",\"email\":\"i.scollen@outlook.com\"},\"invoice_items\":[{\"invoice_item_id\":\"e4b6bf29-be89-4908-9045-c887b024d5d2\",\"id\":\"4647fba2-6af2-46dc-aca5-ad8f559cff98\",\"name\":\"Telehealth Re-Enrolment\",\"type\":0,\"code\":\"S00070\",\"price\":{\"currency_id\":8,\"sales\":0,\"tax\":0,\"final\":0,\"discount\":0},\"quantity\":1,\"sale_by_id\":\"6ec055bd-89e7-421f-b6f5-0653c22dcffc\",\"therapist_name\":\"Dr Mark Liu \"}],\"appointments\":[{\"id\":\"fc465648-9eea-40b7-9639-fed5c0ab9c07\",\"invoice_item_id\":\"e4b6bf29-be89-4908-9045-c887b024d5d2\",\"service_name\":\"Telehealth Re-Enrolment\",\"service_id\":\"4647fba2-6af2-46dc-aca5-ad8f559cff98\",\"start_time\":\"2026-11-17T06:30:00\",\"end_time\":\"2026-11-17T06:45:00\",\"serviceduration_in_miutes\":15,\"has_add_ons\":false,\"is_add_on\":false,\"therapist_name\":\"Dr Mark Liu\",\"TherapistId\":\"6ec055bd-89e7-421f-b6f5-0653c22dcffc\",\"is_recurring\":false,\"appointment_type\":2,\"therapist_request_type\":0,\"room_name\":\"\",\"equipment_name\":\"\",\"appointment_status\":1,\"cancel_noshow_status\":0}],\"transactions\":[],\"additional_fields\":[{\"key\":\"Additional invoice field\",\"value\":\"\"}]}}},\"webhookUrl\":\"https://webhook.ashleyandmartin.com.au/webhook/AppComplete\",\"executionMode\":\"production\"}"
+        }
+      }
+    ]
+  },
   "repo": {
     "owner": "AMNicholasRyall",
     "name": "n8n-workflow-Backup"
@@ -842,6 +860,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-11-10T07:48:45.952Z",
-  "versionId": "5a45fd1d-9f05-4f2b-85ba-535c9a2ad686"
+  "updatedAt": "2026-11-17T07:18:44.559Z",
+  "versionId": "421b953d-f7c0-455f-9434-96c1e31edf97"
 }
