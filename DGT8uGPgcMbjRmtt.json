@@ -3,11 +3,33 @@
   "activeVersion": null,
   "activeVersionId": null,
   "connections": {
-    "Schedule Trigger": {
+    "Private token request": {
       "main": [
         [
           {
-            "node": "Microsoft SQL",
+            "node": "Read ZenotiTokens row 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read ZenotiTokens row 1": {
+      "main": [
+        [
+          {
+            "node": "Validate token and UTC expiry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate token and UTC expiry": {
+      "main": [
+        [
+          {
+            "node": "Return privately",
             "type": "main",
             "index": 0
           }
@@ -18,38 +40,110 @@
   "createdAt": "2026-11-09T23:06:17.664Z",
   "id": "DGT8uGPgcMbjRmtt",
   "isArchived": false,
-  "meta": null,
-  "name": "SQL token retrieve",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Disputes - Private Zenoti invoice token",
   "nodes": [
     {
       "parameters": {
-        "rule": {
-          "interval": [
-            {}
-          ]
-        }
+        "path": "disputes-zenoti-invoice-token-v1",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
       },
-      "type": "n8n-nodes-base.scheduleTrigger",
-      "typeVersion": 1.3,
+      "id": "8fdd5669-5184-4c4a-825f-05dfc6361272",
+      "name": "Private token request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
       "position": [
         0,
         0
       ],
-      "id": "913f7df4-135c-409f-b1d3-be0043fbaffd",
-      "name": "Schedule Trigger"
+      "webhookId": "e3968340-3d1b-44c1-a85d-121d4beb6338",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "7ypviF3nUVElJwoN",
+          "name": "Helix-Playwright"
+        }
+      }
     },
     {
       "parameters": {
-        "operation": "executeQuery"
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "O7QvEberheUcDwMp",
+          "mode": "list",
+          "cachedResultName": "ZenotiTokens",
+          "cachedResultUrl": "/projects/gMwV5v9nxJB6matq/datatables/O7QvEberheUcDwMp"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "condition": "={{ 'eq' }}",
+              "keyValue": "1"
+            }
+          ]
+        },
+        "limit": 2
       },
-      "type": "n8n-nodes-base.microsoftSql",
+      "id": "d72aec7a-c949-473e-8191-82b426118ca6",
+      "name": "Read ZenotiTokens row 1",
+      "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        208,
+        240,
         0
       ],
-      "id": "e3bf6271-856a-42fe-a35f-95fbf8788162",
-      "name": "Microsoft SQL"
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Read only ZenotiTokens row 1. Never log, interpolate errors with, or pin the row.\nfunction normaliseTokenRows(rows, nowMs = Date.now()) {\n  const unavailable = () => ({ statusCode: 503, body: { error: 'ZenotiTokenUnavailable' } });\n  if (!Array.isArray(rows) || rows.length !== 1 || Number(rows[0]?.id) !== 1) return unavailable();\n  const row = rows[0];\n  if (typeof row.TokenSecret !== 'string' || typeof row.Token_Expiry !== 'string') return unavailable();\n  const token = row.TokenSecret.trim().replace(/^Bearer\\s+/i, '');\n  if (token.length < 8 || token.length > 32768 || !/^[\\x21-\\x7e]+$/.test(token) || /^apikey\\s/i.test(token)) return unavailable();\n  const rawExpiry = row.Token_Expiry.trim();\n  if (!/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?Z$/.test(rawExpiry)) return unavailable();\n  const expiry = Date.parse(rawExpiry);\n  if (!Number.isFinite(expiry) || new Date(expiry).toISOString().slice(0, 19) !== rawExpiry.slice(0, 19) || expiry <= nowMs + 60000) return unavailable();\n  return { statusCode: 200, body: { schemaVersion: 1, token, expiresAtUtc: new Date(expiry).toISOString() } };\n}\n\nreturn [{ json: normaliseTokenRows($input.all().map(item => item.json)) }];\n"
+      },
+      "id": "5ab28d52-d531-42c9-b8ae-e5db86de9202",
+      "name": "Validate token and UTC expiry",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.body }}",
+        "options": {
+          "responseCode": "={{ $json.statusCode }}",
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Cache-Control",
+                "value": "no-store, max-age=0"
+              },
+              {
+                "name": "Pragma",
+                "value": "no-cache"
+              },
+              {
+                "name": "X-Content-Type-Options",
+                "value": "nosniff"
+              }
+            ]
+          }
+        }
+      },
+      "id": "788e587b-e649-43a3-86f3-490d7628720c",
+      "name": "Return privately",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        720,
+        0
+      ]
     }
   ],
   "origin": "n8n",
@@ -75,6 +169,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-11-10T00:22:50.499Z",
-  "versionId": "d4fdbdd4-86c9-4f68-a55a-4aaed3600df1"
+  "updatedAt": "2026-11-24T06:17:36.686Z",
+  "versionId": "34c612d8-306c-4f65-9e6f-d1fe41956073"
 }
